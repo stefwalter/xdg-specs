@@ -29,5 +29,6 @@ mkdir -p ${XDG_CONFIG_DIR}/menus
 EOF
 
 # Install .desktop files
-installData ${XDG_DATA_DIR}/applications kwrite.desktop KEdit.desktop kate.desktop freecell.desktop
+installData ${XDG_DATA_DIR}/applications kwrite.desktop KEdit.desktop kate.desktop
+installData ${XDG_DATA_DIR}/applications/test freecell.desktop
 installData ${XDG_DATA_DIR}/desktop-directories apps.directory

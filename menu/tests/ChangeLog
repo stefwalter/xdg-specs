@@ -1,5 +1,13 @@
 2005-02-18  Mark McLoughlin  <mark@skynet.ie>
 
+	Make it a bit more difficult in order to catch:
+	  http://bugzilla.gnome.org/show_bug.cgi?id=167758
+	Thanks to Chris Lahey for the test case.
+
+	* tests/o/test: put freecell.desktop in a subdirectory.
+
+2005-02-18  Mark McLoughlin  <mark@skynet.ie>
+
 	* tests/o/result,
 	  tests/o/test: test that
 	<And><Category>foo</Category><Not><Category>foo</Category></Not></And>
