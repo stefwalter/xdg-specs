@@ -371,7 +371,7 @@ _NET_CURRENT_DESKTOP
 ]]></programlisting>
 	</sect2><sect2><title>_NET_DESKTOP_NAMES</title>
 	<programlisting><![CDATA[
-_NET_DESKTOP_NAMES, UTF-8_STRING[]
+_NET_DESKTOP_NAMES, UTF8_STRING[]
 ]]></programlisting>
 	<para>
 The names of all virtual desktops. This is a list of NULL-terminated strings in UTF-8 [1] encoding. This property MAY be changed by a Pager or the Window Manager at any time.
@@ -519,7 +519,7 @@ _NET_WM_MOVERESIZE
 	<title>Application Window Properties</title>
 	<sect2><title>_NET_WM_NAME</title>
 	<programlisting><![CDATA[
-_NET_WM_NAME, UTF-8_STRING
+_NET_WM_NAME, UTF8_STRING
 ]]></programlisting>
 	<para>
 The Client SHOULD set this to the title of the window in UTF-8 encoding.  If
@@ -529,7 +529,7 @@ set, the Window Manager should use this in preference to WM_NAME.
 
 	<sect2><title>_NET_WM_VISIBLE_NAME</title>
 	<programlisting><![CDATA[
-_NET_WM_VISIBLE_NAME, UTF-8_STRING
+_NET_WM_VISIBLE_NAME, UTF8_STRING
 ]]></programlisting>
 	<para>
 If the Window Manager displays a window name other than _NET_WM_NAME the Window Manager MUST set this to the title displayed in UTF-8 encoding.
@@ -541,7 +541,7 @@ Rationale: For window managers that display a title different from the _NET_WM_N
 
 	<sect2><title>_NET_WM_ICON_NAME</title>
 	<programlisting><![CDATA[
-_NET_WM_ICON_NAME, UTF-8_STRING
+_NET_WM_ICON_NAME, UTF8_STRING
 ]]></programlisting>
 	<para>
 The Client SHOULD set this to the title of the icon for this window in UTF-8 
@@ -552,7 +552,7 @@ WM_ICON_NAME.
 
 	<sect2><title>_NET_WM_VISIBLE_ICON_NAME</title>
 	<programlisting><![CDATA[
-_NET_WM_VISIBLE_ICON_NAME, UTF-8_STRING
+_NET_WM_VISIBLE_ICON_NAME, UTF8_STRING
 ]]></programlisting>
 	<para>
 If the Window Manager displays an icon name other than _NET_WM_ICON_NAME 
