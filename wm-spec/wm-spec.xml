@@ -766,13 +766,13 @@ _NET_WM_MOVERESIZE
 _NET_RESTACK_WINDOW
 ]]></programlisting>
 	<para>
-	Pagers wanting to restack a window SHOULD send a _NET_CLOSE_WINDOW client
+	Pagers wanting to restack a window SHOULD send a _NET_RESTACK_WINDOW client
 	message request to the root window:
 	</para>
 <programlisting><![CDATA[
-_NET_CLOSE_WINDOW
+_NET_RESTACK_WINDOW
   window = window to restack
-  message_type = _NET_CLOSE_WINDOW
+  message_type = _NET_RESTACK_WINDOW
   format = 32
   data.l[0] = source indication
   data.l[1] = sibling window
