@@ -1,6 +1,6 @@
 <!doctype article PUBLIC "-//OASIS//DTD DocBook V4.1//EN" [
 <!entity version "Draft version 1.3">
-<!entity date "November 27, 2002">
+<!entity date "January 3, 2003">
 ]>
 <article id="index">
 <articleinfo>
@@ -18,7 +18,11 @@
 	<sect2>
 		<title>Version</title>
 		<para>
-This is &version; of the Extended Window Manager Hints (EWMH) spec, updated &date;.
+This is &version; of the Extended Window Manager Hints (EWMH) spec, updated
+&date;. The canonical home for this document is <ulink
+url="http://www.freedesktop.org/standards/wm-spec.html">http://www.freedesktop.org</ulink>,
+which also contains directions for reporting bugs or contributing to future
+versions.
 		</para>
 	</sect2>
 	<sect2>
@@ -483,7 +487,7 @@ windows.
         <sect2>
         <title>_NET_DESKTOP_LAYOUT</title>
         <programlisting><![CDATA[
-_NET_DESKTOP_LAYOUT, orientation, x, y, starting_corner CARDINAL[4]/32
+_NET_DESKTOP_LAYOUT, orientation, columns, rows, starting_corner CARDINAL[4]/32
 ]]>
   #define _NET_WM_ORIENTATION_HORZ 0
   #define _NET_WM_ORIENTATION_VERT 1
@@ -519,19 +523,20 @@ _NET_DESKTOP_LAYOUT, orientation, x, y, starting_corner CARDINAL[4]/32
   use _NET_WM_TOPLEFT as the starting corner in this case.
   </para>
   <para>
-  The virtual desktops are arranged in a rectangle
-  with X rows and Y columns.  If X times Y does not match the total number of
-  desktops as specified by
+  The virtual desktops are arranged in a rectangle with 
+  <literal>rows</literal> rows and <literal>columns</literal> columns.
+  If <literal>rows</literal> times <literal>columns</literal> does not match 
+  the total number of desktops as specified by
   _NET_NUMBER_OF_DESKTOPS, the highest-numbered
-  workspaces are assumed to be nonexistent. Either X or Y (but not
-  both) may be specified as 0 in which case its actual value will be
-  derived from _NET_NUMBER_OF_DESKTOPS.
+  workspaces are assumed to be nonexistent. Either <literal>rows</literal> or 
+  <literal>columns</literal> (but not both) may be specified as 0 in which 
+  case its actual value will be derived from _NET_NUMBER_OF_DESKTOPS.
         </para>
         <para>
   When the orientation is _NET_WM_ORIENTATION_HORZ
   the desktops are laid out in rows, with the first desktop in the 
-  specified starting corner. So a layout with X=4 and Y=3 starting in 
-  the _NET_WM_TOPLEFT corner looks like this:
+  specified starting corner. So a layout with four columns and three rows 
+  starting in the _NET_WM_TOPLEFT corner looks like this:
 <programlisting>
  +--+--+--+--+
  | 0| 1| 2| 3|
@@ -541,8 +546,7 @@ _NET_DESKTOP_LAYOUT, orientation, x, y, starting_corner CARDINAL[4]/32
  | 8| 9|10|11|
  +--+--+--+--+
 </programlisting>
-With starting_corner _NET_WM_BOTTOMRIGHT, it looks like
-this:
+With starting_corner _NET_WM_BOTTOMRIGHT, it looks like this:
 <programlisting>
  +--+--+--+--+
  |11|10| 9| 8|
@@ -555,9 +559,8 @@ this:
 
          </para>
         <para>
-
   When the orientation is _NET_WM_ORIENTATION_VERT
-  the layout for X=4 and Y=3 starting in the _NET_WM_TOPLEFT
+  the layout with four columns and three rows starting in the _NET_WM_TOPLEFT
   corner looks like:
 
 <programlisting>
@@ -935,10 +938,10 @@ them from the list. These extension atoms MUST NOT start with the prefix
 _NET. 
       </para>
 	<para>
-_NET_WM_STATE_MODAL indicates that this is a modal dialog box.  The
-WM_TRANSIENT_FOR hint MUST be set to indicate which window the dialog is a
-modal for, or set to the root window if the dialog is a modal for its window
-group.
+_NET_WM_STATE_MODAL indicates that this is a modal dialog box.  
+If the WM_TRANSIENT_FOR hint is set to another toplevel window, the 
+dialog is modal for that window; if WM_TRANSIENT_FOR is not set or set
+to the root window the dialog is modal for its window group.
 	</para>
 	<para>
 _NET_WM_STATE_STICKY indicates that the Window Manager SHOULD keep the
@@ -1703,6 +1706,15 @@ to "Window Geometry".
  			<listitem><para>
 Rewrote the implementation notes on "Urgency", making it clear that
 the hint is not just about dialogs.
+ 			</para></listitem>
+ 			<listitem><para>
+Fixed the specification of the X and Y members of _NET_DESKTOP_LAYOUT
+and renamed them to columns and row for clarity.
+ 			</para></listitem>
+ 			<listitem><para>
+Change the description of _NET_WM_STATE_MODAL to no longer require apps to 
+break the ICCCM for group-modal windows, but still support the 
+WM_TRANSIENT_FOR=root dialect.
  			</para></listitem>
 	        </itemizedlist>
             </sect2>
