@@ -1483,11 +1483,12 @@ resize the window faster than the client can keep up.
 		</para>
 		<para>
 The update request number in the client message is determined by the
-window manager, but is generally intended to be incremented by one for
-each message sent. Since the initial value of the XSync counter is not
-defined by this specification, the window manager MAY set the value of
-the XSync counter at any time, and MUST do so when it first manages a
-new window.
+window manager subject to the restriction that it MUST NOT be 0. The
+number is generally intended to be incremented by one for each message
+sent. Since the initial value of the XSync counter is not defined by
+this specification, the window manager MAY set the value of the XSync
+counter at any time, and MUST do so when it first manages a new
+window.
 		</para>
 	</sect2>
 </sect1>
