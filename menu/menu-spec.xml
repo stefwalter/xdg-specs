@@ -2,10 +2,10 @@
                   "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
 				  ]>
 <article id="index">
-  <articleinfo>
+  <artheader>
     <title>Desktop Menu Specification</title>
-    <releaseinfo>Version 0.7</releaseinfo>
-    <date>30 September 2003</date>
+    <releaseinfo>Version 0.8</releaseinfo>
+    <date>9 November 2003</date>
     <authorgroup>
       <author>
 	<firstname>Waldo</firstname>
@@ -62,7 +62,7 @@
 	</affiliation>
       </author>
     </authorgroup>
-  </articleinfo>
+  </artheader>
 
   <sect1 id="introduction">
     <title>Introduction</title>
@@ -270,18 +270,18 @@ entries</ulink>: <varname>Categories</varname>,
             </listitem>
           </varlistentry>
           <varlistentry>
-            <term>Public Identifier for 1.0</term>
+            <term>Public Identifier for 0.8</term>
             <listitem>
               <para>
-                <literal>PUBLIC "-//freedesktop//DTD Menu 1.0//EN"</literal>
+                <literal>PUBLIC "-//freedesktop//DTD Menu 0.8//EN"</literal>
               </para>
             </listitem>
           </varlistentry>
           <varlistentry>
-            <term>System Identifier for 1.0</term>
+            <term>System Identifier for 0.8</term>
             <listitem>
               <para>
-                <literal>http://www.freedesktop.org/standards/menu-spec/1.0/menu.dtd</literal>
+                <literal>http://www.freedesktop.org/standards/menu-spec/menu-0.8.dtd</literal>
               </para>
             </listitem>
           </varlistentry>
@@ -290,8 +290,8 @@ entries</ulink>: <varname>Categories</varname>,
         Here is a sample doctype declaration:
         <informalexample>
           <programlisting>
-            &lt;!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 1.0//EN"
-            "http://www.freedesktop.org/standards/menu-spec/1.0/menu.dtd"&gt;
+            &lt;!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 0.8//EN"
+            "http://www.freedesktop.org/standards/menu-spec/menu-0.8.dtd"&gt;
           </programlisting>
         </informalexample>
         
@@ -930,7 +930,7 @@ entries</ulink>: <varname>Categories</varname>,
     </para>
     <para>
       Once all files have been loaded into a single tree, scan the tree 
-      recursively performing these steps:
+      recursively performing these steps to remove duplicates:
       <orderedlist>
         <listitem>
           <para>
@@ -957,36 +957,39 @@ entries</ulink>: <varname>Categories</varname>,
         </listitem>
         <listitem>
           <para>
-            Recurse into each child &lt;Menu&gt;, performing this list of 
-            steps for each child in order.
-          </para>
-        </listitem>
-        <listitem>
-          <para>
             Resolve duplicate &lt;Move&gt; operations (with the same 
             origin path) by keeping the last one.
           </para>
         </listitem>
         <listitem>
           <para>
-            Execute &lt;Move&gt; operations in the order that they appear. If
-            the destination path does not exist, simply relocate the origin
-            &lt;Menu&gt; element, and change its &lt;Name&gt; field to match the
-            destination path.  If the origin path does not exist, do nothing.
-            If both paths exist, take the origin &lt;Menu&gt; element, delete
-            its &lt;Name&gt; element, and prepend its remaining child elements
-            to the destination &lt;Menu&gt; element. Then, recursively re-run
-            the previous merge steps on the resulting combined &lt;Menu&gt; in order to
-            consolidate duplicates.
-          </para>
-        </listitem>
-        <listitem>
-          <para>
-            For each &lt;Menu&gt; containing a &lt;Deleted&gt; element which is
-            not followed by a &lt;NotDeleted&gt; element, remove that menu.
+            Recurse into each child &lt;Menu&gt;, performing this list of 
+            steps for each child in order.
           </para>
         </listitem>
       </orderedlist>
+    </para>
+    <para>
+      After recursing once to remove duplicates, resolve &lt;Move&gt; elements
+      for each menu starting with the top level and recursing into child menus.
+      So the deepest menus have their &lt;Move&gt; operations performed last.
+      Within each &lt;Menu&gt;, execute &lt;Move&gt; operations in the order
+      that they appear. If the destination path does not exist, simply relocate
+      the origin &lt;Menu&gt; element, and change its &lt;Name&gt; field to
+      match the destination path.  If the origin path does not exist, do
+      nothing.  If both paths exist, take the origin &lt;Menu&gt; element,
+      delete its &lt;Name&gt; element, and prepend its remaining child elements
+      to the destination &lt;Menu&gt; element.
+    </para>
+    <para>
+      If any &lt;Move&gt; operations affect a menu, then re-run the 
+      steps to resolve duplicates in case any duplicates have been 
+      created.
+    </para>
+    <para>
+      Finally, for each &lt;Menu&gt; containing a &lt;Deleted&gt; element which
+      is not followed by a &lt;NotDeleted&gt; element, remove that menu and all
+      its child menus.
     </para>
 
     <para>
@@ -1142,8 +1145,8 @@ entries</ulink>: <varname>Categories</varname>,
       Conceptually that is converted to the following &lt;Menu&gt;:
       <informalexample>
         <programlisting>
-          &lt;!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 1.0//EN"
-          "http://www.freedesktop.org/standards/menu-spec/1.0/menu.dtd"&gt;
+          &lt;!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 0.8//EN"
+          "http://www.freedesktop.org/standards/menu-spec/menu-0.8.dtd"&gt;
 
           &lt;Menu&gt;
             &lt;AppDir&gt;/usr/share/applnk&lt;/AppDir&gt;
@@ -1172,8 +1175,8 @@ entries</ulink>: <varname>Categories</varname>,
     <para>
       <informalexample>
         <programlisting>
-          &lt;!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 1.0//EN"
-          "http://www.freedesktop.org/standards/menu-spec/1.0/menu.dtd"&gt;
+          &lt;!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 0.8//EN"
+          "http://www.freedesktop.org/standards/menu-spec/menu-0.8.dtd"&gt;
 
           &lt;Menu&gt;
             &lt;Name&gt;Applications&lt;/Name&gt;
@@ -1271,6 +1274,11 @@ entries</ulink>: <varname>Categories</varname>,
 			  <entry></entry>
 
             </row><row>
+              <entry>Building</entry>
+              <entry>A tool to build applications</entry>
+			  <entry>Development</entry>
+
+            </row><row>
               <entry>Debugger</entry>
               <entry>A tool to debug applications</entry>
 			  <entry>Development</entry>
@@ -1286,8 +1294,18 @@ entries</ulink>: <varname>Categories</varname>,
 			  <entry>Development</entry>
 
             </row><row>
+              <entry>Profiling</entry>
+              <entry>A profiling tool</entry>
+			  <entry>Development</entry>
+
+            </row><row>
               <entry>RevisionControl</entry>
               <entry>Applications like cvs or subversion</entry>
+			  <entry>Development</entry>
+
+            </row><row>
+              <entry>Translation</entry>
+              <entry>A translation tool</entry>
 			  <entry>Development</entry>
 
             </row><row>
@@ -1307,7 +1325,12 @@ entries</ulink>: <varname>Categories</varname>,
             </row><row>
               <entry>Database</entry>
               <entry>Application to manage a database</entry>
-			  <entry>Office;Development</entry>
+			  <entry>Office or Development or AudioVideo</entry>
+
+			</row><row>
+              <entry>Dictionary</entry>
+              <entry>A dictionary</entry>
+			  <entry>Office</entry>
 
             </row><row>
               <entry>Chart</entry>
@@ -1322,6 +1345,11 @@ entries</ulink>: <varname>Categories</varname>,
             </row><row>
               <entry>Finance</entry>
               <entry>Application to manage your finance</entry>
+			  <entry>Office</entry>
+
+            </row><row>
+              <entry>FlowChart</entry>
+              <entry>A flowchart application</entry>
 			  <entry>Office</entry>
 
             </row><row>
@@ -1354,42 +1382,51 @@ entries</ulink>: <varname>Categories</varname>,
               <entry>Graphical application</entry>
 
             </row><row>
-              <entry>3DGraphics</entry>
-              <entry>3D based graphical application</entry>
-			  <entry>Graphics</entry>
-
-            </row><row>
-              <entry>RasterGraphics</entry>
-              <entry>Raster based graphical application</entry>
-			  <entry>Graphics</entry>
-
-            </row><row>
-              <entry>ScanTool</entry>
-              <entry>Tool to scan a file/text</entry>
+              <entry>2DGraphics</entry>
+              <entry>2D based graphical application</entry>
 			  <entry>Graphics</entry>
 
             </row><row>
               <entry>VectorGraphics</entry>
               <entry>Vector based graphical application</entry>
+			  <entry>2DGraphics</entry>
+
+            </row><row>
+              <entry>RasterGraphics</entry>
+              <entry>Raster based graphical application</entry>
+			  <entry>2DGraphics</entry>
+
+            </row><row>
+              <entry>3DGraphics</entry>
+              <entry>3D based graphical application</entry>
 			  <entry>Graphics</entry>
+
+            </row><row>
+              <entry>Scanning</entry>
+              <entry>Tool to scan a file/text</entry>
+			  <entry>Graphics</entry>
+
+            </row><row>
+              <entry>OCR</entry>
+              <entry>Tool to text</entry>
+			  <entry>Scanning</entry>
+
+            </row><row>
+              <entry>Photograph</entry>
+              <entry>Camera tools, etc.</entry>
+			  <entry>Graphics or Office</entry>
 
             </row><row>
               <entry>Viewer</entry>
               <entry>Tool to view e.g. a graphic or pdf file</entry>
-			  <entry>(Graphics)</entry>
+			  <entry>Graphics or Office</entry>
 
             </row><row>
               <entry>Settings</entry>
               <entry>Settings applications</entry>
 
             </row><row>
-              <entry>AccessibilitySettings</entry>
-              <entry>Accessibility settings</entry>
-			  <entry>Settings</entry>
-
-
-            </row><row>
-              <entry>Desktop-Settings</entry>
+              <entry>DesktopSettings</entry>
               <entry>ConfigurationTool for the GUI</entry>
 			  <entry>Settings</entry>
 
@@ -1399,27 +1436,18 @@ entries</ulink>: <varname>Categories</varname>,
 			  <entry>Settings</entry>
 
             </row><row>
-              <entry>NetworkSettings</entry>
-              <entry>Application to manage network settings</entry>
-			  <entry>Settings</entry>
-
-            </row><row>
               <entry>PackageManager</entry>
               <entry>A package manager application</entry>
 			  <entry>Settings</entry>
 
             </row><row>
-              <entry>SystemSetup</entry>
-              <entry>System setup application, e.g. init level configuration</entry>
-			  <entry>Settings</entry>
-
-            </row><row>
               <entry>Network</entry>
               <entry>Network application such as a webbrowser</entry>
+			  <entry>(Settings)</entry>
 
             </row><row>
-              <entry>WebBrowser</entry>
-              <entry>A webbrowser</entry>
+              <entry>Dialup</entry>
+              <entry>A dialup program</entry>
 			  <entry>Network</entry>
 
             </row><row>
@@ -1433,13 +1461,23 @@ entries</ulink>: <varname>Categories</varname>,
 			  <entry>Network</entry>
 
             </row><row>
-              <entry>News</entry>
-              <entry>A newsreader or newsticker</entry>
+              <entry>FileTransfer</entry>
+              <entry>Tools like FTP or P2P programs</entry>
 			  <entry>Network</entry>
 
             </row><row>
-              <entry>FileTransfer</entry>
-              <entry>Tools like FTP or P2P programs</entry>
+              <entry>HamRadio</entry>
+              <entry>HAM radio software</entry>
+			  <entry>Network or Audio</entry>
+
+            </row><row>
+              <entry>News</entry>
+              <entry>A newsreader or newsticker</entry>
+
+            </row><row>
+              <entry>P2P</entry>
+              <entry>A P2P program</entry>
+			  <entry>Network</entry>
 			  <entry>Network</entry>
 
             </row><row>
@@ -1453,13 +1491,68 @@ entries</ulink>: <varname>Categories</varname>,
 			  <entry>Network</entry>
 
             </row><row>
+              <entry>WebBrowser</entry>
+              <entry>A webbrowser</entry>
+			  <entry>Network</entry>
+
+            </row><row>
+              <entry>WebDevelopment</entry>
+              <entry>A tool for web developers</entry>
+			  <entry>Network or Development</entry>
+
+            </row><row>
               <entry>AudioVideo</entry>
               <entry>A multimedia (audio/video) application</entry>
 
             </row><row>
+              <entry>Audio</entry>
+              <entry>An audio application</entry>
+			  <entry>AudioVideo</entry>
+
+            </row><row>
+              <entry>Midi</entry>
+              <entry>An app related to midi</entry>
+			  <entry>Audio</entry>
+
+            </row><row>
+              <entry>Mixer</entry>
+              <entry>Just a mixer</entry>
+			  <entry>Audio</entry>
+
+            </row><row>
+              <entry>Sequencer</entry>
+              <entry>a sequencer</entry>
+			  <entry>Audio</entry>
+
+            </row><row>
+              <entry>Tuner</entry>
+              <entry>a tuner</entry>
+			  <entry>Audio</entry>
+
+            </row><row>
+              <entry>Video</entry>
+              <entry>A video application</entry>
+			  <entry>AudioVideo</entry>
+
+            </row><row>
+              <entry>TV</entry>
+              <entry>A TV application</entry>
+			  <entry>Video</entry>
+
+            </row><row>
               <entry>AudioVideoEditing</entry>
               <entry>Application to edit audio or video files</entry>
-			  <entry>AudioVideo</entry>
+			  <entry>Audio or Video or AudiVideo</entry>
+
+            </row><row>
+              <entry>Player</entry>
+              <entry>Application to play audio/video files</entry>
+			  <entry>Audio or Video or AudioVideo</entry>
+
+            </row><row>
+              <entry>Recorder</entry>
+              <entry>Application to record audio/video files</entry>
+			  <entry>Audio or Video or AudioVideo</entry>
 
             </row><row>
               <entry>DiscBurning</entry>
@@ -1467,18 +1560,13 @@ entries</ulink>: <varname>Categories</varname>,
 			  <entry>AudioVideo</entry>
 
             </row><row>
-              <entry>Mixer</entry>
-              <entry>Just a mixer</entry>
-			  <entry>AudioVideo</entry>
-
-            </row><row>
-              <entry>Player</entry>
-              <entry>Application to play audio/video files</entry>
-			  <entry>AudioVideo</entry>
-
-            </row><row>
               <entry>Game</entry>
               <entry>A game</entry>
+
+            </row><row>
+              <entry>ActionGame</entry>
+              <entry>An actiongame</entry>
+			  <entry>Game</entry>
 
             </row><row>
               <entry>AdventureGame</entry>
@@ -1506,11 +1594,6 @@ entries</ulink>: <varname>Categories</varname>,
 			  <entry>Game</entry>
 
             </row><row>
-              <entry>FirstPersonGame</entry>
-              <entry>First person perspective game</entry>
-			  <entry>Game</entry>
-
-            </row><row>
               <entry>KidsGame</entry>
               <entry>A game for kids</entry>
 			  <entry>Game</entry>
@@ -1518,6 +1601,16 @@ entries</ulink>: <varname>Categories</varname>,
             </row><row>
               <entry>LogicGame</entry>
               <entry>Logic games like puzzles, etc</entry>
+			  <entry>Game</entry>
+
+            </row><row>
+              <entry>RolePlaying</entry>
+              <entry>A roleplaying game</entry>
+			  <entry>Game</entry>
+
+            </row><row>
+              <entry>Simulation</entry>
+              <entry>A simulation game</entry>
 			  <entry>Game</entry>
 
             </row><row>
@@ -1533,6 +1626,21 @@ entries</ulink>: <varname>Categories</varname>,
             </row><row>
               <entry>Education</entry>
               <entry>Educational software</entry>
+
+            </row><row>
+              <entry>Art</entry>
+              <entry>software to teach arts</entry>
+			  <entry>Education</entry>
+
+            </row><row>
+              <entry>Art</entry>
+              <entry></entry>
+			  <entry>Education</entry>
+
+            </row><row>
+              <entry>Contruction</entry>
+              <entry></entry>
+			  <entry>Education</entry>
 
             </row><row>
               <entry>Music</entry>
@@ -1585,6 +1693,11 @@ entries</ulink>: <varname>Categories</varname>,
 			  <entry>Science</entry>
 
             </row><row>
+              <entry>Teaching</entry>
+              <entry>An education program for teachers</entry>
+			  <entry>Education</entry>
+
+            </row><row>
               <entry>Amusement</entry>
               <entry>A simple amusement</entry>
 			  <entry></entry>
@@ -1600,15 +1713,9 @@ entries</ulink>: <varname>Categories</varname>,
 			  <entry></entry>
 
             </row><row>
-              <entry>Clock</entry>
-              <entry>A clock application/applet</entry>
-			  <entry></entry>
-
-            </row><row>
               <entry>Electronics</entry>
               <entry>Electronics software, e.g. a circuit designer</entry>
 			  <entry></entry>
-
 
             </row><row>
               <entry>Emulator</entry>
@@ -1626,11 +1733,6 @@ entries</ulink>: <varname>Categories</varname>,
 			  <entry></entry>
 
             </row><row>
-              <entry>HamRadio</entry>
-              <entry>HAM radio software</entry>
-			  <entry></entry>
-
-            </row><row>
               <entry>Shell</entry>
               <entry>A shell (an actual specific shell such as
               <filename>bash</filename> or <filename>tcsh</filename>, not a TerminalEmulator)</entry>
@@ -1641,9 +1743,24 @@ entries</ulink>: <varname>Categories</varname>,
 			  <entry></entry>
 
             </row><row>
+              <entry>TerminalEmulator</entry>
+              <entry>A terminal emulator application</entry>
+			  <entry></entry>
+
+            </row><row>
+              <entry>TrayIcon</entry>
+              <entry>An application that is primarily an icon for the "system tray" or "notification area" (apps that open a normal window and just happen to have a tray icon as well should not list this category)</entry>
+			  <entry></entry>
+
+            </row><row>
               <entry>System</entry>
               <entry>System application, "System Tools" such as say a log viewer or network monitor</entry>
-			  <entry></entry>
+			  <entry>(Settings)</entry>
+
+            </row><row>
+              <entry>Filesystem</entry>
+              <entry>A filesytem tool</entry>
+			  <entry>System</entry>
 
             </row><row>
               <entry>Monitor</entry>
@@ -1651,19 +1768,9 @@ entries</ulink>: <varname>Categories</varname>,
 			  <entry>System</entry>
 
             </row><row>
-              <entry>TerminalEmulator</entry>
-              <entry>A terminal emulator application</entry>
-			  <entry></entry>
-
-            </row><row>
-              <entry>TextEditor</entry>
-              <entry>A text editor</entry>
-			  <entry></entry>
-
-            </row><row>
-              <entry>TrayIcon</entry>
-              <entry>An application that is primarily an icon for the "system tray" or "notification area" (apps that open a normal window and just happen to have a tray icon as well should not list this category)</entry>
-			  <entry></entry>
+              <entry>Security</entry>
+              <entry>A security tool</entry>
+			  <entry>Settings or System</entry>
 
             </row><row>
               <entry>Utility</entry>
@@ -1673,7 +1780,22 @@ entries</ulink>: <varname>Categories</varname>,
             </row><row>
               <entry>Accessibility</entry>
               <entry>Accessibility</entry>
+			  <entry>Settings or Utility</entry>
+
+            </row><row>
+              <entry>Calculator</entry>
+              <entry>A calculator</entry>
+			  <entry>Utilitiy</entry>
+
+            </row><row>
+              <entry>Clock</entry>
+              <entry>A clock application/applet</entry>
 			  <entry>Utility</entry>
+
+            </row><row>
+              <entry>TextEditor</entry>
+              <entry>A text editor</entry>
+			  <entry>Utilitiy</entry>
 
             </row><row>
               <entry>KDE</entry>
