@@ -1988,13 +1988,13 @@ entries</ulink>: <varname>Categories</varname>,
         <para>
           The id to identify a desktop entry with. 
           For example, if <filename>/usr/share/applications</filename> is
-          specified as an &lt;AppDir&gt;, and <filename>/opt/fop</filename>
-          as a &lt;LegacyDir&gt; with a prefix of <literal>foo-</literal>
+          specified as an &lt;AppDir&gt;, and <filename>/opt/ude</filename>
+          as &lt;LegacyDir prefix="foo-"&gt;
           then 
           <filename>/usr/share/applications/foo/bar.desktop</filename>, 
           <filename>/usr/share/applications/foo-bar.desktop</filename>
           and
-          <filename>/opt/fop/Settings/bar.desktop</filename> all have
+          <filename>/opt/ude/Settings/bar.desktop</filename> all have
           the same desktop-file id <literal>foo-bar.desktop</literal>
         </para>
       </glossdef>
