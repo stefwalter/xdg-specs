@@ -48,14 +48,15 @@
 <!ELEMENT Deleted    EMPTY>
 <!ELEMENT NotDeleted EMPTY>
 
-<!ELEMENT Exclude  ((Category|Filename|And|Or|Not)*)> 
-<!ELEMENT Include  ((Category|Filename|And|Or|Not)*)>
+<!ELEMENT Exclude  ((Category|Filename|And|Or|Not|All)*)> 
+<!ELEMENT Include  ((Category|Filename|And|Or|Not|All)*)>
 
-<!ELEMENT And      ((Category|Filename|And|Or|Not)*)>
-<!ELEMENT Or       ((Category|Filename|And|Or|Not)*)>
-<!ELEMENT Not      ((Category|Filename|And|Or|Not)*)>
+<!ELEMENT And      ((Category|Filename|And|Or|Not|All)*)>
+<!ELEMENT Or       ((Category|Filename|And|Or|Not|All)*)>
+<!ELEMENT Not      ((Category|Filename|And|Or|Not|All)*)>
 <!ELEMENT Filename (#PCDATA)>
 <!ELEMENT Category (#PCDATA)>
+<!ELEMENT All      EMPTY>
 
 <!ELEMENT Move ((Old,New)*)>
 <!ELEMENT Old  (#PCDATA)>
