@@ -1,3 +1,16 @@
+2004-08-29  Mark McLoughlin  <mark@skynet.ie>
+
+	* tests/m: test for NoDisplay=true behavious in .desktop and
+	.directory files.
+	
+	* data/hidden.desktop,
+	  data/hidden.directory: add.
+	
+	* data/apps.directory: add Type=Directory.
+	
+	* menutest: actually generate a test result if one doesn't
+	exist - makes it easier to write new tests.
+
 2003-10-23  Havoc Pennington  <hp@redhat.com>
 
 	* tests/f/test: remove <OnlyUnallocated/> from inside <Include>

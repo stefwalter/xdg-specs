@@ -36,10 +36,7 @@ for TEST in ${TESTS}; do
   mkdir ${MENUTESTDIR}
   RESULT=tests/${TEST}/result
 
-  if [ ! -e ${RESULT} ]; then
-    echo '!!! Result file ('${RESULT}') for '${TEST}' missing'
-  else
-    (
+  (
     echo ">>> Running test ${TEST}"
 
     # Some predefined values
@@ -60,9 +57,18 @@ for TEST in ${TESTS}; do
      . tests/${TEST}/test
 
     $MENUTEST > ${MENUTESTDIR}/result1 2> ${MENUTESTDIR}/log
-    ./expand ${RESULT} > ${MENUTESTDIR}/result2
-    )
 
+    if [ -e ${RESULT} ]; then
+      ./expand ${RESULT} > ${MENUTESTDIR}/result2
+    fi
+  )
+
+  if [ ! -e ${RESULT} ]; then
+    echo '!!! Result file ('${RESULT}') for '${TEST}' missing'
+    echo '>>> Failed'
+    FAILED="${FAILED} ${TEST}"
+
+  else
     if diff -q ${MENUTESTDIR}/result1 ${MENUTESTDIR}/result2 > /dev/null; then
       echo '>>> OK'
       SUCCEEDED="${SUCCEEDED} ${TEST}"
