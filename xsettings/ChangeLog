@@ -1,0 +1,4 @@
+Thu May 10 15:23:50 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* xsettings-manager.[ch]: Add xsettings_manager_delete_setting().
+
