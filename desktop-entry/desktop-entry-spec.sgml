@@ -3,8 +3,8 @@
 <article id="index">
   <artheader>
     <title>Desktop Entry Standard</title>
-    <releaseinfo>Version 0.9.2</releaseinfo>
-    <date>6 March 2001</date>
+    <releaseinfo>Version 0.9.3</releaseinfo>
+    <date>13 March 2001</date>
     <authorgroup>
       <author>
 	<firstname>Preston</firstname>
@@ -803,7 +803,7 @@ Icon=fooview-edit.png</programlisting>
     <para>
       If the locale tag includes an .ENCODING part, then that determines
       the encoding for the line. Otherwise, the encoding is determined
-      by the language, or language-country pair from the locale, according
+      by the language, or language-country pair from the locale tag, according
       to the following table.
     </para>
     <informaltable>
@@ -811,69 +811,108 @@ Icon=fooview-edit.png</programlisting>
 	<thead>
 	  <row>
 	    <entry>Encoding</entry>
+	    <entry>Aliases</entry>
 	    <entry>Tags</entry>
 	  </row>
 	</thead>
 	<tbody>
 	  <row>
-	    <entry>ARMSCII-8 (*)</entry><entry>by</entry>
+	    <entry>ARMSCII-8 (*)</entry><entry></entry><entry>by</entry>
 	  </row><row>
-	    <entry>BIG5</entry><entry>zh_TW.Big5</entry>
+	    <entry>BIG5</entry><entry></entry><entry>zh_TW</entry>
 	  </row><row>
-	    <entry>CP1251</entry><entry>be bg</entry>
+	    <entry>CP1251</entry><entry></entry><entry>be bg</entry>
 	  </row><row>
-	    <entry>EUC-CN</entry><entry>zh_CN.GB2312</entry>
+	    <entry>EUC-CN</entry><entry>GB2312</entry><entry>zh_CN</entry>
 	  </row><row>
-	    <entry>EUC-JP</entry><entry>ja</entry>
+	    <entry>EUC-JP</entry><entry></entry><entry>ja</entry>
 	  </row><row>
-	    <entry>EUC-KR</entry><entry>ko</entry>
+	    <entry>EUC-KR</entry><entry></entry><entry>ko</entry>
 	  </row><row>
-	    <entry>GEORGIAN-ACADEMY (*)</entry><entry>ka_GE.georgianacademy</entry>
+	    <entry>GEORGIAN-ACADEMY (*)</entry><entry></entry><entry></entry>
 	  </row><row>
-	    <entry>GEORGIAN-PS (*)</entry><entry>ka</entry>
+	    <entry>GEORGIAN-PS (*)</entry><entry></entry><entry>ka</entry>
 	  </row><row>
-	    <entry>ISO-8859-1</entry><entry>br ca da de en es eu fi fr gl it nl wa no pt pt sv</entry>
+	    <entry>ISO-8859-1</entry><entry></entry><entry>br ca da de en es eu fi fr gl it nl wa no pt pt sv</entry>
 	  </row><row>
-	    <entry>ISO-8859-2</entry><entry>cs hr hu pl ro sk sl sq sr</entry>
+	    <entry>ISO-8859-2</entry><entry></entry><entry>cs hr hu pl ro sk sl sq sr</entry>
 	  </row><row>
-	    <entry>ISO-8859-3 </entry><entry>eo</entry>
+	    <entry>ISO-8859-3 </entry><entry></entry><entry>eo</entry>
 	  </row><row>
-	    <entry>ISO-8859-5</entry><entry>mk sp</entry>
+	    <entry>ISO-8859-5</entry><entry></entry><entry>mk sp</entry>
 	  </row><row>
-	    <entry>ISO-8859-7</entry><entry>el</entry>
+	    <entry>ISO-8859-7</entry><entry></entry><entry>el</entry>
 	  </row><row>
-	    <entry>ISO-8859-9</entry><entry>tr</entry>
+	    <entry>ISO-8859-9</entry><entry></entry><entry>tr</entry>
 	  </row><row>
-	    <entry>ISO-8859-13</entry><entry>lt lv mi</entry>
+	    <entry>ISO-8859-13</entry><entry></entry><entry>lt lv mi</entry>
 	  </row><row>
-	    <entry>ISO-8859-14</entry><entry>ga cy</entry>
+	    <entry>ISO-8859-14</entry><entry></entry><entry>ga cy</entry>
 	  </row><row>
-	    <entry>ISO-8859-15</entry><entry>et</entry>
+	    <entry>ISO-8859-15</entry><entry></entry><entry>et</entry>
 	  </row><row>
-	    <entry>KOI8-R</entry><entry>ru</entry>
+	    <entry>KOI8-R</entry><entry></entry><entry>ru</entry>
 	  </row><row>
-	    <entry>KOI8-U</entry><entry>uk</entry>
+	    <entry>KOI8-U</entry><entry></entry><entry>uk</entry>
 	  </row><row>
-	    <entry>TCVN-5712 (*)</entry><entry>vi vi_VN.TCVN</entry>
+	    <entry>TCVN-5712 (*)</entry><entry>TCVN</entry><entry>vi</entry>
 	  </row><row>
-	    <entry>TIS-620</entry><entry>th</entry>
+	    <entry>TIS-620</entry><entry></entry><entry>th</entry>
+	  </row><row>
+	    <entry>VISCII</entry><entry></entry><entry></entry>
 	  </row>
 	</tbody>
       </tgroup>
     </informaltable>
+    <variablelist>
+      <varlistentry>
+	<term>Encoding</term>
+	<listitem>
+	  <para>
+	    The name given here is listed here is typically the
+	    canonical name for the encoding in the GNU C Library's
+	    iconv facility Encodings marked with (*) are not
+	    currently supported by the GNU C Library; for this reason,
+	    implementations may choose to ignore lines in desktop
+	    files that resolve to this encoding. Desktop files with
+	    these encodings are currently rare or non-existent.
+	  </para>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>Aliases</term>
+	<listitem>
+	  <para>
+	    Other names for the encoding found in existing desktop
+	    files.
+	  </para>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>Tags</term>
+	<listitem>
+	  <para>
+	    Language tags for which this is the default encoding.
+	  </para>
+	</listitem>
+      </varlistentry>
+    </variablelist>
     <para>
-      Encodings marked with a (*) are not currently supported by the GNU C
-      Library; for this reason, implementations may choose to ignore lines
-      in desktop files with the corresponding tags. Desktop files with
-      these tags are currently rare or non-existent.
+      This table above covers all tags and encodings that are known to
+      be currently in use. Implementors may choose to support
+      encodings not in the above set. For tags without defaults listed
+      in the above table, desktop file creators must specify the
+      ENCODING part of the locale tag.
     </para>
     <para>
-      The encoding here is listed according to its canonical name in the 
-      GNU C Library's iconv facility. The more common tags tags found
-      with an encoding part are listed here, so that implementors can
-      verify that the correct encoding will be used. (In particular,
-      note the mismatch between zh_CN.GB2312, and the canonical name
-      EUC-CN.)
+      Matching the ENCODING part of the locale tag against a locale
+      name or alias should be done by stripping all punctuation
+      characters from both the tag and the name or alias, converting
+      both name and alias to lowercase, and comparing the result.
+      This is necessary because, for example, "Big5" is frequently
+      found instead of "BIG5" and "georgianacademy" instead of
+      GEORGIAN-ACADEMY. Desktop files creators should, however, use
+      the name as it appears in the "Encoding" column above.
     </para>
   </appendix>
 </article>
