@@ -1,10 +1,13 @@
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
                   "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+  <!ENTITY version "0.92">
+  <!ENTITY dtd-version "1.0">
 				  ]>
+
 <article id="index">
   <articleinfo>
     <title>Desktop Menu Specification</title>
-    <releaseinfo>Version 0.91</releaseinfo>
+    <releaseinfo>Version &version;</releaseinfo>
     <date>15 March 2005</date>
     <authorgroup>
       <author>
@@ -249,11 +252,20 @@ entries</ulink>: <varname>Categories</varname>,
   <sect1 id="menu-file-format">
     <title>Format of menu files</title>
     <para>
-      Menu files must be well-formed XML files, conform to the menu file DTD,
-      and end in the extension ".menu".  DTD conformance implies that
-      implementation-specific extensions to the file format are not allowed;
-      implementations are expected to stop processing if they encounter XML
-      elements or attributes that are not specified in this document.
+      Menu files must be well-formed XML files and end in the extension
+      ".menu". They should also conform to the menu file DTD which implies
+      that implementation-specific extensions to the file format are not
+      allowed. Implementations may stop processing if they encounter a menu
+      file which does not comply with the associated DTD. Note that the
+      associated DTD may differ in version from the one defined in this document.
+    </para>
+    <para>
+      When an implementation updates an existing menu file it may need to
+      update the identifier to a newer version of the DTD. Implementations
+      should never update the identifier of an existing menu file to an
+      older version. In order to remain compatible with newer versions,
+      implementations should ignore and preserve any XML elements,
+      attributes and attribute values that it does not know how to handle.
     </para>
     <sect2 id="menu-file-doctype">
       <title>Document Type Declaration</title>
@@ -270,18 +282,19 @@ entries</ulink>: <varname>Categories</varname>,
             </listitem>
           </varlistentry>
           <varlistentry>
-            <term>Public Identifier for 0.8</term>
+            <term>Public Identifier for &version;</term>
             <listitem>
               <para>
-                <literal>PUBLIC "-//freedesktop//DTD Menu 0.8//EN"</literal>
+                <literal>PUBLIC "-//freedesktop//DTD Menu &dtd-version;//EN"</literal>
               </para>
             </listitem>
           </varlistentry>
           <varlistentry>
-            <term>System Identifier for 0.8</term>
+            <term>System Identifier for &version;</term>
             <listitem>
               <para>
-                <literal>http://www.freedesktop.org/standards/menu-spec/menu-0.8.dtd</literal>
+
+<literal>http://www.freedesktop.org/standards/menu-spec/menu-&dtd-version;.dtd</literal>
               </para>
             </listitem>
           </varlistentry>
@@ -290,8 +303,8 @@ entries</ulink>: <varname>Categories</varname>,
         Here is a sample document type declaration:
         <informalexample>
           <programlisting>
-            &lt;!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 0.8//EN"
-            "http://www.freedesktop.org/standards/menu-spec/menu-0.8.dtd"&gt;
+            &lt;!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu &dtd-version;//EN"
+            "http://www.freedesktop.org/standards/menu-spec/menu-&dtd-version;.dtd"&gt;
           </programlisting>
         </informalexample>
         
@@ -1191,8 +1204,8 @@ entries</ulink>: <varname>Categories</varname>,
       Conceptually that is converted to the following &lt;Menu&gt;:
       <informalexample>
         <programlisting>
-          &lt;!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 0.8//EN"
-          "http://www.freedesktop.org/standards/menu-spec/menu-0.8.dtd"&gt;
+          &lt;!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu &dtd-version;//EN"
+          "http://www.freedesktop.org/standards/menu-spec/menu-&dtd-version;.dtd"&gt;
 
           &lt;Menu&gt;
             &lt;Name&gt;Applications&lt;/Name&gt;
@@ -1224,8 +1237,8 @@ entries</ulink>: <varname>Categories</varname>,
     <para>
       <informalexample>
         <programlisting>
-          &lt;!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 0.8//EN"
-          "http://www.freedesktop.org/standards/menu-spec/menu-0.8.dtd"&gt;
+          &lt;!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu &dtd-version;//EN"
+          "http://www.freedesktop.org/standards/menu-spec/menu-&dtd-version;.dtd"&gt;
 
           &lt;Menu&gt;
             &lt;Name&gt;Applications&lt;/Name&gt;

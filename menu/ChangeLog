@@ -1,3 +1,7 @@
+2005-03-23  Waldo Bastian <bastian@kde.org>
+
+        * menu-spec.xml: Clearify DTD conformance and version compatibility
+
 2005-03-22  Waldo Bastian <bastian@kde.org>
 
         * menu-spec.xml, menu.dtd: Added type attribute to <MergeFile>
