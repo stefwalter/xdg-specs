@@ -247,6 +247,13 @@ xsettings_manager_set_setting (XSettingsManager *manager,
 }
 
 XSettingsResult
+xsettings_manager_delete_setting (XSettingsManager *manager,
+                                  const char       *name)
+{
+  return xsettings_list_delete (&settings, name);
+}
+
+XSettingsResult
 xsettings_manager_set_int (XSettingsManager *manager,
 			   const char       *name,
 			   int               value)
