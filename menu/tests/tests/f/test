@@ -28,8 +28,8 @@ mkdir -p ${XDG_CONFIG_DIR}/menus
 		<Name>Games</Name>
 		<Include>
 			<Category>Game</Category>
-			<OnlyUnallocated/>
 		</Include>
+	        <OnlyUnallocated/>
 	</Menu>
 </Menu>
 EOF
