@@ -1,3 +1,10 @@
+Sat Aug 24 17:00:48 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* desktop-entry-spec.sgml: In legacy-mixed table, fix duplicate 
+	pt entry, language code for Armenian. Make explicit that
+	language-country locale tags can match a single language in
+	the table. (Pablo Saratxaga)
+
 Tue Mar 13 12:37:03 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* 0.9.3

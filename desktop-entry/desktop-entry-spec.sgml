@@ -804,7 +804,9 @@ Icon=fooview-edit.png</programlisting>
       If the locale tag includes an .ENCODING part, then that determines
       the encoding for the line. Otherwise, the encoding is determined
       by the language, or language-country pair from the locale tag, according
-      to the following table.
+      to the following table. (A language-country locale tag matches a
+      language by itself in the table if the language-country pair isn't
+      explicitely in the table.)
     </para>
     <informaltable>
       <tgroup cols=2>
@@ -817,7 +819,7 @@ Icon=fooview-edit.png</programlisting>
 	</thead>
 	<tbody>
 	  <row>
-	    <entry>ARMSCII-8 (*)</entry><entry></entry><entry>by</entry>
+	    <entry>ARMSCII-8 (*)</entry><entry></entry><entry>hy</entry>
 	  </row><row>
 	    <entry>BIG5</entry><entry></entry><entry>zh_TW</entry>
 	  </row><row>
@@ -833,7 +835,7 @@ Icon=fooview-edit.png</programlisting>
 	  </row><row>
 	    <entry>GEORGIAN-PS (*)</entry><entry></entry><entry>ka</entry>
 	  </row><row>
-	    <entry>ISO-8859-1</entry><entry></entry><entry>br ca da de en es eu fi fr gl it nl wa no pt pt sv</entry>
+	    <entry>ISO-8859-1</entry><entry></entry><entry>br ca da de en es eu fi fr gl it nl wa no pt sv</entry>
 	  </row><row>
 	    <entry>ISO-8859-2</entry><entry></entry><entry>cs hr hu pl ro sk sl sq sr</entry>
 	  </row><row>
