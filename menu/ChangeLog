@@ -1,3 +1,7 @@
+2004-12-13  Mark McLoughlin  <mark@skynet.ie>
+
+	* menu-spec.xml: elaboration from Waldo.
+
 2004-12-08  Mark McLoughlin  <mark@skynet.ie>
 
 	* menu-spec.xml: make <OnlyUnallocated/> be for entries

@@ -1048,7 +1048,10 @@ entries</ulink>: <varname>Categories</varname>,
       add it to the menu to be displayed and mark it as having been allocated.
       For each &lt;Exclude&gt;, match the rules against the currently-included
       desktop entries. For each desktop entry that matches, remove it again
-      from the menu.
+      from the menu. Note that an entry that is included in a menu but excluded
+      again by a later &lt;Exclude&gt; is still considered allocated (for the
+      purposes of &lt;OnlyUnallocated&gt;) even though that entry no longer
+      appears in the menu.
     </para>
     <para>
       Two passes are necessary, once for regular menus where any entry may
