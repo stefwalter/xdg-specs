@@ -22,18 +22,20 @@ Development/    kde-quanta.desktop      /opt/kde3/share/applnk/Development/quant
 The environment variable $MENUTEST should point to a command that is
 able to generate the menu in the above format.
 
+To test KDE one can use:
+	MENUTEST="kbuildsycoca --menutest"
+
 The menutest script should be used to run the tests. The following commands can
 be used:
 
-	MENUTEST=foobar menutest
+	MENUTEST="foo -bar" ./menutest
 
 to run all tests
 
-	MENUTEST=foobar menutest test-1
+	MENUTEST="foo -bar" TESTS="a b" ./menutest
 
-to run test-1 only
+to run test a and b only
 
-
-All tests contain of a test setup script that starts with "test-" and a file describing
-the expected menu that starts with "result-".
+All tests contain of a test setup script named "test" and a file describing
+the expected menu named "result".
 
