@@ -2,7 +2,7 @@
                   "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
 				  ]>
 <article id="index">
-  <artheader>
+  <articleinfo>
     <title>Desktop Menu Specification</title>
     <releaseinfo>Version 0.8</releaseinfo>
     <date>9 November 2003</date>
@@ -62,7 +62,7 @@
 	</affiliation>
       </author>
     </authorgroup>
-  </artheader>
+  </articleinfo>
 
   <sect1 id="introduction">
     <title>Introduction</title>
@@ -88,7 +88,7 @@
     </para>
     <para>
       In addition to a strict definition of the contents of each menu this 
-      specification also forsees in a number of layout / presentation hints.
+      specification also foresees in a number of layout / presentation hints.
       This part of the specification is optional, implementations may chose to
       ignore these hints.
     </para>
@@ -110,8 +110,8 @@
               This file contains the XML definition of the main application menu 
               layout. The first file found in the search path should be used;
               other files are ignored.  This implies that if the user has 
-              their own applications.menu, it replaces the systemwide one. 
-              (Though the user's menu may explicitly merge the systemwide one.)
+              their own applications.menu, it replaces the system wide one. 
+              (Though the user's menu may explicitly merge the system wide one.)
             </para>
             <para>
               Other menu files may exist, but are not specified in this
@@ -256,7 +256,7 @@ entries</ulink>: <varname>Categories</varname>,
       elements or attributes that are not specified in this document.
     </para>
     <sect2 id="menu-file-doctype">
-      <title>Doctype Declaration</title>
+      <title>Document Type Declaration</title>
       <para>
         Menu files for this version of the specification must use the following
         namespace, public and system identifiers:
@@ -287,7 +287,7 @@ entries</ulink>: <varname>Categories</varname>,
           </varlistentry>
         </variablelist>
 
-        Here is a sample doctype declaration:
+        Here is a sample document type declaration:
         <informalexample>
           <programlisting>
             &lt;!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 0.8//EN"
@@ -295,7 +295,7 @@ entries</ulink>: <varname>Categories</varname>,
           </programlisting>
         </informalexample>
         
-        All menu files MUST include the doctype declaration, so that
+        All menu files MUST include the document type declaration, so that
         implementations can adapt to different versions of this specification
         (and so implementations can validate the menu file against 
         the DTD).
@@ -449,7 +449,7 @@ entries</ulink>: <varname>Categories</varname>,
               <para>
                 Each &lt;Menu&gt; element has any number of &lt;Directory&gt;
                 elements. The content of the &lt;Directory&gt; element 
-                is the relative path of a directory entry containing metainformation 
+                is the relative path of a directory entry containing meta information 
                 about the &lt;Menu&gt;, such as its icon and localized name.
                 If no &lt;Directory&gt; is specified for a &lt;Menu&gt;, 
                 its &lt;Name&gt; field should be used as the user-visible
@@ -788,7 +788,7 @@ entries</ulink>: <varname>Categories</varname>,
                 preserve any &lt;Layout&gt; elements and their contents as far as
                 possible.
                 Each &lt;Menu&gt; may optionally contain a &lt;Layout&gt; element. 
-                If multipe elements appear then only the last such element is relevant.
+                If multiple elements appear then only the last such element is relevant.
                 The purpose of this element is to offer suggestions for the presentation
                 of the menu. 
                 If a menu does not contain a &lt;Layout&gt; element or if it contains
@@ -842,7 +842,7 @@ entries</ulink>: <varname>Categories</varname>,
                 The optional inline_limit attribute defines the maximum number of entries that can be inlined.
                 If the sub-menu has more entries than inline_limit, the sub-menu will not be inlined.
                 If the inline_limit is 0 (zero) there is no limit.
-                The optional inline_title attribute defines whether an inlined menu should be preceeded with
+                The optional inline_title attribute defines whether an inlined menu should be preceded with
                 a header entry listing the caption of the sub-menu. 
                 The inline_title attribute can be either "true" or "false".
                 The optional inline_alias attribute defines whether a single inlined entry should adopt the
@@ -887,7 +887,7 @@ entries</ulink>: <varname>Categories</varname>,
                 alphabetical order of their visual caption at this point.
                 Each &lt;Layout&gt; or &lt;DefaultLayout&gt; element shall have exactly one &lt;Merge type="all"&gt;
                 element or it shall have exactly one &lt;Merge type="files"&gt; and exactly one
-                &lt;Merge type="menus"&gt; element. An excemption is made for a completely empty &lt;Layout&gt; 
+                &lt;Merge type="menus"&gt; element. An exception is made for a completely empty &lt;Layout&gt; 
                 element which may be used to indicate that the default-layout should be used instead.
               </para>
             </listitem>
@@ -1268,7 +1268,7 @@ entries</ulink>: <varname>Categories</varname>,
 
             </row><row>
               <entry>Core</entry>
-              <entry>Important application, core to the desktop such as a filemanager or a help browser</entry>
+              <entry>Important application, core to the desktop such as a file manager or a help browser</entry>
 			  <entry></entry>
 
             </row><row>
@@ -1322,7 +1322,7 @@ entries</ulink>: <varname>Categories</varname>,
 
             </row><row>
               <entry>ContactManagement</entry>
-              <entry>E.g. an addressbook</entry>
+              <entry>E.g. an address book</entry>
 			  <entry>Office</entry>
 
             </row><row>
@@ -1411,11 +1411,11 @@ entries</ulink>: <varname>Categories</varname>,
 
             </row><row>
               <entry>OCR</entry>
-              <entry>Tool to text</entry>
+              <entry>Optical character recognition application</entry>
 			  <entry>Scanning</entry>
 
             </row><row>
-              <entry>Photograph</entry>
+              <entry>Photography</entry>
               <entry>Camera tools, etc.</entry>
 			  <entry>Graphics or Office</entry>
 
@@ -1430,12 +1430,12 @@ entries</ulink>: <varname>Categories</varname>,
 
             </row><row>
               <entry>DesktopSettings</entry>
-              <entry>ConfigurationTool for the GUI</entry>
+              <entry>Configuration tool for the GUI</entry>
 			  <entry>Settings</entry>
 
             </row><row>
               <entry>HardwareSettings</entry>
-              <entry>A tool to manage hardware components, like soundcards, graphicards or printers</entry>
+              <entry>A tool to manage hardware components, like sound cards, video cards or printers</entry>
 			  <entry>Settings</entry>
 
             </row><row>
@@ -1445,22 +1445,22 @@ entries</ulink>: <varname>Categories</varname>,
 
             </row><row>
               <entry>Network</entry>
-              <entry>Network application such as a webbrowser</entry>
+              <entry>Network application such as a web browser</entry>
 			  <entry>(Settings)</entry>
 
             </row><row>
               <entry>Dialup</entry>
-              <entry>A dialup program</entry>
+              <entry>A dial-up program</entry>
 			  <entry>Network</entry>
 
             </row><row>
               <entry>InstantMessaging</entry>
-              <entry>An InstantMessaging Client</entry>
+              <entry>An instant messaging client</entry>
 			  <entry>Network</entry>
 
             </row><row>
               <entry>IRCClient</entry>
-              <entry>An IRC Client</entry>
+              <entry>An IRC client</entry>
 			  <entry>Network</entry>
 
             </row><row>
@@ -1475,7 +1475,7 @@ entries</ulink>: <varname>Categories</varname>,
 
             </row><row>
               <entry>News</entry>
-              <entry>A newsreader or newsticker</entry>
+              <entry>A news reader or a news ticker</entry>
 
             </row><row>
               <entry>P2P</entry>
@@ -1494,7 +1494,7 @@ entries</ulink>: <varname>Categories</varname>,
 
             </row><row>
               <entry>WebBrowser</entry>
-              <entry>A webbrowser</entry>
+              <entry>A web browser</entry>
 			  <entry>Network</entry>
 
             </row><row>
@@ -1513,7 +1513,7 @@ entries</ulink>: <varname>Categories</varname>,
 
             </row><row>
               <entry>Midi</entry>
-              <entry>An app related to midi</entry>
+              <entry>An app related to MIDI</entry>
 			  <entry>Audio</entry>
 
             </row><row>
@@ -1523,12 +1523,12 @@ entries</ulink>: <varname>Categories</varname>,
 
             </row><row>
               <entry>Sequencer</entry>
-              <entry>a sequencer</entry>
+              <entry>A sequencer</entry>
 			  <entry>Audio</entry>
 
             </row><row>
               <entry>Tuner</entry>
-              <entry>a tuner</entry>
+              <entry>A tuner</entry>
 			  <entry>Audio</entry>
 
             </row><row>
@@ -1543,8 +1543,8 @@ entries</ulink>: <varname>Categories</varname>,
 
             </row><row>
               <entry>AudioVideoEditing</entry>
-              <entry>Application to edit audio or video files</entry>
-			  <entry>Audio or Video or AudiVideo</entry>
+              <entry>Application to edit audio/video files</entry>
+			  <entry>Audio or Video or AudioVideo</entry>
 
             </row><row>
               <entry>Player</entry>
@@ -1567,7 +1567,7 @@ entries</ulink>: <varname>Categories</varname>,
 
             </row><row>
               <entry>ActionGame</entry>
-              <entry>An actiongame</entry>
+              <entry>An action game</entry>
 			  <entry>Game</entry>
 
             </row><row>
@@ -1607,7 +1607,7 @@ entries</ulink>: <varname>Categories</varname>,
 
             </row><row>
               <entry>RolePlaying</entry>
-              <entry>A roleplaying game</entry>
+              <entry>A role playing game</entry>
 			  <entry>Game</entry>
 
             </row><row>
@@ -1617,12 +1617,12 @@ entries</ulink>: <varname>Categories</varname>,
 
             </row><row>
               <entry>SportsGame</entry>
-              <entry>A Sports game</entry>
+              <entry>A sports game</entry>
 			  <entry>Game</entry>
 
             </row><row>
               <entry>StrategyGame</entry>
-              <entry>A Strategy game</entry>
+              <entry>A strategy game</entry>
 			  <entry>Game</entry>
 
             </row><row>
@@ -1631,22 +1631,17 @@ entries</ulink>: <varname>Categories</varname>,
 
             </row><row>
               <entry>Art</entry>
-              <entry>software to teach arts</entry>
+              <entry>Software to teach arts</entry>
 			  <entry>Education</entry>
 
             </row><row>
-              <entry>Art</entry>
-              <entry></entry>
-			  <entry>Education</entry>
-
-            </row><row>
-              <entry>Contruction</entry>
+              <entry>Construction</entry>
               <entry></entry>
 			  <entry>Education</entry>
 
             </row><row>
               <entry>Music</entry>
-              <entry>Musical Software</entry>
+              <entry>Musical software</entry>
 			  <entry>AudioVideo;Education</entry>
 
             </row><row>
@@ -1686,7 +1681,7 @@ entries</ulink>: <varname>Categories</varname>,
 
             </row><row>
               <entry>MedicalSoftware</entry>
-              <entry>MedicalSoftware</entry>
+              <entry>Medical software</entry>
 			  <entry>Science</entry>
 
             </row><row>
@@ -1706,7 +1701,7 @@ entries</ulink>: <varname>Categories</varname>,
 
             </row><row>
               <entry>Applet</entry>
-              <entry>An applet that will run inside a panel or another such application, likely desktop specifi.c</entry>
+              <entry>An applet that will run inside a panel or another such application, likely desktop specific</entry>
 			  <entry></entry>
 
             </row><row>
@@ -1731,7 +1726,7 @@ entries</ulink>: <varname>Categories</varname>,
 
             </row><row>
               <entry>FileManager</entry>
-              <entry>A Filemanager</entry>
+              <entry>A file manager</entry>
 			  <entry></entry>
 
             </row><row>
@@ -1741,7 +1736,7 @@ entries</ulink>: <varname>Categories</varname>,
 
             </row><row>
               <entry>Screensaver</entry>
-              <entry>A screensaver (launching this desktop entry should activate the screensaver)</entry>
+              <entry>A screen saver (launching this desktop entry should activate the screen saver)</entry>
 			  <entry></entry>
 
             </row><row>
@@ -1761,7 +1756,7 @@ entries</ulink>: <varname>Categories</varname>,
 
             </row><row>
               <entry>Filesystem</entry>
-              <entry>A filesytem tool</entry>
+              <entry>A file system tool</entry>
 			  <entry>System</entry>
 
             </row><row>
@@ -1787,7 +1782,7 @@ entries</ulink>: <varname>Categories</varname>,
             </row><row>
               <entry>Calculator</entry>
               <entry>A calculator</entry>
-			  <entry>Utilitiy</entry>
+			  <entry>Utility</entry>
 
             </row><row>
               <entry>Clock</entry>
@@ -1797,7 +1792,7 @@ entries</ulink>: <varname>Categories</varname>,
             </row><row>
               <entry>TextEditor</entry>
               <entry>A text editor</entry>
-			  <entry>Utilitiy</entry>
+			  <entry>Utility</entry>
 
             </row><row>
               <entry>KDE</entry>
@@ -1826,7 +1821,7 @@ entries</ulink>: <varname>Categories</varname>,
 
             </row><row>
               <entry>Java</entry>
-              <entry>Application based on Java awt or Swing</entry>
+              <entry>Application based on Java GUI libraries, such as AWT or Swing</entry>
 			  <entry></entry>
 
             </row><row>
@@ -1941,7 +1936,7 @@ entries</ulink>: <varname>Categories</varname>,
       <para>
         To implement menu editing, the intent is that a per-user file is
         created.  The per-user file should specify a &lt;MergeFile&gt; with the
-        systemwide file, so that system changes are inherited.  When the user
+        system wide file, so that system changes are inherited.  When the user
         deletes a menu item, you add
         <literal>&lt;Exclude&gt;&lt;Filename&gt;foo.desktop&lt;/Filename&gt;&lt;/Exclude&gt;</literal>. If
         the user adds a menu item, you use

@@ -1,3 +1,9 @@
+2004-04-18  Mark McLoughlin  <mark@skynet.ie>
+
+	Patch from Ville Skyttä <ville.skytta@iki.fi>
+
+	* menu-spec.xml: editorial changes and typo fixes.
+
 2003-12-12  Waldo Bastian  <bastian@kde.org>
         * menu-spec.xml: Correct example in "Legacy Menu Hierarchies"
 
