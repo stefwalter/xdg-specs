@@ -10,13 +10,13 @@
 	<sect2>
 		<title>Version</title>
 		<para>
-This spec is version 1.0pre2.
+This spec is version 1.0pre3.
 		</para>
 	</sect2>
 	<sect2>
 		<title>What is this spec?</title>
 		<para>
-This spec defines interactions between window managers, applications and the utilities that form part of a desktop environment.  It builds on the ICCCM, which defines wm/client interactions at a lower level.  It was born out of a need to replace the original Gnome WM specification, although this specification has been designed to be independent of any one desktop environment.
+This spec defines interactions between window managers, applications and the utilities that form part of a desktop environment.  It builds on the ICCCM [2], which defines wm/client interactions at a lower level.  It was born out of a need to replace the original Gnome WM specification, although this specification has been designed to be independent of any one desktop environment.
 		</para>
 	</sect2>
 	<sect2>
@@ -42,6 +42,39 @@ explicitly modifies the ICCCM Window Managers and Clients MUST fulfil these
 modifications.
 		</para>
 	</sect2>
+	<sect2>
+		<title>Changes since 1.0pre2</title>
+		<itemizedlist>
+			<listitem><para>
+_NET_SET_NUMBER_OF_DESKTOPS -> _NET_NUMBER_OF_DESKTOPS for consistency.
+			</para></listitem>
+			<listitem><para>
+_NET_WM_VISIBLE_NAME_STRING -> _NET_WM_VISIBLE_NAME for consistency.
+			</para></listitem>
+			<listitem><para>
+_NET_WM_STATE: added explanation of permitted extensions. Added explanation of 
+being set / not set.
+			</para></listitem>
+			<listitem><para>
+Spellchecked, corrected various typos.
+			</para></listitem>
+			<listitem><para>
+UTF8 -> UTF-8 for consistency.
+			</para></listitem>
+			<listitem><para>
+added references to the ICCCM an UTF-8 (incomplete).
+			</para></listitem>
+			<listitem><para>
+added data and event formats where missing.
+			</para></listitem>
+			<listitem><para>
+clarified _NET_SUPPORTING_WM_CHECK.
+			</para></listitem>
+			<listitem><para>
+fixed formatting of _NET_CLOSE_WINDOW message.
+			</para></listitem>
+		</itemizedlist>
+	</sect2>		
 	<sect2>
 		<title>Changes since 1.0pre1</title>
 		<itemizedlist>
@@ -234,12 +267,12 @@ This property SHOULD be set and updated by the Window Manager to indicate the
 number of virtual desktops.  
 	</para>
 	<para>
-A Pager can request change in the desktops number by sending a _NET_SET_NUMBER_OF_DESKTOPS message to the root window:
+A Pager can request change in the desktops number by sending a _NET_NUMBER_OF_DESKTOPS message to the root window:
 	</para>
 	<programlisting><![CDATA[
-_NET_SET_NUMBER_OF_DESKTOPS
+_NET_NUMBER_OF_DESKTOPS
   window = target app window
-  message_type = _NET_SET_NUMBER_OF_DESKTOPS
+  message_type = _NET_NUMBER_OF_DESKTOPS
   format = 32
   data.l[0] = new_desktops_number
 ]]></programlisting>
@@ -260,10 +293,18 @@ Array of two cardinals that defines the width and height of each desktop in
 pixels.  This property SHOULD be set by the Window Manager. 
 		</para>
 		<para>
-A Pager can change the desktop geometry by sending a _NET_DESKTOP_GEOMETRY client
-message to the root window 
-<!-- (type _NET_DESKTOP_GEOMETRY, format 32, l[0]=&lt;new
-width&gt; l[1]=&lt;new height&gt; -->
+A Pager can request a change in  the desktop geometry by sending a _NET_DESKTOP_GEOMETRY client
+message to the root window:
+		</para>
+	<programlisting><![CDATA[
+_NET_DESKTOP_GEOMETRY
+  message_type = _NET_DESKTOP_GEOMETRY 
+  format = 32
+  data.l[0] = new_width
+  data.l[1] = new_height
+]]></programlisting> 
+		<para>
+The Window Manager MAY choose to ignore this message, in which case _NET_DESKTOP_GEOMETRY property will remain unchanged.
 		</para>
 	</sect2>
 	<sect2>
@@ -278,11 +319,18 @@ desktops, this MUST always be set to (0,0).
 	</para>	
 	<para>
 A Pager can change the viewport for the current desktop by sending a
-_NET_DESKTOP_VIEWPORT client message to the root window 
-<!-- (type
-_NET_DESKTOP_VIEWPORT, format 32, l[0]=&lt;new x&gt;, l[1]=&lt;new y&gt;).
-The Window Manager MUST set and update this property. -->
+_NET_DESKTOP_VIEWPORT client message to the root window:
 	</para>
+	<programlisting><![CDATA[
+_NET_DESKTOP_VIEWPORT
+  message_type = _NET_DESKTOP_VIEWPORT
+  format = 32
+  data.l[0] = new_vx
+  data.l[1] = new_vy
+]]></programlisting> 
+		<para>
+The Window Manager MAY choose to ignore this message, in which case _NET_DESKTOP_VIEWPORT property will remain unchanged.
+		</para>
 	</sect2><sect2><title>_NET_CURRENT_DESKTOP</title>
 	<programlisting><![CDATA[
 _NET_CURRENT_DESKTOP <desktop>, CARDINAL[1]/32
@@ -300,11 +348,10 @@ _NET_CURRENT_DESKTOP
 ]]></programlisting>
 	</sect2><sect2><title>_NET_DESKTOP_NAMES</title>
 	<programlisting><![CDATA[
-_NET_DESKTOP_NAMES
+_NET_DESKTOP_NAMES, UTF-8_STRING[]
 ]]></programlisting>
 	<para>
-The names of all virtual desktops in UTF8 encoding. This property MAY be
-changed by a Pager or the Window Mangaer at any time.
+The names of all virtual desktops. This is a NULL spearated list of strings in UTF-8 [1] encoding with 	an additional NULL at the end of the list. This property MAY be changed by a Pager or the Window Manager at any time.
 	</para>
 	</sect2><sect2><title>_NET_ACTIVE_WINDOW</title>
 	<programlisting><![CDATA[
@@ -330,7 +377,7 @@ _NET_WORKAREA, CARDINAL[][4]/32
 ]]>
 	</programlisting>
 	<para>
-	This property MUST be set by WM upon calculating the work area for each desktop (the first quadruple = desktop 1).  Contains the left, right, top, bottom co-ordinates for each desktop.  Work area SHOULD be used by desktop applications to place desktop icons apropriately.
+	This property MUST be set by WM upon calculating the work area for each desktop (the first quadruple = desktop 1).  Contains the left, right, top, bottom co-ordinates for each desktop.  Work area SHOULD be used by desktop applications to place desktop icons appropriately.
 	</para>
 	<para>
 	The window manager SHOULD calculate this space by taking the current page minus space occupied by dock and panel windows, as indicated by the <link linkend="NETWMSTRUT">_NET_WM_STRUT</link> property set on client windows.
@@ -342,10 +389,19 @@ _NET_WORKAREA, CARDINAL[][4]/32
 _NET_SUPPORTING_WM_CHECK, XA_WINDOW/32
 ]]></programlisting>
 	<para>
-The Window Manager MUST set this property on the root window to be the ID of a child window created by the WM, to indicate that a compliant WM is active.  The child window MUST also have the _NET_SUPPORTING_WM_CHECK property set with the same value.  The child window MUST also have the _NET_WM_NAME property set to the name of the Window Manager.
+The Window Manager MUST set this property on the root window to be the ID of a
+	child window created by the WM, to indicate that a compliant WM is
+	active.  The child window MUST also have the _NET_SUPPORTING_WM_CHECK
+	property set to the ID of the child window. The child window MUST also
+	have the _NET_WM_NAME property set to the name of the Window Manager.
 	</para>
 	<para>
-Rationale:  The child window is used to guard against stale properties being left on the root window by a crashed WM.
+Rationale:  The child window is used to distinguish an active window manager 
+ from a stale _NET_SUPPORTING_WM_CHECK 
+ property that happens to point to another window. If the
+ _NET_SUPPORTING_WM_CHECK window on the client window is missing
+ or not properly set, clients SHOULD assume that no conforming
+ window manager is present.
 	</para>
 	</sect2>
 	<sect2>
@@ -365,7 +421,18 @@ The Window Manager MUST set this to a list of IDs for windows that are acting as
 _NET_CLOSE_WINDOW
 ]]></programlisting>
 	<para>
-	Pagers wanting to close a window MUST send a _NET_CLOSE_WINDOW client message request to the root window (type _NET_ACTIVE_WINDOW, format 32, l[0]=0 /*may be used later*/, window should be set to the window to close).  The Window Manager MUST then attempt to close the window specified.
+	Pagers wanting to close a window MUST send a _NET_CLOSE_WINDOW client
+	message request to the root window:
+	</para>
+<programlisting><![CDATA[
+_NET_CLOSE_WINDOW
+  window = window to close
+  message_type = _NET_CLOSE_WINDOW
+  format = 32
+  data.l[0] = 0 /* may be used later */
+]]></programlisting>
+	<para>
+The Window Manager MUST then attempt to close the window specified.
 	</para>
 	<para>
 	Rationale: A window manager might be more clever than the usual method (send WM_DELETE message if the protocol is selected, XKillClient otherwise).  It might introduce a timeout, for example.  Instead of duplicating the code, the Window Manager can easily do the job.
@@ -403,20 +470,20 @@ _NET_WM_MOVERESIZE
 	<title>Application Window Properties</title>
 	<sect2><title>_NET_WM_NAME</title>
 	<programlisting><![CDATA[
-_NET_WM_NAME
+_NET_WM_NAME, UTF-8_STRING
 ]]></programlisting>
 	<para>
-The Client SHOULD set this to the title of the window in UTF8 encoding.  If
+The Client SHOULD set this to the title of the window in UTF-8 encoding.  If
 set, the Window Manager should use this in preference to WM_NAME.
 	</para>
 	</sect2>
 
-	<sect2><title>_NET_WM_VISIBLE_NAME_STRING</title>
+	<sect2><title>_NET_WM_VISIBLE_NAME</title>
 	<programlisting><![CDATA[
-_NET_WM_VISIBLE_NAME_STRING
+_NET_WM_VISIBLE_NAME, UTF-8_STRING
 ]]></programlisting>
 	<para>
-If the Window Manager displays a window name other than _NET_WM_NAME the Window Manager MUST set this to the title displayed in UTF8 encoding.
+If the Window Manager displays a window name other than _NET_WM_NAME the Window Manager MUST set this to the title displayed in UTF-8 encoding.
 	</para>
         <para>
 Rationale: For window managers that display a title different from the _NET_WM_NAME or WM_NAME of the window (i.e. xterm <1>, xterm <2>, ... is shown, but _NET_WM_NAME / WM_NAME is still xterm for each window). This property allows taskbars / pagers to display the same title as the window manager.
@@ -513,7 +580,9 @@ be taken as this type.
 _NET_WM_STATE, ATOM[]
 ]]></programlisting>
 		<para>
-A list of hints describing the state window.  The Window Manager SHOULD honor
+A list of hints describing the state window. Atoms present in the list MUST be
+considered set, atoms not present in the list MUST be considered not set. The
+Window Manager SHOULD honor
 _NET_WM_STATE whenever a withdrawn window requests to be mapped.  A Client
 wishing to change the state of a window MUST send a _NET_WM_STATE client
 message to the root window (see below).  The Window Manager MUST keep this
@@ -530,6 +599,12 @@ _NET_WM_STATE_MAXIMIZED_HORZ, ATOM
 _NET_WM_STATE_SHADED, ATOM
 _NET_WM_STATE_SKIP_TASKBAR, ATOM
 ]]></programlisting>
+      <para>
+An implementation MAY add new atoms to this list. Implementations
+without extensions MUST ignore any unknown atoms, effectively removing
+them from the list. These extension atoms MUST NOT start with the prefix
+_NET. 
+      </para>
 	<para>
 _NET_WM_STATE_MODAL indicates that this is a modal dialog box.  The
 WM_TRANSIENT_FOR hint MUST be set to indicate which window the dialog is a
@@ -566,7 +641,7 @@ _NET_WM_STATE_REMOVE        0    /* remove/unset property */
 _NET_WM_STATE_ADD           1    /* add/set property */
 _NET_WM_STATE_TOGGLE        2    /* toggle property  */
 ]]></programlisting>
-	<para>
+      <para>
 	See also the implementation notes on <link linkend="URGENCY">urgency</link> and <link linkend="NORESIZE">fixed size windows</link>.
 	</para>
 	</sect2><sect2><title>_NET_WM_STRUT</title>
@@ -575,7 +650,7 @@ _NET_WM_STRUT, CARDINAL[4]/32
 ]]></programlisting>
 	<para>
 This property MUST be set by the Client if the window is to reserve space at
-the edge of the screen.  The property is a 4-tupel of cardinals, one for each
+the edge of the screen.  The property is a 4-tuple of cardinals, one for each
 border of the screen.  The order of the borders is left, right, top, bottom.
 The client MAY change this property anytime, therefore the Window Manager MUST
 watch out for property notify events.  
@@ -740,7 +815,7 @@ unlikely to break anything, it seems reasonable to document it as standard.
 	<sect2>
 	<title>Pagers and Taskbars</title>
 	<para>
-	This specification attempts to make reasonable provisions for WM independant pagers and taskbars.  Window Managers that require / desire additional functionality beyond what can be acheived using the mechanisms set out in this specification may choose to implement their own pagers, which communicates with the Window Manager using further, WM-specific hints, or some other means.
+	This specification attempts to make reasonable provisions for WM independent pagers and taskbars.  Window Managers that require / desire additional functionality beyond what can be achieved using the mechanisms set out in this specification may choose to implement their own pagers, which communicates with the Window Manager using further, WM-specific hints, or some other means.
 	</para>
 	</sect2>
 	<sect2>
@@ -857,8 +932,16 @@ was the frame for this window.
 If processes fail to respond to the _NET_WM_PING protocol _NET_WM_PID may be used in combination with the ICCCM specified WM_CLIENT_MACHINE(STRING) to attempt to kill a process. 
 		</para>
 	</sect2>
-	</sect1>
-	<sect1>
+	</Sect1>
+  <Sect1>
+    <title>References</title>
+    <para>[1] UTF-8</para>
+    <para>
+[2] David Rosenthal / Stuart W. Marks "Inter-Client Communication Conventions
+      Manual (Version 2.0)", X Consortium Standard, X Version 11, Release 6.3 
+    </para>
+  </Sect1>
+	<Sect1>
 	<title>Contributors</title>
 	
 		<para>Sasha Vasko</para>
