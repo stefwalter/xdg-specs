@@ -1149,7 +1149,7 @@ entries</ulink>: <varname>Categories</varname>,
           "http://www.freedesktop.org/standards/menu-spec/menu-0.8.dtd"&gt;
 
           &lt;Menu&gt;
-            &lt;Name&gt;Applications&lt;/Name&gt
+            &lt;Name&gt;Applications&lt;/Name&gt;
             &lt;AppDir&gt;/usr/share/applnk&lt;/AppDir&gt;
             &lt;DirectoryDir&gt;/usr/share/applnk&lt;/DirectoryDir&gt;
             &lt;Directory&gt;.directory&lt;/Directory&gt;
