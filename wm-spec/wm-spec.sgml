@@ -10,7 +10,7 @@
 	<sect2>
 		<title>Version</title>
 		<para>
-This spec is version 1.0pre5.
+This spec is version 1.0.
 		</para>
 	</sect2>
 	<sect2>
@@ -41,276 +41,6 @@ to the ICCCM on which this specification builds. If this specification
 explicitly modifies the ICCCM Window Managers and Clients MUST fulfil these 
 modifications.
 		</para>
-	</sect2>
-	<sect2>
-		<title>Changes since 1.0pre4</title>
-		<itemizedlist>
-			<listitem><para>
-Clarified the interpretation of client-provided geometries on large desktops.
-			</para></listitem>
-			<listitem><para>
-Added more explanation for _NET_DESKTOP_NAMES. 
-			</para></listitem>
-			<listitem><para>
-Added _NET_WM_ICON_NAME and _NET_WM_VISIBLE_ICON_NAME.
-			</para></listitem>
-			<listitem><para>
-Tried to improve the wording of _NET_WM_STRUT explanation.
-			</para></listitem>
-			<listitem><para>
-Changed _NET_WORKAREA to an array of viewport-relative geometries.
-			</para></listitem>
-			<listitem><para>
-Updated list of <quote>dependent</quote> properties for _NET_NUMBER_OF_DESKTOPS
-to include _NET_WORKAREA and _NET_DESKTOP_VIEWPORT.
-			</para></listitem>
-			<listitem><para>
-Tidied formatting of all client messages.
-			</para></listitem>
-		</itemizedlist>
-	</sect2>
-	<sect2>
-		<title>Changes since 1.0pre3</title>
-		<itemizedlist>
-			<listitem><para>
-Added information about common non-ICCCM features.
-			</para></listitem>
-			<listitem><para>
-Added explanation of sending messages to the root window.
-			</para></listitem>
-			<listitem><para>
-Removed XA_ prefix from type names.
-			</para></listitem>
-			<listitem><para>
-Clarified that <quote>mapping order</quote> refers to inital mapping 
-and specify the directions of both orders.
-			</para></listitem>
-			<listitem><para>
-Clarified that desktops have a common size specified by _NET_DESKTOP_GEOMETRY.
-			</para></listitem>
-			<listitem><para>
-Rewrote explanation of _NET_DESKTOP_VIEWPORT.
-			</para></listitem>
-			<listitem><para>
-Tidied formatting of _NET_CURRENT_DESKTOP.
-			</para></listitem>
-			<listitem><para>
-Replaced <quote>window handle</quote> by <quote>window ID</quote>.
-			</para></listitem>
-			<listitem><para>
-Tidied formatting of _NET_WORKAREA.
-			</para></listitem>
-			<listitem><para>
-Rewrote the motivation for _NET_VIRTUAL_ROOTS.
-			</para></listitem>
-			<listitem><para>
-Added advice on Pointer grabs to _NET_WM_MOVERESIZE.
-			</para></listitem>
-			<listitem><para>
-Fixed typos in _NET_WM_STATE.
-			</para></listitem>
-			<listitem><para>
-Added _NET_WM_STATE_SKIP_PAGER.
-			</para></listitem>
-			<listitem><para>
-Tidied formatting of _NET_WM_STRUT.
-			</para></listitem>
-			<listitem><para>
-Tidied formatting of _NET_WM_ICON_GEOMETRY.
-			</para></listitem>
-		</itemizedlist>
-	</sect2>		
-	<sect2>
-		<title>Changes since 1.0pre2</title>
-		<itemizedlist>
-			<listitem><para>
-_NET_SET_NUMBER_OF_DESKTOPS -> _NET_NUMBER_OF_DESKTOPS for consistency.
-			</para></listitem>
-			<listitem><para>
-_NET_WM_VISIBLE_NAME_STRING -> _NET_WM_VISIBLE_NAME for consistency.
-			</para></listitem>
-			<listitem><para>
-_NET_WM_STATE: added explanation of permitted extensions. Added explanation of 
-being set / not set.
-			</para></listitem>
-			<listitem><para>
-Spellchecked, corrected various typos.
-			</para></listitem>
-			<listitem><para>
-UTF8 -> UTF-8 for consistency.
-			</para></listitem>
-			<listitem><para>
-added references to the ICCCM an UTF-8 (incomplete).
-			</para></listitem>
-			<listitem><para>
-added data and event formats where missing.
-			</para></listitem>
-			<listitem><para>
-clarified _NET_SUPPORTING_WM_CHECK.
-			</para></listitem>
-			<listitem><para>
-fixed formatting of _NET_CLOSE_WINDOW message.
-			</para></listitem>
-		</itemizedlist>
-	</sect2>		
-	<sect2>
-		<title>Changes since 1.0pre1</title>
-		<itemizedlist>
-			<listitem><para>
-Removed implementation note concerning Gnome's (potential) file manager behaviour.
-			</para></listitem>
-			<listitem><para>
-The Window Movement section of the implementation notes has been revised.
-			</para></listitem>
-		</itemizedlist>
-	</sect2>		
-	<sect2>
-		<title>Changes since 1.9f</title>
-		<itemizedlist>
-			<listitem><para>
-Revised revision number for first accepted release 1.9XX -> 1.0preXX.
-			</para></listitem>
-			<listitem><para>
-Prerequisites for adoption of this specification added.
-			</para></listitem>
-			<listitem><para>
-Tidied formatting of _NET_CURRENT_DESKTOP for consistency.
-			</para></listitem>
-			<listitem><para>
-Tidied formatting of _NET_ACTIVE_WINDOW  for consistency. Removed doubled text.
-			</para></listitem>
-			<listitem><para>
-Tidied formatting of _NET_WM_DESKTOP for consistency.
-			</para></listitem>
-			<listitem><para>
-Killing Hung Processes implementation note added. _NET_WM_PID and _NET_WM_PING now link to this.
-			</para></listitem>
-			<listitem><para>
-Clarified x_root and y_root meaning for _NET_WM_MOVERESIZE.
-			</para></listitem>
-			<listitem><para>
-Added contributor list.
-			</para></listitem>
-		</itemizedlist>
-	</sect2>		
-	<sect2>
-		<title>Changes since 1.9e</title>
-		<itemizedlist>
-			<listitem><para>
-Added _NET_WM_VISIBLE_NAME_STRING
-			</para></listitem>
-			<listitem><para>
-Removed ambiguity from _NET_NUMBER_OF_DESKTOPS and  _NET_DESKTOP_NAMES in combination.
-			</para></listitem>
-			<listitem><para>
-Set _NET_WM_MOVERESIZE format to 32 for consistency.
-			</para></listitem>
-			<listitem><para>
-Removed _NET_PROPERTIES.
-			</para></listitem>
-			<listitem><para>
-Removed comment from _NET_WM_MOVERESIZE.
-			</para></listitem>
-		</itemizedlist>
-	</sect2>		
-	<sect2>
-		<title>Changes since 1.9d</title>
-		<itemizedlist>
-			<listitem><para>
-Added _NET_VIRTUAL_ROOTS
-			</para></listitem>
-			<listitem><para>
-Added note about ICCCM compliant window moves.
-			</para></listitem>
-			<listitem><para>
-Added _NET_WM_HANDLED_ICONS
-			</para></listitem>
-			<listitem><para>
-Added _NET_SUPPORTING_WM_CHECK
-			</para></listitem>
-			<listitem><para>
-Removed degrees of activation
-			</para></listitem>
-		</itemizedlist>
-	</sect2>		
-		<sect2>
-		<title>Changes since 1.9c</title>
-		<itemizedlist>
-			<listitem>
-				<para>
-Removed packaging of hints into 2 X properties.  Jim Gettys points out that the
-performance gains of fewer round trips can be better achieved using Xlib
-routines.
-				</para>
-			</listitem>
-			<listitem>
-				<para>
-Clarified that _NET_DESKTOP_VIEWPORT is in pixels
-				</para>
-			</listitem>
-			<listitem>
-				<para>
-_NET_DESKTOP_VIEWPORT is now an array, one for each desktop, to allow for
-different active viewports on different desktops
-				</para>
-			</listitem>
-			<listitem>
-				<para>
-_NET_WM_STRUT now only applies on desktops on which the client is visible
-				</para>
-			</listitem>
-			<listitem>
-				<para>
-Introduced RFC 2119 language, and attempted to clarify the roles of the Window
-Manager, Pagers and Applications
-				</para>
-			</listitem>
-			<listitem>
-				<para>
-Added _NET_WM_NAME
-				</para>
-			</listitem>
-			<listitem>
-				<para>
-_NET_DESKTOP_NAMES now in UTF8
-				</para>
-			</listitem>
-			<listitem>
-				<para>
-Desktops now start from 0
-				</para>
-			</listitem>
-			<listitem>
-				<para>
-Added _NET_WM_PID
-				</para>
-			</listitem>
-			<listitem>
-				<para>
-Added _NET_WM_PING protocol
-				</para>
-			</listitem>
-			<listitem>
-				<para>
-Added _NET_WM_STATE_SKIP_TASKBAR
-				</para>
-			</listitem>
-		</itemizedlist>
-	</sect2>
-	
-	<sect2>
-	<title>Changes since 1.9b</title>
-	<itemizedlist>
-	<listitem><para>Removed _NET_NUMBER_OF_DESKTOPS client message, as it overlaps unnecessarily with _NET_{INSERT/DELETE}_DESKTOP.</para>
-	</listitem>
-	<listitem><para>Replaced _NET_WM_LAYER and _NET_WM_HINTS with _NET_WM_WINDOW_TYPE functional hint.</para></listitem>
-	<listitem><para>Changed _NET_WM_STATE to a list of atoms, for extensibility.</para></listitem>
-	<listitem><para>Expanded description of _NET_WORKAREA and _NET_WM_STRUT.</para></listitem>
-	<listitem><para>Removed _NET_WM_SIZEMOVE_NOTIFY protocol. </para></listitem>
-	<listitem><para>Added degrees of activation to _NET_ACTIVE_WINDOW client message</para></listitem>
-	<listitem><para>Added _NET_WM_ICON</para></listitem>
-	<listitem><para>My comments are in [[ ]].  Comments from Marko's draft are in [[MM: ]]</para></listitem>
-	</itemizedlist>
 	</sect2>
 </sect1>
 <sect1>
@@ -1179,51 +909,140 @@ When generating synthetic ConfigureNotify events, the position given
    origin of the root window (i.e., ignoring win_gravity) [2]
 		</para></listitem>
 		<listitem><para>
-XMoveWindow( w, x, y) behaviour depends on the window gravity:
+XMoveWindow(w,x,y) behaviour depends on the window gravity. Upon receiving a
+request from client application the Window Manager calculates a new reference
+point, based on the client window's own size, border width and gravity. For given client
+window dimentions (width, height) and border width (bw), the reference point will be
+placed at:
+		</para>
+	  <informaltable>
+	    <tgroup cols="3">
+	      <tbody>
+		<row>
+		  <entry>Gravity:</entry>
+		  <entry>ref_x:</entry>
+		  <entry>ref_y:</entry>
+		</row>
+		<row>
+		  <entry>StaticGravity</entry>
+		  <entry>x</entry>
+		  <entry>y</entry>
+		</row>
+		<row>
+		  <entry>NorthWestGravity</entry>
+		  <entry>x-bw</entry>
+		  <entry>y-bw</entry>
+		</row>
+		<row>
+		  <entry>NorthGravity</entry>
+		  <entry>x+(width/2)</entry>
+		  <entry>y-bw</entry>
+		</row>
+		<row>
+		  <entry>NorthEastGravity</entry>
+		  <entry>x+width+bw</entry>
+		  <entry>y-bw</entry>
+		</row>
+		<row>
+		  <entry>EastGravity</entry>
+		  <entry>x+width+bw</entry>
+		  <entry>y+(height/2)</entry>
+		</row>
+		<row>
+		  <entry>SouthEastGravity</entry>
+		  <entry>x+width+bw</entry>
+		  <entry>y+height+bw</entry>
+		</row>
+		<row>
+		  <entry>SouthGravity</entry>
+		  <entry>x+(width/2)</entry>
+		  <entry>y+height+bw</entry>
+		</row>
+		<row>
+		  <entry>SouthWestGravity</entry>
+		  <entry>x-bw</entry>
+		  <entry>y+height+bw</entry>
+		</row>
+		<row>
+		  <entry>WestGravity</entry>
+		  <entry>x-bw</entry>
+		  <entry>y+(height/2)</entry>
+		</row>
+		<row>
+		  <entry>CenterGravity</entry>
+		  <entry>x+(width/2)</entry>
+		  <entry>y+(height/2)</entry>
+		</row>
+	      </tbody>
+	    </tgroup>
+	    <!-- one of (tgroup graphic) -->
+	  </informaltable>
+	<para>
+The Window manager will use the reference point as calculated above,
+until next XMoveWindow request. The Window Manager will place frame decorations
+in the following position, based on the window gravity :
 		</para>
 		<para>
 StaticGravity:
 		</para>
 		<para>
-     window's left top corner will be placed at (x,y)
+window's left top corner will be placed at (ref_x,ref_y)
 		</para>
 		<para>
 NorthWestGravity:
 		</para>
 		<para>
-     window frame's left top corner will be placed at (x,y)
+window frame's left top corner will be placed at (ref_x,ref_y)
+		</para>
+		<para>
+NorthGravity:
+		</para>
+		<para>
+window frame's top side's center will be placed at (ref_x,ref_y)
 		</para>
 		<para>
 NorthEastGravity:
 		</para>
 		<para>
-     window frame's right top corner will be placed at (x,y)
+window frame's right top corner will be placed at (ref_x,ref_y)
 		</para>
 		<para>
-
+EastGravity:
+		</para>
+		<para>
+window frame's right side's center will be placed at (ref_x,ref_y)
+		</para>
+		<para>
 SouthWestGravity:
 		</para>
 		<para>
-     window frame's left bottom corner will be placed at (x,y)
+window frame's left bottom corner will be placed at (ref_x,ref_y)
 		</para>
 		<para>
-
+SouthGravity:
+		</para>
+		<para>
+window frame's bottom side's center will be placed at (ref_x,ref_y)
+		</para>
+		<para>
 SouthEastGravity:
 		</para>
 		<para>
-     window frame's right bottom corner will be placed at (x,y)
+window frame's right bottom corner will be placed at (ref_x,ref_y)
 		</para>
 		<para>
-
+WestGravity:
+		</para>
+		<para>
+window frame's left side's center will be placed at (ref_x,ref_y)
+		</para>
+		<para>
 CenterGravity:
 		</para>
 		<para>
-     window frame's center will be placed at (x,y)
+window frame's center will be placed at (ref_x,ref_y)
 		</para>
-		<para>
-
-(x,y) will become a new "reference point" for the client window.
-		</para></listitem>
+		</listitem>
 		<listitem><para>
 Implementation Note for Application developers:
 		</para>
@@ -1252,7 +1071,7 @@ was the frame for this window.
 	<sect2>
 	<title>Window-in-Window MDI</title>
 	<para>
-	The authors of this specification acknowledge that there is no standard method to allow the Window Manager to manage windows that a part of a Window-in-Window MDI application.  Application authors are advised to use some other form of MDI, or to propose a mechanism to be included in the next revision of this specification.
+	The authors of this specification acknowledge that there is no standard method to allow the Window Manager to manage windows that are part of a Window-in-Window MDI application.  Application authors are advised to use some other form of MDI, or to propose a mechanism to be included in the next revision of this specification.
 	</para>
 	</sect2>
 	<sect2 id="KILLINGWINDOWS">
@@ -1264,13 +1083,46 @@ If processes fail to respond to the _NET_WM_PING protocol _NET_WM_PID may be use
 	</Sect1>
   <Sect1>
     <title>References</title>
-    <para>[1] UTF-8</para>
+    <para>
+[1] F. Yergeau,"UTF-8, a transformation format of ISO 10646", RFC 2279
+    </para>
     <para>
 [2] David Rosenthal / Stuart W. Marks "Inter-Client Communication Conventions
       Manual (Version 2.0)", X Consortium Standard, X Version 11, Release 6.3 
     </para>
   </Sect1>
-	<Sect1>
+  <Sect1>
+    <title>Copyright</title>
+    <para>
+Copyright (C) 2000 See Contributors List
+    </para>
+    <para> 
+Permission  is hereby granted, free of charge, to any person
+obtaining a copy of this software and associated  documentation 
+files (the "Software"), to deal in the Software without
+restriction, including without limitation the rights to use,
+copy, modify, merge, publish, distribute, sublicense, and/or
+sell copies of the Software, and to permit persons  to  whom
+the Software is furnished to do so, subject to the following
+conditions:
+    </para>
+    <para> 
+The above copyright notice and this permission notice  shall
+be  included  in  all  copies or substantial portions of the
+Software.
+    </para>
+    <para>
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT  WARRANTY  OF  ANY
+KIND,  EXPRESS  OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+AND  NONINFRINGEMENT.  IN NO EVENT SHALL THE AUTHORS
+BE LIABLE FOR ANY CLAIM, DAMAGES  OR  OTHER  LIABILITY,
+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR  THE  USE
+OR OTHER DEALINGS IN THE SOFTWARE.  
+    </para>
+  </Sect1>
+  <Sect1>
 	<title>Contributors</title>
 	
 		<para>Sasha Vasko</para>
@@ -1293,7 +1145,300 @@ If processes fail to respond to the _NET_WM_PING protocol _NET_WM_PID may be use
 		<para>Marko Macek</para>
 		<para>Greg Badros</para>
 		<para>Matthias Clasen</para>
+		<para>David Rosenthal</para>
 		
 	</sect1>
-
+  <Sect1>
+    <title>Change history</title>
+    <sect2>
+		<title>Changes since 1.0pre5</title>
+		<itemizedlist>
+			<listitem><para>
+Change history moved to end.
+			</para></listitem>
+			<listitem><para>
+UTF-8 Reference updated.
+			</para></listitem>
+			<listitem><para>
+Window Gravity information updated.
+			</para></listitem>
+			<listitem><para>
+Copyright Added.
+			</para></listitem>
+			<listitem><para>
+Minor typo corrections.
+			</para></listitem>
+	</itemizedlist>
+	</sect2>
+	<sect2>
+		<title>Changes since 1.0pre4</title>
+		<itemizedlist>
+			<listitem><para>
+Clarified the interpretation of client-provided geometries on large desktops.
+			</para></listitem>
+			<listitem><para>
+Added more explanation for _NET_DESKTOP_NAMES. 
+			</para></listitem>
+			<listitem><para>
+Added _NET_WM_ICON_NAME and _NET_WM_VISIBLE_ICON_NAME.
+			</para></listitem>
+			<listitem><para>
+Tried to improve the wording of _NET_WM_STRUT explanation.
+			</para></listitem>
+			<listitem><para>
+Changed _NET_WORKAREA to an array of viewport-relative geometries.
+			</para></listitem>
+			<listitem><para>
+Updated list of <quote>dependent</quote> properties for _NET_NUMBER_OF_DESKTOPS
+to include _NET_WORKAREA and _NET_DESKTOP_VIEWPORT.
+			</para></listitem>
+			<listitem><para>
+Tidied formatting of all client messages.
+			</para></listitem>
+		</itemizedlist>
+	</sect2>
+	<sect2>
+		<title>Changes since 1.0pre3</title>
+		<itemizedlist>
+			<listitem><para>
+Added information about common non-ICCCM features.
+			</para></listitem>
+			<listitem><para>
+Added explanation of sending messages to the root window.
+			</para></listitem>
+			<listitem><para>
+Removed XA_ prefix from type names.
+			</para></listitem>
+			<listitem><para>
+Clarified that <quote>mapping order</quote> refers to inital mapping 
+and specify the directions of both orders.
+			</para></listitem>
+			<listitem><para>
+Clarified that desktops have a common size specified by _NET_DESKTOP_GEOMETRY.
+			</para></listitem>
+			<listitem><para>
+Rewrote explanation of _NET_DESKTOP_VIEWPORT.
+			</para></listitem>
+			<listitem><para>
+Tidied formatting of _NET_CURRENT_DESKTOP.
+			</para></listitem>
+			<listitem><para>
+Replaced <quote>window handle</quote> by <quote>window ID</quote>.
+			</para></listitem>
+			<listitem><para>
+Tidied formatting of _NET_WORKAREA.
+			</para></listitem>
+			<listitem><para>
+Rewrote the motivation for _NET_VIRTUAL_ROOTS.
+			</para></listitem>
+			<listitem><para>
+Added advice on Pointer grabs to _NET_WM_MOVERESIZE.
+			</para></listitem>
+			<listitem><para>
+Fixed typos in _NET_WM_STATE.
+			</para></listitem>
+			<listitem><para>
+Added _NET_WM_STATE_SKIP_PAGER.
+			</para></listitem>
+			<listitem><para>
+Tidied formatting of _NET_WM_STRUT.
+			</para></listitem>
+			<listitem><para>
+Tidied formatting of _NET_WM_ICON_GEOMETRY.
+			</para></listitem>
+		</itemizedlist>
+	</sect2>		
+	<sect2>
+		<title>Changes since 1.0pre2</title>
+		<itemizedlist>
+			<listitem><para>
+_NET_SET_NUMBER_OF_DESKTOPS -> _NET_NUMBER_OF_DESKTOPS for consistency.
+			</para></listitem>
+			<listitem><para>
+_NET_WM_VISIBLE_NAME_STRING -> _NET_WM_VISIBLE_NAME for consistency.
+			</para></listitem>
+			<listitem><para>
+_NET_WM_STATE: added explanation of permitted extensions. Added explanation of 
+being set / not set.
+			</para></listitem>
+			<listitem><para>
+Spellchecked, corrected various typos.
+			</para></listitem>
+			<listitem><para>
+UTF8 -> UTF-8 for consistency.
+			</para></listitem>
+			<listitem><para>
+added references to the ICCCM an UTF-8 (incomplete).
+			</para></listitem>
+			<listitem><para>
+added data and event formats where missing.
+			</para></listitem>
+			<listitem><para>
+clarified _NET_SUPPORTING_WM_CHECK.
+			</para></listitem>
+			<listitem><para>
+fixed formatting of _NET_CLOSE_WINDOW message.
+			</para></listitem>
+		</itemizedlist>
+	</sect2>		
+	<sect2>
+		<title>Changes since 1.0pre1</title>
+		<itemizedlist>
+			<listitem><para>
+Removed implementation note concerning Gnome's (potential) file manager behaviour.
+			</para></listitem>
+			<listitem><para>
+The Window Movement section of the implementation notes has been revised.
+			</para></listitem>
+		</itemizedlist>
+	</sect2>		
+	<sect2>
+		<title>Changes since 1.9f</title>
+		<itemizedlist>
+			<listitem><para>
+Revised revision number for first accepted release 1.9XX -> 1.0preXX.
+			</para></listitem>
+			<listitem><para>
+Prerequisites for adoption of this specification added.
+			</para></listitem>
+			<listitem><para>
+Tidied formatting of _NET_CURRENT_DESKTOP for consistency.
+			</para></listitem>
+			<listitem><para>
+Tidied formatting of _NET_ACTIVE_WINDOW  for consistency. Removed doubled text.
+			</para></listitem>
+			<listitem><para>
+Tidied formatting of _NET_WM_DESKTOP for consistency.
+			</para></listitem>
+			<listitem><para>
+Killing Hung Processes implementation note added. _NET_WM_PID and _NET_WM_PING now link to this.
+			</para></listitem>
+			<listitem><para>
+Clarified x_root and y_root meaning for _NET_WM_MOVERESIZE.
+			</para></listitem>
+			<listitem><para>
+Added contributor list.
+			</para></listitem>
+		</itemizedlist>
+	</sect2>		
+	<sect2>
+		<title>Changes since 1.9e</title>
+		<itemizedlist>
+			<listitem><para>
+Added _NET_WM_VISIBLE_NAME_STRING
+			</para></listitem>
+			<listitem><para>
+Removed ambiguity from _NET_NUMBER_OF_DESKTOPS and  _NET_DESKTOP_NAMES in combination.
+			</para></listitem>
+			<listitem><para>
+Set _NET_WM_MOVERESIZE format to 32 for consistency.
+			</para></listitem>
+			<listitem><para>
+Removed _NET_PROPERTIES.
+			</para></listitem>
+			<listitem><para>
+Removed comment from _NET_WM_MOVERESIZE.
+			</para></listitem>
+		</itemizedlist>
+	</sect2>		
+	<sect2>
+		<title>Changes since 1.9d</title>
+		<itemizedlist>
+			<listitem><para>
+Added _NET_VIRTUAL_ROOTS
+			</para></listitem>
+			<listitem><para>
+Added note about ICCCM compliant window moves.
+			</para></listitem>
+			<listitem><para>
+Added _NET_WM_HANDLED_ICONS
+			</para></listitem>
+			<listitem><para>
+Added _NET_SUPPORTING_WM_CHECK
+			</para></listitem>
+			<listitem><para>
+Removed degrees of activation
+			</para></listitem>
+		</itemizedlist>
+	</sect2>		
+		<sect2>
+		<title>Changes since 1.9c</title>
+		<itemizedlist>
+			<listitem>
+				<para>
+Removed packaging of hints into 2 X properties.  Jim Gettys points out that the
+performance gains of fewer round trips can be better achieved using Xlib
+routines.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+Clarified that _NET_DESKTOP_VIEWPORT is in pixels
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+_NET_DESKTOP_VIEWPORT is now an array, one for each desktop, to allow for
+different active viewports on different desktops
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+_NET_WM_STRUT now only applies on desktops on which the client is visible
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+Introduced RFC 2119 language, and attempted to clarify the roles of the Window
+Manager, Pagers and Applications
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+Added _NET_WM_NAME
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+_NET_DESKTOP_NAMES now in UTF8
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+Desktops now start from 0
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+Added _NET_WM_PID
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+Added _NET_WM_PING protocol
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+Added _NET_WM_STATE_SKIP_TASKBAR
+				</para>
+			</listitem>
+		</itemizedlist>
+	</sect2>
+	
+	<sect2>
+	<title>Changes since 1.9b</title>
+	<itemizedlist>
+	<listitem><para>Removed _NET_NUMBER_OF_DESKTOPS client message, as it overlaps unnecessarily with _NET_{INSERT/DELETE}_DESKTOP.</para>
+	</listitem>
+	<listitem><para>Replaced _NET_WM_LAYER and _NET_WM_HINTS with _NET_WM_WINDOW_TYPE functional hint.</para></listitem>
+	<listitem><para>Changed _NET_WM_STATE to a list of atoms, for extensibility.</para></listitem>
+	<listitem><para>Expanded description of _NET_WORKAREA and _NET_WM_STRUT.</para></listitem>
+	<listitem><para>Removed _NET_WM_SIZEMOVE_NOTIFY protocol. </para></listitem>
+	<listitem><para>Added degrees of activation to _NET_ACTIVE_WINDOW client message</para></listitem>
+	<listitem><para>Added _NET_WM_ICON</para></listitem>
+	<listitem><para>My comments are in [[ ]].  Comments from Marko's draft are in [[MM: ]]</para></listitem>
+	</itemizedlist>
+    </sect2>
+  </sect1>
 </article>
