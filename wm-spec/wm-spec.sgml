@@ -1,6 +1,6 @@
 <!doctype article PUBLIC "-//OASIS//DTD DocBook V4.1//EN" [
-<!entity version "Version 1.2">
-<!entity date "October 7, 2002">
+<!entity version "Draft version 1.3">
+<!entity date "November 27, 2002">
 ]>
 <article id="index">
 <articleinfo>
@@ -1279,7 +1279,8 @@ unlikely to break anything, it seems reasonable to document it as standard.
 	<sect2 id="URGENCY">
 		<title>Urgency</title>
 		<para>
-	Dialog boxes should indicate their urgency level (information or warning) using the urgency bit in the WM_HINTS.flags property, as defined in the ICCCM.
+Windows expecting immediate user action should indicate this using the
+urgency bit in the WM_HINTS.flags property, as defined in the ICCCM.
 		</para>
 	</sect2>
 	<sect2 id="NORESIZE">
@@ -1339,7 +1340,7 @@ unlikely to break anything, it seems reasonable to document it as standard.
         </para>
 	</sect2>
 	<sect2>
-	<title>Window Movement</title>
+	<title>Window Geometry</title>
 	<para>
 Window manager implementors should refer to the ICCCM for definitive
 specifications of how to handle MapRequest and ConfigureRequest events.
@@ -1348,40 +1349,114 @@ document offers the following clarifications:
 	</para>
 	<itemizedlist>
 		<listitem><para>
-Window managers MUST honor the win_gravity field of WM_NORMAL_HINTS
-   for both MapRequest _and_ ConfigureRequest events (ICCCM Version 2.0,
-	    &sect;4.1.2.3 and &sect;4.1.5)
+Window Managers MUST honor the win_gravity field of WM_NORMAL_HINTS
+for both MapRequest <emphasis>and</emphasis> ConfigureRequest events 
+(ICCCM Version 2.0, &sect;4.1.2.3 and &sect;4.1.5)
 		</para></listitem>
+		<listitem><para>
+When generating synthetic ConfigureNotify events, the position given
+MUST be the top-left corner of the client window in relation to the
+origin of the root window (i.e., ignoring win_gravity) 
+(ICCCM Version 2.0, &sect;4.2.3)
+		</para></listitem>
+		<listitem><para>
+Window Managers maintain a reference point for each client window and place 
+the window relative to this reference point depending on the window's 
+win_gravity as follows:
+		</para>
+	  <informaltable>
+	    <tgroup cols="2">
+	      <tbody>
+		<row>
+		  <entry>win_gravity:</entry>
+		  <entry>placed at the reference point</entry>
+		</row>
+		<row>
+		  <entry>StaticGravity</entry>
+		  <entry>the left top corner of the client window</entry>
+		</row>
+		<row>
+		  <entry>NorthWestGravity</entry>
+		  <entry>the left top corner of the frame window</entry>
+		</row>
+		<row>
+		  <entry>NorthGravity</entry>
+		  <entry>the center of the frame window's top side</entry>
+		</row>
+		<row>
+		  <entry>NorthEastGravity</entry>
+		  <entry>the right top corner of the frame window</entry>
+		</row>
+		<row>
+		  <entry>EastGravity</entry>
+		  <entry>the center of the frame window's right side</entry>
+		</row>
+		<row>
+		  <entry>SouthEastGravity</entry>
+		  <entry>the right bottom corner of the frame window</entry>
+		</row>
+		<row>
+		  <entry>SouthGravity</entry>
+		  <entry>the center of the frame window's bottom side</entry>
+		</row>
+		<row>
+		  <entry>SouthWestGravity</entry>
+		  <entry>the left bottom corner of the frame window</entry>
+		</row>
+		<row>
+		  <entry>WestGravity</entry>
+		  <entry>the center of the frame window's left side</entry>
+		</row>
+		<row>
+		  <entry>CenterGravity</entry>
+		  <entry>the center of the frame window</entry>
+		</row>
+	      </tbody>
+	    </tgroup>
+	  </informaltable>
+                </listitem>
 		<listitem><para>
 Applications are free to change their win_gravity setting at any time.
 		</para>
 		<para>
-If an application changes its gravity then the Window Manager should adjust the
-reference point, so that the client window will not move as the result.
-For example if Client's gravity was NorthWestGravity and reference point
-was
-at the top-left corner of the frame window, then after change of gravity to
-the SouthEast reference point should be adjusted to point to the
-lower-right
-corner of the frame.
-		</para></listitem>
+If an Application changes its win_gravity then the Window Manager should 
+adjust the reference point, so that the client window will not move as the 
+result. For example if the Application's win_gravity was NorthWestGravity and 
+reference point was at the top-left corner of the frame window, then after 
+change of win_gravity to SouthEastGravity the reference point should be 
+adjusted to point to the lower-right corner of the frame.
+		</para>
+                <note>
+                <para> 
+Changing the win_gravity for a single configure request and back afterwards is
+unlikely to work as intended, due to a race condition. The window manager sees
+a property notify for WM_NORMAL_HINTS, followed by the configure request,
+followed by another property notify for WM_NORMAL_HINTS. By the time the
+window manager gets around to request the changed WM_NORMAL_HINTS in response
+to the first property notify, the server may have already processed the second
+property change.  
+                </para>
+                <para>
+If the window manager supports it, applications should use 
+_NET_MOVERESIZE_WINDOW with a specified gravity to avoid this problem.
+                </para>
+                </note>
+                </listitem>
 		<listitem><para>
-When generating synthetic ConfigureNotify events, the position given
-   MUST be the top-left corner of the client window in relation to the
-   origin of the root window (i.e., ignoring win_gravity) (ICCCM Version 2.0, &sect;4.2.3)
-		</para></listitem>
-		<listitem><para>
-XMoveWindow(w,x,y) behavior depends on the window gravity. Upon receiving a
-request from a client application the Window Manager calculates a new reference
-point, based on the client window's own size, border width and gravity.
-For any given client window dimensions (width, height) and border width (bw), the reference point will be
-placed at:
+If the Application requests a new position (x, y) (and possibly also a 
+new size), the Window Manager calculates a new reference point (ref_x, ref_y),
+based on the client window's (possibly new) size (width, height), border 
+width (bw) and win_gravity as explained in the table below.
+                </para>
+                <para>
+The Window Manager will use the new reference point until the next request for 
+a new position. 
 		</para>
 	  <informaltable>
 	    <tgroup cols="3">
 	      <tbody>
 		<row>
-		  <entry>Gravity:</entry>
+		  <entry>win_gravity:</entry>
 		  <entry>ref_x:</entry>
 		  <entry>ref_y:</entry>
 		</row>
@@ -1437,90 +1512,18 @@ placed at:
 		</row>
 	      </tbody>
 	    </tgroup>
-	    <!-- one of (tgroup graphic) -->
 	  </informaltable>
-	<para>
-The Window Manager will use the reference point as calculated above,
-until the next XMoveWindow request. The Window Manager will place frame decorations
-in the following position, based on the window gravity :
-		</para>
-		<para>
-StaticGravity:
-		</para>
-		<para>
-window's left top corner will be placed at (ref_x,ref_y)
-		</para>
-		<para>
-NorthWestGravity:
-		</para>
-		<para>
-window frame's left top corner will be placed at (ref_x,ref_y)
-		</para>
-		<para>
-NorthGravity:
-		</para>
-		<para>
-window frame's top side's center will be placed at (ref_x,ref_y)
-		</para>
-		<para>
-NorthEastGravity:
-		</para>
-		<para>
-window frame's right top corner will be placed at (ref_x,ref_y)
-		</para>
-		<para>
-EastGravity:
-		</para>
-		<para>
-window frame's right side's center will be placed at (ref_x,ref_y)
-		</para>
-		<para>
-SouthWestGravity:
-		</para>
-		<para>
-window frame's left bottom corner will be placed at (ref_x,ref_y)
-		</para>
-		<para>
-SouthGravity:
-		</para>
-		<para>
-window frame's bottom side's center will be placed at (ref_x,ref_y)
-		</para>
-		<para>
-SouthEastGravity:
-		</para>
-		<para>
-window frame's right bottom corner will be placed at (ref_x,ref_y)
-		</para>
-		<para>
-WestGravity:
-		</para>
-		<para>
-window frame's left side's center will be placed at (ref_x,ref_y)
-		</para>
-		<para>
-CenterGravity:
-		</para>
-		<para>
-window frame's center will be placed at (ref_x,ref_y)
-		</para>
 		</listitem>
 		<listitem><para>
-Implementation Note for Application developers:
-		</para>
-		<para>
-When a client window is resized - its reference point does not move.
-So for example if window has SouthEastGravity and it is resized -
-the bottom-right corner of its frame will not move but instead
-top-left corner will be adjusted by the difference in size.
+If an Application requests just a new size, its reference point does not 
+move. So for example if client window has win_gravity SouthEastGravity and 
+is resized, the bottom right corner of its frame will not move but instead
+the top left corner will be adjusted by the difference in size.
 		</para></listitem>
 		<listitem><para>
-Implementation Note for window manager developers:
-		</para>
-		<para>
-When calculating the reference point at the time of initial placement -
-the initial window's width should be taken into consideration, as if it
-was the frame for this window.
+When calculating the reference point at the time of initial placement,
+the Window Manager should take the initial window's size into consideration, 
+as if it was the frame for this window.
 		</para></listitem>
 	</itemizedlist>
 	</sect2>
@@ -1690,6 +1693,19 @@ OR OTHER DEALINGS IN THE SOFTWARE.
 	</sect1>
   <Sect1>
     <title>Change history</title>
+ 	    <sect2>
+ 		<title>Changes since 1.2</title>
+ 		<itemizedlist>
+ 			<listitem><para>
+Rewrote the implementation notes on "Window Movement", retitled it 
+to "Window Geometry".
+ 			</para></listitem>
+ 			<listitem><para>
+Rewrote the implementation notes on "Urgency", making it clear that
+the hint is not just about dialogs.
+ 			</para></listitem>
+	        </itemizedlist>
+            </sect2>
  	    <sect2>
  		<title>Changes since 1.1</title>
  		<itemizedlist>
