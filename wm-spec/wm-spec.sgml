@@ -8,6 +8,12 @@
 <sect1>
 	<title>Introduction</title>
 	<sect2>
+		<title>Version</title>
+		<para>
+This spec is version 1.9f.
+		</para>
+	</sect2>
+	<sect2>
 		<title>What is this spec?</title>
 		<para>
 This spec defines interactions between window managers, applications and the utilities that form part of a desktop environment.  It builds on the ICCCM, which defines wm/client interactions at a lower level.  It was born out of a need to replace the original Gnome WM specification, although this specification has been designed to be independent of any one desktop environment.
@@ -27,6 +33,26 @@ pagers and taskbars.  "Application" refers to other clients.  "Clients" refers
 to Pagers + Applications ie. all X clients, except for the Window Manager.
 		</para>
 	</sect2>
+	<sect2>
+		<title>Changes since 1.9e</title>
+		<itemizedlist>
+			<listitem><para>
+Added _NET_WM_VISIBLE_NAME_STRING
+			</para></listitem>
+			<listitem><para>
+Removed ambiguity from _NET_NUMBER_OF_DESKTOPS and  _NET_DESKTOP_NAMES in combination.
+			</para></listitem>
+			<listitem><para>
+Set _NET_WM_MOVERESIZE format to 32 for consistency.
+			</para></listitem>
+			<listitem><para>
+Removed _NET_PROPERTIES.
+			</para></listitem>
+			<listitem><para>
+Removed comment from _NET_WM_MOVERESIZE.
+			</para></listitem>
+		</itemizedlist>
+	</sect2>		
 	<sect2>
 		<title>Changes since 1.9d</title>
 		<itemizedlist>
@@ -159,16 +185,21 @@ This property SHOULD be set and updated by the Window Manager to indicate the
 number of virtual desktops.  
 	</para>
 	<para>
-A Pager can insert or delete a certain desktop by sending a
-_NET_{INSERT/DELETE}_DESKTOP client message to the root window.  
+A Pager can request change in the desktops number by sending a _NET_SET_NUMBER_OF_DESKTOPS message to the root window:
 	</para>
-<!--
-(l[0] = desktop
-to insert/delete). Insert must also work for appending one desktop.  When a
-desktop is deleted, the Window Manager SHOULD move its windows to the newly
-active desktop.  Applications SHOULD NOT perform this operation.
+	<programlisting><![CDATA[
+_NET_SET_NUMBER_OF_DESKTOPS
+  window = target app window
+  message_type = _NET_SET_NUMBER_OF_DESKTOPS
+  format = 32
+  data.l[0] = new_desktops_number
+]]></programlisting>
+	<para>
+The Window Manager is free to honor or reject this request. If request is honored _NET_NUMBER_OF_DESKTOPS MUST be set to the new number of desktops and _NET_VIRTUAL_ROOTS MUST be set to store the new number of desktop virtual root window IDs. The _NET_DESKTOP_NAMES property MAY remain unchanged.
 	</para>
-	-->
+	<para> 
+If the number of desktops is shrinking and _NET_CURRENT_DESKTOP is out of the new range of of available desktops, then this MUST must be set to the last available desktop from the new set. If number of desktops is shrinking then clients that are still present on desktops, that are out of the new range, MUST be moved to the very last desktop from the new set. For these _NET_WM_DESKTOP MUST be updated.
+	</para>
 	</sect2>
 	<sect2>
 		<title>_NET_DESKTOP_GEOMETRY</title>
@@ -219,8 +250,7 @@ _NET_DESKTOP_NAMES
 ]]></programlisting>
 	<para>
 The names of all virtual desktops in UTF8 encoding. This property MAY be
-changed by a Pager or the Window Mangaer at any time.  When a desktop is added
-or removed, the Window Manager MUST update this list.
+changed by a Pager or the Window Mangaer at any time.
 	</para>
 	</sect2><sect2><title>_NET_ACTIVE_WINDOW</title>
 	<programlisting><![CDATA[
@@ -285,10 +315,10 @@ _NET_CLOSE_WINDOW
 _NET_WM_MOVERESIZE
   window = target app window
   message_type = _NET_WM_MOVERESIZE
-  format = 16
-  data.s[0] = x_root 
-  data.s[1] = y_root
-  data.s[2] = direction
+  format = 32
+  data.l[0] = x_root 
+  data.l[1] = y_root
+  data.l[2] = direction
 ]]></programlisting>
 	<para>
 	This message allows an application to initiate window movement or resizing.  This allows the application to define its own move and size "grips", whilst letting the window manager control the actual move/resize.  This means that all moves / resizes can happen in a consistent manner as defined by the WM.
@@ -307,30 +337,10 @@ _NET_WM_MOVERESIZE
 #define _NET_WM_MOVERESIZE_SIZE_LEFT         7
 #define _NET_WM_MOVERESIZE_MOVE              8   /* Movement only */
 ]]></programlisting>
-	<para>
-	[[PDW: Why do we need to indicate the direction?  The WM could guess this from the click position - some WMs (eg. sawmill) have code for doing something similar when you hold eg. Meta + click in the client area... ]]
-	</para>
 	</sect2>
 	</sect1>	
 	<sect1>
 	<title>Application Window Properties</title>
-	<sect2><title>_NET_PROPERTIES</title>
-	<programlisting><![CDATA[
-_NET_PROPERTIES, ATOM[]/32
-]]></programlisting>
-	<para>
-Enables only use of listed properties on this windows.  If this property is
-set, the Window Manager MUST only handle (XGetWindowProperty) properties
-listed here.  This property MUST be set by the Client before any other _NET
-hints can be used.  If this property is set, it MUST also include any ICCCM
-client-only (not WM_STATE) hints that are set by the client.  If WM_PROTOCOLS
-is not listed here, the Window Manager SHOULD assume that it contains exactly
-WM_DELETE_WINDOW.
-	</para>
-	<para>
-This is a performance optimization.  [[MM: I still have to do a benchmark.]]
-	</para>
-	</sect2>
 	<sect2><title>_NET_WM_NAME</title>
 	<programlisting><![CDATA[
 _NET_WM_NAME
@@ -340,6 +350,19 @@ The Client SHOULD set this to the title of the window in UTF8 encoding.  If
 set, the Window Manager should use this in preference to WM_NAME.
 	</para>
 	</sect2>
+
+	<sect2><title>_NET_WM_VISIBLE_NAME_STRING</title>
+	<programlisting><![CDATA[
+_NET_WM_VISIBLE_NAME_STRING
+]]></programlisting>
+	<para>
+If the Window Manager displays a window name other than _NET_WM_NAME the Window Manager MUST set this to the title displayed in UTF8 encoding.
+	</para>
+        <para>
+Rationale: For window managers that display a title different from the _NET_WM_NAME or WM_NAME of the window (i.e. xterm <1>, xterm <2>, ... is shown, but _NET_WM_NAME / WM_NAME is still xterm for each window). This property allows taskbars / pagers to display the same title as the window manager.
+        </para>
+	</sect2>
+
 	<sect2><title>_NET_WM_DESKTOP</title>
 	<programlisting><![CDATA[
 _NET_WM_DESKTOP <desktop>, CARDINAL/32
