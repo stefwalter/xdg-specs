@@ -1,3 +1,8 @@
+2004-12-08  Mark McLoughlin  <mark@skynet.ie>
+
+	* tests/2/result,
+	  tests/2/test: test the new <OnlyUnallocated> behaviour.
+
 2004-08-29  Mark McLoughlin  <mark@skynet.ie>
 
 	* tests/m: test for NoDisplay=true behavious in .desktop and

@@ -14,8 +14,16 @@ mkdir -p ${XDG_CONFIG_DIR}/menus
 	<Menu>
 		<Name>BoardGames</Name>
 		<Include>
-			<Category>BoardGame</Category>
+			<And>
+				<Category>Game</Category>
+				<Not>
+					<Category>CardGame</Category>
+				</Not>
+			</And>
 		</Include>
+		<Exclude>
+			<Category>PuzzleGame</Category>
+		</Exclude>
 	</Menu>
 	<Menu>
 		<Name>Games</Name>
