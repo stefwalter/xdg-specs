@@ -4,8 +4,8 @@
 <article id="index">
   <artheader>
     <title>Desktop Menu Specification</title>
-    <releaseinfo>Version 0.5</releaseinfo>
-    <date>31 July 2003</date>
+    <releaseinfo>Version 0.6</releaseinfo>
+    <date>5 September 2003</date>
     <authorgroup>
       <author>
 	<firstname>Waldo</firstname>
@@ -1090,13 +1090,18 @@ entries</ulink>: <varname>Categories</varname> and
   <appendix id="category-registry">
     <title>Registered Categories</title>
     <para>
-      Remember, these are case-sensitive.
+      Remember, these are case-sensitive. 
+      When using a category described in the list below it is strongly 
+      recommended to also include the category listed under Related 
+      Categories. If a category has multiple related categories the most
+      suitable related category should be included.
       <informaltable>
         <tgroup cols="2">
           <thead>
             <row>
               <entry>Category</entry>
               <entry>Description</entry>
+			  <entry>Related Categories</entry>
             </row>
           </thead>
           <tbody>
@@ -1108,242 +1113,452 @@ entries</ulink>: <varname>Categories</varname> and
               directory is given as both a &lt;LegacyDir&gt; and an
               &lt;AppDir&gt;, its desktop entries should be labeled "Legacy"
               only if the &lt;LegacyDir&gt; appears later in the file than the
-              &lt;AppDir&gt;.</entry>
+              &lt;AppDir&gt;</entry>
 
             </row><row>
               <entry>Core</entry>
               <entry>Important application, core to the desktop such as a filemanager or a help browser</entry>
-
-            </row><row>
-              <entry>Applet</entry>
-              <entry>An applet that will run inside a panel or another such application, likely desktop specific</entry>
-
-            </row><row>
-              <entry>TrayIcon</entry>
-              <entry>An application that is primarily an icon for the "system tray" or "notification area" (apps that open a normal window and just happen to have a tray icon as well should not list this category)</entry>
-
-            </row><row>
-              <entry>Screensaver</entry>
-              <entry>A screensaver (launching this desktop entry should activate the screensaver)</entry>
-
-            </row><row>
-              <entry>TerminalEmulator</entry>
-              <entry>A terminal emulator application.</entry>
+			  <entry></entry>
 
             </row><row>
               <entry>Development</entry>
               <entry>An application for development</entry>
+			  <entry></entry>
 
             </row><row>
-              <entry>GUIDesigner</entry>
-              <entry>A GUI designer application</entry>
+              <entry>Debugger</entry>
+              <entry>A tool to debug applications</entry>
+			  <entry>Development</entry>
 
             </row><row>
               <entry>IDE</entry>
               <entry>IDE application</entry>
+			  <entry>Development</entry>
 
             </row><row>
-              <entry>TextEditor</entry>
-              <entry>A text editor</entry>
+              <entry>GUIDesigner</entry>
+              <entry>A GUI designer application</entry>
+			  <entry>Development</entry>
+
+            </row><row>
+              <entry>RevisionControl</entry>
+              <entry>Applications like cvs or subversion</entry>
+			  <entry>Development</entry>
 
             </row><row>
               <entry>Office</entry>
               <entry>An office type application</entry>
 
             </row><row>
-              <entry>Spreadsheet</entry>
-              <entry>A spreadsheet</entry>
-
-            </row><row>
-              <entry>WordProcessor</entry>
-              <entry>A word processor</entry>
-
-            </row><row>
-              <entry>Presentation</entry>
-              <entry>Presentation software</entry>
-
-            </row><row>
               <entry>Calendar</entry>
-              <entry>Calendar app</entry>
+              <entry>Calendar application</entry>
+			  <entry>Office</entry>
+
+            </row><row>
+              <entry>ContactManagement</entry>
+              <entry>E.g. an addressbook</entry>
+			  <entry>Office</entry>
+
+            </row><row>
+              <entry>Database</entry>
+              <entry>Application to manage a database</entry>
+			  <entry>Office;Development</entry>
+
+            </row><row>
+              <entry>Chart</entry>
+              <entry>Chart application</entry>
+			  <entry>Office</entry>
 
             </row><row>
               <entry>Email</entry>
               <entry>Email application</entry>
+			  <entry>Office;Network</entry>
 
             </row><row>
-              <entry>TODO</entry>
-              <entry>TODO list application</entry>
+              <entry>Finance</entry>
+              <entry>Application to manage your finance</entry>
+			  <entry>Office</entry>
+
+            </row><row>
+              <entry>PDA</entry>
+              <entry>Tool to manage your PDA</entry>
+			  <entry>Office</entry>
 
             </row><row>
               <entry>ProjectManagement</entry>
               <entry>Project management application</entry>
+			  <entry>Office;Development</entry>
+
+            </row><row>
+              <entry>Presentation</entry>
+              <entry>Presentation software</entry>
+			  <entry>Office</entry>
+
+            </row><row>
+              <entry>Spreadsheet</entry>
+              <entry>A spreadsheet</entry>
+			  <entry>Office</entry>
+
+            </row><row>
+              <entry>WordProcessor</entry>
+              <entry>A word processor</entry>
+			  <entry>Office</entry>
 
             </row><row>
               <entry>Graphics</entry>
               <entry>Graphical application</entry>
 
             </row><row>
-              <entry>VectorGraphics</entry>
-              <entry>Vector based graphical application (should also include 'Graphics' category)</entry>
+              <entry>3DGraphics</entry>
+              <entry>3D based graphical application</entry>
+			  <entry>Grahpics</entry>
 
             </row><row>
               <entry>RasterGraphics</entry>
-              <entry>Raster based graphical application (should also include 'Graphics' category)</entry>
+              <entry>Raster based graphical application</entry>
+			  <entry>Grahpics</entry>
 
             </row><row>
-              <entry>System</entry>
-              <entry>System application, "System Tools" such as say a log viewer or network monitor.</entry>
+              <entry>ScanTool</entry>
+              <entry>Tool to scan a file/text</entry>
+			  <entry>Grahpics</entry>
 
             </row><row>
-              <entry>SystemSetup</entry>
-              <entry>System setup application, hardware installation, hardware clock setup, kernel setup, X server setup, etc.; i.e. system configuration tools.
-              </entry>
+              <entry>VectorGraphics</entry>
+              <entry>Vector based graphical application</entry>
+			  <entry>Grahpics</entry>
 
             </row><row>
-              <entry>PackageManager</entry>
-              <entry>A package manager application, should include the System keyword as well</entry>
-
-            </row><row>
-              <entry>Utility</entry>
-              <entry>Small utility application, "Accessories"</entry>
+              <entry>Viewer</entry>
+              <entry>Tool to view e.g. a graphic or pdf file</entry>
+			  <entry>(Grahpics)</entry>
 
             </row><row>
               <entry>Settings</entry>
-              <entry>Desktop settings applications (not system settings application, those should be System;SystemSetup;)</entry>
-
-            </row><row>
-              <entry>AdvancedSettings</entry>
-              <entry>Advanced desktop settings.</entry>
+              <entry>Settings applications</entry>
 
             </row><row>
               <entry>Accessibility</entry>
               <entry>Accessibility settings</entry>
+			  <entry>Settings</entry>
+
+
+            </row><row>
+              <entry>Desktop-Settings</entry>
+              <entry>ConfigurationTool for the GUI</entry>
+			  <entry>Settings</entry>
+
+            </row><row>
+              <entry>HardwareSettings</entry>
+              <entry>A tool to manage hardware components, like soundcards, graphicards or printers</entry>
+			  <entry>Settings</entry>
+
+            </row><row>
+              <entry>NetworkSettings</entry>
+              <entry>Application to manage network settings</entry>
+			  <entry>Settings</entry>
+
+            </row><row>
+              <entry>PackageManager</entry>
+              <entry>A package manager application</entry>
+			  <entry>Settings</entry>
+
+            </row><row>
+              <entry>SystemSetup</entry>
+              <entry>System setup application, e.g. init level configuration</entry>
+			  <entry>Settings</entry>
 
             </row><row>
               <entry>Network</entry>
               <entry>Network application such as a webbrowser</entry>
 
             </row><row>
-              <entry>Clock</entry>
-              <entry>A clock application/applet</entry>
+              <entry>WebBrowser</entry>
+              <entry>A webbrowser</entry>
+			  <entry>Network</entry>
 
             </row><row>
-              <entry>Monitor</entry>
-              <entry>Monitor application/applet that monitors some resource or activity.</entry>
+              <entry>InstantMessaging</entry>
+              <entry>An InstantMessaging Client</entry>
+			  <entry>Network</entry>
+
+            </row><row>
+              <entry>IRCClient</entry>
+              <entry>An IRC Client</entry>
+			  <entry>Network</entry>
+
+            </row><row>
+              <entry>News</entry>
+              <entry>A newsreader or newsticker</entry>
+			  <entry>Network</entry>
+
+            </row><row>
+              <entry>FileTransfer</entry>
+              <entry>Tools like FTP or P2P programs</entry>
+			  <entry>Network</entry>
+
+            </row><row>
+              <entry>RemoteAccess</entry>
+              <entry>A tool to remotely manage your PC</entry>
+			  <entry>Network</entry>
+
+            </row><row>
+              <entry>Telephony</entry>
+              <entry>Telephony via PC</entry>
+			  <entry>Network</entry>
 
             </row><row>
               <entry>AudioVideo</entry>
               <entry>A multimedia (audio/video) application</entry>
 
             </row><row>
-              <entry>Amusement</entry>
-              <entry>A simple amusement</entry>
+              <entry>AudioVideoEditing</entry>
+              <entry>Application to edit audio or video files</entry>
+			  <entry>AudioVideo</entry>
 
             </row><row>
-              <entry>Emulator</entry>
-              <entry>Emulator of another platform, such as a DOS emulator.</entry>
+              <entry>DiscBurning</entry>
+              <entry>Application to burn a disc</entry>
+			  <entry>AudioVideo</entry>
+
+            </row><row>
+              <entry>Mixer</entry>
+              <entry>Just a mixer</entry>
+			  <entry>AudioVideo</entry>
+
+            </row><row>
+              <entry>Player</entry>
+              <entry>Application to play audio/video files</entry>
+			  <entry>AudioVideo</entry>
 
             </row><row>
               <entry>Game</entry>
               <entry>A game</entry>
 
             </row><row>
-              <entry>3DGame</entry>
-              <entry>A game in 3D</entry>
+              <entry>AdventureGame</entry>
+              <entry>Adventure style game</entry>
+			  <entry>Game</entry>
 
             </row><row>
               <entry>ArcadeGame</entry>
               <entry>Arcade style game</entry>
+			  <entry>Game</entry>
 
             </row><row>
               <entry>BoardGame</entry>
               <entry>A board game</entry>
-
-            </row><row>
-              <entry>CardGame</entry>
-              <entry>A card game</entry>
-
-            </row><row>
-              <entry>FirstPersonGame</entry>
-              <entry>First person perspective game</entry>
-
-            </row><row>
-              <entry>PlatformGame</entry>
-              <entry>Platform style game</entry>
-
-            </row><row>
-              <entry>PuzzleGame</entry>
-              <entry>Puzzle game</entry>
-
-            </row><row>
-              <entry>SportsGame</entry>
-              <entry>Sports game</entry>
-
-            </row><row>
-              <entry>StrategyGame</entry>
-              <entry>Strategy game</entry>
+			  <entry>Game</entry>
 
             </row><row>
               <entry>BlocksGame</entry>
               <entry>Falling blocks game</entry>
+			  <entry>Game</entry>
+
+            </row><row>
+              <entry>CardGame</entry>
+              <entry>A card game</entry>
+			  <entry>Game</entry>
+
+            </row><row>
+              <entry>FirstPersonGame</entry>
+              <entry>First person perspective game</entry>
+			  <entry>Game</entry>
+
+            </row><row>
+              <entry>KidsGame</entry>
+              <entry>A game for kids</entry>
+			  <entry>Game</entry>
+
+            </row><row>
+              <entry>LogicGame</entry>
+              <entry>Logic games like puzzles, etc</entry>
+			  <entry>Game</entry>
+
+            </row><row>
+              <entry>SportsGame</entry>
+              <entry>A Sports game</entry>
+			  <entry>Game</entry>
+
+            </row><row>
+              <entry>StrategyGame</entry>
+              <entry>A Strategy game</entry>
+			  <entry>Game</entry>
 
             </row><row>
               <entry>Education</entry>
               <entry>Educational software</entry>
 
             </row><row>
-              <entry>Math</entry>
-              <entry>Math software</entry>
+              <entry>Music</entry>
+              <entry>Musical Software</entry>
+			  <entry>AudioVideo;Education</entry>
 
             </row><row>
-              <entry>Astronomy</entry>
-              <entry>Astronomy software</entry>
-
-            </row><row>
-              <entry>Physics</entry>
-              <entry>Physics software</entry>
-
-            </row><row>
-              <entry>Chemistry</entry>
-              <entry>Chemistry software</entry>
+              <entry>Languages</entry>
+              <entry>Software to learn foreign languages</entry>
+			  <entry>Education</entry>
 
             </row><row>
               <entry>Science</entry>
               <entry>Scientific software</entry>
+			  <entry>Education</entry>
+
+            </row><row>
+              <entry>Astronomy</entry>
+              <entry>Astronomy software</entry>
+			  <entry>Science</entry>
+
+            </row><row>
+              <entry>Biology</entry>
+              <entry>Biology software</entry>
+			  <entry>Science</entry>
+
+            </row><row>
+              <entry>Chemistry</entry>
+              <entry>Chemistry software</entry>
+			  <entry>Science</entry>
+
+            </row><row>
+              <entry>Geology</entry>
+              <entry>Geology software</entry>
+			  <entry>Science</entry>
+
+            </row><row>
+              <entry>Math</entry>
+              <entry>Math software</entry>
+			  <entry>Science</entry>
+
+            </row><row>
+              <entry>MedicalSoftware</entry>
+              <entry>MedicalSoftware</entry>
+			  <entry>Science</entry>
+
+            </row><row>
+              <entry>Physics</entry>
+              <entry>Physics software</entry>
+			  <entry>Science</entry>
+
+            </row><row>
+              <entry>Amusement</entry>
+              <entry>A simple amusement</entry>
+			  <entry></entry>
+
+            </row><row>
+              <entry>Applet</entry>
+              <entry>An applet that will run inside a panel or another such application, likely desktop specifi.c</entry>
+			  <entry></entry>
+
+            </row><row>
+              <entry>Archiving</entry>
+              <entry>A tool to archive/backup data</entry>
+			  <entry></entry>
+
+            </row><row>
+              <entry>Clock</entry>
+              <entry>A clock application/applet</entry>
+			  <entry></entry>
+
+            </row><row>
+              <entry>Electronics</entry>
+              <entry>Electronics software, e.g. a circuit designer</entry>
+			  <entry></entry>
+
+
+            </row><row>
+              <entry>Emulator</entry>
+              <entry>Emulator of another platform, such as a DOS emulator</entry>
+			  <entry></entry>
+
+            </row><row>
+              <entry>Engineering</entry>
+              <entry>Engineering software, e.g. CAD programs</entry>
+			  <entry></entry>
+
+            </row><row>
+              <entry>FileManager</entry>
+              <entry>A Filemanager</entry>
+			  <entry></entry>
 
             </row><row>
               <entry>HamRadio</entry>
               <entry>HAM radio software</entry>
-
-            </row><row>
-              <entry>KDE</entry>
-              <entry>Application based on KDE libraries.</entry>
-
-            </row><row>
-              <entry>GNOME</entry>
-              <entry>Application based on GNOME libraries.</entry>
-
-            </row><row>
-              <entry>GTK</entry>
-              <entry>Application based on GTK+ libraries (may also have GNOME category).</entry>
-
-            </row><row>
-              <entry>Qt</entry>
-              <entry>Application based on Qt libraries (may also have KDE category).</entry>
-
-            </row><row>
-              <entry>Motif</entry>
-              <entry>Application based on Motif libraries.</entry>
-
-            </row><row>
-              <entry>ConsoleOnly</entry>
-              <entry>Application that only works inside a terminal (text-based or command line application).</entry>
+			  <entry></entry>
 
             </row><row>
               <entry>Shell</entry>
               <entry>A shell (an actual specific shell such as
-              <filename>bash</filename> or <filename>tcsh</filename>, not a
-              TerminalEmulator).</entry>
+              <filename>bash</filename> or <filename>tcsh</filename>, not a TerminalEmulator)</entry>
+
+            </row><row>
+              <entry>Screensaver</entry>
+              <entry>A screensaver (launching this desktop entry should activate the screensaver)</entry>
+			  <entry></entry>
+
+            </row><row>
+              <entry>System</entry>
+              <entry>System application, "System Tools" such as say a log viewer or network monitor</entry>
+			  <entry></entry>
+
+            </row><row>
+              <entry>Monitor</entry>
+              <entry>Monitor application/applet that monitors some resource or activity</entry>
+			  <entry>System</entry>
+
+            </row><row>
+              <entry>TerminalEmulator</entry>
+              <entry>A terminal emulator application</entry>
+			  <entry></entry>
+
+            </row><row>
+              <entry>TextEditor</entry>
+              <entry>A text editor</entry>
+			  <entry></entry>
+
+            </row><row>
+              <entry>TrayIcon</entry>
+              <entry>An application that is primarily an icon for the "system tray" or "notification area" (apps that open a normal window and just happen to have a tray icon as well should not list this category)</entry>
+			  <entry></entry>
+
+            </row><row>
+              <entry>Utility</entry>
+              <entry>Small utility application, "Accessories"</entry>
+			  <entry></entry>
+
+            </row><row>
+              <entry>KDE</entry>
+              <entry>Application based on KDE libraries</entry>
+			  <entry>QT</entry>
+
+            </row><row>
+              <entry>GNOME</entry>
+              <entry>Application based on GNOME libraries</entry>
+			  <entry>GTK</entry>
+
+            </row><row>
+              <entry>GTK</entry>
+              <entry>Application based on GTK+ libraries</entry>
+			  <entry></entry>
+
+            </row><row>
+              <entry>Qt</entry>
+              <entry>Application based on Qt libraries</entry>
+			  <entry></entry>
+
+            </row><row>
+              <entry>Motif</entry>
+              <entry>Application based on Motif libraries</entry>
+			  <entry></entry>
+
+            </row><row>
+              <entry>Java</entry>
+              <entry>Application based on Java awt or Swing</entry>
+			  <entry></entry>
+
+            </row><row>
+              <entry>ConsoleOnly</entry>
+              <entry>Application that only works inside a terminal (text-based or command line application)</entry>
+			  <entry></entry>
 
             </row>
           </tbody>
