@@ -1360,17 +1360,21 @@ This property contains the XServer time at which last user activity in this
 window took place.
         </para>
         <para>
-Clients should keep the last timestamp from user interaction. and set
-this timestamp in this property on every new toplevel window before mapping it.
-A client that only deals with core events, might, for example, use the
-timestamp of the last KeyPress or ButtonPress event. ButtonRelease and KeyRelease
-events should not generally be considered to be user interaction, because an application
-may receive KeyRelease events from global keybindings, and generally release events
-may have later timestamp than actions that were triggered by the matching press events.
-Clients should start setting the property 
-only after receiving the first event from user interaction, they shouldn't set
-it before receiving first input event. The special value of zero on a newly
-mapped window means that the window shouldn't initially get focus after being mapped.
+Clients should set this property on every new toplevel window, before mapping
+the window, to the timestamp of the user interaction that caused the window to
+appear.  A client that only deals with core events, might, for example, use the
+timestamp of the last KeyPress or ButtonPress event. ButtonRelease and
+KeyRelease events should not generally be considered to be user interaction,
+because an application may receive KeyRelease events from global keybindings,
+and generally release events may have later timestamp than actions that were
+triggered by the matching press events.  Clients can obtain the timestamp that
+caused its first window to appear from the DESKTOP_STARTUP_ID environment
+variable, if the app was launched with startup notification.  If the client does
+not know the timestamp of the user interaction that caused the first window to
+appear (e.g. because it was not launched with startup notification), then it
+should not set the property for that window.  The special value of zero on a
+newly mapped window can be used to request that the window not be initially
+focused when it is mapped.
         </para>
         <para>
 If the client has the active window, it should also update this property
