@@ -659,7 +659,7 @@ _NET_CLOSE_WINDOW
   window = window to close
   message_type = _NET_CLOSE_WINDOW
   format = 32
-  data.l[0] = 0 /* may be used later */
+  data.l[0] = timestamp
   other data.l[] elements = 0
 ]]></programlisting>
 	<para>
