@@ -1266,6 +1266,38 @@ _NET_WM_HANDLED_ICONS
 	for iconified windows. 
 	</para>
     </sect2>
+       <sect2><title>_NET_WM_USER_TIME</title>
+       <programlisting><![CDATA[
+_NET_WM_USER_TIME CARDINAL/32
+]]></programlisting>
+        <para>
+This property contains the XServer time at which last user activity in this
+window took place.
+        </para>
+        <para>
+Clients should keep the last timestamp from user interaction. and set
+this timestamp in this property on every new toplevel window before mapping it.
+A client that only deals with core events, might, for example, use the
+timestamp of the last KeyPress, ButtonPress, or ButtonRelease
+event. KeyRelease events should not generally be considered to
+be user interaction, because an application may receive KeyRelease
+events from global keybindings. Clients should start setting the property
+only after receiving the first event from user interaction, they shouldn't set
+it before receiving first input event. The special value of zero on a newly
+mapped window means that the window shouldn't initially get focus after being mapped.
+        </para>
+        <para>
+If the client has the active window, it should also update this property
+on the window whenever there's user activity.
+        </para>
+        <para>
+Rationale: This property allows a Window Manager to alter the focus,
+stacking, and/or placement behavior of windows when they are
+mapped depending on whether the new window was created by a user
+action or is a "pop-up" window activated by a timer or some other
+event.
+        </para>
+    </sect2>
 </sect1>
 <sect1>
 	<title>Window Manager Protocols</title>
