@@ -806,7 +806,7 @@ setting the window's _NET_FRAME_EXTENTS property accordingly.  The
 Client MUST handle the resulting _NET_FRAME_EXTENTS PropertyNotify
 event.  So that the Window Manager has a good basis for estimation,
 the Client MUST set any window properties it intends to set
-<i>before</i> sending this message.  The Client MUST be able to cope
+<emphasis>before</emphasis> sending this message.  The Client MUST be able to cope
 with imperfect estimates.
 	</para>
 	<para>
@@ -1438,6 +1438,8 @@ respond to this protocol within a reasonable time.
 		<para>
 See also the implementation notes on <link linkend="KILLINGWINDOWS">killing hung processes</link>.
 		</para>
+    </sect2>
+    <sect2>
 		<title>_NET_WM_SYNC_REQUEST</title>
 		<para>
 This protocol uses the XSync extension (see <ulink
@@ -1456,7 +1458,7 @@ counter is not defined by this specification.
 A window manager uses this protocol by preceding a ConfigureNotify
 event sent to a client by a client message as follows:
 		</para>
-		<programlisting><![[CDATA[
+		<programlisting><![CDATA[
 type = ClientMessage
 window = the respective client window
 message_type = WM_PROTOCOLS
@@ -1467,7 +1469,7 @@ data.l[2] = low 32 bits of the update request number
 data.l[3] = high 32 bits of the update request number
 other data.l[] elements = 0
 ]]></programlisting>
-		</para>
+    
 		<para>
 After receiving one or more such message/ConfigureNotify pairs, and
 having handled all repainting associated with the ConfigureNotify
