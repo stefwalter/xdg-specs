@@ -1,6 +1,6 @@
 <!doctype article PUBLIC "-//OASIS//DTD DocBook V4.1//EN" [
 <!entity version "DRAFT version 1.2">
-<!entity date "17 May 2002">
+<!entity date "June 11, 2002">
 ]>
 <article id="index">
 <articleinfo>
@@ -496,12 +496,24 @@ _NET_WM_MOVERESIZE
   data.l[0] = x_root 
   data.l[1] = y_root
   data.l[2] = direction
+  data.l[3] = button
 ]]></programlisting>
 	<para>
-	This message allows an application to initiate window movement or resizing.  This allows the application to define its own move and size "grips", whilst letting the window manager control the actual move/resize.  This means that all moves / resizes can happen in a consistent manner as defined by the WM.
+	This message allows an application to initiate window movement or 
+        resizing.  This allows the application to define its own move and size
+	"grips", whilst letting the window manager control the actual operation.
+	This means that all moves/resizes can happen in a consistent manner as 
+	defined by the WM.
 	</para>
 	<para>
-	When sending this message, x_root and y_root MUST indicate the position of the mouse click with respect to the root window and direction MUST indicate whether this is a move or resize event, and if it is a resize event, which edges of the window the size grip applies to.
+	When sending this message in response to a button press event, button 
+	SHOULD indicate the button which was pressed, x_root and y_root MUST 
+	indicate the position of the button press with respect to the root 
+	window and direction MUST indicate whether this is a move or resize 
+	event, and if it is a resize event, which edges of the window the size 
+	grip applies to. When sending this message in response to a key event, 
+	the direction MUST indicate wether this this is a move or resize event 
+	and the other fields are unused. 
 	</para>
 	<programlisting><![CDATA[
 #define _NET_WM_MOVERESIZE_SIZE_TOPLEFT      0
@@ -512,11 +524,21 @@ _NET_WM_MOVERESIZE
 #define _NET_WM_MOVERESIZE_SIZE_BOTTOM       5
 #define _NET_WM_MOVERESIZE_SIZE_BOTTOMLEFT   6
 #define _NET_WM_MOVERESIZE_SIZE_LEFT         7
-#define _NET_WM_MOVERESIZE_MOVE              8   /* Movement only */
+#define _NET_WM_MOVERESIZE_MOVE              8   /* movement only */
+#define _NET_WM_MOVERESIZE_SIZE_KEYBOARD     9   /* size via keyboard */
+#define _NET_WM_MOVERESIZE_MOVE_KEYBOARD    10   /* move via keyboard */
 ]]></programlisting>
 	<para>
-	The client MUST release all grabs on Pointer events, prior to sending such message.
+	The Client MUST release all grabs prior to sending such message.
 	</para>
+        <para>
+        The Window Manager can use the button field to determine the
+	events on which it terminates the operation initiated by the
+        _NET_WM_MOVERESIZE message. Since there is a race condition between 
+	client sending the _NET_WM_MOVERESIZE message and the user releasing 
+	the button, Window Managers are advised to offer some other means to 
+	terminate the operation, e.g. by pressing the ESC key.  
+        </para>
 	</sect2>
 	</sect1>	
 	<sect1>
@@ -576,8 +598,20 @@ indicates that the window SHOULD appear on all desktops/workspaces.
 	</para>
 	<para>
 The Window Manager should honor _NET_WM_DESKTOP whenever a withdrawn window
-requests to be mapped.  
+requests to be mapped.
+        </para>
+        <para>
+The Window Manager should remove the property whenever
+a window is withdrawn, but it should leave the property in place when it is
+shutting down, e.g. in response to losing ownership of the WM_Sn manager 
+selection.
 	</para>
+        <para>
+Rationale: Removing the property upon window withdrawal helps legacy 
+applications which want to reuse withdrawn windows. Not removing the property
+upon shutdown allows the next Window Manager to restore windows to their 
+previous desktops. 
+        </para>
 	<para>
 A Client can request a change of desktop for a non-withdrawn window by sending
 a _NET_WM_DESKTOP client message to the root window:
@@ -678,6 +712,18 @@ wishing to change the state of a window MUST send a _NET_WM_STATE client
 message to the root window (see below).  The Window Manager MUST keep this
 property updated to reflect the current state of the window.
 		</para>
+        <para>
+The Window Manager should remove the property whenever
+a window is withdrawn, but it should leave the property in place when it is
+shutting down, e.g. in response to losing ownership of the WM_Sn manager 
+selection.
+	</para>
+        <para>
+Rationale: Removing the property upon window withdrawal helps legacy 
+applications which want to reuse withdrawn windows. Not removing the property
+upon shutdown allows the next Window Manager to restore windows to their 
+previous state. 
+        </para>
 		<para>
 Possible atoms are:
 		</para>
@@ -1328,7 +1374,7 @@ int net_get_hostname (char *buf, size_t maxlen)
   <Sect1>
     <title>Copyright</title>
     <para>
-Copyright (C) 2000 See Contributors List
+Copyright (C) 2000, 2001, 2002 See Contributors List
     </para>
     <para> 
 Permission  is hereby granted, free of charge, to any person
@@ -1408,6 +1454,14 @@ OR OTHER DEALINGS IN THE SOFTWARE.
  section on virtual desktop implementation to suggest ICCCM compliance
  regarding IconicState, using _NET_WM_STATE_HIDDEN to avoid confusion.
  Added implementation note for pagers on when to display a window.
+ 			</para></listitem>
+ 			<listitem><para>
+ Added button field and new directions for keyboard-initiated actions
+ to the _NET_WM_MOVERESIZE message. 
+ 			</para></listitem>
+ 			<listitem><para>
+ Added advice on removing _NET_WM_STATE and _NET_WM_DESKTOP when a window 
+ is withdrawn.
  			</para></listitem>
  	</itemizedlist>
  	</sect2>
