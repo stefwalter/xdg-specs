@@ -169,7 +169,7 @@ fetch_card8 (XSettingsBuffer *buffer,
   if (BYTES_LEFT (buffer) < 1)
     return XSETTINGS_ACCESS;
 
-  *result = *(CARD32 *)buffer->pos;
+  *result = *(CARD8 *)buffer->pos;
   buffer->pos += 1;
 
   return XSETTINGS_SUCCESS;
@@ -194,7 +194,7 @@ parse_settings (unsigned char *data,
   buffer.pos = buffer.data = data;
   buffer.len = len;
   
-  result = fetch_card8 (&buffer, &buffer.byte_order);
+  result = fetch_card8 (&buffer, (char *)&buffer.byte_order);
   if (buffer.byte_order != MSBFirst &&
       buffer.byte_order != LSBFirst)
     {
@@ -511,7 +511,8 @@ xsettings_client_process_event (XSettingsClient *client,
   if (xev->xany.window == RootWindow (client->display, client->screen))
     {
       if (xev->xany.type == ClientMessage &&
-	  xev->xclient.message_type == client->manager_atom)
+	  xev->xclient.message_type == client->manager_atom &&
+	  xev->xclient.data.l[1] == client->selection_atom)
 	{
 	  check_manager_window (client);
 	  return True;

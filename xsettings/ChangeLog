@@ -1,3 +1,22 @@
+Tue Oct  8 19:19:37 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* xsettings-common.c (xsettings_setting_free): Fre
+	the setting name. (Anders Carlsson)
+
+	* xsettings-client.c (xsettings_client_process_event):
+	Be more selective about which manager client events
+	we process. (Anders Carlsson)
+
+	* xsettings-client.c (fetch_card8): Fix cut-and-paste
+	bug (Jacob Berkman, bugzilla.gnome.org #73585)
+
+	* xsettings-client.c (parse_settings): Suppress
+	a signed-unsigned warning (David L. Cooper II
+	bugzilla.gnome.org, #85853)
+
+	* xsettings-client.h (enum): Remove trailing ,
+	(Miroslaw Dobrzanski-Neumann, bugzilla.gnome.org #72182)
+
 Thu May 10 15:23:50 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* xsettings-manager.[ch]: Add xsettings_manager_delete_setting().
