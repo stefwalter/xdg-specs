@@ -780,7 +780,7 @@ entries</ulink>: <varname>Categories</varname>,
             </listitem>
           </varlistentry>
           <varlistentry>
-            <term>&lt;Layout [show_empty="false"]&gt;</term>
+            <term>&lt;Layout&gt;</term>
             <listitem>
               <para>
                 The &lt;Layout&gt; element is an optional part of this specification.
@@ -800,14 +800,11 @@ entries</ulink>: <varname>Categories</varname>,
                 menu as defined by the &lt;Include&gt; and &lt;Exclude&gt; elements should 
                 be ignored. References to sub-menus that are not directly contained in this
                 menu as defined by the &lt;Menu&gt; elements should be ignored.
-                The show_empty attribute defines whether a menu that contains no desktop
-                entries and no sub-menus should be shown at all. The show_empty attribute 
-                can be "true" or "false". The default is "false".
               </para>
             </listitem>
           </varlistentry>
           <varlistentry>
-            <term>&lt;DefaultLayout&gt;</term>
+            <term>&lt;DefaultLayout [show_empty="false"] [inline="false"] [inline_limit="4"] [inline_header="true"] [inline_alias="false"]&gt;</term>
             <listitem>
               <para>
                 The &lt;DefaultLayout&gt; element is an optional part of this specification.
@@ -820,33 +817,38 @@ entries</ulink>: <varname>Categories</varname>,
                 any default-layout specified by a parent menu.
                 The default-layout defines the suggested layout if a &lt;Menu&gt; element 
                 does either not have &lt;Layout&gt; element or if it has an empty &lt;Layout&gt; element.
+				For explanations of the various attributes see the &lt;Menuname&gt; element.
                 If no default-layout has been specified then the layout as specified by the following
                 elements should be assumed:
-                &lt;DefaultLayout&gt;&lt;Merge type="menus"/&gt;&lt;Merge type="files"/&gt;&lt;/DefaultLayout&gt;
+                &lt;DefaultLayout show_empty="false" inline="false" inline_limit="4" inline_header="true" inline_alias="false"&gt;&lt;Merge type="menus"/&gt;&lt;Merge type="files"/&gt;&lt;/DefaultLayout&gt;
               </para>
             </listitem>
           </varlistentry>
           <varlistentry>
-            <term>&lt;Menuname [inline="false"] [inline_limit="4"] [inline_header="true"] [inline_alias="false"]&gt;</term>
+            <term>&lt;Menuname [show_empty="..."] [inline="..."] [inline_limit="..."] [inline_header="..."] [inline_alias="..."]&gt;</term>
             <listitem>
               <para>
                 This element may only appear as a child of a &lt;Layout&gt; or &lt;DefaultLayout&gt;
                 menu. Its contents references an immediate sub-menu of the current menu as defined 
                 with the &lt;Menu&gt; element, as such it should never contain a slash. 
                 If no such sub-menu exists the element should be ignored.
-                It may have an inline attribute that can be either "true" or "false", the default is "false". 
+				This element may have various attributes, the default values are taken from the DefaultLayout key.
+                The show_empty attribute defines whether a menu that contains no desktop
+                entries and no sub-menus should be shown at all. The show_empty attribute 
+                can be "true" or "false".
+                It may have an inline attribute that can be either "true" or "false".
                 If the inline attribute is "true" the menu that is referenced may be copied into the 
                 current menu at the current point instead of being inserted as sub-menu of the current menu.
                 The optional inline_limit attribute defines the maximum number of entries that can be inlined.
                 If the sub-menu has more entries than inline_limit, the sub-menu will not be inlined.
-                If the inline_limit is 0 (zero) there is no limit. The default inline_limit is 4.
+                If the inline_limit is 0 (zero) there is no limit.
                 The optional inline_title attribute defines whether an inlined menu should be preceeded with
                 a header entry listing the caption of the sub-menu. 
-                The inline_title attribute can be either "true" or "false", the default is "true".
+                The inline_title attribute can be either "true" or "false".
                 The optional inline_alias attribute defines whether a single inlined entry should adopt the
                 caption of the inlined menu. In such case no additional header entry will be added regardless
                 of the value of the inline_title attribute.
-                The inline_alias attribute can be either "true" or "false", the default is "false".
+                The inline_alias attribute can be either "true" or "false".
                 Example: if a menu has a sub-menu titled "WordProcessor" with a single entry "OpenOffice 4.2", 
                 and both inline="true" and inline_alias="true" are specified then this would result in the 
                 "OpenOffice 4.2" entry being inlined in the current menu but the "OpenOffice 4.2" caption 
