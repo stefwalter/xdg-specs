@@ -436,9 +436,26 @@ _NET_ACTIVE_WINDOW
   window  = window to activate
   message_type = _NET_ACTIVE_WINDOW
   format = 32
-  data.l[0] = 0 /* may be used later */
+  data.l[0] = source indication 
+  data.l[1] = timestamp
+  data.l[2] = requestor's currently active window, 0 if none
   other data.l[] elements = 0
 ]]></programlisting>
+        <para>
+Source indication should be 1 when the request comes from an application, and 2
+when it comes from a pager. Clients using older version of this spec use 0
+as source indication, see <xref linkend="sourceindication"/> for details.
+The timestamp is Client's last user activity timestamp (see _NET_WM_USER_TIME)
+at the time of the request, and the currently active window
+is the Client's active toplevel window, if any (the Window Manager may
+be e.g. more likely to obey the request if it will mean transferring
+focus from one active window to another).
+        </para>
+        <para>
+Depending on the information provided with the message, the Window Manager may
+decide to refuse the request (either completely ignore it, or e.g. use
+_NET_WM_STATE_DEMANDS_ATTENTION).
+        </para>
 	</sect2><sect2><title>_NET_WORKAREA</title>
 	<programlisting><![CDATA[
 _NET_WORKAREA, x, y, width, height CARDINAL[][4]/32
@@ -744,6 +761,35 @@ _NET_WM_MOVERESIZE
 	terminate the operation, e.g. by pressing the ESC key.  
         </para>
 	</sect2>
+	<sect2><title>_NET_RESTACK_WINDOW</title>
+	<programlisting><![CDATA[
+_NET_RESTACK_WINDOW
+]]></programlisting>
+	<para>
+	Pagers wanting to restack a window SHOULD send a _NET_CLOSE_WINDOW client
+	message request to the root window:
+	</para>
+<programlisting><![CDATA[
+_NET_CLOSE_WINDOW
+  window = window to restack
+  message_type = _NET_CLOSE_WINDOW
+  format = 32
+  data.l[0] = source indication
+  data.l[1] = sibling window
+  data.l[2] = detail
+  other data.l[] elements = 0
+]]></programlisting>
+	<para>
+        This request is similar to ConfigureRequest with CWSibling and CWStackMode flags. It should be used only by pagers,
+        applications can use normal ConfigureRequests. The source indication field should be therefore set to 1,
+        see <xref linkend="sourceindication"/> for details.
+	</para>
+	<para>
+	Rationale: A Window Manager may put restrictions on configure requests from applications, for example it may
+        under some conditions refuse to raise a window. This request makes it clear it comes from a pager or similar
+        tool, and therefore the Window Manager should always obey it.
+	</para>
+	</sect2>
 	</sect1>	
 	<sect1>
 	<title>Application Window Properties</title>
@@ -944,6 +990,7 @@ _NET_WM_STATE_HIDDEN, ATOM
 _NET_WM_STATE_FULLSCREEN, ATOM
 _NET_WM_STATE_ABOVE, ATOM
 _NET_WM_STATE_BELOW, ATOM
+_NET_WM_STATE_DEMANDS_ATTENTION, ATOM
 ]]></programlisting>
       <para>
 An implementation MAY add new atoms to this list. Implementations
@@ -1021,6 +1068,15 @@ windows (see <xref linkend="STACKINGORDER"/> for details).
 	attention to their dialogs (the Urgency
 	hint should be used in that case, see <xref linkend="URGENCY"/>).' 
        </para>
+
+	<para>
+_NET_WM_STATE_DEMANDS_ATTENTION indicates that some action in or with the window
+happened. For example, it may be set by the Window Manager if the window requested
+activation but the Window Manager refused it, or the application may set it if it
+finished some work. This state may be set by both the Client and
+the Window Manager. It should be unset by the Window Manager when it decides
+the window got the required attention (usually, that it got activated).
+	</para>
 
 	<para>
 To change the state of a mapped window, a Client MUST send a _NET_WM_STATE
@@ -1278,10 +1334,11 @@ window took place.
 Clients should keep the last timestamp from user interaction. and set
 this timestamp in this property on every new toplevel window before mapping it.
 A client that only deals with core events, might, for example, use the
-timestamp of the last KeyPress, ButtonPress, or ButtonRelease
-event. KeyRelease events should not generally be considered to
-be user interaction, because an application may receive KeyRelease
-events from global keybindings. Clients should start setting the property
+timestamp of the last KeyPress or ButtonPress event. ButtonRelease and KeyRelease
+events should not generally be considered to be user interaction, because an application
+may receive KeyRelease events from global keybindings, and generally release events
+may have later timestamp than actions that were triggered by the matching press events.
+Clients should start setting the property 
 only after receiving the first event from user interaction, they shouldn't set
 it before receiving first input event. The special value of zero on a newly
 mapped window means that the window shouldn't initially get focus after being mapped.
@@ -1711,6 +1768,22 @@ int net_get_hostname (char *buf, size_t maxlen)
 	focus.
       </para>
     </sect2>
+
+	<sect2 id="sourceindication">
+      <title>Source indication in requests</title>
+      <para>
+          Some requests from Clients include type of the Client, for example
+          the _NET_ACTIVE_WINDOW message. Currently the types can be
+          1 for normal applications, and 2 for pagers and other Clients
+          that represent direct user actions (the Window Manager may decide
+          to treat requests from applications differently than requests
+          that are result of direct user actions).
+          Clients that support only older version of this spec will have 0
+          as their source indication, thus not specifying their source at all.
+          This also may mean that some of the fields in the message comply
+          only with the older specification version.
+      </para>
+    </sect2>
 	</sect1>
   <sect1>
     <title>References</title>
@@ -1798,6 +1871,16 @@ OR OTHER DEALINGS IN THE SOFTWARE.
  	    <sect2>
  		<title>Changes since 1.2</title>
  		<itemizedlist>
+ 			<listitem><para>
+Added new state _NET_WM_STATE_DEMANDS_ATTENTION.
+ 			</para></listitem>
+ 			<listitem><para>
+Added timestamp, source indication and requestor's active window
+fields to the _NET_ACTIVE_WINDOW message.
+ 			</para></listitem>
+ 			<listitem><para>
+Added _NET_RESTACK_WINDOW message.
+ 			</para></listitem>
  			<listitem><para>
 Added new property _NET_WM_STRUT_PARTIAL to allow partial-width struts.
  			</para></listitem>
