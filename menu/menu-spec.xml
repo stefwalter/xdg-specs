@@ -2,7 +2,7 @@
                   "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
 				  ]>
 <article id="index">
-  <artheader>
+  <articleinfo>
     <title>Desktop Menu Specification</title>
     <releaseinfo>Version 0.8</releaseinfo>
     <date>9 November 2003</date>
@@ -62,7 +62,7 @@
 	</affiliation>
       </author>
     </authorgroup>
-  </artheader>
+  </articleinfo>
 
   <sect1 id="introduction">
     <title>Introduction</title>

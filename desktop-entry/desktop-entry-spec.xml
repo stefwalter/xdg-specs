@@ -2,7 +2,7 @@
                   "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
 				  ]>
 <article id="index">
-  <artheader>
+  <articleinfo>
     <title>Desktop Entry Standard</title>
     <releaseinfo>Version 0.9.4</releaseinfo>
 	<date>7 July 2003</date>
@@ -35,7 +35,7 @@
 	</affiliation>
       </author>
     </authorgroup>
-  </artheader>
+  </articleinfo>
 
   <sect1 id="introduction">
     <title>Introduction</title>
