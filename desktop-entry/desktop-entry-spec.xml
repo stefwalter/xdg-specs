@@ -4,8 +4,8 @@
 <article id="index">
   <artheader>
     <title>Desktop Entry Standard</title>
-    <releaseinfo>Version 0.9.3</releaseinfo>
-    <date>13 March 2001</date>
+    <releaseinfo>Version 0.9.4</releaseinfo>
+	<date>7 July 2003</date>
     <authorgroup>
       <author>
 	<firstname>Preston</firstname>
@@ -52,9 +52,8 @@
   <sect1 id="basic-format">
     <title>Basic format of the file</title>
     <para>
-      These desktop entry files should have an extension of ".desktop" or
-      ".kdelnk".  ".kdelnk" is deprecated, and is only maintained for
-      backwards compatibility.  Determining file type on basis of extension
+      These desktop entry files should have the extension ".desktop".
+      Determining file type on basis of extension
       makes determining the file type very easy and quick.  When no file
       extension is present, the desktop system should fall back to
       recognition via "magic detection."  Desktop entries which describe how
@@ -63,8 +62,7 @@
     </para>
     <para>
       The basic format of the desktop entry file requires that there be a
-      "group" header named "[Desktop Entry]".  For backwards compatibility,
-      implementations may also support the header "[KDE Desktop Entry]".
+      "group" header named "[Desktop Entry]".
       This "group" entry denotes that all {key,value} pairs following it
       belong in the Desktop Entry group.  There may be other groups present
       in the file (see MIME types discussion below), but this is the most
@@ -79,7 +77,7 @@
       those delimit the header.
     </para>
     <para>
-      Lines beginning with a "#" are considered comments and will be
+      Lines beginning with a "#" and blank lines are considered comments and will be
       ignored, however they should be preserved across reads / writes of the
       desktop entry file.
     </para>
@@ -108,14 +106,13 @@ Name=Value</programlisting>
   <sect1 id="value-types">
     <title>Possible value types</title>
     <para>
-      The value types recognized are string, localestring, regular expression,
+      The value types recognized are string, localestring, regexp,
       boolean (encoded as the string true/false), and numeric.
     </para>
     <para>
       The difference between string and localestring is that the value for
-      a string key must contain only UTF-8 characters and while the value
-      of a localestring key may contain localized encodings. (See
-      section 5.)
+      a string key must contain only ASCII characters and while the value
+      of a localestring key may contain UTF-8 characters. (See section 5.)
     </para>
     <para>
       Some keys can have multiple values; these should be separated by a
@@ -128,42 +125,105 @@ Name=Value</programlisting>
   <sect1 id="recognized-keys">
     <title>Recognized desktop entry keys</title>
     <para>
-      Keys may be postfixed by [<replaceable>locale</replaceable>], where <replaceable>locale</replaceable> is the LOCALE type
-      of the entry.  <replaceable>locale</replaceable> must be of the form lang[_COUNTRY][.ENCODING],
-      where either _COUNTRY or .ENCODING may be omitted. If a postfixed key
-      occurs, the same key must be also present without the postfix.
+	  Keys  with type localestring may be postfixed by [<replaceable>LOCALE</replaceable>],
+	  where <replaceable>LOCALE</replaceable> is the locale type of the
+	  entry.  <replaceable>LOCALE</replaceable> must be of the form
+	  lang[_COUNTRY][ ENCODING][ MODIFIER], where _COUNTRY, .ENCODING,
+	  and @MODIFIER may be omitted. If a postfixed key occurs, the same
+	  key must be also present without the postfix.
     </para>
     <para>
       When reading in the desktop entry file, the value of the key is
       selected by matching the current POSIX locale for the LC_MESSAGES
-      category against the <replaceable>locale</replaceable> postfixes of all occurrences of the key,
-      with the .ENCODING part stripped. (The .ENCODING is used when the
-      Encoding key for the desktop entry file is Legacy-Mixed, see
-      <xref linkend="legacy-mixed"/>.)
+	  category against the <replaceable>locale</replaceable> postfixes
+	  of all occurrences of the key, with the .ENCODING part stripped.
+	  The .ENCODING field is used only when the Encoding key for the
+	  desktop entry file is Legacy-Mixed, (see <xref
+	  linkend="legacy-mixed"/>.)
     </para>
     <para>
-      The matching is done as follows: if the current value of
-      LC_MESSAGES is
-      <replaceable>lang</replaceable>_<replaceable>country</replaceable>.<replaceable>encoding</replaceable>@<replaceable>modifier</replaceable>,
-      then, if a key for
-      <replaceable>lang</replaceable>_<replaceable>country</replaceable>
-      is present, it will be used. Otherwise, if a key for
-      <replaceable>lang</replaceable> is present, it will be used. If
-      both of these are missing, the required key without a locale
-      specified is used.  The encoding and modifier from the
-      LC_MESSAGES value are ignored.
+	  The matching of is done as follows.  If LC_MESSAGES is of the form
+	  <replaceable>LANG</replaceable>_<replaceable>COUNTRY</replaceable>.<replaceable>ENCODING</replaceable>@<replaceable>MODIFIER</replaceable>,
+	  then it will match a key of the form
+	  <replaceable>LANG</replaceable>_<replaceable>COUNTRY</replaceable>@<replaceable>MODIFIER</replaceable>.
+	  If such a key does not exist, it will attempt to match
+	  <replaceable>LANG</replaceable>_<replaceable>COUNTRY</replaceable>
+	  followed by
+	  <replaceable>LANG</replaceable>@<replaceable>MODIFIER</replaceable>.
+	  Then, a match against <replaceable>LANG</replaceable> by itself
+	  will be attempted.  Finally, if no matching key is found the
+	  required key without a locale specified is used.  The encoding
+	  from the LC_MESSAGES value is ignored when matching.
     </para>
+    <para>
+      If LC_MESSAGES does not have a <replaceable>MODIFIER</replaceable>
+      field, then no key with a modifier will be matched.  Similarly, if
+      LC_MESSAGES does not have a <replaceable>COUNTRY</replaceable>
+      field, then no key with a country specified will be matched.  If
+      LC_MESSAGES just has a <replaceable>LANG</replaceable> field, then
+      it will do a straight match to a key with a similar value.  The
+      following table lists possible matches of various LC_MESSAGES in
+      the order in which they are matched.  Note that the
+      <replaceable>ENCODING</replaceable> field isn't shown.
+    </para>
+    <table>
+      <title>Locale Matching</title>
+      <tgroup cols="2">
+<thead>
+  <row>
+    <entry>LC_MESSAGES Value</entry>
+    <entry>Possible Keys in Order of Matching</entry>
+  </row>
+</thead>
+<tbody>
+  <row>
+    <entry><replaceable>LANG</replaceable>_<replaceable>COUNTRY</replaceable>@<replaceable>MODIFIER</replaceable></entry>
+    <entry>
+      <replaceable>LANG</replaceable>_<replaceable>COUNTRY</replaceable>@<replaceable>MODIFIER</replaceable>,
+      <replaceable>LANG</replaceable>_<replaceable>COUNTRY</replaceable>,
+      <replaceable>LANG</replaceable>@<replaceable>MODIFIER</replaceable>,
+      <replaceable>LANG</replaceable>,
+      Default Value
+    </entry>
+  </row>
+  <row>
+    <entry><replaceable>LANG</replaceable>_<replaceable>COUNTRY</replaceable></entry>
+    <entry>
+      <replaceable>LANG</replaceable>_<replaceable>COUNTRY</replaceable>,
+      <replaceable>LANG</replaceable>,
+      Default Value
+    </entry>
+  </row>
+  <row>
+    <entry><replaceable>LANG</replaceable>@<replaceable>MODIFIER</replaceable></entry>
+    <entry>
+      <replaceable>LANG</replaceable>@<replaceable>MODIFIER</replaceable>,
+      <replaceable>LANG</replaceable>,
+      Default Value
+    </entry>
+  </row>
+  <row>
+    <entry><replaceable>LANG</replaceable></entry>
+    <entry>
+      <replaceable>LANG</replaceable>,
+      Default Value
+    </entry>
+  </row>
+</tbody>
+      </tgroup>
+    </table>
+    
     <para>
       For example, if the current value of the LC_MESSAGES category
-      is de_DE, and the desktop file includes:
+      is sr_YU Latn and the desktop file includes:
     </para>
     <programlisting>
  Name=Foo
- Name[de]=Foo auf Deutsch</programlisting>
+ Name[sr_YU]=...
+ Name[sr Latn]=   
+ Name[sr]=...</programlisting>
     <para>
-      Then the value used for the name key will be 'Foo auf Deutsch'. However,
-      if a value is specified for Name[de_DE], then that will be used
-      instead.
+      then the value of the Name keyed by "sr_YU" is used.
     </para>
     <para>
       Case is significant.  The keys "Name" and "NAME" are not equivalent.
@@ -194,13 +254,14 @@ Name=Value</programlisting>
 	    <entry>Value Type</entry>
 	    <entry>REQ?</entry>
 	    <entry>MUST?</entry>
+		<entry>Type</entry>
 	  </row>
 	</thead>
 	<tbody>
 	  <row>
-	    <entry>Encoding</entry>
+	    <entry>Type</entry>
 	    <entry>
-	      encoding of the desktop entry  file
+		  There are 4 types of desktop entries: Application(1), Link(2), FSDevice(3) and Directory(4).
 	    </entry>
 	    <entry>string</entry>
 	    <entry>YES</entry>
@@ -209,385 +270,311 @@ Name=Value</programlisting>
 	  <row>
 	    <entry>Version</entry>
 	    <entry>
-	      version of Desktop Entry Specification
+	      Version of Desktop Entry Specification
+		  (While the version field is not required to be present, it should be in all newer implementations of the Desktop Entry specification. If the version number is not present, a "pre-standard" desktop entry file is to be assumed).
 	    </entry>
-	    <entry>numeric (4)</entry>
+	    <entry>numeric</entry>
 	    <entry>NO</entry>
 	    <entry>YES</entry>
+		<entry>1-4</entry>
+	  </row>
+	  <row>
+	    <entry>Encoding</entry>
+	    <entry>
+	      Encoding of the whole desktop entry file (UTF-8 or LegacyMixed).
+	    </entry>
+	    <entry>string</entry>
+	    <entry>YES</entry>
+	    <entry>YES</entry>
+		<entry>1-4</entry>
 	  </row>
 	  <row>
 	    <entry>Name</entry>
 	    <entry>
-              specific name of the application, for example "Mozilla"
+          Specific name of the application, for example "Mozilla".
 	    </entry>
 	    <entry>localestring</entry>
 	    <entry>YES</entry>
 	    <entry>YES</entry>
+		<entry>1-4</entry>
 	  </row>
 	  <row>
 	    <entry>GenericName</entry>
 	    <entry>
-              generic name of the application, for example "Web Browser"
+          Generic name of the application, for example "Web Browser".
 	    </entry>
 	    <entry>localestring</entry>
-	    <entry>YES</entry>
-	    <entry>YES</entry>
-	  </row>
-	  <row>
-	    <entry>Type</entry>
-	    <entry>
-              the type of desktop entry
-	    </entry>
-	    <entry>string (1)</entry>
-	    <entry>YES</entry>
-	    <entry>YES</entry>
-	  </row>
-	  <row>
-	    <entry>FilePattern</entry>
-	    <entry>
-              a list of regular expressions to match against for a
-              file manager to determine if this entry's icon should be
-              displayed. Usually simply the name of the main
-              executable and friends.
-	    </entry>
-	    <entry>regexp(s)</entry>
 	    <entry>NO</entry>
-	    <entry>NO</entry>
-	  </row>
-	  <row>
-	    <entry>TryExec</entry>
-	    <entry>
-              filename of a binary on disk used to determine if the
-              program is actually installed.  If not, entry may not
-              show in menus, etc.
-	    </entry>
-	    <entry>string</entry>
-	    <entry>NO</entry>
-	    <entry>NO</entry>
+	    <entry>YES</entry>
+		<entry>1-4</entry>
 	  </row>
 	  <row>
 	    <entry>NoDisplay</entry>
 	    <entry>
-              whether not to display in menus, etc.
+		  NoDisplay means "this application exists, but don't display it in the menus".
+		  This can be useful to e.g. associate this application with mimetypes, so that
+		  it gets launched from a file manager (or other apps), without having a menu
+		  entry for it (there are tons of good reasons for this, including e.g. the
+		  netscape -remote, or kfmclient openURL kind of stuff).
 	    </entry>
 	    <entry>boolean</entry>
 	    <entry>NO</entry>
 	    <entry>NO</entry>
+		<entry>1-4</entry>
 	  </row>
 	  <row>
 	    <entry>Comment</entry>
 	    <entry>
-              tooltip for the entry, for example "View sites on the
-              Internet"; should not be redundant with Name or 
-              GenericName.
+           Tooltip for the entry, for example "View sites on the
+           Internet"; should not be redundant with Name or 
+           GenericName.
 	    </entry>
 	    <entry>localestring</entry>
 	    <entry>NO</entry>
 	    <entry>YES</entry>
-	  </row>
-	  <row>
-	    <entry>Exec</entry>
-	    <entry>
-              program to execute, possibly with arguments
-	    </entry>
-	    <entry>string</entry>
-	    <entry>NO</entry>
-	    <entry>YES</entry>
-	  </row>
-	  <row>
-	    <entry>Actions</entry>
-	    <entry>
-              additional actions possible, see MIME type discussion
-	      in <xref linkend="mime-types"/>
-	    </entry>
-	    <entry>string(s)</entry>
-	    <entry>NO</entry>
-	    <entry>YES</entry>
+		<entry>1-4</entry>
 	  </row>
 	  <row>
 	    <entry>Icon</entry>
 	    <entry>
-              icon to display in file manager, menus, etc.  If the
-              name is an absolute path, the given file will be
-              used. If the name is not an absolute path, an
-              implementation-dependent search algorithm will be used
-              to locate the icon. Icons may be localized with the
-              Icon[xx]= syntax, but filenames should be in UTF-8, not
-              locale encoding.
+          Icon to display in file manager, menus, etc.  If the
+          name is an absolute path, the given file will be
+          used. If the name is not an absolute path, an
+          implementation-dependent search algorithm will be used
+          to locate the icon. Icons may be localized with the
+          Icon[xx]= syntax.
 	    </entry>
 	    <entry>string</entry>
 	    <entry>NO</entry>
 	    <entry>YES</entry>
-	  </row>
-	  <row>
-	    <entry>MiniIcon</entry>
-	    <entry>
-              small icon for menus, etc (deprecated).
-	    </entry>
-	    <entry>string</entry>
-	    <entry>NO</entry>
-	    <entry>NO</entry>
+		<entry>1-4</entry>
 	  </row>
 	  <row>
 	    <entry>Hidden</entry>
 	    <entry>
-              if true, pretend this entry doesn't exist.
+		  Hidden should have been called Deleted. It means the user deleted (at his level)
+		  something that was present (at an upper level, e.g. in the system dirs). It's
+		  strictly equivalent to the .desktop file not existing at all, as far as that user is
+		  concerned. This can also be used to "uninstall" existing files (e.g. due to a renaming)
+		  - by letting "make install" install a file with Hidden=true in it.
 	    </entry>
 	    <entry>boolean</entry>
 	    <entry>NO</entry>
 	    <entry>NO</entry>
+		<entry>1-4</entry>
+	  </row>
+	  <row>
+	    <entry>FilePattern</entry>
+	    <entry>
+		  A list of regular expressions to match against for a
+          file manager to determine if this entry's icon should be
+          displayed. Usually simply the name of the main
+          executable and friends.
+	    </entry>
+	    <entry>regexp(s)</entry>
+	    <entry>NO</entry>
+	    <entry>NO</entry>
+		<entry>1</entry>
+	  </row>
+	  <row>
+	    <entry>TryExec</entry>
+	    <entry>
+          Filename of a binary on disk used to determine if the
+          program is actually installed.  If not, entry may not
+          show in menus, etc.
+	    </entry>
+	    <entry>string</entry>
+	    <entry>NO</entry>
+	    <entry>NO</entry>
+		<entry>1</entry>
+	  </row>
+	  <row>
+	    <entry>Exec</entry>
+	    <entry>
+           Program to execute, possibly with arguments.
+	    </entry>
+	    <entry>string</entry>
+	    <entry>NO</entry>
+	    <entry>YES</entry>
+		<entry>1</entry>
 	  </row>
 	  <row>
 	    <entry>Path</entry>
 	    <entry>
-              if entry is type Application, the working directory to run the program in.
+           If entry is type Application, the working directory to run the program in.
 	    </entry>
 	    <entry>string</entry>
 	    <entry>NO</entry>
 	    <entry>YES</entry>
+		<entry>1</entry>
 	  </row>
 	  <row>
 	    <entry>Terminal</entry>
 	    <entry>
-              whether the program runs in a terminal window
+           Whether the program runs in a terminal window
 	    </entry>
-	    <entry>boolean (2)</entry>
+	    <entry>boolean</entry>
 	    <entry>NO</entry>
 	    <entry>YES</entry>
-	  </row>
-	  <row>
-	    <entry>TerminalOptions</entry>
-	    <entry>
-              if the program runs in a terminal, any options that
-              should be passed to the terminal emulator before
-              actually executing the program. This field is 
-              deprecated because it's dependent on which emulator
-              is used.
-	    </entry>
-	    <entry>string</entry>
-	    <entry>NO</entry>
-	    <entry>NO</entry>
+		<entry>1</entry>
 	  </row>
 	  <row>
 	    <entry>SwallowTitle</entry>
 	    <entry>
-              if entry is swallowed onto the panel, this should be the title of window
+           If entry is swallowed onto the panel, this should be the title of window
 	    </entry>
 	    <entry>localestring</entry>
 	    <entry>NO</entry>
 	    <entry>NO</entry>
+		<entry>1</entry>
 	  </row>
 	  <row>
 	    <entry>SwallowExec</entry>
 	    <entry>
-              program to exec if swallowed app is clicked
+           Program to exec if swallowed app is clicked.
 	    </entry>
 	    <entry>string</entry>
 	    <entry>NO</entry>
 	    <entry>NO</entry>
+		<entry>1</entry>
+	  </row>
+	  <row>
+	    <entry>Actions</entry>
+	    <entry>
+           Additional actions possible, see MIME type discussion in <xref linkend="mime-types"/>.
+	    </entry>
+	    <entry>string(s)</entry>
+	    <entry>NO</entry>
+	    <entry>YES</entry>
+		<entry>1</entry>
 	  </row>
 	  <row>
 	    <entry>MimeType</entry>
 	    <entry>
-              the MIME type(s) supported by this entry
+           The MIME type(s) supported by this entry.
 	    </entry>
 	    <entry>regexp(s)</entry>
 	    <entry>NO</entry>
 	    <entry>NO</entry>
-	  </row>
-	  <row>
-	    <entry>Patterns</entry>
-	    <entry>
-              if entry is type MimeType, various file name extensions
-              associated with the MIME type.
-	    </entry>
-	    <entry>regexp(s)</entry>
-	    <entry>NO</entry>
-	    <entry>NO</entry>
-	  </row>
-	  <row>
-	    <entry>DefaultApp</entry>
-	    <entry>
-              if entry is type MimeType, the default application associated with this mime type
-	    </entry>
-	    <entry>string</entry>
-	    <entry>NO</entry>
-	    <entry>NO</entry>
-	  </row>
-	  <row>
-	    <entry>Dev</entry>
-	    <entry>
-              if FSDevice type of entry, the device to mount
-	    </entry>
-	    <entry>string</entry>
-	    <entry>NO</entry>
-	    <entry>NO</entry>
-	  </row>
-	  <row>
-	    <entry>FSType</entry>
-	    <entry>
-              The type of filesystem to try to mount
-	    </entry>
-	    <entry>string</entry>
-	    <entry>NO</entry>
-	    <entry>NO</entry>
-	  </row>
-	  <row>
-	    <entry>MountPoint</entry>
-	    <entry>
-              if FSDevice type of entry, the mount point of the device in question
-	    </entry>
-	    <entry>string</entry>
-	    <entry>NO</entry>
-	    <entry>NO</entry>
-	  </row>
-	  <row>
-	    <entry>ReadOnly</entry>
-	    <entry>
-              if FSDevice type of entry, specifies whether or not the device is read-only
-	    </entry>
-	    <entry>boolean (2)</entry>
-	    <entry>NO</entry>
-	    <entry>NO</entry>
-	  </row>
-	  <row>
-	    <entry>UnmountIcon</entry>
-	    <entry>
-              icon to display when device is not mounted Mounted devices display icon from Icon key
-	    </entry>
-	    <entry>string</entry>
-	    <entry>NO</entry>
-	    <entry>NO</entry>
+		<entry>1</entry>
 	  </row>
 	  <row>
 	    <entry>SortOrder</entry>
 	    <entry>
-              if entry of type Directory, this may specify the order in which to display files
+           This may specify the order in which to display files.
 	    </entry>
-	    <entry>strings (3)</entry>
+	    <entry>string(s)</entry>
 	    <entry>NO</entry>
 	    <entry>NO</entry>
+		<entry>4</entry>
+	  </row>
+	  <row>
+	    <entry>Dev</entry>
+	    <entry>
+           The device to mount.
+	    </entry>
+	    <entry>string</entry>
+	    <entry>NO</entry>
+	    <entry>NO</entry>
+		<entry>3</entry>
+	  </row>
+	  <row>
+	    <entry>FSType</entry>
+	    <entry>
+           The type of filesystem to try to mount.
+	    </entry>
+	    <entry>string</entry>
+	    <entry>NO</entry>
+	    <entry>NO</entry>
+		<entry>3</entry>
+	  </row>
+	  <row>
+	    <entry>MountPoint</entry>
+	    <entry>
+           The mount point of the device in question.
+	    </entry>
+	    <entry>string</entry>
+	    <entry>NO</entry>
+	    <entry>NO</entry>
+		<entry>3</entry>
+	  </row>
+	  <row>
+	    <entry>ReadOnly</entry>
+	    <entry>
+           Specifies whether or not the device is read-only.
+	    </entry>
+	    <entry>boolean</entry>
+	    <entry>NO</entry>
+	    <entry>NO</entry>
+		<entry>3</entry>
+	  </row>
+	  <row>
+	    <entry>UnmountIcon</entry>
+	    <entry>
+           Icon to display when device is not mounted Mounted devices display icon from Icon key.
+		   UnmountIcons may be localized with the UnmountIcon[xx]= syntax.
+	    </entry>
+	    <entry>string</entry>
+	    <entry>NO</entry>
+	    <entry>NO</entry>
+		<entry>3</entry>
 	  </row>
 	  <row>
 	    <entry>URL</entry>
 	    <entry>
-              if entry is Link type, the URL to access
+           If entry is Link type, the URL to access.
 	    </entry>
-	    <entry>string    </entry>
+	    <entry>string</entry>
 	    <entry>NO</entry>
 	    <entry>YES</entry>
+		<entry>2</entry>
 	  </row>
 	  <row>
-	    <entry>BinaryPattern</entry>
+	    <entry>Categories</entry>
 	    <entry>
-              Deprecated.
+          Categories in which the entry should be shown in a menu (for possible values see the <ulink url="http://www.freedesktop.org/standards/menu-spec/">xdg-menu</ulink> specification).
+	    </entry>
+	    <entry>string(s)</entry>
+	    <entry>NO</entry>
+	    <entry>NO</entry>
+		<entry>1</entry>
+	  </row>
+	  <row>
+	    <entry>OnlyShowIn / NotShowIn</entry>
+	    <entry>
+           A list of strings identifying the environments that should display/not display a given .desktop item. Only one of these keys, either OnlyShowIn or NotShowIn, may appear in a Group. (for possible values see the <ulink url="http://www.freedesktop.org/standards/menu-spec/">xdg-menu</ulink> specification)
+	    </entry>
+	    <entry>string(s)</entry>
+	    <entry>NO</entry>
+	    <entry>NO</entry>
+		<entry>1-4</entry>
+	  </row>
+	  <row>
+	    <entry>StartupNotify</entry>
+	    <entry>
+			If true, it is KNOWN that the application will send a "remove"
+			message when started with the DESKTOP_LAUNCH_ID environment variable
+			set (see the <ulink url="http://www.freedesktop.org/standards/startup-notification-spec/">startup notification spec</ulink> for more details).
+	    </entry>
+	    <entry>boolean</entry>
+	    <entry>NO</entry>
+	    <entry>NO</entry>
+		<entry>1</entry>
+	  </row>
+	  <row>
+	    <entry>StartupWMClass</entry>
+	    <entry>
+			If true, it is KNOWN that the application will map at least one
+			window with the given string as its WM class or WM name hint (see the <ulink url="http://www.freedesktop.org/standards/startup-notification-spec/">startup notification spec</ulink> for more details).
 	    </entry>
 	    <entry>string</entry>
 	    <entry>NO</entry>
 	    <entry>NO</entry>
-	  </row>
-	  <row>
-	    <entry>DocPath</entry>
-	    <entry>
-              Deprecated.
-	    </entry>
-	    <entry>string</entry>
-	    <entry>NO</entry>
-	    <entry>NO</entry>
-	  </row>
-	  <row>
-	    <entry>Extensions</entry>
-	    <entry>
-              Deprecated.
-	    </entry>
-	    <entry>string</entry>
-	    <entry>NO</entry>
-	    <entry>NO</entry>
-	  </row>
-	  <row>
-	    <entry>InitialPreference</entry>
-	    <entry>
-              Deprecated.
-	    </entry>
-	    <entry>string</entry>
-	    <entry>NO</entry>
-	    <entry>NO</entry>
-	  </row>
-	  <row>
-	    <entry>Keywords</entry>
-	    <entry>
-              Deprecated.
-	    </entry>
-	    <entry>string</entry>
-	    <entry>NO</entry>
-	    <entry>NO</entry>
-	  </row>
-	  <row>
-	    <entry>MapNotify</entry>
-	    <entry>
-              Deprecated.
-	    </entry>
-	    <entry>string</entry>
-	    <entry>NO</entry>
-	    <entry>NO</entry>
-	  </row>
-	  <row>
-	    <entry>Protocols</entry>
-	    <entry>
-              Deprecated.
-	    </entry>
-	    <entry>string</entry>
-	    <entry>NO</entry>
-	    <entry>NO</entry>
-	  </row>
-	  <row>
-	    <entry>ServiceTypes</entry>
-	    <entry>
-              Deprecated.
-	    </entry>
-	    <entry>string</entry>
-	    <entry>NO</entry>
-	    <entry>NO</entry>
+		<entry>1</entry>
 	  </row>
 	</tbody>
       </tgroup>
     </table>
-    <para>
-      Notes:
-    </para>
-    <orderedlist>
-      <listitem>
-	<para>
-	  possible values are Application, Link, FSDevice, MimeType, Directory,
-	  Service, ServiceType
-	</para>
-      </listitem>
-      <listitem>
-	<para>
-	  historically these have been represented by the numeric entries 0
-	  or 1.  With this version of the standard they are now to be
-	  represented as a boolean string.  However, if an implementation is
-	  reading a pre-1.0 desktop entry, it should interpret 0 and 1 as false
-	  and true, respectively.
-	</para>
-      </listitem>
-      <listitem>
-	<para>
-	  historically this has been a comma separated list.  This is inconsistent
-	  with other lists which are separated by a semicolon.  When reading
-	  a pre-1.0 desktop entry, comma separated lists should continue to
-	  be supported.
-	</para>
-      </listitem>
-      <listitem>
-	<para>
-	  while the version field is not required to be present, it should
-	  be in all newer implementations of the Desktop Entry specification.
-	  If the version number is not present, a "pre-standard" desktop entry
-	  file is to be assumed.
-	</para>
-      </listitem>
-    </orderedlist>
   </sect1>
   <sect1 id="character-encoding">
     <title>Character set encoding of the file</title>
@@ -595,39 +582,35 @@ Name=Value</programlisting>
       Desktop entry files are encoded as lines of 8-bit characters separated
       by LF characters.
     </para>
-    <para>
-      Except for comments and values of type localestring, only ASCII 
-      characters are permitted in the file:
-    </para>
     <itemizedlist>
       <listitem>
-	<para>
-	  Key names must contain only the characters 'A-Za-z0-9-'
-	</para>
+       <para>
+         Key names must contain only the characters 'A-Za-z0-9-'
+       </para>
       </listitem>
       <listitem>
-	<para>
-	  Group names may contain all ASCII characters except for control 
-	  characters and '[' and ']'.
-	</para>
+       <para>
+         Group names may contain all ASCII characters except for control 
+         characters and '[' and ']'.
+       </para>
       </listitem>
       <listitem>
-	<para>
-	  Values of type string may contain all ASCII characters except
-	  for control characters.
-	</para>
+       <para>
+         Values of type string may contain all ASCII characters except
+         for control characters.
+       </para>
       </listitem>
       <listitem>
-	<para>
-	  Values of type boolean must either be the string 'true' or
-	  'false'
-	</para>
+       <para>
+          Values of type boolean must either be the string 'true' or
+          'false'.
+       </para>
       </listitem>
       <listitem>
-	<para>
-	  Numeric values must be a valid floating point number as recognized
-	  by the %f specifier for scanf.
-	</para>
+       <para>
+          Numeric values must be a valid floating point number as recognized
+          by the %f specifier for scanf.
+       </para>
       </listitem>
     </itemizedlist>
     <para>
@@ -635,46 +618,10 @@ Name=Value</programlisting>
       (except for LF). However, using UTF-8 for comment lines that
       contain characters not in ASCII is encouraged.
     </para>
-    <para>
-      The encoding for values of type localestring is determined by the
-      Encoding field of the desktop entry. This field should always
-      be present. (However, many legacy files may not include it.)
-    </para>
-    <para>
-      Only two values for Encoding are currently defined: 'UTF-8', and 
-      'Legacy-Mixed', and desktop files must not use any other value.
-      Implementations must support the UTF-8 encoding, and may choose
-      to support Legacy-Mixed in addition. For this reason, authors
-      of desktop files are encouraged to use the value 'UTF-8'.
-    </para>
-    <para>
-      If the file specifies an unsupported encoding, the implementation
-      should either ignore the file, or, if the user has requested a direct
-      operation on the file (such as opening it for editing), display an
-      appropriate error indication to the user.
-    </para>
-    <para>
-      In the absence of an Encoding line, the implementation may choose
-      to autodetect the encoding of the file by using such factors
-      as:
-    </para>
-    <itemizedlist>
-      <listitem>
 	<para>
-	  The location of the file on the filesystem
+	  The encoding for values of type localestring is determined by the
+	  Encoding field. 
 	</para>
-      </listitem>
-      <listitem>
-	<para>
-	  Whether the contents of the file are valid UTF-8
-	</para>
-      </listitem>
-    </itemizedlist>
-    <para>
-      If the implementation does not perform such auto-detection, it should
-      treat a file without an Encoding key in the same way as a file with an
-      unsupported Encoding Key.
-    </para>
   </sect1>
   <sect1 id="exec-variables">
     <title>List of valid Exec parameter variables</title>
@@ -691,6 +638,12 @@ Name=Value</programlisting>
       not allowed here - you must add an X-Foo-Exec field if you have
       nonstandard Exec lines</emphasis>.
     </para>
+	<para>
+	  The escaping of the exec parameters is done in the way the mailcap
+	  specification describes. Take a look at
+	  <ulink url="http://www.faqs.org/rfcs/rfc1524.html">RFC 1524</ulink>
+	  for more information.
+	</para>
     <para>
     Recognized fields are as follows:
     </para>
@@ -759,12 +712,6 @@ Name=Value</programlisting>
 	    <entry>%i</entry>
 	    <entry>
 	      the icon associated with the desktop entry
-	    </entry>
-	  </row>
-	  <row>
-	    <entry>%m</entry>
-	    <entry>
-	      the mini-icon associated with the desktop entry
 	    </entry>
 	  </row>
 	  <row>
@@ -883,11 +830,11 @@ Exec=sp -edit %u</programlisting>
 [Desktop Entry]
 Version=1.0
 Type=Application
+Encoding=UTF-8
 Name=Foo Viewer
 Comment=The best viewer for Foo objects available!
 TryExec=fooview
 Exec=fooview %F
-Actions=Edit;Inverse
 Icon=fooview.png
 MimeType=image/x-foo
 X-KDE-Library=libfooview
@@ -903,8 +850,74 @@ Exec=fooview --edit %f
 Name=Foo Viewer (edit image)
 Icon=fooview-edit.png</programlisting>
   </appendix>
+  <appendix id="kde-items">
+  <title>Currently reserved for use within KDE</title>
+    <para>
+      During the time KDE added some extensions that are currently not prefixed by the "X-" prefix, but should be in future KDE releases.
+    </para>
+    <itemizedlist>
+      <listitem>
+        <para>
+         Keys added by KDE: ServiceTypes, DocPath, Keywords, InitialPreference
+        </para>
+      </listitem>
+	  <listitem>
+        <para>
+         Types added by KDE: ServiceType, Service
+        </para>
+      </listitem>
+	</itemizedlist>
+  </appendix>
+  <appendix id="deprecated-items">
+  <title>Deprecated Items</title>
+  <para>
+    As this standard is quite old there are some deprecated items that may or may not be used by serveral implementations.
+  </para>
+    <itemizedlist>
+      <listitem>
+        <para>
+          Type=MimeType is deprecated as there is a new standard for this now: http://www.freedesktop.org/standards/shared-mime-info.html for more information. In consequence the Keys 'Patterns' (various file name extensions associated with the MIME type.) and 'DefaultApp' (the default application associated with this mime type) are also deprecated.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Using .kdelnk instead of .desktop as file-extension is deprecated.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Using "[KDE Desktop Entry]" instead of "[Desktop Entry]" as header is deprecated.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Encoding=LegacyMixed, which allowed localestrings in the encoding of the specified locale, is deprecated.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Deprecated ExecParameters: %m (the mini-icon associated with the desktop entry)
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Deprecated Keys: MiniIcon (small icon for menus, etc), TerminalOptions (if the program runs in a terminal, any options that should be passed to the terminal emulator before actually executing the program), Protocols, Extensions, BinaryPattern, MapNotify.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+    Historically some booleans have been represented by the numeric entries 0 or 1. With this version of the standard they are now to be represented as a boolean string. However, if an implementation is reading a pre-1.0 desktop entry, it should interpret 0 and 1 as false and true, respectively. 
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Historically lists have been comma separated . This is inconsistent with other lists which are separated by a semicolon. When reading a pre-1.0 desktop entry, comma separated lists should continue to be supported. 
+        </para>
+      </listitem>
+    </itemizedlist>
+  </appendix>
   <appendix id="legacy-mixed">
-    <title>The Legacy-Mixed encoding</title>
+    <title>The Legacy-Mixed encoding (Deprecated)</title>
     <para>
       The Legacy-Mixed encoding corresponds to the traditional encoding
       of desktop files in older versions of the GNOME and KDE desktop
@@ -914,12 +927,38 @@ Icon=fooview-edit.png</programlisting>
       characters.
     </para>
     <para>
+      If the file specifies an unsupported encoding, the implementation
+      should either ignore the file, or, if the user has requested a direct
+      operation on the file (such as opening it for editing), display an
+      appropriate error indication to the user.
+    </para>
+    <para>
+      In the absence of an Encoding line, the implementation may choose
+      to autodetect the encoding of the file by using such factors
+      as:
+    </para>
+    <itemizedlist>
+      <listitem>
+	<para>
+	  The location of the file on the filesystem
+	</para>
+      </listitem>
+      <listitem>
+	<para>
+	  Whether the contents of the file are valid UTF-8
+	</para>
+      </listitem>
+    </itemizedlist>
+    <para>
+      If the implementation does not perform such auto-detection, it should
+      treat a file without an Encoding key in the same way as a file with an
+      unsupported Encoding Key.
+    </para>
+    <para>
       If the locale tag includes an .ENCODING part, then that determines
       the encoding for the line. Otherwise, the encoding is determined
       by the language, or language-country pair from the locale tag, according
-      to the following table. (A language-country locale tag matches a
-      language by itself in the table if the language-country pair isn't
-      explicitely in the table.)
+      to the following table.
     </para>
     <informaltable>
       <tgroup cols="2">
@@ -932,7 +971,7 @@ Icon=fooview-edit.png</programlisting>
 	</thead>
 	<tbody>
 	  <row>
-	    <entry>ARMSCII-8 (*)</entry><entry></entry><entry>hy</entry>
+	    <entry>ARMSCII-8 (*)</entry><entry></entry><entry>by</entry>
 	  </row><row>
 	    <entry>BIG5</entry><entry></entry><entry>zh_TW</entry>
 	  </row><row>
@@ -948,7 +987,7 @@ Icon=fooview-edit.png</programlisting>
 	  </row><row>
 	    <entry>GEORGIAN-PS (*)</entry><entry></entry><entry>ka</entry>
 	  </row><row>
-	    <entry>ISO-8859-1</entry><entry></entry><entry>br ca da de en es eu fi fr gl it nl wa no pt sv</entry>
+	    <entry>ISO-8859-1</entry><entry></entry><entry>br ca da de en es eu fi fr gl it nl no pt sv wa</entry>
 	  </row><row>
 	    <entry>ISO-8859-2</entry><entry></entry><entry>cs hr hu pl ro sk sl sq sr</entry>
 	  </row><row>
@@ -962,7 +1001,7 @@ Icon=fooview-edit.png</programlisting>
 	  </row><row>
 	    <entry>ISO-8859-13</entry><entry></entry><entry>lt lv mi</entry>
 	  </row><row>
-	    <entry>ISO-8859-14</entry><entry></entry><entry>ga cy</entry>
+	    <entry>ISO-8859-14</entry><entry></entry><entry>cy ga</entry>
 	  </row><row>
 	    <entry>ISO-8859-15</entry><entry></entry><entry>et</entry>
 	  </row><row>
@@ -1031,4 +1070,3 @@ Icon=fooview-edit.png</programlisting>
     </para>
   </appendix>
 </article>
-
