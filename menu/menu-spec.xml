@@ -1381,7 +1381,7 @@ entries</ulink>: <varname>Categories</varname>,
               <entry>Settings applications</entry>
 
             </row><row>
-              <entry>Accessibility</entry>
+              <entry>AccessibilitySettings</entry>
               <entry>Accessibility settings</entry>
 			  <entry>Settings</entry>
 
@@ -1667,6 +1667,11 @@ entries</ulink>: <varname>Categories</varname>,
               <entry>Utility</entry>
               <entry>Small utility application, "Accessories"</entry>
 			  <entry></entry>
+
+            </row><row>
+              <entry>Accessibility</entry>
+              <entry>Accessibility</entry>
+			  <entry>Utility</entry>
 
             </row><row>
               <entry>KDE</entry>
