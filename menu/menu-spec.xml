@@ -321,7 +321,7 @@ entries</ulink>: <varname>Categories</varname> and
                 <filename>/foo/bar/booz/Hello.desktop</filename> the desktop
                 entry would get a desktop-file id of <filename>booz-Hello.desktop</filename>
                 A desktop entry <filename>/foo/bar/bo/oz/Hello.desktop</filename> would result
-                in a desktop-file id of <filename>bo-oz-Hello.desktop</filename
+                in a desktop-file id of <filename>bo-oz-Hello.desktop</filename>
               </para>
               <para>
                 &lt;AppDir&gt; elements appearing later in the menu file have
@@ -530,7 +530,7 @@ entries</ulink>: <varname>Categories</varname> and
               <para>
                 The &lt;Filename&gt; element is the most basic matching rule.
                 It matches a desktop entry if the desktop entry has the given
-                desktop-file id. See <xref linkend="term-application-id"/>.
+                desktop-file id. See <xref linkend="term-desktop-file-id"/>.
               </para>
             </listitem>
           </varlistentry>
@@ -1057,8 +1057,8 @@ entries</ulink>: <varname>Categories</varname> and
             &lt;Move&gt;
               &lt;Old&gt;Foo&lt;/Old&gt;
               &lt;New&gt;Bar&lt;/New&gt;
-              &lt;Old&gt;Faz/Abc&lt;/Old&gt;
-              &lt;New&gt;Baz/Xyz&lt;/New&gt;
+              &lt;Old&gt;Foo2&lt;/Old&gt;
+              &lt;New&gt;Bar2&lt;/New&gt;
             &lt;/Move&gt;          
 
             &lt;-- A preferences submenu, kept in a separate file 
