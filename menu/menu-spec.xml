@@ -1157,9 +1157,11 @@ entries</ulink>: <varname>Categories</varname>,
             &lt;/Include&gt;
             &lt;Menu&gt;
               &lt;Name&gt;System&lt;/Name&gt;
-              &lt;Directory&gt;System/.directory&lt;/Directory&gt;
+              &lt;AppDir&gt;/usr/share/applnk/System&lt;/AppDir&gt;
+              &lt;DirectoryDir&gt;/usr/share/applnk/System&lt;/DirectoryDir&gt;
+              &lt;Directory&gt;.directory&lt;/Directory&gt;
               &lt;Include&gt;
-                &lt;Filename&gt;System/foo.desktop&lt;/Filename&gt;
+                &lt;Filename&gt;foo.desktop&lt;/Filename&gt;
               &lt;/Include&gt;
             &lt;/Menu&gt;
           &lt;/Menu&gt;
