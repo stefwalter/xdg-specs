@@ -1,6 +1,7 @@
-<!doctype article PUBLIC "-//OASIS//DTD DocBook V4.1//EN" [
-<!entity version "Draft version 1.3">
-<!entity date "June 29, 2003">
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!ENTITY version "Draft version 1.3">
+<!ENTITY date "June 29, 2003">
 ]>
 <article id="index">
 <articleinfo>
@@ -20,7 +21,7 @@
 		<para>
 This is &version; of the Extended Window Manager Hints (EWMH) spec, updated
 &date;. The canonical home for this document is <ulink
-url="http://www.freedesktop.org/standards/wm-spec.html">http://www.freedesktop.org</ulink>,
+url="http://www.freedesktop.org/standards/wm-spec/">http://www.freedesktop.org</ulink>,
 which also contains directions for reporting bugs or contributing to future
 versions.
 		</para>
@@ -756,7 +757,7 @@ _NET_WM_VISIBLE_NAME, UTF8_STRING
 If the Window Manager displays a window name other than _NET_WM_NAME the Window Manager MUST set this to the title displayed in UTF-8 encoding.
 	</para>
         <para>
-Rationale: This property is for Window Managers that display a title different from the _NET_WM_NAME or WM_NAME of the window (i.e. xterm <1>, xterm <2>, ... is shown, but _NET_WM_NAME / WM_NAME is still xterm for each window) thereby allowing Pagers to display the same title as the Window Manager.
+Rationale: This property is for Window Managers that display a title different from the _NET_WM_NAME or WM_NAME of the window (i.e. xterm &lt;1&gt;, xterm &lt;2&gt;, ... is shown, but _NET_WM_NAME / WM_NAME is still xterm for each window) thereby allowing Pagers to display the same title as the Window Manager.
         </para>
 	</sect2>
 
@@ -1664,8 +1665,8 @@ int net_get_hostname (char *buf, size_t maxlen)
 	focus.
       </para>
     </sect2>
-	</Sect1>
-  <Sect1>
+	</sect1>
+  <sect1>
     <title>References</title>
     <variablelist>
     <varlistentry>
@@ -1687,8 +1688,8 @@ int net_get_hostname (char *buf, size_t maxlen)
     </listitem>
     </varlistentry>
     </variablelist>
-  </Sect1>
-  <Sect1>
+  </sect1>
+  <sect1>
     <title>Copyright</title>
     <para>
 Copyright (C) 2000-2003 See Contributors List
@@ -1718,8 +1719,8 @@ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR  THE  USE
 OR OTHER DEALINGS IN THE SOFTWARE.  
     </para>
-  </Sect1>
-  <Sect1>
+  </sect1>
+  <sect1>
 	<title>Contributors</title>
 	
 		<para>Sasha Vasko</para>
@@ -1746,7 +1747,7 @@ OR OTHER DEALINGS IN THE SOFTWARE.
                 <para>Lubos Lunak</para>
                 <para>Rob Adams</para>
 	</sect1>
-  <Sect1>
+  <sect1>
     <title>Change history</title>
  	    <sect2>
  		<title>Changes since 1.2</title>
