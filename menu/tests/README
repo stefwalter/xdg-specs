@@ -25,6 +25,9 @@ able to generate the menu in the above format.
 To test KDE one can use:
 	MENUTEST="kbuildsycoca --menutest"
 
+With GNOME, you can use:
+	MENUTEST=gnome-menu-spec-test
+
 The menutest script should be used to run the tests. The following commands can
 be used:
 

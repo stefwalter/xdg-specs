@@ -1,5 +1,14 @@
 2005-02-18  Mark McLoughlin  <mark@skynet.ie>
 
+	* tests/o/result,
+	  tests/o/test: test that
+	<And><Category>foo</Category><Not><Category>foo</Category></Not></And>
+	doesn't match anything.
+
+	* README: add bit about how to test the GNOME impl.
+
+2005-02-18  Mark McLoughlin  <mark@skynet.ie>
+
 	Problem pointed out by Waldo.
 
 	* menutest: don't try and run the "CVS" test :)
