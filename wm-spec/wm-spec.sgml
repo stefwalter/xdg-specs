@@ -1,6 +1,6 @@
 <!doctype article PUBLIC "-//OASIS//DTD DocBook V4.1//EN" [
 <!entity version "DRAFT version 1.2">
-<!entity date "August 19, 2002">
+<!entity date "September 7, 2002">
 ]>
 <article id="index">
 <articleinfo>
@@ -26,10 +26,11 @@ This is &version; of the Extended Window Manager Hints (EWMH) spec, updated &dat
 		<para>
 This spec defines interactions between window managers, applications,
 and the utilities that form part of a desktop environment.  It builds
-on the ICCCM [2], which defines WM (window manager) interactions at a
-lower level. The ICCCM does not provide ways to implement many
-features that modern desktop users expect. The GNOME and KDE desktop
-projects originally developed their own extensions to the ICCCM to
+on the Inter-Client Communication Conventions Manual <citation><link
+	    linkend="ICCCM">ICCCM</link></citation>, which defines  
+window manager interactions at a lower level. The ICCCM does not provide ways
+to implement many features that modern desktop users expect. The GNOME and KDE
+desktop projects originally developed their own extensions to the ICCCM to
 support these features; this spec replaces those custom extensions
 with a standardized set of ICCCM additions that any desktop
 environment can adopt.
@@ -46,7 +47,7 @@ interpreted as described in RFC 2119.
 The key words "Window Manager" refer to a window manager which is adopting this
 specification.  "Pager" refers to desktop utility applications, including
 pagers and taskbars.  "Application" refers to other clients.  "Clients" refers
-to Pagers + Applications ie. all X clients, except for the Window Manager.
+to Pagers and Applications ie. all X clients, except for the Window Manager.
 		</para>
 	</sect2>
 	<sect2>
@@ -260,7 +261,7 @@ argument).</para>
 </sect2>
 </sect1>
 <sect1>
-	<title>Root Window Properties (+Related Messages)</title>
+	<title>Root Window Properties (and Related Messages)</title>
 	<para>
 Whenever this spec speaks about <quote>sending a message to the root 
 window</quote>, it is understood that the client is supposed to create 
@@ -390,7 +391,9 @@ _NET_CURRENT_DESKTOP
 _NET_DESKTOP_NAMES, UTF8_STRING[]
 ]]></programlisting>
 	<para>
-The names of all virtual desktops. This is a list of NULL-terminated strings in UTF-8 [1] encoding. This property MAY be changed by a Pager or the Window Manager at any time.
+The names of all virtual desktops. This is a list of NULL-terminated strings in
+	UTF-8 encoding <citation><link linkend="UTF8">UTF8</link></citation>. This property MAY be
+	changed by a Pager or the Window Manager at any time. 
 	</para>
 <para>
 Note: The number of names could be different from _NET_NUMBER_OF_DESKTOPS.
@@ -631,7 +634,37 @@ The Window Manager MUST then attempt to close the window specified.
 	<para>
 	Rationale: A Window Manager might be more clever than the usual method (send WM_DELETE message if the protocol is selected, XKillClient otherwise).  It might introduce a timeout, for example.  Instead of duplicating the code, the Window Manager can easily do the job.
 	</para>
-	</sect2><sect2><title>_NET_WM_MOVERESIZE</title>
+	</sect2>
+	<sect2><title>_NET_MOVERESIZE_WINDOW</title>
+<programlisting><![CDATA[
+_NET_MOVERESIZE_WINDOW
+  window = window to be moved or resized
+  message_type = _NET_MOVERESIZE_WINDOW
+  format = 32
+  data.l[0] = gravity
+  data.l[1] = x
+  data.l[2] = y
+  data.l[3] = width
+  data.l[4] = height
+]]></programlisting>
+	<para>
+	Pagers wanting to move or resize a window may send a
+	_NET_MOVERESIZE_WINDOW client message request to the root window
+	instead of using a ConfigureRequest. 
+	</para>
+        <para>
+	Window Managers should treat a _NET_MOVERESIZE_WINDOW message exactly 
+	like a ConfigureRequest (in particular, adhere to the ICCCM rules about
+	synthetic ConfigureNotify events), except that they should use the
+	gravity specified in the message. 
+        </para>
+	<para>
+	Rationale: Using a _NET_MOVERESIZE_WINDOW message with StaticGravity
+	allows Pagers to exactly position and resize a window including its 
+	decorations without knowing the size of the decorations.
+	</para>
+	</sect2>
+    <sect2><title>_NET_WM_MOVERESIZE</title>
 	<programlisting><![CDATA[
 _NET_WM_MOVERESIZE
   window = window to be moved or resized
@@ -881,7 +914,8 @@ _NET_WM_STATE_SKIP_TASKBAR, ATOM
 _NET_WM_STATE_SKIP_PAGER, ATOM
 _NET_WM_STATE_HIDDEN, ATOM
 _NET_WM_STATE_FULLSCREEN, ATOM
-_NET_WM_STATE_FLOATING, ATOM
+_NET_WM_STATE_ABOVE, ATOM
+_NET_WM_STATE_BELOW, ATOM
 ]]></programlisting>
       <para>
 An implementation MAY add new atoms to this list. Implementations
@@ -930,27 +964,34 @@ be in the _NET_WM_STATE_HIDDEN state.  Pagers and similar applications
 should use _NET_WM_STATE_HIDDEN instead of WM_STATE to decide whether
 to display a window in miniature representations of the windows on a
 desktop.
-<footnote>
+        </para>
 <para>
-Implementation note: if an application asks to toggle
-_NET_WM_STATE_HIDDEN the window manager should probably just ignore
+Implementation note: if an Application asks to toggle
+_NET_WM_STATE_HIDDEN the Window Manager should probably just ignore
 the request, since _NET_WM_STATE_HIDDEN is a function of some other
 aspect of the window such as minimization, rather than an independent
 state.
 </para>
-</footnote>
-        </para>
 	<para>
-_NET_WM_STATE_FULLSCREEN indicates that the window should fill the entire screen
-and have no window decorations. For example, a presentation program would use
-this hint.
+_NET_WM_STATE_FULLSCREEN indicates that the window should fill the entire
+	screen and have no window decorations. For example, a presentation
+	program would use this hint.
 	</para>
         <para>
-_NET_WM_STATE_FLOATING indicates that the window should be on top of other
-windows of the same type. Applications should not set this hint 
-if _NET_WM_WINDOW_TYPE already conveys the exact nature of the window. 
-Windows in this state would typically appear above other windows of the same 
-_NET_WM_WINDOW_TYPE.
+_NET_WM_STATE_ABOVE indicates that the window should be on top of most 
+windows (see <xref linkend="STACKINGORDER"> for details). 
+        </para>
+
+        <para>
+_NET_WM_STATE_BELOW indicates that the window should be below most 
+windows (see <xref linkend="STACKINGORDER"> for details). 
+       </para>
+
+       <para>
+	_NET_WM_STATE_ABOVE and _NET_WM_STATE_BELOW are mainly meant for user
+	preferences and should not be used by applications e.g. for drawing 
+	attention to their dialogs (the Urgency
+	hint should be used in that case, see <xref linkend="URGENCY">).' 
        </para>
 
 	<para>
@@ -993,6 +1034,7 @@ Possible atoms are:
 	<programlisting><![CDATA[
 _NET_WM_ACTION_MOVE, ATOM
 _NET_WM_ACTION_RESIZE, ATOM
+_NET_WM_ACTION_MINIMIZE, ATOM
 _NET_WM_ACTION_SHADE, ATOM
 _NET_WM_ACTION_STICK, ATOM
 _NET_WM_ACTION_MAXIMIZE_HORZ, ATOM
@@ -1029,6 +1071,9 @@ _NET_WM_ACTION_RESIZE indicates that the window may be resized.
 window because its minimum and maximum size in WM_NORMAL_HINTS will be the same.)
 	</para>
 	<para>
+_NET_WM_ACTION_MINIMIZE indicates that the window may be iconified.
+	</para>
+	<para>
 _NET_WM_ACTION_SHADE indicates that the window may be shaded.
 	</para>
 	<para>
@@ -1044,7 +1089,7 @@ _NET_WM_ACTION_MAXIMIZE_VERT indicates that the window may be maximized vertical
 	</para>
 	<para>
 _NET_WM_ACTION_FULLSCREEN indicates that the window may be brought to
-	fullscreen mode.
+	fullscreen state.
 	</para>
 	<para>
 _NET_WM_ACTION_CHANGE_DESKTOP indicates that the window may be moved between desktops.
@@ -1287,7 +1332,8 @@ document offers the following clarifications:
 	<itemizedlist>
 		<listitem><para>
 Window managers MUST honour the win_gravity field of WM_NORMAL_HINTS
-   for both MapRequest _and_ ConfigureRequest events [1]
+   for both MapRequest _and_ ConfigureRequest events (ICCCM Version 2.0,
+	    &sect;4.1.2.3 and &sect;4.1.5)
 		</para></listitem>
 		<listitem><para>
 Applications are free to change their win_gravity setting at any time
@@ -1305,7 +1351,7 @@ corner of the frame.
 		<listitem><para>
 When generating synthetic ConfigureNotify events, the position given
    MUST be the top-left corner of the client window in relation to the
-   origin of the root window (i.e., ignoring win_gravity) [2]
+   origin of the root window (i.e., ignoring win_gravity) (ICCCM Version 2.0, &sect;4.2.3)
 		</para></listitem>
 		<listitem><para>
 XMoveWindow(w,x,y) behaviour depends on the window gravity. Upon receiving a
@@ -1460,12 +1506,6 @@ initial window's width should be taken into consideration, as if it
 was the frame for this window.
 		</para></listitem>
 	</itemizedlist>
-	<para>
-[1] ICCCM Version 2.0, &sect;4.1.2.3 and &sect;4.1.5
-	</para>
-	<para>
-[2] ICCCM Version 2.0, &sect;4.2.3
-	</para>
 	</sect2>
 	<sect2>
 	<title>Window-in-Window MDI</title>
@@ -1522,16 +1562,56 @@ int net_get_hostname (char *buf, size_t maxlen)
 ]]></programlisting>
 		</para>
 	</sect2>
+
+	<sect2 id="STACKINGORDER">
+      <title>Stacking order</title>
+      <para>
+	To obtain good interoperability between different Desktop Environments,
+	the following layered stacking order is recommended, from the bottom:
+	<itemizedlist>
+	  <listitem><para>windows of type _NET_WM_TYPE_DESKTOP</para></listitem>
+	  <listitem><para>windows having state _NET_WM_STATE_BELOW</para></listitem>
+	  <listitem><para>windows not belonging in any other layer</para></listitem> 
+	  <listitem><para>windows of type _NET_WM_TYPE_DOCK (unless they have
+	      state _NET_WM_TYPE_BELOW) and windows having state
+	      _NET_WM_STATE_ABOVE</para></listitem>  
+	  <listitem><para>focused windows having state
+	      _NET_WM_STATE_FULLSCREEN</para></listitem>
+	</itemizedlist>
+      </para>
+      <para>
+	Windows that are transient for another window should be kept 
+	above this window.
+      </para>
+      <para>
+	The window manager may choose to put some windows in different 
+	stacking position, for example to allow user to bring currently active
+	window to the top and return it back when the window looses focus.
+      </para>
+    </sect2>
 	</Sect1>
   <Sect1>
     <title>References</title>
-    <para>
-[1] F. Yergeau,"UTF-8, a transformation format of ISO 10646", RFC 2279
+    <variablelist>
+    <varlistentry>
+    <term>[UTF8]</term>
+    <listitem>
+    <para id="UTF8">
+      F. Yergeau,"UTF-8, a transformation format of ISO 10646", RFC 2279
     </para>
-    <para>
-[2] David Rosenthal / Stuart W. Marks "Inter-Client Communication Conventions
-      Manual (Version 2.0)", X Consortium Standard, X Version 11, Release 6.3 
+    </listitem>
+    </varlistentry>
+    <varlistentry>
+    <term>[ICCCM]</term>
+    <listitem>
+    <para id="ICCCM">
+      David Rosenthal and Stuart W. Marks, "Inter-Client Communication
+      Conventions Manual (Version 2.0)", X Consortium Standard, X Version 11,
+      Release 6.3
     </para>
+    </listitem>
+    </varlistentry>
+    </variablelist>
   </Sect1>
   <Sect1>
     <title>Copyright</title>
@@ -1632,8 +1712,15 @@ OR OTHER DEALINGS IN THE SOFTWARE.
  Added _NET_SHOWING_DESKTOP. 
  			</para></listitem>
  			<listitem><para>
- Added _NET_WM_STATE_FLOATING.
- 			</para></listitem>                       
+ Added _NET_WM_STATE_ABOVE and _NET_WM_STATE_BELOW and a recommended layered 
+ stacking order. 
+ 			</para></listitem>
+ 			<listitem><para>
+ Added _NET_MOVERESIZE_WINDOW.
+ 			</para></listitem>
+ 			<listitem><para>
+ Improve markup of citations. 
+ 			</para></listitem>                        
  	</itemizedlist>
  	</sect2>
     <sect2>
