@@ -74,6 +74,10 @@
       below).
     </para>
     <para>
+      Group headers may not contain the characters '[' and ']' as
+      those delimit the header.
+    </para>
+    <para>
       Lines beginning with a "#" are considered comments and will be
       ignored, however they should be preserved across reads / writes of the
       desktop entry file.
@@ -91,8 +95,13 @@
     <programlisting>
 Name=Value</programlisting>
     <para>
-      Space before and after the equals sign should be supported; the "="
+      Space before and after the equals sign should be ignored; the "="
       sign is the actual delimiter.
+    </para>
+    <para>
+      The escape sequences \s, \n, \t, \r, and \\ are supported,
+      meaning ASCII space, newline, tab, carriage return, and
+      backslash, respectively.
     </para>
   </sect1>
   <sect1 id="value-types">
@@ -103,14 +112,16 @@ Name=Value</programlisting>
     </para>
     <para>
       The difference between string and localestring is that the value for
-      a string key must contain only ASCII characters and while the value
+      a string key must contain only UTF-8 characters and while the value
       of a localestring key may contain localized encodings. (See
       section 5.)
     </para>
     <para>
       Some keys can have multiple values; these should be separated by a
       semicolon.  Those keys which have several values should have a
-      semicolon as the trailing character.
+      semicolon as the trailing character. For lists of strings, 
+      semicolons are simply not allowed in the strings, there is no 
+      escape mechanism.
     </para>
   </sect1>
   <sect1 id="recognized-keys">
@@ -206,7 +217,16 @@ Name=Value</programlisting>
 	  <row>
 	    <entry>Name</entry>
 	    <entry>
-              name of the entry, need not match binary name
+              specific name of the application, for example "Mozilla"
+	    </entry>
+	    <entry>localestring</entry>
+	    <entry>YES</entry>
+	    <entry>YES</entry>
+	  </row>
+	  <row>
+	    <entry>GenericName</entry>
+	    <entry>
+              generic name of the application, for example "Web Browser"
 	    </entry>
 	    <entry>localestring</entry>
 	    <entry>YES</entry>
@@ -256,7 +276,9 @@ Name=Value</programlisting>
 	  <row>
 	    <entry>Comment</entry>
 	    <entry>
-              descriptive comment
+              tooltip for the entry, for example "View sites on the
+              Internet"; should not be redundant with Name or 
+              GenericName.
 	    </entry>
 	    <entry>localestring</entry>
 	    <entry>NO</entry>
@@ -284,9 +306,13 @@ Name=Value</programlisting>
 	  <row>
 	    <entry>Icon</entry>
 	    <entry>
-              icon to display in file manager, menus, etc. the icon
-              MAY specify a specific path to override common search
-              directories
+              icon to display in file manager, menus, etc.  If the
+              name is an absolute path, the given file will be
+              used. If the name is not an absolute path, an
+              implementation-dependent search algorithm will be used
+              to locate the icon. Icons may be localized with the
+              Icon[xx]= syntax, but filenames should be in UTF-8, not
+              locale encoding.
 	    </entry>
 	    <entry>string</entry>
 	    <entry>NO</entry>
@@ -333,7 +359,9 @@ Name=Value</programlisting>
 	    <entry>
               if the program runs in a terminal, any options that
               should be passed to the terminal emulator before
-              actually executing the program
+              actually executing the program. This field is 
+              deprecated because it's dependent on which emulator
+              is used.
 	    </entry>
 	    <entry>string</entry>
 	    <entry>NO</entry>
@@ -447,6 +475,78 @@ Name=Value</programlisting>
 	    <entry>string    </entry>
 	    <entry>NO</entry>
 	    <entry>YES</entry>
+	  </row>
+	  <row>
+	    <entry>BinaryPattern</entry>
+	    <entry>
+              Deprecated.
+	    </entry>
+	    <entry>string</entry>
+	    <entry>NO</entry>
+	    <entry>NO</entry>
+	  </row>
+	  <row>
+	    <entry>DocPath</entry>
+	    <entry>
+              Deprecated.
+	    </entry>
+	    <entry>string</entry>
+	    <entry>NO</entry>
+	    <entry>NO</entry>
+	  </row>
+	  <row>
+	    <entry>Extensions</entry>
+	    <entry>
+              Deprecated.
+	    </entry>
+	    <entry>string</entry>
+	    <entry>NO</entry>
+	    <entry>NO</entry>
+	  </row>
+	  <row>
+	    <entry>InitialPreference</entry>
+	    <entry>
+              Deprecated.
+	    </entry>
+	    <entry>string</entry>
+	    <entry>NO</entry>
+	    <entry>NO</entry>
+	  </row>
+	  <row>
+	    <entry>Keywords</entry>
+	    <entry>
+              Deprecated.
+	    </entry>
+	    <entry>string</entry>
+	    <entry>NO</entry>
+	    <entry>NO</entry>
+	  </row>
+	  <row>
+	    <entry>MapNotify</entry>
+	    <entry>
+              Deprecated.
+	    </entry>
+	    <entry>string</entry>
+	    <entry>NO</entry>
+	    <entry>NO</entry>
+	  </row>
+	  <row>
+	    <entry>Protocols</entry>
+	    <entry>
+              Deprecated.
+	    </entry>
+	    <entry>string</entry>
+	    <entry>NO</entry>
+	    <entry>NO</entry>
+	  </row>
+	  <row>
+	    <entry>ServiceTypes</entry>
+	    <entry>
+              Deprecated.
+	    </entry>
+	    <entry>string</entry>
+	    <entry>NO</entry>
+	    <entry>NO</entry>
 	  </row>
 	</tbody>
       </tgroup>
@@ -580,7 +680,18 @@ Name=Value</programlisting>
     <para>
       Each "Exec" field may take a number of arguments which will be
       expanded by the file manager or program launcher and passed to the
-      program if necessary.  Recognized fields are as follows:
+      program if necessary.
+    </para>
+    <para>
+      Literal % characters must be escaped as %%, and adding new
+      format characters is not allowed. It's a fatal error to have an
+      Exec field with a format character not given in the spec.
+      Again for emphasis: <emphasis>nonstandard extensions are 
+      not allowed here - you must add an X-Foo-Exec field if you have
+      nonstandard Exec lines</emphasis>.
+    </para>
+    <para>
+    Recognized fields are as follows:
     </para>
     <informaltable>
       <tgroup cols=2>
@@ -621,13 +732,14 @@ Name=Value</programlisting>
 	  <row>
 	    <entry>%d</entry>
 	    <entry>
-	      the directory of the file to open.
+              directory containing the file that would be passed in a %f field
 	    </entry>
 	  </row>
 	  <row>
 	    <entry>%D</entry>
 	    <entry>
-	      a list of directories
+              list of directories containing the files that would be
+              passed in to a %F field
 	    </entry>
 	  </row>
 	  <row>

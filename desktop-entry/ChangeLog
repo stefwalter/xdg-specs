@@ -1,3 +1,10 @@
+Mon Jul  7 18:26:14 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* destop-entry-spec.sgml: Merge changes by Havoc
+	Pennington that had been made in web module:
+
+	2002/04/20: add changes posted to xdg-list a while back
+
 Sat Aug 24 17:00:48 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* desktop-entry-spec.sgml: In legacy-mixed table, fix duplicate 
