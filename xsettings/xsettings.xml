@@ -213,8 +213,8 @@ If TYPE == XSettingsTypeInteger, then the body is:
     </para>
     <programlisting>
  2      CARD16        red
- 2      CARD16        blue
  2      CARD16        green
+ 2      CARD16        blue
  2      CARD16        alpha
     </programlisting>
     <para>
