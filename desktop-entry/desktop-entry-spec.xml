@@ -633,7 +633,9 @@ Name=Value</programlisting>
     <para>
       Literal % characters must be escaped as %%, and adding new
       format characters is not allowed. It's a fatal error to have an
-      Exec field with a format character not given in the spec.
+      Exec field with a format character not given in the spec (exception
+      to this are the deprecated format characters which can be ignored,
+      that is expanded to no parameters, by the implementation).
       Again for emphasis: <emphasis>nonstandard extensions are 
       not allowed here - you must add an X-Foo-Exec field if you have
       nonstandard Exec lines</emphasis>.
@@ -711,19 +713,19 @@ Name=Value</programlisting>
 	  <row>
 	    <entry>%i</entry>
 	    <entry>
-	      the icon associated with the desktop entry
+              the Icon field of the desktop entry expanded as two parameters, first "--icon" and then the contents of the Icon field (should not expand as any prameters if the Icon field is empty or missing)
 	    </entry>
 	  </row>
 	  <row>
 	    <entry>%c</entry>
 	    <entry>
-	      the comment associated with the desktop entry
+	      the translated Name field associated with the desktop entry
 	    </entry>
 	  </row>
 	  <row>
 	    <entry>%k</entry>
 	    <entry>
-	      the name of the desktop file
+	      the location of the desktop file as either a uri (if for example gotten from the vfolder system) or a local filename or empty if no location is known
 	    </entry>
 	  </row>
 	  <row>
@@ -896,7 +898,7 @@ Icon=fooview-edit.png</programlisting>
       </listitem>
       <listitem>
         <para>
-          Deprecated ExecParameters: %m (the mini-icon associated with the desktop entry)
+          Deprecated ExecParameters: %m (the mini-icon associated with the desktop entry, this should be expanded as two parameters, "--miniicon" and the content of the Icon field, it can also be ignored by expanding it to no parameters)
         </para>
       </listitem>
       <listitem>
