@@ -1818,6 +1818,15 @@ Change the description of _NET_WM_STATE_MODAL to no longer require apps to
 break the ICCCM for group-modal windows, but still support the 
 WM_TRANSIENT_FOR=root dialect.
  			</para></listitem>
+                        <listitem><para>
+Specified that (yet) unused fields in client messages must be set to 0.
+                        </para></listitem>
+                        <listitem><para>
+_NET_WM_PING message now has the client window identified in data.l[2] field.
+                        </para></listitem>
+                        <listitem><para>
+Added _NET_WM_USER_TIME to detect user activity in windows.
+                        </para></listitem>
 	        </itemizedlist>
             </sect2>
  	    <sect2>
