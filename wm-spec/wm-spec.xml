@@ -1291,13 +1291,17 @@ message_type = WM_PROTOCOLS
 format = 32
 data.l[0] = _NET_WM_PING
 data.l[1] = timestamp
+data.l[2] = the respective client window
 other data.l[] elements = 0
 ]]></programlisting>
 		<para>
 A participating Client receiving this message MUST send it back to the root
-window immediately, by setting window = root, and calling XSendEvent.  The
-Client MUST NOT alter the timestamp, as this can be used by the Window Manager
-to uniquely identify the ping.
+window immediately, by setting window = root, and calling XSendEvent with
+the same event mask like all other root window messages in this specification use.
+The Client MUST NOT alter any field in the event other than the window. This
+includes all 5 longs in the data.l[5] array. The Window Manager can uniquely
+identify the ping by the timestamp and the data.l[2] field if necessary.
+Note that some older clients may not preserve data.l[2] through data.l[4].
 		</para>
 		<para>
 The Window Manager MAY kill the Client (using _NET_WM_PID) if it fails to
