@@ -28,6 +28,8 @@ if [ "x${TESTS}" == "x" ]; then
 	TESTS=`ls tests`
 fi
 
+FAILED=
+SUCCEEDED=
 for TEST in ${TESTS}; do
   echo
   rm -rf ${MENUTESTDIR} 2> /dev/null
@@ -63,15 +65,28 @@ for TEST in ${TESTS}; do
 
     if diff -q ${MENUTESTDIR}/result1 ${MENUTESTDIR}/result2 > /dev/null; then
       echo '>>> OK'
+      SUCCEEDED="${SUCCEEDED} ${TEST}"
     else
       sort ${MENUTESTDIR}/result1 > ${MENUTESTDIR}/result1.sorted
       sort ${MENUTESTDIR}/result2 > ${MENUTESTDIR}/result2.sorted
       if diff -u ${MENUTESTDIR}/result1.sorted ${MENUTESTDIR}/result2.sorted > ${MENUTESTDIR}/result.diff; then
         echo '>>> OK (different order)'
+        SUCCEEDED="${SUCCEEDED} ${TEST}"
       else
         echo '>>> Failed'
         cat ${MENUTESTDIR}/result.diff
+        cat ${MENUTESTDIR}/log
+        FAILED="${FAILED} ${TEST}"
       fi
     fi
   fi
 done
+
+echo "OK tests:     ${SUCCEEDED}"
+
+if ! test -z "${FAILED}" ; then
+    echo "Failed tests: ${FAILED}"
+    exit 1
+fi
+
+exit 0

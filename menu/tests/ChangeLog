@@ -1,0 +1,5 @@
+2003-10-16  Havoc Pennington  <hp@redhat.com>
+
+	* menutest: cat log file on failure; print list of failed tests
+	when we're done
+
