@@ -1,3 +1,7 @@
+2005-02-24  Waldo Bastian <bastian@kde.org>
+
+	* menu-spec.xml: Fixed links to www.freedesktop.org
+
 2004-12-13  Mark McLoughlin  <mark@skynet.ie>
 
 	* menu-spec.xml: elaboration from Waldo.
