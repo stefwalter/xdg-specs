@@ -4,8 +4,8 @@
 <article id="index">
   <articleinfo>
     <title>Desktop Menu Specification</title>
-    <releaseinfo>Version 0.8</releaseinfo>
-    <date>9 November 2003</date>
+    <releaseinfo>Version 0.9</releaseinfo>
+    <date>8 December 2004</date>
     <authorgroup>
       <author>
 	<firstname>Waldo</firstname>
@@ -483,12 +483,13 @@ entries</ulink>: <varname>Categories</varname>,
                 To handle &lt;OnlyUnallocated&gt;, the menu file must be
                 analyzed in two conceptual passes. The first pass processes
                 &lt;Menu&gt; elements that can match any desktop entry. During
-                this pass, each desktop entry is marked according to whether it
-                was included in some &lt;Menu&gt;. The second pass processes
-                only &lt;Menu&gt; elements that are restricted to unallocated
-                desktop entries.  During the second pass, queries may only match
-                desktop entries that were not allocated to some menu during the
-				first pass. See <xref linkend="query-algorithm"/>.
+                this pass, each desktop entry is marked as allocated according
+                to whether it was matched by an &lt;Include&gt; rule in some
+                &lt;Menu&gt;. The second pass processes only &lt;Menu&gt;
+                elements that are restricted to unallocated desktop entries.
+                During the second pass, queries may only match desktop entries
+                that were not marked as allocated during the first pass.
+                See <xref linkend="query-algorithm"/>.
               </para>
             </listitem>
           </varlistentry>
@@ -1044,13 +1045,15 @@ entries</ulink>: <varname>Categories</varname>,
       Next, walk through all &lt;Include&gt; and &lt;Exclude&gt; statements.
       For each &lt;Include&gt;, match the rules against the pool of all desktop
       entries. For each desktop entry that matches one of the rules, 
-      add it to the menu to be displayed. For each &lt;Exclude&gt;, match 
-      the rules against the currently-included desktop entries. For each 
-      desktop entry that matches, remove it again from the menu.
+      add it to the menu to be displayed and mark it as having been allocated.
+      For each &lt;Exclude&gt;, match the rules against the currently-included
+      desktop entries. For each desktop entry that matches, remove it again
+      from the menu.
     </para>
     <para>
-      Two passes are necessary, once for regular menus, and 
-      once for &lt;OnlyUnallocated&gt; menus.
+      Two passes are necessary, once for regular menus where any entry may
+      be matched, and once for &lt;OnlyUnallocated&gt; menus where only entries
+      which have not been marked as allocated may be matched.
     </para>
     <para>
       The result is a tree of desktop entries, of course.

@@ -1,3 +1,9 @@
+2004-12-08  Mark McLoughlin  <mark@skynet.ie>
+
+	* menu-spec.xml: make <OnlyUnallocated/> be for entries
+	which don't match any <Include> rule rather than entries
+	which don't appear in any menu.
+
 2004-09-03  Mark McLoughlin  <mark@skynet.ie>
 
 	* menu-spec.xml: minor typo - "This specification adds two
