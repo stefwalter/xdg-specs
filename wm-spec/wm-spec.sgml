@@ -1,22 +1,36 @@
-<!doctype article PUBLIC "-//Davenport//DTD DocBook V3.0//EN" [
+<!doctype article PUBLIC "-//OASIS//DTD DocBook V4.0//EN" [
 ]>
 <article id="index">
-<artheader>
+<articleinfo>
+   <authorgroup>
+      <corpauthor>
+      <ulink url="http://www.freedesktop.org">X Desktop Group</ulink>
+      </corpauthor>
+      </authorgroup>
 <title>Extended Window Manager Hints</title>
-<date>5 November 2000</date>
-</artheader>
+<date>10 March 2001</date>
+</articleinfo>
 <sect1>
 	<title>Introduction</title>
 	<sect2>
 		<title>Version</title>
 		<para>
-This spec is version 1.0.
+This is version 1.1 of the Extended Window Manager Hints (EWMH) spec,
+updated 10 March 2001.
 		</para>
 	</sect2>
 	<sect2>
 		<title>What is this spec?</title>
 		<para>
-This spec defines interactions between window managers, applications and the utilities that form part of a desktop environment.  It builds on the ICCCM [2], which defines wm/client interactions at a lower level.  It was born out of a need to replace the original Gnome WM specification, although this specification has been designed to be independent of any one desktop environment.
+This spec defines interactions between window managers, applications,
+and the utilities that form part of a desktop environment.  It builds
+on the ICCCM [2], which defines WM (window manager) interactions at a
+lower level. The ICCCM does not provide ways to implement many
+features that modern desktop users expect. The GNOME and KDE desktop
+projects originally developed their own extensions to the ICCCM to
+support these features; this spec replaces those custom extensions
+with a standardized set of ICCCM additions that any desktop
+environment can adopt.
 		</para>
 	</sect2>
 	<sect2>
@@ -82,7 +96,7 @@ decorated with a titlebar.</para>
 </sect2>
 <sect2>
 <title>Modality</title>
-<para>The Window Manager_TRANSIENT_FOR hint of the ICCCM allows clients to specify that a 
+<para>The Window Manager _TRANSIENT_FOR hint of the ICCCM allows clients to specify that a 
 toplevel window may be closed before the client finishes.  A typical example 
 of a transient window is a dialog.  Some dialogs can be open for a long time,  
 while the user continues to work in the main window.  Other dialogs have to be 
@@ -183,7 +197,7 @@ is on), deiconifying it or raising it.</para>
 </sect2>
 <sect2>
 <title>Animated iconification</title>
-<para>Some Window Managers display some form of animation when (de-)iconfying a window.
+<para>Some Window Managers display some form of animation when (de-)iconifying a window.
 This may be a line drawing connecting the corners of the window with
 the corners of the icon or the window may be opaquely moved and resized 
 on some trajectory joining the window location and the icon location.</para>
@@ -286,7 +300,7 @@ _NET_NUMBER_OF_DESKTOPS
 The Window Manager is free to honor or reject this request. If request is honored _NET_NUMBER_OF_DESKTOPS MUST be set to the new number of desktops, _NET_VIRTUAL_ROOTS MUST be set to store the new number of desktop virtual root window IDs and _NET_DESKTOP_VIEWPORT and _NET_WORKAREA must also be changed accordingly. The _NET_DESKTOP_NAMES property MAY remain unchanged.
 	</para>
 	<para> 
-If the number of desktops is shrinking and _NET_CURRENT_DESKTOP is out of the new range of of available desktops, then this MUST must be set to the last available desktop from the new set. If number of desktops is shrinking then clients that are still present on desktops, that are out of the new range, MUST be moved to the very last desktop from the new set. For these _NET_WM_DESKTOP MUST be updated.
+If the number of desktops is shrinking and _NET_CURRENT_DESKTOP is out of the new range of available desktops, then this MUST be set to the last available desktop from the new set. If number of desktops is shrinking then clients that are still present on desktops, that are out of the new range, MUST be moved to the very last desktop from the new set. For these _NET_WM_DESKTOP MUST be updated.
 	</para>
 	</sect2>
 	<sect2>
@@ -577,7 +591,7 @@ _NET_WM_DESKTOP
 _NET_WM_WINDOW_TYPE, ATOM[]/32
 ]]></programlisting>
 	<para>
-This MUST be set by the Client before mapping, to a list of atoms indicating
+This SHOULD be set by the Client before mapping, to a list of atoms indicating
 the functional type of the window.  This property SHOULD be used by the window
 manager in determining the decoration, stacking position and other behaviour
 of the window.  The Client SHOULD specify window types in order of preference
@@ -757,7 +771,7 @@ icons to an appropriate size.
 		</para>
 		<para>
 This is an array of 32bit packed CARDINAL ARGB with high byte being A, low
-byte being B.  First two bytes are width, height.  Data is in rows, left to
+byte being B.  First two cardinals are width, height.  Data is in rows, left to
 right and top to bottom.
 		</para>
 	</sect2>
@@ -1062,10 +1076,10 @@ was the frame for this window.
 		</para></listitem>
 	</itemizedlist>
 	<para>
-[1] ICCCM Version 2.0, Åß4.1.2.3 and Åß4.1.5
+[1] ICCCM Version 2.0, &sect;4.1.2.3 and &sect;4.1.5
 	</para>
 	<para>
-[2] ICCCM Version 2.0, Åß4.2.3
+[2] ICCCM Version 2.0, &sect;4.2.3
 	</para>
 	</sect2>
 	<sect2>
