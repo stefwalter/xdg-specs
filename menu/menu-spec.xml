@@ -1,0 +1,1507 @@
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+                  "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+				  ]>
+<article id="index">
+  <artheader>
+    <title>Desktop Menu Specification</title>
+    <releaseinfo>Version 0.4</releaseinfo>
+    <date>31 May 2003</date>
+    <authorgroup>
+      <author>
+	<firstname>Waldo</firstname>
+	<surname>Bastian</surname>
+	<affiliation>
+	  <address>
+	    <email>waldo@kde.org</email>
+	  </address>
+	</affiliation>
+      </author>
+      <author>
+	<firstname>Francois</firstname>
+	<surname>Gouget</surname>
+	<affiliation>
+	  <address>
+	    <email>fgouget@codeweavers.com</email>
+	  </address>
+	</affiliation>
+      </author>
+      <author>
+	<firstname>Alex</firstname>
+	<surname>Graveley</surname>
+	<affiliation>
+	  <address>
+	    <email>alex@ximian.com</email>
+	  </address>
+	</affiliation>
+      </author>
+      <author>
+	<firstname>George</firstname>
+	<surname>Lebl</surname>
+	<affiliation>
+	  <address>
+	    <email>jirka@5z.com</email>
+	  </address>
+	</affiliation>
+      </author>
+      <author>
+	<firstname>Havoc</firstname>
+	<surname>Pennington</surname>
+	<affiliation>
+	  <address>
+	    <email>hp@pobox.com</email>
+	  </address>
+	</affiliation>
+      </author>
+    </authorgroup>
+  </artheader>
+
+  <sect1 id="introduction">
+    <title>Introduction</title>
+    <para>
+      This DRAFT document defines how to construct a user-visible hierarchy of
+      applications, typically displayed as a menu. It allows third-party
+      software to add menu items that work for all desktops, and allows system
+      administrators to edit menus in a way that affects all desktops.
+    </para>
+    <para>
+      The basic scheme is very simple. Information about each application (menu
+      item) is stored in a desktop entry (see <ulink
+        url="http://www.freedesktop.org/standards/desktop-entry-spec.html">Desktop
+      Entry Standard</ulink>).  Then an XML configuration file defines the
+      hierarchical arrangement (layout) of menu items, and which menu items are
+      actually displayed.
+    </para>
+    <para>
+      Things are complicated somewhat by the need to support legacy desktop
+      entry hierarchies, and the need to allow third parties to extend the menu
+      layout. Both of these issues are addressed by the idea of
+      <firstterm>merging</firstterm> two menu layouts.
+    </para>
+  </sect1>
+  <sect1 id="paths">
+    <title>File locations</title>
+    <para>
+      Files involved in this specification are located according to the "desktop
+      base directory specification" which can be found on <ulink
+      url="http://www.freedesktop.org/standards/">www.freedesktop.org</ulink>.
+    </para>
+    <para>
+      Here are the files defined by this specification:
+      <variablelist>
+        <varlistentry>
+          <term><varname>$XDG_CONFIG_DIRS</varname>/menus/applications.menu</term>
+          <listitem>
+            <para>
+              This file contains the XML definition of the main application menu 
+              layout. The first file found in the search path should be used;
+              other files are ignored.  This implies that if the user has 
+              their own applications.menu, it replaces the systemwide one. 
+              (Though the user's menu may explicitly merge the systemwide one.)
+            </para>
+            <para>
+              Other menu files may exist, but are not specified in this
+              document.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><varname>$XDG_CONFIG_DIRS</varname>/menus/<replaceable>menu-file-basename</replaceable>-merged/</term>
+          <listitem>
+            <para>
+              One of the default merge directories included in the
+              &lt;DefaultMergeDirs&gt; element.  By convention, third parties
+              may add new &lt;Menu&gt; files in this
+              location. <replaceable>menu-file-basename</replaceable> means the
+              "applications" from "applications.menu" for example. So the merge
+              directory would be "applications-merged".
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><varname>$XDG_DATA_DIRS</varname>/applications/</term>
+          <listitem>
+            <para>
+              This directory contains a .desktop file for each possible menu
+              item. Each directory in the <varname>$XDG_DATA_DIRS</varname>
+              search path should be used (i.e. desktop entries are collected
+              from all of them, not just the first one that exists). When two
+              desktop entries have the same name, the one appearing earlier in
+              the path is used.
+            </para>
+            <para>
+              The &lt;DefaultAppDirs&gt; element in a menu file indicates that
+              this default list of desktop entry locations should be scanned at
+              that point. If a menu file does not contain
+              &lt;DefaultAppDirs&gt;, then these locations are not scanned.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><varname>$XDG_DATA_DIRS</varname>/desktop-directories/</term>
+          <listitem>
+            <para>
+              This directory contains directory entries which may be associated 
+              with folders in the menu layout. Each directory 
+              in the search path should be used. Only files ending in 
+              .directory are used; other files are ignored.
+            </para>
+            <para>
+              The &lt;DefaultDirectoryDirs&gt; element in a menu file indicates that
+              this default list of directory entry locations should be scanned at
+              that point. If a menu file does not contain
+              &lt;DefaultDirectoryDirs&gt;, then these locations are not scanned.
+            </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </para>
+  </sect1>
+  <sect1 id="desktop-entry-extensions">
+    <title>Extensions to the desktop entry format</title>
+    <para>
+      This specification adds two new fields to <ulink
+url="http://www.freedesktop.org/standards/desktop-entry-spec.html">desktop
+entries</ulink>: <varname>Categories</varname> and
+      <varname>OnlyShowIn</varname>.
+    </para>
+    <para>
+      The <varname>Categories</varname> field is a list of strings used to
+      classify menu items. For example, applications in the
+      <literal>AudioVideo</literal> category might end up in the "Sound &amp;
+	  Video" submenu. <xref linkend="category-registry"/> enumerates the 
+      standard categories. Categories not in this document must be prefixed
+      by the string "X-" indicating that they are extensions. Categories 
+      are case-sensitive.
+    </para>
+    <para>
+      Desktop entries should list all categories that clearly apply. They should
+      not list categories that only vaguely or possibly apply, because the user
+      will end up seeing the same desktop entry in a half-dozen places. But
+      it's typical that several categories will apply to a given desktop entry.
+    </para>
+    <para>
+      The <varname>OnlyShowIn</varname> field is a list of strings identifying
+      the environments that should display a given menu item.  If an
+      <varname>OnlyShowIn</varname> field is present, a given environment should
+      only display the menu item if the string identifying that environment is
+      present.  The strings are case-sensitive. <xref
+	  linkend="onlyshowin-registry"/> enumerates the strings to use for
+      some common environments.
+    </para>
+    <sect2 id="desktop-entry-extensions-examples">
+      <title>Examples of using <varname>Categories</varname> and <varname>OnlyShowIn</varname></title>
+      <para>
+        A desktop entry for a Qt-based image viewer might contain 
+        this <varname>Categories</varname> line:
+        <informalexample>
+          <programlisting>
+            Categories=Qt;Graphics;RasterGraphics;Viewer;
+          </programlisting>
+        </informalexample>
+      </para>
+      <para>
+        A desktop entry for Octave, a command-line mathematics program (which
+        would also have the field <literal>Terminal=true</literal>), might have:
+        <informalexample>
+          <programlisting>
+            Categories=ConsoleOnly;Math;
+          </programlisting>
+        </informalexample>
+      </para>
+      <para>
+        A desktop entry for a GNOME-specific calculator program
+        that should only appear in GNOME might have:
+        <informalexample>
+          <programlisting>
+            Categories=GNOME;Utility;
+            OnlyShowIn=GNOME;
+          </programlisting>
+        </informalexample>
+        Note that the <varname>OnlyShowIn</varname> field is a
+        <emphasis>list</emphasis> and thus ends in a semicolon.
+      </para>
+    </sect2>
+  </sect1>
+  <sect1 id="menu-file-format">
+    <title>Format of menu files</title>
+    <para>
+      Menu files must be well-formed XML files, conform to the menu file DTD,
+      and end in the extension ".menu".  DTD conformance implies that
+      implementation-specific extensions to the file format are not allowed;
+      implementations are expected to stop processing if they encounter XML
+      elements or attributes that are not specified in this document.
+    </para>
+    <sect2 id="menu-file-doctype">
+      <title>Doctype Declaration</title>
+      <para>
+        Menu files for this version of the specification must use the following
+        namespace, public and system identifiers:
+        <variablelist>
+          <varlistentry>
+            <term>Namespace</term>
+            <listitem>
+              <para>
+                <literal>http://www.freedesktop.org/standards/menu</literal>
+              </para>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>Public Identifier for 1.0</term>
+            <listitem>
+              <para>
+                <literal>PUBLIC "-//freedesktop//DTD Menu 1.0//EN"</literal>
+              </para>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>System Identifier for 1.0</term>
+            <listitem>
+              <para>
+                <literal>http://www.freedesktop.org/standards/menu-spec/1.0/menu.dtd</literal>
+              </para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        Here is a sample doctype declaration:
+        <informalexample>
+          <programlisting>
+            &lt;!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 1.0//EN"
+            "http://www.freedesktop.org/standards/menu-spec/1.0/menu.dtd"&gt;
+          </programlisting>
+        </informalexample>
+        
+        All menu files MUST include the doctype declaration, so that
+        implementations can adapt to different versions of this specification
+        (and so implementations can validate the menu file against 
+        the DTD).
+      </para>
+    </sect2>
+    <sect2 id="menu-file-elements">
+      <title>Elements</title>
+      <para>
+        <variablelist>
+          <varlistentry>
+            <term>&lt;Menu&gt;</term>
+            <listitem>
+              <para>
+                The root element is &lt;Menu&gt;.  Each &lt;Menu&gt; element may
+                contain any number of nested &lt;Menu&gt; elements, indicating submenus.
+              </para>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>&lt;AppDir&gt;</term>
+            <listitem>
+              <para>
+                This element may only appear below &lt;Menu&gt;. The
+                content of this element is a directory name. Desktop entries
+                in this directory are scanned and added to the pool of entries 
+                which can be included in this &lt;Menu&gt; and its submenus.
+              </para>
+              <para>
+                Desktop entries in the pool of available entries are identified
+                by their <firstterm>relative path</firstterm> (see <xref
+				linkend="term-relative-path"/>).
+              </para>
+              <para>
+                &lt;AppDir&gt; elements appearing later in the menu file have
+                priority in case of collisions between relative paths.
+              </para>
+              <para>
+                If the filename given as an &lt;AppDir&gt; is not an absolute
+                path, it should be located relative to the location of the menu
+                file being parsed. An &lt;AppDir&gt; should be recursively
+                scanned, finding all desktop entries below the given directory.
+                Only files ending in ".desktop" should be used, other files are
+                ignored.
+              </para>
+              <para>
+                Duplicate &lt;AppDir&gt; elements (that specify the same
+                directory) should be ignored, but the <emphasis>last</emphasis>
+                duplicate in the file should be used when establishing the order
+                in which to scan the directories. This is important when merging
+				(see <xref linkend="merge-algorithm"/>). The order of
+                &lt;AppDir&gt; elements with respect to &lt;Include&gt; and
+                &lt;Exclude&gt; elements is not relevant, also to facilitate
+                merging.
+              </para>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>&lt;DefaultAppDirs&gt;</term>
+            <listitem>
+              <para>
+                This element may only appear below &lt;Menu&gt;. The element has
+                no content. The element should be treated as if it were a list
+                of &lt;AppDir&gt; elements containing the default app dir
+                locations
+                (<replaceable>datadir</replaceable>/applications/ etc.). When expanding 
+                &lt;DefaultAppDirs&gt; to a list of &lt;AppDir&gt;, the default
+                locations that are earlier in the search path go later in the
+                &lt;Menu&gt; so that they have priority.
+              </para>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>&lt;DirectoryDir&gt;</term>
+            <listitem>
+              <para>
+                This element may only appear below &lt;Menu&gt;. The content of
+                this element is a directory name. Each directory listed in a
+                &lt;DirectoryDir&gt; element will be searched for directory 
+                entries to be used when resolving the &lt;Directory&gt; element
+                for this menu and its submenus.
+                If the filename given as a &lt;DirectoryDir&gt; is not an absolute path, 
+                    it should be located relative to the location 
+                    of the menu file being parsed.
+              </para>
+              <para>
+                  Directory entries in the pool of available entries are identified
+                  by their <firstterm>relative path</firstterm> (see <xref
+				  linkend="term-relative-path"/>).
+              </para>
+              <para>
+                If two directory entries have duplicate relative paths, the one from 
+                the last (furthest down) element in the menu file must be used.
+                Only files ending in the extension ".directory" should be 
+                loaded, other files should be ignored.
+              </para>
+              <para>
+                Duplicate &lt;DirectoryDir&gt; elements (that specify the same
+                directory) are handled as with duplicate &lt;AppDir&gt;
+                elements (the last duplicate is used).
+              </para>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>&lt;DefaultDirectoryDirs&gt;</term>
+            <listitem>
+              <para>
+                This element may only appear below &lt;Menu&gt;. The element has
+                no content. The element should be treated as if it were a list
+                of &lt;DirectoryDir&gt; elements containing the default desktop dir
+                locations
+                (<replaceable>datadir</replaceable>/desktop-directories/ etc.). The default
+                locations that are earlier in the search path go later in the
+                &lt;Menu&gt; so that they have priority.
+              </para>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>&lt;Name&gt;</term>
+            <listitem>
+              <para>
+                Each &lt;Menu&gt; element must have a single &lt;Name&gt;
+                element. The content of the &lt;Name&gt; element is a name to
+                be used when referring to the given menu. Each submenu of a
+                given &lt;Menu&gt; must have a unique name. &lt;Menu&gt;
+                elements can thus be referenced by a menu path, for example
+                "Applications/Graphics." The &lt;Name&gt; field must not contain
+                the slash character ("/"); implementations should discard 
+				any name containing a slash. See also <xref linkend="term-menu-path"/>.
+              </para>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>&lt;Directory&gt;</term>
+            <listitem>
+              <para>
+                Each &lt;Menu&gt; element has any number of &lt;Directory&gt;
+                elements. The content of the &lt;Directory&gt; element 
+                is the relative path of a directory entry containing metainformation 
+                about the &lt;Menu&gt;, such as its icon and localized name.
+                If no &lt;Directory&gt; is specified for a &lt;Menu&gt;, 
+                its &lt;Name&gt; field should be used as the user-visible
+                name of the menu.
+              </para>
+              <para>
+                Duplicate &lt;Directory&gt; elements are allowed in order 
+                to simplify menu merging, and allow user menus to override 
+                system menus. The last &lt;Directory&gt; element to appear 
+                in the menu file "wins" and other elements are ignored, 
+                unless the last element points to a nonexistent directory 
+                entry, in which case the previous element should be tried instead, 
+                and so on.
+              </para>              
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>&lt;OnlyUnallocated&gt; and &lt;NotOnlyUnallocated&gt;</term>
+            <listitem>
+              <para>
+                Each &lt;Menu&gt; may contain any number of
+                &lt;OnlyUnallocated&gt; and &lt;NotOnlyUnallocated&gt;
+                elements. Only the last such element to appear is relevant, as
+                it determines whether the &lt;Menu&gt; can contain any desktop
+                entries, or only those desktop entries that do not match other
+                menus. If neither &lt;OnlyUnallocated&gt; nor
+                &lt;NotOnlyUnallocated&gt; elements are present, the default 
+                is &lt;NotOnlyUnallocated&gt;.
+              </para>
+              <para>
+                To handle &lt;OnlyUnallocated&gt;, the menu file must be
+                analyzed in two conceptual passes. The first pass processes
+                &lt;Menu&gt; elements that can match any desktop entry. During
+                this pass, each desktop entry is marked according to whether it
+                was included in some &lt;Menu&gt;. The second pass processes
+                only &lt;Menu&gt; elements that are restricted to unallocated
+                desktop entries.  During the second pass, queries may only match
+                desktop entries that were not allocated to some menu during the
+				first pass. See <xref linkend="query-algorithm"/>.
+              </para>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>&lt;Deleted&gt; and &lt;NotDeleted&gt;</term>
+            <listitem>
+              <para>
+                Each &lt;Menu&gt; may contain any number of &lt;Deleted&gt; and
+                &lt;NotDeleted&gt; elements. Only the last such element to
+                appear is relevant, as it determines whether the &lt;Menu&gt;
+                has been deleted. If neither &lt;Deleted&gt; nor
+                &lt;NotDeleted&gt; elements are present, the default is
+                &lt;NotDeleted&gt;. The purpose of this element is to support
+                menu editing. If a menu contains a &lt;Deleted&gt; element 
+                not followed by a &lt;NotDeleted&gt; element, that menu 
+                should be ignored.
+              </para>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>&lt;Include&gt;</term>
+            <listitem>
+              <para>
+                An &lt;Include&gt; element is a set of rules attempting to match
+                some of the known desktop entries.  The &lt;Include&gt; element
+                contains a list of any number of matching rules.  Matching rules
+                are specified using the elements &lt;And&gt;, &lt;Or&gt;,
+                &lt;Not&gt;, &lt;All&gt;, &lt;Filename&gt;, and
+                &lt;Category&gt;. Each rule in a list of rules has a logical OR
+                relationship, that is, desktop entries which match any rule
+                are included in the menu.
+              </para>
+              <para>
+                &lt;Include&gt; elements must appear immediately under
+                &lt;Menu&gt; elements. The desktop entries they match are
+                included in the menu. &lt;Include&gt; and &lt;Exclude&gt;
+                elements for a given &lt;Menu&gt; are processed in order,
+                with queries earlier in the file handled first. This has
+				implications for merging, see <xref linkend="merge-algorithm"/>.
+				See <xref linkend="query-algorithm"/> for full details on 
+                    how to process &lt;Include&gt; and &lt;Exclude&gt; elements.
+              </para>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>&lt;Exclude&gt;</term>
+            <listitem>
+              <para>
+                Any number of &lt;Exclude&gt; elements may appear below a
+                &lt;Menu&gt; element. The content of an &lt;Exclude&gt; element
+                is a list of matching rules, just as with an
+                &lt;Include&gt;. However, the desktop entries matched are
+                removed from the list of desktop entries included so far.  (Thus
+                an &lt;Exclude&gt; element that appears before any
+                &lt;Include&gt; elements will have no effect, for example, as no
+                desktop entries have been included yet.)
+              </para>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>&lt;Filename&gt;</term>
+            <listitem>
+              <para>
+                The &lt;Filename&gt; element is the most basic matching rule.
+                It matches a desktop entry if the desktop entry has the given
+                relative path. Absolute paths <emphasis>must not be used</emphasis>, 
+                and relative paths must be the canonical form used to reference 
+                a desktop entry in the pool of desktop entries (they can't 
+                contain ".." or anything of that nature, and can't contain 
+				extra "/" characters). See <xref linkend="term-relative-path"/>.
+              </para>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>&lt;Category&gt;</term>
+            <listitem>
+              <para>
+                The &lt;Category&gt; element is another basic matching
+                predicate. It matches a desktop entry if the desktop entry has
+                the given category in its <varname>Categories</varname> field.
+              </para>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>&lt;All&gt;</term>
+            <listitem>
+              <para>
+                The &lt;All&gt; element is a matching rule that matches 
+                all desktop entries.
+              </para>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>&lt;And&gt;</term>
+            <listitem>
+              <para>
+                The &lt;And&gt; element contains a list of matching rules. 
+                If each of the matching rules inside the &lt;And&gt;
+                element match a desktop entry, then the entire 
+                &lt;And&gt; rule matches the desktop entry.
+              </para>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>&lt;Or&gt;</term>
+            <listitem>
+              <para>
+                The &lt;Or&gt; element contains a list of matching rules. 
+                If any of the matching rules inside the &lt;Or&gt;
+                element match a desktop entry, then the entire 
+                &lt;Or&gt; rule matches the desktop entry.
+              </para>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>&lt;Not&gt;</term>
+            <listitem>
+              <para>
+                The &lt;Not&gt; element contains a list of matching rules.  If
+                any of the matching rules inside the &lt;Not&gt; element matches
+                a desktop entry, then the entire &lt;Not&gt; rule does
+                <emphasis>not</emphasis> match the desktop entry. That is,
+                matching rules below &lt;Not&gt; have a logical OR relationship.
+              </para>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>&lt;MergeFile&gt;</term>
+            <listitem>
+              <para>
+                  Any number of &lt;MergeFile&gt; elements may be listed below a
+                  &lt;Menu&gt; element, giving the name of another menu file to
+				  be merged into this one. <xref linkend="merge-algorithm"/>
+                  specifies how merging is done. The root &lt;Menu&gt; of the
+                  merged file will be merged into the immediate parent of the
+                  &lt;MergeFile&gt; element. The &lt;Name&gt; element of the
+                  root &lt;Menu&gt; of the merged file are ignored. If the
+                  filename given as a &lt;MergeFile&gt; is not an absolute path,
+                  it should be located relative to the location of the menu file
+                  being parsed.
+              </para>
+              <para>
+                Duplicate &lt;MergeFile&gt; elements (that specify the same
+                file) are handled as with duplicate &lt;AppDir&gt;
+                elements (the last duplicate is used).
+              </para>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>&lt;MergeDir&gt;</term>
+            <listitem>
+              <para>
+                Any number of &lt;MergeDir&gt; elements may be listed below a
+                &lt;Menu&gt; element. A &lt;MergeDir&gt; contains the name of a
+                directory. Each file in the given directory which ends in the
+                ".menu" extension should be merged in the same way that a
+                &lt;MergeFile&gt; would be.  If the filename given as a
+                &lt;MergeDir&gt; is not an absolute path, it should be located
+                relative to the location of the menu file being parsed.
+                The files inside the merged directory are not merged in any 
+                specified order.
+              </para>
+              <para>
+                Duplicate &lt;MergeDir&gt; elements (that specify the same
+                directory) are handled as with duplicate &lt;AppDir&gt;
+                elements (the last duplicate is used).
+              </para>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>&lt;DefaultMergeDirs&gt;</term>
+            <listitem>
+              <para>
+                This element may only appear below &lt;Menu&gt;. The element has
+                no content. The element should be treated as if it were a list
+                of &lt;MergeDir&gt; elements containing the default merge
+                directory locations. When expanding &lt;DefaultMergeDirs&gt; to a
+                list of &lt;MergeDir&gt;, the default locations that are earlier
+                in the search path go later in the &lt;Menu&gt; so that they
+                have priority.
+              </para>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>&lt;LegacyDir&gt;</term>
+            <listitem>
+              <para>
+                This element may only appear below &lt;Menu&gt;. The text
+                content of this element is a directory name.  Each directory
+                listed in a &lt;LegacyDir&gt; element will be an old-style
+                legacy hierarchy of desktop entries, see <xref
+				linkend="legacy-hierarchies"/> for how to load such a
+                hierarchy. Implementations must not load legacy hierarchies that
+                are not explicitly specified in the menu file (because for
+                example the menu file may not be the main menu).  If the
+                filename given as a &lt;LegacyDir&gt; is not an absolute path,
+                it should be located relative to the location of the menu file
+                being parsed.
+              </para>
+              <para>
+                Duplicate &lt;LegacyDir&gt; elements (that specify the same
+                directory) are handled as with duplicate &lt;AppDir&gt;
+                elements (the last duplicate is used).
+              </para>
+              <para>
+                The &lt;LegacyDir&gt; element may have one attribute,
+                <literal>prefix</literal>. Normally, given a &lt;LegacyDir&gt;
+                <filename>/foo/bar</filename> and desktop entry
+                <filename>/foo/bar/baz/Hello.desktop</filename> the desktop
+                entry would be included as
+                <filename>baz/Hello.desktop</filename>.  Given a prefix of
+                <literal>boo-</literal>, it would instead be loaded as
+                <filename>boo-Hello.desktop</filename>. In other words, if a
+                prefix is present it replaces the relative path to the desktop
+                or directory entry. The prefix may contain path separator ('/')
+                characters.
+              </para>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>&lt;KDELegacyDirs&gt;</term>
+            <listitem>
+              <para>
+                This element may only appear below &lt;Menu&gt;. The element has
+                no content. The element should be treated as if it were a list
+                of &lt;LegacyDir&gt; elements containing the traditional desktop
+                file locations supported by KDE. When expanding
+                &lt;KDELegacyDirs&gt; to a list of &lt;LegacyDir&gt;, the
+                locations that are earlier in the search path go later in the
+                &lt;Menu&gt; so that they have priority.
+                [FIXME what are the exact &lt;LegacyDir prefix="???"&gt; that 
+                this expands to?]
+              </para>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>&lt;Move&gt;</term>
+            <listitem>
+              <para>
+                This element may only appear below &lt;Menu&gt;.  The
+                &lt;Move&gt; element contains pairs of &lt;Old&gt;/&lt;New&gt;
+                elements indicating how to rename a descendant of the current
+                &lt;Menu&gt;. If the destination path already exists, the moved
+                menu is merged with the destination menu (see <xref
+				linkend="merge-algorithm"/> for details).
+              </para>
+              <para>
+                &lt;Move&gt; is used primarily to fix up legacy directories.
+                For example, say you are merging a &lt;LegacyDir&gt; with folder
+                names that don't match the current hierarchy; the legacy folder
+                names can be moved to the new names, where they will be merged
+                with the new folders.
+              </para>
+              <para>
+                &lt;Move&gt; may or may not be useful for implementing menu 
+				editing, see <xref linkend="menu-editing"/>.
+              </para>
+              <para>
+                Duplicate &lt;Move&gt; elements are merged as specified in <xref
+				linkend="merge-algorithm"/>.  Note that duplicates (two moves of
+                the same path) can be detected easily because of the following
+                rule: a move must reside at the lowest possible point.
+              </para>
+              <para>
+                In other words, all moves have exactly one permissible location
+                in the &lt;Menu&gt; hierarchy. Implementations can trivially
+                detect violations of this rule: the &lt;Old&gt; and &lt;New&gt;
+                paths may never share a common prefix. Moving "Foo/Bar" to
+                "Foo/Baz" must be done with a &lt;Move&gt; element that's a
+                child of the "Foo" &lt;Menu&gt;, i.e. by moving "Bar" to "Baz", not 
+                by moving "Foo/Bar" to "Foo/Baz".
+              </para>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>&lt;Old&gt;</term>
+            <listitem>
+              <para>
+                This element may only appear below &lt;Move&gt;, and
+                must be followed by a &lt;New&gt; element.  The content of both
+                &lt;Old&gt; and &lt;New&gt; should be a menu path
+                (slash-separated concatenation of &lt;Name&gt; fields, see 
+				<xref linkend="term-menu-path"/>).
+                Paths are interpreted relative to the menu containing 
+                the &lt;Move&gt; element.
+              </para>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>&lt;New&gt;</term>
+            <listitem>
+              <para>
+                This element may only appear below &lt;Move&gt;, and must
+                be preceded by an &lt;Old&gt; element. The &lt;New&gt; element 
+                specifies the new path for the preceding &lt;Old&gt; element.
+              </para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </para>
+    </sect2>
+  </sect1>
+
+  <sect1 id="merge-algorithm">
+    <title>Merging</title>
+    <para>
+      Sometimes two menu layouts need to be merged. This is done when folding in
+	  legacy menu hierarchies (see <xref linkend="legacy-hierarchies"/>) and also
+      for files specified in &lt;MergeFile&gt; elements. A common case is that
+      per-user menu files might merge the system menu file. Merging is also used
+      to avoid cut-and-paste, for example to include a common submenu in
+      multiple menu files.
+    </para>
+    <para>
+      Merging involves a base &lt;Menu&gt; and a merged &lt;Menu&gt;. The base
+      is the "target" menu and the merged &lt;Menu&gt; is being added to it. The
+      result of the merge is termed the "combined menu."
+    </para>
+    <para>
+      As a preparatory step, the goal is to resolve all files into 
+      XML elements. To do so, traverse the entire menu tree. For each
+      &lt;MergeFile&gt;, &lt;MergeDir&gt;, or &lt;LegacyDir&gt; element, replace
+      the &lt;MergeFile&gt;, &lt;MergeDir&gt;, or &lt;LegacyDir&gt; element with
+      the child elements of the root &lt;Menu&gt; of the file(s) being
+      merged. As a special exception, remove the &lt;Name&gt; element from the
+      root element of each file being merged. To generate a 
+      &lt;Menu&gt; based on a &lt;LegacyDir&gt;, see 
+	  <xref linkend="legacy-hierarchies"/>.
+    </para>
+    <para>
+      Continue processing until no &lt;MergeFile&gt;, &lt;MergeDir&gt;, or
+      &lt;LegacyDir&gt; elements remain, taking care to avoid infinite loops
+      caused by files that reference one another.
+    </para>
+    <para>
+      Once all files have been loaded into a single tree, scan the tree 
+      recursively performing these steps:
+      <orderedlist>
+        <listitem>
+          <para>
+            Consolidate child menus. Each group of child &lt;Menu&gt;s with the same
+            name must be consolidated into a single child menu with that name.
+            Concatenate the child elements of all menus with the same name, in
+            the order that they appear, and insert those elements as the
+            children of the <emphasis>last</emphasis> menu with that name.
+            Delete all the newly empty &lt;Menu&gt; elements, keeping the 
+            last one.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Expand &lt;DefaultAppDirs&gt; and &lt;DefaultDirectoryDirs&gt; 
+            elements to &lt;AppDir&gt; and &lt;DirectoryDir&gt; elements.
+            Consolidate duplicate &lt;AppDir&gt;, &lt;DirectoryDir&gt;, 
+            and &lt;Directory&gt; elements by keeping the last one.
+            For &lt;Directory&gt; elements that refer to distinct directory 
+            entries, all of them should be kept - if the last one points 
+            to a nonexistent file, the one before that can be used instead, 
+            and so forth.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Recurse into each child &lt;Menu&gt;, performing this list of 
+            steps for each child in order.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Resolve duplicate &lt;Move&gt; operations (with the same 
+            origin path) by keeping the last one.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Execute &lt;Move&gt; operations in the order that they appear. If
+            the destination path does not exist, simply relocate the origin
+            &lt;Menu&gt; element, and change its &lt;Name&gt; field to match the
+            destination path.  If the origin path does not exist, do nothing.
+            If both paths exist, take the origin &lt;Menu&gt; element, delete
+            its &lt;Name&gt; element, and prepend its remaining child elements
+            to the destination &lt;Menu&gt; element. Then, recursively re-run
+            the previous merge steps on the resulting combined &lt;Menu&gt; in order to
+            consolidate duplicates.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            For each &lt;Menu&gt; containing a &lt;Deleted&gt; element which is
+            not followed by a &lt;NotDeleted&gt; element, remove that menu.
+          </para>
+        </listitem>
+      </orderedlist>
+    </para>
+
+    <para>
+      Merged menu elements are kept in order because &lt;Include&gt; and
+      &lt;Exclude&gt; elements later in the file override &lt;Include&gt; and
+      &lt;Exclude&gt; elements earlier in the file. This means that if the user's
+      menu file merges the system menu file, the user can always override what
+      the system menu specifies by placing elements after the &lt;MergeFile&gt;
+      that incorporates the system file.
+    </para>
+  </sect1>
+
+  <sect1 id="query-algorithm">
+    <title>Generating the menus</title>
+    <para>
+      After merging the menus, the result should be a single menu layout
+      description.  For each &lt;Menu&gt;, we have a list of directories where
+      desktop entries can be found, a list of directories where directory
+      entries can be found, and a series of &lt;Include&gt; and &lt;Exclude&gt;
+      directives.
+    </para>
+    <para>
+      For each &lt;Menu&gt; element, build a pool of desktop entries by
+      collecting entries found in each &lt;AppDir&gt; for the menu element.  If
+      two entries have the same relative path, the entry for the earlier (closer
+      to the top of the file) &lt;AppDir&gt; must be discarded. Next, add to the
+      pool the entries for any &lt;AppDir&gt;s specified by ancestor
+      &lt;Menu&gt; elements. If a parent menu has a duplicate entry (same
+      relative path), the entry for the child menu has priority.
+    </para>
+    <para>
+      Next, walk through all &lt;Include&gt; and &lt;Exclude&gt; statements.
+      For each &lt;Include&gt;, match the rules against the pool of all desktop
+      entries. For each desktop entry that matches one of the rules, 
+      add it to the menu to be displayed. For each &lt;Exclude&gt;, match 
+      the rules against the currently-included desktop entries. For each 
+      desktop entry that matches, remove it again from the menu.
+    </para>
+    <para>
+      Two passes are necessary, once for regular menus, and 
+      once for &lt;OnlyUnallocated&gt; menus.
+    </para>
+    <para>
+      The result is a tree of desktop entries, of course.
+    </para>
+  </sect1>
+
+  <sect1 id="legacy-hierarchies">
+    <title>Legacy Menu Hierarchies</title>
+    <para>
+      Traditionally, menus were defined as a filesystem hierarchy, with each
+      filesystem directory corresponding to a submenu.  Implementations of this
+      specification must be able to load these old-style hierarchies
+      as specified in this section.
+    </para>
+    <para>
+      The general approach is: the legacy hierarchy is converted into a
+      &lt;Menu&gt;, and then this menu layout is merged with the menu that
+      specified &lt;LegacyDir&gt;.
+    </para>
+    <para>
+      Desktop entries in the legacy hierarchy should be added to the pool of
+      desktop entries as if the &lt;LegacyDir&gt; were an
+      &lt;AppDir&gt;. Directory entries in the legacy hierarchy should be added
+      to the pool of directory entries as if the &lt;LegacyDir&gt; were a
+      &lt;DirectoryDir&gt;. This can be trivially implemented by adding
+      appropriate &lt;AppDir&gt; and &lt;DirectoryDir&gt; statements to the root
+      legacy &lt;Menu&gt;. There is one slight complexity, namely the 
+      "prefix" attribute of &lt;LegacyDir&gt;.
+    </para>
+    <para>
+      The menu layout corresponds conceptually to the following, though actually
+      generating the XML is not necessary:
+      <itemizedlist>
+        <listitem>
+          <para>
+            For each directory in the legacy hierarchy, a 
+            &lt;Menu&gt; is created with the same &lt;Name&gt; 
+            as the directory on disk.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            This menu then contains an &lt;Include&gt; element that includes
+            each desktop entry in the directory.  That is, it should have a 
+            
+            &lt;Filename&gt;<replaceable>Foo/Bar/foo.desktop</replaceable>&lt;/Filename&gt;
+            for each desktop entry in the directory.
+          </para>
+          <para>
+            As a special exception, if a desktop entry in a directory contains 
+            a <varname>Categories</varname> field, that desktop entry should 
+            <emphasis>not</emphasis> be included in the legacy menu.
+            That is, no &lt;Include&gt; element should be generated for 
+            the entry. This allows a desktop entry to be installed 
+            in a legacy location but still work optimally with the
+            menu system specified in this document.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            If the legacy directory contains a ".directory" file, then 
+            a &lt;Directory&gt; element should be generated that points to said 
+            ".directory" file. 
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Legacy desktop entries should not be assigned any
+            <varname>Categories</varname> fields if they didn't have them
+            already, except that all legacy entries should have the 
+            "Legacy" category added to allow menu files to treat them 
+            specially. (If the same directory is given as both 
+            a &lt;LegacyDir&gt; and an &lt;AppDir&gt;, its desktop 
+            entries should be labeled "Legacy" only if the &lt;LegacyDir&gt;
+            appears later in the file than the &lt;AppDir&gt;.)
+          </para>
+        </listitem>
+      </itemizedlist>
+    </para>
+    <para>
+      For example, say we have the following legacy directory hierarchy:
+      <informalexample>
+        <programlisting>
+          /usr/share/applnk
+              /usr/share/applnk/.directory
+              /usr/share/applnk/bar.desktop
+              /usr/share/applnk/System
+                  /usr/share/applnk/System/.directory
+                  /usr/share/applnk/System/foo.desktop
+        </programlisting>
+      </informalexample>
+      Conceptually that is converted to the following &lt;Menu&gt;:
+      <informalexample>
+        <programlisting>
+          &lt;!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 1.0//EN"
+          "http://www.freedesktop.org/standards/menu-spec/1.0/menu.dtd"&gt;
+
+          &lt;Menu&gt;
+            &lt;AppDir&gt;/usr/share/applnk&lt;/AppDir&gt;
+            &lt;DirectoryDir&gt;/usr/share/applnk&lt;/DirectoryDir&gt;
+            &lt;Directory&gt;.directory&lt;/Directory&gt;
+            &lt;Include&gt;
+              &lt;Filename&gt;bar.desktop&lt;/Filename&gt;
+            &lt;/Include&gt;
+            &lt;Menu&gt;
+              &lt;Name&gt;System&lt;/Name&gt;
+              &lt;Directory&gt;System/.directory&lt;/Directory&gt;
+              &lt;Include&gt;
+                &lt;Filename&gt;System/foo.desktop&lt;/Filename&gt;
+              &lt;/Include&gt;
+            &lt;/Menu&gt;
+          &lt;/Menu&gt;
+        </programlisting>
+      </informalexample>
+      This &lt;Menu&gt; is then merged as if it were in a file 
+      and loaded with &lt;MergeFile&gt;.
+    </para>
+  </sect1>
+
+  <sect1 id="example">
+    <title>Example Menu File</title>
+    <para>
+      <informalexample>
+        <programlisting>
+          &lt;!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 1.0//EN"
+          "http://www.freedesktop.org/standards/menu-spec/1.0/menu.dtd"&gt;
+
+          &lt;Menu&gt;
+            &lt;Name&gt;Applications&lt;/Name&gt;
+            &lt;Directory&gt;Applications.directory&lt;/Directory&gt;
+  
+            &lt;-- Search the default locations --&gt;
+            &lt;DefaultAppDirs/&gt;
+            &lt;DefaultDirectoryDirs/&gt;
+          
+            &lt;-- Merge third-party submenus --&gt;
+            &lt;MergeDir&gt;applications-merged&lt;/MergeDir&gt;
+
+            &lt;-- Merge legacy hierarchy --&gt;
+            &lt;LegacyDir&gt;/usr/share/applnk&lt;/LegacyDir&gt;
+
+            &lt;-- some random moves, maybe to clean up legacy dirs, 
+                   maybe from menu editing --&gt;
+            &lt;Move&gt;
+              &lt;Old&gt;Foo&lt;/Old&gt;
+              &lt;New&gt;Bar&lt;/New&gt;
+              &lt;Old&gt;Faz/Abc&lt;/Old&gt;
+              &lt;New&gt;Baz/Xyz&lt;/New&gt;
+            &lt;/Move&gt;          
+
+            &lt;-- A preferences submenu, kept in a separate file 
+                   so it can also be used standalone --&gt;
+            &lt;Menu&gt;
+              &lt;Name&gt;Preferences&lt;/Name&gt;
+              &lt;Directory&gt;Preferences.directory&lt;/Directory&gt;
+              &lt;MergeFile&gt;preferences.menu&lt;/MergeFile&gt;
+            &lt;/Menu&gt;
+
+            &lt;-- An Office submenu, specified inline --&gt;
+            &lt;Menu&gt;
+              &lt;Name&gt;Office&lt;/Name&gt;
+              &lt;Directory&gt;Office.directory&lt;/Directory&gt;
+              &lt;Include&gt;
+                &lt;Category&gt;Office&lt;/Category&gt;
+              &lt;/Include&gt;
+              &lt;Exclude&gt;
+                &lt;Filename&gt;foo.desktop&lt;/Filename&gt;
+              &lt;/Exclude&gt;
+            &lt;/Menu&gt;
+             
+          &lt;/Menu&gt;
+        </programlisting>
+      </informalexample>
+    </para>
+  </sect1>
+
+  <appendix id="category-registry">
+    <title>Registered Categories</title>
+    <para>
+      Remember, these are case-sensitive.
+      <informaltable>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Category</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>Legacy</entry> 
+              <entry>Keyword that must be added to menu
+              entries merged from legacy locations. May not actually exist in a
+              desktop entry (should be stripped out if found there). If the same
+              directory is given as both a &lt;LegacyDir&gt; and an
+              &lt;AppDir&gt;, its desktop entries should be labeled "Legacy"
+              only if the &lt;LegacyDir&gt; appears later in the file than the
+              &lt;AppDir&gt;.</entry>
+
+            </row><row>
+              <entry>Core</entry>
+              <entry>Important application, core to the desktop such as a filemanager or a help browser</entry>
+
+            </row><row>
+              <entry>Applet</entry>
+              <entry>An applet that will run inside a panel or another such application, likely desktop specific</entry>
+
+            </row><row>
+              <entry>TrayIcon</entry>
+              <entry>An application that is primarily an icon for the "system tray" or "notification area" (apps that open a normal window and just happen to have a tray icon as well should not list this category)</entry>
+
+            </row><row>
+              <entry>Screensaver</entry>
+              <entry>A screensaver (launching this desktop entry should activate the screensaver)</entry>
+
+            </row><row>
+              <entry>TerminalEmulator</entry>
+              <entry>A terminal emulator application.</entry>
+
+            </row><row>
+              <entry>Development</entry>
+              <entry>An application for development</entry>
+
+            </row><row>
+              <entry>GUIDesigner</entry>
+              <entry>A GUI designer application</entry>
+
+            </row><row>
+              <entry>IDE</entry>
+              <entry>IDE application</entry>
+
+            </row><row>
+              <entry>TextEditor</entry>
+              <entry>A text editor</entry>
+
+            </row><row>
+              <entry>Office</entry>
+              <entry>An office type application</entry>
+
+            </row><row>
+              <entry>Spreadsheet</entry>
+              <entry>A spreadsheet</entry>
+
+            </row><row>
+              <entry>WordProcessor</entry>
+              <entry>A word processor</entry>
+
+            </row><row>
+              <entry>Presentation</entry>
+              <entry>Presentation software</entry>
+
+            </row><row>
+              <entry>Calendar</entry>
+              <entry>Calendar app</entry>
+
+            </row><row>
+              <entry>Email</entry>
+              <entry>Email application</entry>
+
+            </row><row>
+              <entry>TODO</entry>
+              <entry>TODO list application</entry>
+
+            </row><row>
+              <entry>ProjectManagement</entry>
+              <entry>Project management application</entry>
+
+            </row><row>
+              <entry>Graphics</entry>
+              <entry>Graphical application</entry>
+
+            </row><row>
+              <entry>VectorGraphics</entry>
+              <entry>Vector based graphical application (should also include 'Graphics' category)</entry>
+
+            </row><row>
+              <entry>RasterGraphics</entry>
+              <entry>Raster based graphical application (should also include 'Graphics' category)</entry>
+
+            </row><row>
+              <entry>System</entry>
+              <entry>System application, "System Tools" such as say a log viewer or network monitor.</entry>
+
+            </row><row>
+              <entry>SystemSetup</entry>
+              <entry>System setup application, hardware installation, hardware clock setup, kernel setup, X server setup, etc.; i.e. system configuration tools.
+              </entry>
+
+            </row><row>
+              <entry>PackageManager</entry>
+              <entry>A package manager application, should include the System keyword as well</entry>
+
+            </row><row>
+              <entry>Utility</entry>
+              <entry>Small utility application, "Accessories"</entry>
+
+            </row><row>
+              <entry>Settings</entry>
+              <entry>Desktop settings applications (not system settings application, those should be System;SystemSetup;)</entry>
+
+            </row><row>
+              <entry>AdvancedSettings</entry>
+              <entry>Advanced desktop settings.</entry>
+
+            </row><row>
+              <entry>Accessibility</entry>
+              <entry>Accessibility settings</entry>
+
+            </row><row>
+              <entry>Network</entry>
+              <entry>Network application such as a webbrowser</entry>
+
+            </row><row>
+              <entry>Clock</entry>
+              <entry>A clock application/applet</entry>
+
+            </row><row>
+              <entry>Monitor</entry>
+              <entry>Monitor application/applet that monitors some resource or activity.</entry>
+
+            </row><row>
+              <entry>AudioVideo</entry>
+              <entry>A multimedia (audio/video) application</entry>
+
+            </row><row>
+              <entry>Amusement</entry>
+              <entry>A simple amusement</entry>
+
+            </row><row>
+              <entry>Emulator</entry>
+              <entry>Emulator of another platform, such as a DOS emulator.</entry>
+
+            </row><row>
+              <entry>Game</entry>
+              <entry>A game</entry>
+
+            </row><row>
+              <entry>3DGame</entry>
+              <entry>A game in 3D</entry>
+
+            </row><row>
+              <entry>ArcadeGame</entry>
+              <entry>Arcade style game</entry>
+
+            </row><row>
+              <entry>BoardGame</entry>
+              <entry>A board game</entry>
+
+            </row><row>
+              <entry>CardGame</entry>
+              <entry>A card game</entry>
+
+            </row><row>
+              <entry>FirstPersonGame</entry>
+              <entry>First person perspective game</entry>
+
+            </row><row>
+              <entry>PlatformGame</entry>
+              <entry>Platform style game</entry>
+
+            </row><row>
+              <entry>PuzzleGame</entry>
+              <entry>Puzzle game</entry>
+
+            </row><row>
+              <entry>SportsGame</entry>
+              <entry>Sports game</entry>
+
+            </row><row>
+              <entry>StrategyGame</entry>
+              <entry>Strategy game</entry>
+
+            </row><row>
+              <entry>BlocksGame</entry>
+              <entry>Falling blocks game</entry>
+
+            </row><row>
+              <entry>Education</entry>
+              <entry>Educational software</entry>
+
+            </row><row>
+              <entry>Math</entry>
+              <entry>Math software</entry>
+
+            </row><row>
+              <entry>Astronomy</entry>
+              <entry>Astronomy software</entry>
+
+            </row><row>
+              <entry>Physics</entry>
+              <entry>Physics software</entry>
+
+            </row><row>
+              <entry>Chemistry</entry>
+              <entry>Chemistry software</entry>
+
+            </row><row>
+              <entry>Science</entry>
+              <entry>Scientific software</entry>
+
+            </row><row>
+              <entry>HamRadio</entry>
+              <entry>HAM radio software</entry>
+
+            </row><row>
+              <entry>KDE</entry>
+              <entry>Application based on KDE libraries.</entry>
+
+            </row><row>
+              <entry>GNOME</entry>
+              <entry>Application based on GNOME libraries.</entry>
+
+            </row><row>
+              <entry>GTK</entry>
+              <entry>Application based on GTK+ libraries (may also have GNOME category).</entry>
+
+            </row><row>
+              <entry>Qt</entry>
+              <entry>Application based on Qt libraries (may also have KDE category).</entry>
+
+            </row><row>
+              <entry>Motif</entry>
+              <entry>Application based on Motif libraries.</entry>
+
+            </row><row>
+              <entry>ConsoleOnly</entry>
+              <entry>Application that only works inside a terminal (text-based or command line application).</entry>
+
+            </row><row>
+              <entry>Shell</entry>
+              <entry>A shell (an actual specific shell such as
+              <filename>bash</filename> or <filename>tcsh</filename>, not a
+              TerminalEmulator).</entry>
+
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+
+    </para>
+  </appendix>
+  <appendix id="onlyshowin-registry">
+    <title>Registered OnlyShowIn Environments</title>
+    <para>
+      Remember, these are case-sensitive. "KDE" not "kde" should be 
+      used.
+      <informaltable>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>OnlyShowIn Value</entry>
+              <entry>Environment</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>GNOME</entry><entry>GNOME Desktop</entry>
+            </row><row>
+              <entry>KDE</entry><entry>KDE Desktop</entry>
+            </row><row>
+              <entry>ROX</entry><entry>ROX Desktop</entry>
+            </row><row>
+              <entry>XFCE</entry><entry>XFCE Desktop</entry>
+            </row><row>
+              <entry>Old</entry><entry>Legacy menu systems</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+    </para>
+  </appendix>
+  <appendix id="third-party-howto">
+    <title>How to add your application to the menus</title>
+    <para>
+      The short answer for third party applications is:
+      <itemizedlist>
+        <listitem>
+          <para>
+            Install desktop entries to
+            <replaceable>datadir</replaceable>/applications/ for each menu
+            item. Please namespace the filename, as in "vendor-foo.desktop", or
+            use a subdirectory of
+            <replaceable>datadir</replaceable>/applications/ so you have
+            "vendor/foo.desktop." Please be sure all desktop entries are valid
+            (see the <ulink
+            url="http://www.freedesktop.org/software/desktop-file-utils/">
+            desktop-file-utils</ulink> package for a validation utility).
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Install an XML menu file to <replaceable>sysconfdir</replaceable>/desktop/menus/applications-merged/ to add any submenus, if your desktop entries aren't already 
+            included in some common categories.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Install any directory entries needed for your submenus to <replaceable>datadir</replaceable>/desktop-directories/, taking care to namespace and validate
+            the directory entries.
+          </para>
+        </listitem>
+      </itemizedlist>
+    </para>
+    <para>
+      Also, at least for a good long while, installing a directory hierarchy to
+      the old GNOME/KDE specific locations such as /usr/share/applnk and
+      /usr/share/gnome/apps should work. There are two ways to support 
+      both the old and new menu systems at the same time:
+      <itemizedlist>
+        <listitem>
+          <para>
+            If you add a <varname>Categories</varname> line to the desktop
+            entries in the legacy hierarchy, implementations of this
+            specification will ignore their location in the legacy hierarchy,
+            and arrange them according to <varname>Categories</varname> instead.
+            This allows you to install a single desktop file that works in all
+            cases, though on the down side it's in a legacy location.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            If you add the line <literal>OnlyShowIn=Old;</literal> to a desktop
+            entry, then old legacy implementations that ignore
+            <varname>OnlyShowIn</varname> will still show the desktop entry, but
+            implementations of this specification will not. Thus you can 
+            add an "<literal>OnlyShowIn=Old;</literal>" entry to the legacy 
+            hierarchy, and a new-style desktop entry to 
+            <replaceable>datadir</replaceable>/applications/, and still get 
+            only one entry in the menus.
+          </para>
+        </listitem>
+      </itemizedlist>
+    </para>
+  </appendix>
+  <appendix id="implementation-notes">
+    <title>Implementation notes</title>
+    <sect1 id="menu-editing">
+      <title>Menu editing</title>
+      <para>
+        To implement menu editing, the intent is that a per-user file is
+        created.  The per-user file should specify a &lt;MergeFile&gt; with the
+        systemwide file, so that system changes are inherited.  When the user
+        deletes a menu item, you add
+        <literal>&lt;Exclude&gt;&lt;Filename&gt;foo.desktop&lt;/Filename&gt;&lt;/Exclude&gt;</literal>. If
+        the user adds a menu item, you use
+        <literal>&lt;Include&gt;&lt;Filename&gt;foo.desktop&lt;/Filename&gt;&lt;/Include&gt;</literal>.
+      </para>
+      <para>
+        If the user moves a folder, you might try to use &lt;Move&gt; elements
+        to represent that, but it's tricky. (Move A/B/C to D/E/F, then move D/E
+        to D/G, note that D/E/F still contains A/B/C while only the original D/E
+        was moved to D/G.) In order to move a folder, you have to "fix up"
+        all moves that move things <emphasis>into</emphasis> the folder being
+        moved to instead move things into the folder's new location.
+      </para>
+      <para>
+        To delete a folder, simply append the &lt;Deleted&gt; element.
+      </para>
+      <para>
+        Menu editors probably need to do some kind of consolidation/compression 
+        to avoid an XML tree that grows infinitely over time.
+      </para>
+    </sect1>
+  </appendix>
+  <glossary><title>Glossary</title>
+    <para>
+      This glossary defines some of the terms used in this specification.
+    </para>
+      
+    <glossentry id="term-desktop-entry"><glossterm>Desktop entry</glossterm>
+      <glossdef>
+        <para>
+          A desktop entry is a file with a name ending in the ".desktop"
+          extension which conforms to the <ulink
+		  url="http://www.freedesktop.org/standards/desktop-entry-spec/">desktop
+          entry specification</ulink>. It describes a menu item, including 
+          a name, an icon, and what to do when the item is selected.
+          Desktop entries are also known as ".desktop files."
+        </para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry id="term-directory-entry"><glossterm>Directory entry</glossterm>
+      <glossdef>
+        <para>
+          A directory entry is a file with a name ending in the ".directory"
+          extension which conforms to the <ulink
+		  url="http://www.freedesktop.org/standards/desktop-entry-spec/">desktop
+          entry specification</ulink>. It describes gives a localized name and 
+          an icon for a submenu.
+          Directory entries are also known as ".directory files."
+        </para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry id="term-menu-path"><glossterm>Menu path</glossterm>
+      <glossdef>
+        <para>
+          A "menu path" is the path to a particular menu. Menu paths are 
+          always "relative" so never start with a slash character. 
+          The path to a menu is simply the &lt;Name&gt; of each parent 
+          of the menu, followed by the &lt;Name&gt; of the menu itself.
+          For example, "Foo/Bar/Baz" is a valid menu path.
+        </para>
+      </glossdef>
+    </glossentry>
+
+    <glossentry id="term-relative-path"><glossterm>Relative path</glossterm>
+      <glossdef>
+        <para>
+          The canonical path to a desktop or directory entry, relative to the
+          &lt;AppDir&gt; or &lt;DirectoryDir&gt; containing the
+          entry. For example, if <filename>/usr/share/applications</filename> is
+          specified as an &lt;AppDir&gt;, the relative path to
+          <filename>/usr/share/applications/foo/bar.desktop</filename> is
+          <filename>foo/bar.desktop</filename>.
+        </para>
+      </glossdef>
+    </glossentry>
+  </glossary>
+</article>
+
