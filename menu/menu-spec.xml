@@ -174,7 +174,7 @@
   <sect1 id="desktop-entry-extensions">
     <title>Extensions to the desktop entry format</title>
     <para>
-      This specification adds two new fields to <ulink
+      This specification adds three new fields to <ulink
 url="http://www.freedesktop.org/standards/desktop-entry-spec">desktop
 entries</ulink>: <varname>Categories</varname>,
       <varname>OnlyShowIn</varname> and <varname>NotShowIn</varname>.
