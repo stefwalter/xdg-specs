@@ -1,3 +1,8 @@
+2005-03-22  Waldo Bastian <bastian@kde.org>
+
+        * menu-spec.xml, menu.dtd: Added type attribute to <MergeFile>
+        element to facilitate menu-editing.
+
 2005-02-24  Waldo Bastian <bastian@kde.org>
 
 	* menu-spec.xml: Fixed links to www.freedesktop.org

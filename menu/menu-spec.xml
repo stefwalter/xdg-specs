@@ -4,8 +4,8 @@
 <article id="index">
   <articleinfo>
     <title>Desktop Menu Specification</title>
-    <releaseinfo>Version 0.9</releaseinfo>
-    <date>8 December 2004</date>
+    <releaseinfo>Version 0.91</releaseinfo>
+    <date>15 March 2005</date>
     <authorgroup>
       <author>
 	<firstname>Waldo</firstname>
@@ -613,24 +613,64 @@ entries</ulink>: <varname>Categories</varname>,
             </listitem>
           </varlistentry>
           <varlistentry>
-            <term>&lt;MergeFile&gt;</term>
+            <term>&lt;MergeFile [type="path"|"parent"] &gt;</term>
             <listitem>
               <para>
                   Any number of &lt;MergeFile&gt; elements may be listed below a
                   &lt;Menu&gt; element, giving the name of another menu file to
-				  be merged into this one. <xref linkend="merge-algorithm"/>
+                  be merged into this one. <xref linkend="merge-algorithm"/>
                   specifies how merging is done. The root &lt;Menu&gt; of the
                   merged file will be merged into the immediate parent of the
                   &lt;MergeFile&gt; element. The &lt;Name&gt; element of the
-                  root &lt;Menu&gt; of the merged file are ignored. If the
-                  filename given as a &lt;MergeFile&gt; is not an absolute path,
-                  it should be located relative to the location of the menu file
-                  being parsed.
+                  root &lt;Menu&gt; of the merged file are ignored.
+              </para>
+              <para>
+                  If the type attribute is missing or set to "path" then the
+                  contents of the &lt;MergeFile&gt; element indicates the
+                  file to be merged. If this is not an absolute path then the
+                  file to be merged should be located relative to the location
+                  of the menu file that contains this &lt;MergeFile&gt; element.
               </para>
               <para>
                 Duplicate &lt;MergeFile&gt; elements (that specify the same
                 file) are handled as with duplicate &lt;AppDir&gt;
                 elements (the last duplicate is used).
+              </para>
+              <para>
+                If the type attribute is set to "parent" and the file that
+                contains this &lt;MergeFile&gt; element is located under one
+                of the paths specified by <varname>$XDG_CONFIG_DIRS</varname>, 
+                the contents of the element should be ignored and the remaining
+                paths specified by <varname>$XDG_CONFIG_DIRS</varname> are
+                searched for a file with the same relative filename. The first
+                file encountered should be merged. There should be no
+                merging at all if no matching file is found.
+              </para>
+              <para>
+                Compatibility note: The filename specified inside the &lt;MergeFile&gt;
+                element should be ignored if the type attribute is set to "parent",
+                it should however be expected that implementations based on
+                previous versions of this specification will ignore the
+                type attribute and that such implementations will use the
+                filename inside the &lt;MergeFile&gt; element instead.
+              </para>
+              <para>
+                Example 1: If <varname>$XDG_CONFIG_HOME</varname> is "~/.config/" and 
+                <varname>$XDG_CONFIG_DIRS</varname> is "/opt/gnome/:/etc/xdg/"
+                and the file ~/.config/menus/applications.menu contains 
+                &lt;MergeFile type="parent"&gt;/opt/kde3/etc/xdg/menus/applications.menu&lt;/MergeFile&gt;
+                then the file /opt/gnome/menus/applications.menu
+                should be merged if it exists. If that file does not exists
+                then the file /etc/xdg/menus/applications.menu
+                should be merged instead.
+              </para>
+              <para>
+                Example 2: If <varname>$XDG_CONFIG_HOME</varname> is "~/.config/" and 
+                <varname>$XDG_CONFIG_DIRS</varname> is "/opt/gnome/:/etc/xdg/"
+                and the file /opt/gnome/menus/applications.menu contains 
+                &lt;MergeFile type="parent"&gt;/opt/kde3/etc/xdg/menus/applications.menu&lt;/MergeFile&gt;
+                then the file /etc/xdg/menus/applications.menu should be merged
+                if it exists.
               </para>
             </listitem>
           </varlistentry>

@@ -39,6 +39,8 @@
 <!ELEMENT KDELegacyDirs EMPTY>
 
 <!ELEMENT MergeFile        (#PCDATA)>
+<!ATTLIST MergeFile type (path|parent) #IMPLIED>
+
 <!ELEMENT DefaultMergeDirs EMPTY>
 <!ELEMENT MergeDir         (#PCDATA)>
 
