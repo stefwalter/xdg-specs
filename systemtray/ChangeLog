@@ -1,0 +1,4 @@
+2004-11-30  Mark McLoughlin  <mark@skynet.ie>
+
+	* systemtray-spec.xml: add _NET_SYSTEM_TRAY_ORIENTATION.
+

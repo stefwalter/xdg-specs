@@ -5,8 +5,8 @@
 <article id="index">
   <articleinfo>
     <title>System Tray Protocol Specification</title>
-    <releaseinfo>Version 0.1</releaseinfo>
-    <date>19 September 2002</date>
+    <releaseinfo>Version 0.2</releaseinfo>
+    <date>23 November 2004</date>
     <authorgroup>
       <author>
 	<firstname>Havoc</firstname>
@@ -256,6 +256,32 @@ _NET_WM_ICON CARDINAL[][2+n]/32
 
   </sect1>
 
+  <sect1 id="manager-hints">
+    <title>Tray manager hints</title>
+    <para>
+The tray manager should set the following hints on the selection
+owner window.
+    </para>
+
+    <sect2>
+      <title>_NET_SYSTEM_TRAY_ORIENTATION</title>
+      <programlisting><![CDATA[
+_NET_SYSTEM_TRAY_ORIENTATION orientation CARDINAL/32
+]]>
+  #define _NET_SYSTEM_TRAY_ORIENTATION_HORZ 0
+  #define _NET_SYSTEM_TRAY_ORIENTATION_VERT 1
+      </programlisting>
+
+      <para>
+The property should be set by the tray manager to indicate the current
+orientation of the tray. Tray icons may use this hint in order to
+maintain the icon's aspect ratio and also as an indication of how the
+icon contents should be laid out.
+      </para>
+
+    </sect2>
+  </sect1>
+
   <sect1 id="balloon">
     <title>Balloon messages</title>
     <para>
@@ -326,6 +352,18 @@ _NET_WM_ICON CARDINAL[][2+n]/32
 
   <appendix id="changes">
     <title>Change history</title>
+    <formalpara>
+      <title>Version 0.2, 23 November 2004, Mark McLoughlin</title>    
+      <para>
+	<itemizedlist>
+	  <listitem>
+	    <para>
+              Added the _NET_SYSTEM_TRAY_ORIENTATION hint.
+	    </para>
+	  </listitem>
+	</itemizedlist>
+      </para>
+    </formalpara>
     <formalpara>
       <title>Version 0.1, 20 April 2002, Havoc Pennington</title>    
       <para>
