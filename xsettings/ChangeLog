@@ -1,3 +1,9 @@
+Wed Oct  9 15:49:03 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* xsettings.xml: Convert to DocBook XML
+
+	* Makefile: Add a rule for xsettings.html
+
 Wed Oct  9 15:32:20 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* xsettings.xml: Add the spec (prior to converting
