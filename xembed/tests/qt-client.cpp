@@ -1,4 +1,5 @@
 #include <kapp.h>
+#include <qhbox.h>
 #include <qlabel.h>
 #include <qlineedit.h>
 #include <qlayout.h>
@@ -8,9 +9,10 @@
 #include <qxembed.h>
 
 #include "qt-client.h"
+#include "qt-common.h"
 
-XEmbedQtButtonBox::XEmbedQtButtonBox (XEmbedQtClient *client)
-  : QWidget (client)
+XEmbedQtButtonBox::XEmbedQtButtonBox (QWidget *parent, XEmbedQtClient *client)
+  : QWidget (parent)
 {
   QHBoxLayout *layout = new QHBoxLayout (this);
   layout->setAutoAdd (TRUE);
@@ -27,21 +29,32 @@ XEmbedQtButtonBox::XEmbedQtButtonBox (XEmbedQtClient *client)
 
 XEmbedQtClient::XEmbedQtClient ()
 {
-  QHBoxLayout *layout = new QHBoxLayout (this);
+  setFrameStyle (QFrame::Box | QFrame::Sunken);
+  
+  QVBoxLayout *vlayout = new QVBoxLayout (this);
 
-  layout->setAutoAdd (TRUE);
+  vlayout->setAutoAdd (TRUE);
+  vlayout->setMargin (5);
   
-  new QLabel ("Qt", this);
+  hbox_ = new QHBox (this);
+
+  new QLabel ("Qt", hbox_);
   
-  new QLineEdit (this);
+  new QLineEdit (hbox_);
   
   QPushButton *button;
 
-  button = new QPushButton( "&Close", this );
+  button = new QPushButton( "&Close", hbox_ );
   QObject::connect (button, SIGNAL(clicked()), this, SLOT(close()));
 
-  button = new QPushButton( "&Blink", this );
+  button = new QPushButton( "&Blink", hbox_ );
   QObject::connect (button, SIGNAL(clicked()), this, SLOT(blink()));
+
+  button = new QPushButton( "Add &GTK+", hbox_ );
+  QObject::connect (button, SIGNAL(clicked()), this, SLOT(addGtkChild()));
+
+  button = new QPushButton( "Add &Qt", hbox_ );
+  QObject::connect (button, SIGNAL(clicked()), this, SLOT(addQtChild()));
 
   addButtons();
 }
@@ -57,12 +70,23 @@ XEmbedQtClient::blink()
 }
 
 void
-XEmbedQtClient::addButtons ()
+XEmbedQtClient::addGtkChild()
 {
-  XEmbedQtButtonBox *box = new XEmbedQtButtonBox (this);
-  box->show();
+  new XEmbedQtChildSite (this, FALSE, FALSE);
 }
 
+void
+XEmbedQtClient::addQtChild()
+{
+  new XEmbedQtChildSite (this, FALSE, TRUE);
+}
+
+void
+XEmbedQtClient::addButtons ()
+{
+  XEmbedQtButtonBox *box = new XEmbedQtButtonBox (hbox_, this);
+  box->show();
+}
 
 int main( int argc, char **argv )
 {

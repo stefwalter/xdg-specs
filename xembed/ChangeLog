@@ -1,3 +1,8 @@
+Mon Apr 22 00:05:41 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* tests/*: Expand the tests to tests recursively
+	nested embedders.
+
 Sun Apr 21 15:30:21 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* spec/xembed-spec.xml: Typo fixes from Matthias Clasen,

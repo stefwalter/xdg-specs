@@ -2,12 +2,10 @@
 #include <qmenubar.h>
 #include <qmessagebox.h>
 #include <qpopupmenu.h>
-#include <qprocess.h>
 #include <qpushbutton.h>
 #include <qvbox.h>
 
-#include <qxembed.h>
-
+#include "qt-common.h"
 #include "qt-embedder.h"
 
 XEmbedQtEmbedder::XEmbedQtEmbedder ()
@@ -41,34 +39,12 @@ XEmbedQtEmbedder::XEmbedQtEmbedder ()
   QObject::connect (button, SIGNAL(clicked()), this, SLOT(removeChild()));
 }
 
-
 void
 XEmbedQtEmbedder::addChild (bool active, bool isQt)
 {
-  QXEmbed *embedder = new QXEmbed (vbox_);
-  embedder->show ();
+  XEmbedQtChildSite *site = new XEmbedQtChildSite (vbox_, active, isQt);
 
-  embedders_.append (embedder);
-
-  QProcess *proc = new QProcess (this);
-
-  proc->setCommunication (QProcess::Stdout);
-    
-  if (isQt)
-    proc->addArgument ("./qt-client");
-  else
-    proc->addArgument ("./gtk-client");
-
-  if (!active)
-    proc->addArgument (QString::number (embedder->winId ()));
-
-  proc->start ();
-
-  if (active)
-    {
-      QString pid_str = proc->readLineStdout ();
-      embedder->embed (pid_str.toLong ());
-    }
+  embedders_.append (site);
 }
 
 void
@@ -80,7 +56,7 @@ XEmbedQtEmbedder::addActiveGtkChild ()
 void
 XEmbedQtEmbedder::addPassiveGtkChild ()
 {
-  addChild (TRUE, FALSE);
+  addChild (FALSE, FALSE);
 }
 
 void

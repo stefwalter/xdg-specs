@@ -1,4 +1,6 @@
-#include <qmainwindow.h>
+#include <qframe.h>
+
+class QHBox;
 
 class XEmbedQtClient;
 
@@ -8,10 +10,10 @@ class XEmbedQtButtonBox : public QWidget
 
  public:
   
-  XEmbedQtButtonBox (XEmbedQtClient *client);
+  XEmbedQtButtonBox (QWidget *parent, XEmbedQtClient *client);
 };
 
-class XEmbedQtClient : public QWidget
+class XEmbedQtClient : public QFrame
 {
   Q_OBJECT
 
@@ -22,6 +24,11 @@ class XEmbedQtClient : public QWidget
  public slots:
    void addButtons ();
 
+ private:
+   QHBox *hbox_;
+  
  private slots:
    void blink();
+   void addGtkChild();
+   void addQtChild();
 };

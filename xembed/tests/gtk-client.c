@@ -3,6 +3,8 @@
 
 #include <gtk/gtk.h>
 
+#include "gtk-common.h"
+
 static void
 remove_buttons (GtkWidget *widget, GtkWidget *other_button)
 {
@@ -67,23 +69,59 @@ add_buttons (GtkWidget *widget, GtkWidget *box)
 		    G_CALLBACK (remove_buttons), add_button);
 }
 
+void
+add_child (GtkWidget *vbox,
+	   gboolean   qt)
+{
+  Socket *socket = socket_new ();
+
+  gtk_box_pack_start (GTK_BOX (vbox), socket->box, TRUE, TRUE, 0);
+  gtk_widget_show (socket->box);
+
+  socket_start_child (socket, FALSE, qt);
+}
+
+void
+add_gtk_child (GtkWidget *widget,
+	       GtkWidget *vbox)
+{
+  add_child (vbox, FALSE);
+}
+
+void
+add_qt_child (GtkWidget *widget,
+	      GtkWidget *vbox)
+{
+  add_child (vbox, TRUE);
+}
+
 guint32
 create_child_plug (guint32  xid)
 {
   GtkWidget *window;
   GtkWidget *hbox;
+  GtkWidget *vbox;
   GtkWidget *entry;
   GtkWidget *button;
   GtkWidget *label;
+  GtkWidget *frame;
 
   window = gtk_plug_new (xid);
 
+  frame = gtk_frame_new (NULL);
+  gtk_container_add (GTK_CONTAINER (window), frame);
+    
+  vbox = gtk_vbox_new (FALSE, 0);
+  gtk_container_add (GTK_CONTAINER (frame), vbox);
+
+  gtk_container_set_border_width (GTK_CONTAINER (vbox), 3);
+  
   g_signal_connect (window, "destroy",
 		    G_CALLBACK (remote_destroy), NULL);
   gtk_container_set_border_width (GTK_CONTAINER (window), 0);
 
   hbox = gtk_hbox_new (FALSE, 0);
-  gtk_container_add (GTK_CONTAINER (window), hbox);
+  gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE, TRUE, 0);
 
   label = gtk_label_new ("GTK+");
   gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 0);
@@ -99,9 +137,18 @@ create_child_plug (guint32  xid)
 
   button = gtk_button_new_with_mnemonic ("_Blink");
   gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
-
   g_signal_connect (button, "clicked",
 		    G_CALLBACK (blink), window);
+
+  button = gtk_button_new_with_mnemonic ("Add _GTK+");
+  gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
+  g_signal_connect (button, "clicked",
+		    G_CALLBACK (add_gtk_child), vbox);
+
+  button = gtk_button_new_with_mnemonic ("Add _Qt");
+  gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
+  g_signal_connect (button, "clicked",
+		    G_CALLBACK (add_qt_child), vbox);
 
   add_buttons (NULL, hbox);
   
@@ -146,6 +193,8 @@ main (int argc, char *argv[])
     }
 
   gtk_main ();
+
+  wait_for_children ();
 
   return 0;
 }
