@@ -1,6 +1,6 @@
 <!doctype article PUBLIC "-//OASIS//DTD DocBook V4.1//EN" [
 <!entity version "DRAFT version 1.2">
-<!entity date "September 14, 2002">
+<!entity date "September 17, 2002">
 ]>
 <article id="index">
 <articleinfo>
@@ -1196,11 +1196,12 @@ See also the implementation notes on <link linkend="KILLINGWINDOWS">killing hung
 _NET_WM_HANDLED_ICONS
 ]]></programlisting>
 	<para>
-This property can be set by clients to indicate that the Window Manager need
-not provide icons for iconified windows, for example if the client is a taskbar
-and provides buttons for iconified windows.
+	This property can be set by a Pager on one of its own toplevel windows
+	to indicate that the Window Manager need not provide icons for
+	iconified windows, for example if it is a taskbar and provides buttons
+	for iconified windows. 
 	</para>
-	</sect2>
+    </sect2>
 </sect1>
 <sect1>
 	<title>Window Manager Protocols</title>
@@ -1733,8 +1734,9 @@ OR OTHER DEALINGS IN THE SOFTWARE.
  Improve markup of citations. 
  			</para></listitem>                        
  			<listitem><para>
- Explain _NET_DESKTOP_GEOMETRY in more detail and improve the explanation
- of WM_CLIENT_MACHINE in <xref linkend="KILLINGWINDOWS">.
+ Explain _NET_DESKTOP_GEOMETRY and _NET_WM_HANDLED_ICONS in more detail and
+ improve the explanation of WM_CLIENT_MACHINE in 
+ <xref linkend="KILLINGWINDOWS">. 
  			</para></listitem>                        
  			<listitem><para>
  Add Lubos Lunak to the list of contributors.
