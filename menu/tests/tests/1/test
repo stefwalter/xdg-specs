@@ -1,5 +1,4 @@
-LEGACY_DIR=${MENUTESTDIR}/legacy_applnk
-export LEGACY_DIR
+echo ">>> the <Category> tag"
 
 # Generate applications.menu
 mkdir -p ${XDG_CONFIG_DIR}/menus
@@ -10,34 +9,16 @@ mkdir -p ${XDG_CONFIG_DIR}/menus
 <Menu>
 	<Name>KDE</Name>
 	<!-- Search the default locations -->
-	<LegacyDir>${LEGACY_DIR}</LegacyDir>
 	<DefaultAppDirs/>
-	<DefaultDirectoryDirs/>
 
 	<Menu>
 		<Name>Editors</Name>
-		<Directory>kde-editors.directory</Directory>
 		<Include>
 			<Category>TextEditor</Category>
-		</Include>
-	</Menu>
-	<Menu>
-		<Name>Development</Name>
-		<Directory>kde-development.directory</Directory>
-		<Include>
-			<Category>Development</Category>
 		</Include>
 	</Menu>
 </Menu>
 EOF
 
-
 # Install .desktop files
-
 installData ${XDG_DATA_DIR}/applications kwrite.desktop KEdit.desktop kate.desktop
-
-installData ${LEGACY_DIR}/Development gideon.desktop kbabel.desktop quanta.desktop
-
-installData ${LEGACY_DIR} Kfind.desktop Home.desktop Help.desktop
-
-

@@ -24,27 +24,21 @@ fi
 
 export MENUTESTDIR
 
-TESTS=$*
-
 if [ "x${TESTS}" == "x" ]; then
-  TESTS=$(eval echo "test-*[^~]")
-  if [ "x${TESTS}" == "xtest-*[^~]" ]; then
-    echo No tests found in ${PWD}
-    exit 1
-  fi
+	TESTS=`ls tests`
 fi
 
-
 for TEST in ${TESTS}; do
+  echo
   rm -rf ${MENUTESTDIR} 2> /dev/null
   mkdir ${MENUTESTDIR}
-  RESULT=$(echo ${TEST}|sed -e 's^test-^result-^')
+  RESULT=tests/${TEST}/result
 
   if [ ! -e ${RESULT} ]; then
-    echo 'Result file ('${RESULT}') for '${TEST}' missing'
+    echo '!!! Result file ('${RESULT}') for '${TEST}' missing'
   else
     (
-    echo Running: ${TEST}
+    echo ">>> Running test ${TEST}"
 
     # Some predefined values
     XDG_CONFIG_HOME=${MENUTESTDIR}/xdg_config_home
@@ -61,21 +55,21 @@ for TEST in ${TESTS}; do
     export XDG_CONFIG_DIRS
     export XDG_DATA_DIRS
 
-     . ${TEST}
+     . tests/${TEST}/test
 
     $MENUTEST > ${MENUTESTDIR}/result1 2> ${MENUTESTDIR}/log
     ./expand ${RESULT} > ${MENUTESTDIR}/result2
     )
 
     if diff -q ${MENUTESTDIR}/result1 ${MENUTESTDIR}/result2 > /dev/null; then
-      echo ${TEST}' OK'
+      echo '>>> OK'
     else
       sort ${MENUTESTDIR}/result1 > ${MENUTESTDIR}/result1.sorted
       sort ${MENUTESTDIR}/result2 > ${MENUTESTDIR}/result2.sorted
       if diff -u ${MENUTESTDIR}/result1.sorted ${MENUTESTDIR}/result2.sorted > ${MENUTESTDIR}/result.diff; then
-        echo ${TEST}' OK (different order)'
+        echo '>>> OK (different order)'
       else
-        echo ${TEST}' Failed'
+        echo '>>> Failed'
         cat ${MENUTESTDIR}/result.diff
       fi
     fi
