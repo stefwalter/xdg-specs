@@ -26,7 +26,10 @@
 ;;#                       This is Version 1.0-4                         #
 ;;#######################################################################
 ;;
-;; article-titlepage-recto-elements: Modified for desktop entry spec.
+;;  Modified for desktop entry spec.
+;; 
+;; article-titlepage-recto-elements: Added date, release info 
+;; %section-autolabel%: Turn on enumerated sections
 ;;    
 ;; Owen Taylor 8 March 2001
 ;; 
@@ -52,7 +55,7 @@
 
 ;;Do you want enumerated sections? (E.g, 1.1, 1.1.1, 1.2, etc.)
 (define %section-autolabel% 
- #f)
+ #t)
 
 ;;What is the default extension for graphics?
 (define %graphic-default-extension% 
@@ -151,6 +154,18 @@
 ;;Do you want a title page for an Article?
 (define %generate-article-titlepage%
  #t)
+
+;;Which elements should appear 
+;;on title page?
+(define (article-titlepage-recto-elements)
+  (list (normalize "title")
+	(normalize "subtitle")
+        (normalize "authorgroup")
+        (normalize "copyright")
+        (normalize "legalnotice")
+	(normalize "releaseinfo")
+	(normalize "date")
+        (normalize "abstract")))
 
 ;;Generate Article TOC?
 (define %generate-article-toc% 
@@ -770,7 +785,7 @@
 
 ;;Enumerate Sections?
 (define %section-autolabel%
- #f)
+ #t)
 
 ;;=========================
 ;;    HTML Attributes
