@@ -3,14 +3,14 @@
 <article id="index">
 <artheader>
 <title>Extended Window Manager Hints</title>
-<date>15 March 2000</date>
+<date>5 November 2000</date>
 </artheader>
 <sect1>
 	<title>Introduction</title>
 	<sect2>
 		<title>Version</title>
 		<para>
-This spec is version 1.0pre3.
+This spec is version 1.0pre5.
 		</para>
 	</sect2>
 	<sect2>
@@ -42,6 +42,84 @@ explicitly modifies the ICCCM Window Managers and Clients MUST fulfil these
 modifications.
 		</para>
 	</sect2>
+	<sect2>
+		<title>Changes since 1.0pre4</title>
+		<itemizedlist>
+			<listitem><para>
+Clarified the interpretation of client-provided geometries on large desktops.
+			</para></listitem>
+			<listitem><para>
+Added more explanation for _NET_DESKTOP_NAMES. 
+			</para></listitem>
+			<listitem><para>
+Added _NET_WM_ICON_NAME and _NET_WM_VISIBLE_ICON_NAME.
+			</para></listitem>
+			<listitem><para>
+Tried to improve the wording of _NET_WM_STRUT explanation.
+			</para></listitem>
+			<listitem><para>
+Changed _NET_WORKAREA to an array of viewport-relative geometries.
+			</para></listitem>
+			<listitem><para>
+Updated list of <quote>dependent</quote> properties for _NET_NUMBER_OF_DESKTOPS
+to include _NET_WORKAREA and _NET_DESKTOP_VIEWPORT.
+			</para></listitem>
+			<listitem><para>
+Tidied formatting of all client messages.
+			</para></listitem>
+		</itemizedlist>
+	</sect2>
+	<sect2>
+		<title>Changes since 1.0pre3</title>
+		<itemizedlist>
+			<listitem><para>
+Added information about common non-ICCCM features.
+			</para></listitem>
+			<listitem><para>
+Added explanation of sending messages to the root window.
+			</para></listitem>
+			<listitem><para>
+Removed XA_ prefix from type names.
+			</para></listitem>
+			<listitem><para>
+Clarified that <quote>mapping order</quote> refers to inital mapping 
+and specify the directions of both orders.
+			</para></listitem>
+			<listitem><para>
+Clarified that desktops have a common size specified by _NET_DESKTOP_GEOMETRY.
+			</para></listitem>
+			<listitem><para>
+Rewrote explanation of _NET_DESKTOP_VIEWPORT.
+			</para></listitem>
+			<listitem><para>
+Tidied formatting of _NET_CURRENT_DESKTOP.
+			</para></listitem>
+			<listitem><para>
+Replaced <quote>window handle</quote> by <quote>window ID</quote>.
+			</para></listitem>
+			<listitem><para>
+Tidied formatting of _NET_WORKAREA.
+			</para></listitem>
+			<listitem><para>
+Rewrote the motivation for _NET_VIRTUAL_ROOTS.
+			</para></listitem>
+			<listitem><para>
+Added advice on Pointer grabs to _NET_WM_MOVERESIZE.
+			</para></listitem>
+			<listitem><para>
+Fixed typos in _NET_WM_STATE.
+			</para></listitem>
+			<listitem><para>
+Added _NET_WM_STATE_SKIP_PAGER.
+			</para></listitem>
+			<listitem><para>
+Tidied formatting of _NET_WM_STRUT.
+			</para></listitem>
+			<listitem><para>
+Tidied formatting of _NET_WM_ICON_GEOMETRY.
+			</para></listitem>
+		</itemizedlist>
+	</sect2>		
 	<sect2>
 		<title>Changes since 1.0pre2</title>
 		<itemizedlist>
@@ -236,7 +314,205 @@ Added _NET_WM_STATE_SKIP_TASKBAR
 	</sect2>
 </sect1>
 <sect1>
+<title>Non-ICCCM features</title>
+<para>There is a number of window management features or behaviours which are 
+not specified in the ICCCM, but are commonly met in modern Window Managers and Desktop Environments.</para>
+<sect2>
+<title>Additional States</title>
+<para>The ICCCM allows Window Managers to implement additional window states, which will 
+appear to clients as substates of NormalState and IconicState.  Two 
+commonly met examples are Maximized and Shaded.  A Window Manager may implement these
+as proper substates of NormalState and IconicState, or it may treat them 
+as independent flags, allowing e.g. a maximized window to be iconified
+and to re-appear as maximized upon de-iconification.</para>
+<sect3>
+<title>Maximization</title>
+<para>Maximization is a very old feature of Window Managers.  There was even a ZoomedState
+in early ICCCM drafts.  Maximizing a window should give it as much of the
+screen area as possible (this may not be the full screen area, but only
+a smaller 'workarea', since the Window Manager may have reserved certain areas for other 
+windows).  A Window Manager is expected to remember the geometry of a maximized window 
+and restore it upon de-maximization.  Modern Window Managers typically allow separate 
+horizontal and vertical maximization.</para>
+<para>With the introduction of the Xinerama extension in X11 R6.4, maximization
+has become more involved.  Xinerama allows a screen to span multiple 
+monitors in a freely configurable geometry.  In such a setting, maximizing 
+a window would ideally not grow it to fill the whole screen, but only the 
+monitor it is shown on.  There are of course borderline cases for windows 
+crossing monitor boundaries, and 'real' maximization to the full screen may 
+sometimes be useful.</para>
+</sect3>
+<sect3>
+<title>Shading</title>
+<para>Some Desktop Environments offer shading (also known as rollup) as an alternative to 
+iconfication. A shaded window typically shows only the titlebar, the client 
+window is hidden, thus shading is not useful for windows which are not 
+decorated with a titlebar.</para>
+</sect3>
+</sect2>
+<sect2>
+<title>Modality</title>
+<para>The Window Manager_TRANSIENT_FOR hint of the ICCCM allows clients to specify that a 
+toplevel window may be closed before the client finishes.  A typical example 
+of a transient window is a dialog.  Some dialogs can be open for a long time,  
+while the user continues to work in the main window.  Other dialogs have to be 
+closed before the user can continue to work in the main window.  This property 
+is called modality.  While clients can implement modal windows in an ICCCM 
+compliant way using the globally active input model, some Window Managers offer support 
+for handling modality.
+</para>
+</sect2>
+<sect2 id="largedesks">
+<title>Large Desktops</title>
+<para>The Window Manager may offer to arrange the managed windows on a desktop that is 
+larger than the root window. The screen functions as a viewport on this large 
+desktop. Different policies regarding the positioning of the viewport on the 
+desktop can be implemented:  The Window Manager may only allow to change the viewport 
+position in increments of the screen size (paging) or it may allow arbitrary 
+positions (scrolling).</para>
+<para>To fulfill the ICCCM principle that clients should behave the same
+regardless wether a Window Manager is running or not, Window Managers which 
+implement large desktops must interpret all client-provided geometries with 
+respect to the current viewport.</para>
+<sect3 id="largedesksimpl">
+<title>Implementation note</title>
+<para>There are two options for implementing a large desktop: The first is to 
+keep the managed windows (or, if reparenting, their frames) as children
+of the root window.  Moving the viewport is achieved by moving all managed
+windows in the opposite direction.</para>
+<para>The second alternative is to reparent all managed windows to a dedicated 
+large window (somewhat inappropriately called a 'virtual root').  Moving 
+the viewport is then achieved by moving the virtual root in the opposite 
+direction.</para> 
+<para>Both alternatives are completely ICCCM compliant, although the second one 
+may be somewhat problematic for clients trying to figure out the Window Manager decorations
+around their toplevel windows and for clients trying to draw background 
+images on the root window.</para>
+</sect3>
+</sect2>
+<sect2>
+<title>Sticky windows</title>
+<para>A Window Manager which implements a large desktop typically offers a way for the user 
+to make certain windows 'stick to the glass', i.e. these windows will stay 
+at the same position on the screen when the viewport is moved.</para>
+</sect2>
+<sect2>
+<title>Virtual Desktops</title>
+<para>Most X servers have only a single screen.  The Window Manager may virtualize this 
+resource and offer multiple so-called 'virtual desktops', of which only one 
+can be shown on the screen at a time.  There is some variation among the 
+features of virtual desktop implementations.  There may be a fixed number 
+of desktops, or new ones may be created dynamically.  The size of the desktops 
+may be fixed or variable.  If the desktops are larger than the root window, 
+their viewports (see <xref linkend="largedesks">) may be independent or forced to be at the same 
+position.</para>
+<para>A Window Manager which implements virtual desktops generally offers a way for the user
+to move clients between desktops.  Clients may be allowed to occupy more than
+one desktop simultaneously.</para>
+<sect3>
+<title>Implementation note</title>
+<para>There are at least two options for implementing virtual desktops.  
+The first is to use multiple virtual roots (see <xref linkend="largedesksimpl">) and change the current 
+desktop by manipulating the stacking order of the virtual roots.  This is 
+completely ICCCM compliant, but has the issues outlined in <xref linkend="largedesksimpl"></para>
+<para>The second option is to keep all managed windows as children of the root 
+window and unmap the frames of those which are not on the current desktop.
+This puts the clients in an undefined ICCCM state, since they are unviewable,
+but not iconic.  In practice, this seems to cause no problems and the ICCCM
+compliant alternative to iconify all clients on non-current desktops (without
+showing their icons) is clearly not acceptable.</para>
+</sect3>
+</sect2>
+<sect2>
+<title>Pagers</title>
+<para>A pager offers a different UI for window management tasks.  It shows a 
+miniature view of the desktop(s) representing managed windows by small 
+rectangles and allows the user to initiate various Window Manager actions by manipulating 
+these representations.  Typically offered actions are activation (see <xref linkend="activation">), 
+moving, restacking, iconification, maximization and closing.  On a large 
+desktop, the pager may offer a way to move the viewport.  On virtual desktops, 
+the pager may offer ways to move windows between desktops and to change the 
+current desktop.</para>
+</sect2>
+<sect2>
+<title>Taskbars</title>
+<para>A taskbar offers another UI for window management tasks.  It typically 
+represents client windows as a list of buttons labelled with the window
+titles and possibly icons.  Pressing a button initiates a Window Manager action on the
+represented window, typical actions being activation and iconification. 
+In environments with a taskbar, icons are often considered inappropriate,
+since the iconified windows are already represented in the taskbar.</para>
+</sect2>
+<sect2 id="activation">
+<title>Activation</title>
+<para>In the X world, activating a window means to give it the input focus.
+This may not be possible if the window is unmapped, because it is on a
+different desktop.  Thus, activating a window may involve additional steps
+like moving it to the current desktop (or changing to the desktop the window
+is on), deiconifying it or raising it.</para>
+</sect2>
+<sect2>
+<title>Animated iconification</title>
+<para>Some Window Managers display some form of animation when (de-)iconfying a window.
+This may be a line drawing connecting the corners of the window with
+the corners of the icon or the window may be opaquely moved and resized 
+on some trajectory joining the window location and the icon location.</para>
+</sect2>
+<sect2>
+<title>Window-in-window MDI</title>
+<para>Window-in-window MDI is a multiple document interface known from MS
+Windows platforms. Programs employing it have a single top-level window
+which contains a workspace which contains the subwindows for the open
+documents. These subwindows are decorated with Window Manager frames and can be
+manipulated within their parent window just like ordinary top-level
+windows on the root window.</para>
+</sect2>
+<sect2>
+<title>Scope of this spec</title>
+<para>This spec tries to address the following issues:</para>
+<itemizedlist>
+<listitem><para>Allow clients to influence their initial state with respect 
+to maximization, shading, stickyness, desktop.</para></listitem>
+<listitem><para>Improve the Window Managers ability to vary window 
+decorations by allowing clients to hint the Window Manager about the type 
+of their windows.</para></listitem>
+<listitem><para>Enable pagers and taskbars to be implemented as separate 
+clients and allow them to work with any compliant Window Manager.</para></listitem>
+</itemizedlist>
+<para>This spec doesn't cover any of the following:</para>
+<itemizedlist>
+<listitem><para>Other IPC mechanisms like ICE or Corba.</para></listitem>
+<listitem><para>Window Manager configuration.</para></listitem>
+<listitem><para>Window Manager documentation.</para></listitem>
+<listitem><para>Geometry between desktops.</para></listitem>
+<listitem><para>Clients appearing on a proper subset of desktops.</para></listitem>
+<listitem><para>Window-in-window MDI.</para></listitem>
+</itemizedlist>
+<para>The Window Manager is supposed to be in charge of window management 
+policy, so that there is consistent behaviour on the user's screen no matter 
+who wrote the clients.</para>
+<para>The spec offers a lot of external control about Window Manager actions.  
+This is intended mainly to allow pagers, taskbars and similar Window Manager 
+UIs to be implemented as separate clients.  "Ordinary" clients shouldn't use 
+these except maybe in response to a direct user request (i.e. setting a 
+config option to start maximized or specifying a -desk n cmdline 
+argument).</para>
+</sect2>
+</sect1>
+<sect1>
 	<title>Root Window Properties (+Related Messages)</title>
+	<para>
+Whenever this spec speaks about <quote>sending a message to the root 
+window</quote>, it is understood that the client is supposed to create 
+a ClientMessage event with the specified contents and send it by using 
+a SendEvent request with the following arguments:
+	<programlisting><![CDATA[
+destination     root
+propagate       False
+event-mask      (SubstructureNotify|SubstructureRedirect)
+event           the specified ClientMessage
+]]></programlisting>
+	</para>
 	<sect2><title>_NET_SUPPORTED</title>
 	<programlisting><![CDATA[
 _NET_SUPPORTED, ATOM[]/32
@@ -248,12 +524,13 @@ to the hints (without being renamed).
 	</para>
 	</sect2><sect2><title>_NET_CLIENT_LIST</title>
 	<programlisting><![CDATA[
-_NET_CLIENT_LIST, XA_WINDOW[]/32
-_NET_CLIENT_LIST_STACKING, XA_WINDOW[]/32
+_NET_CLIENT_LIST, WINDOW[]/32
+_NET_CLIENT_LIST_STACKING, WINDOW[]/32
 ]]></programlisting>
 	<para>
-An array of all X Windows managed by the Window Manager.  _NET_CLIENT_LIST has
-mapping order. _NET_CLIENT_LIST_STACKING has stacking order.  This property
+These arrays contain all X Windows managed by the Window Manager.  
+_NET_CLIENT_LIST has initial mapping order, starting with the oldest window. 
+_NET_CLIENT_LIST_STACKING has bottom-to-top stacking order.  These properties
 SHOULD be set and updated by the Window Manager.
 	</para>
 	</sect2>
@@ -264,20 +541,19 @@ _NET_NUMBER_OF_DESKTOPS, CARDINAL/32
 ]]></programlisting>
 	<para>
 This property SHOULD be set and updated by the Window Manager to indicate the
-number of virtual desktops.  
+number of virtual desktops. 
 	</para>
 	<para>
 A Pager can request change in the desktops number by sending a _NET_NUMBER_OF_DESKTOPS message to the root window:
 	</para>
 	<programlisting><![CDATA[
 _NET_NUMBER_OF_DESKTOPS
-  window = target app window
   message_type = _NET_NUMBER_OF_DESKTOPS
   format = 32
-  data.l[0] = new_desktops_number
+  data.l[0] = new_number_of_desktops
 ]]></programlisting>
 	<para>
-The Window Manager is free to honor or reject this request. If request is honored _NET_NUMBER_OF_DESKTOPS MUST be set to the new number of desktops and _NET_VIRTUAL_ROOTS MUST be set to store the new number of desktop virtual root window IDs. The _NET_DESKTOP_NAMES property MAY remain unchanged.
+The Window Manager is free to honor or reject this request. If request is honored _NET_NUMBER_OF_DESKTOPS MUST be set to the new number of desktops, _NET_VIRTUAL_ROOTS MUST be set to store the new number of desktop virtual root window IDs and _NET_DESKTOP_VIEWPORT and _NET_WORKAREA must also be changed accordingly. The _NET_DESKTOP_NAMES property MAY remain unchanged.
 	</para>
 	<para> 
 If the number of desktops is shrinking and _NET_CURRENT_DESKTOP is out of the new range of of available desktops, then this MUST must be set to the last available desktop from the new set. If number of desktops is shrinking then clients that are still present on desktops, that are out of the new range, MUST be moved to the very last desktop from the new set. For these _NET_WM_DESKTOP MUST be updated.
@@ -286,11 +562,11 @@ If the number of desktops is shrinking and _NET_CURRENT_DESKTOP is out of the ne
 	<sect2>
 		<title>_NET_DESKTOP_GEOMETRY</title>
 		<programlisting><![CDATA[
-_NET_DESKTOP_GEOMETRY width,height, CARDINAL[2]/32
+_NET_DESKTOP_GEOMETRY width, height, CARDINAL[2]/32
 ]]></programlisting>
 		<para>
-Array of two cardinals that defines the width and height of each desktop in
-pixels.  This property SHOULD be set by the Window Manager. 
+Array of two cardinals that defines the common size of all desktops. 
+This property SHOULD be set by the Window Manager. 
 		</para>
 		<para>
 A Pager can request a change in  the desktop geometry by sending a _NET_DESKTOP_GEOMETRY client
@@ -310,15 +586,15 @@ The Window Manager MAY choose to ignore this message, in which case _NET_DESKTOP
 	<sect2>
 		<title>_NET_DESKTOP_VIEWPORT</title>
 	<programlisting><![CDATA[
-_NET_DESKTOP_VIEWPORT x,y, CARDINAL[][2]/32
+_NET_DESKTOP_VIEWPORT x, y, CARDINAL[][2]/32
 ]]></programlisting>
 	<para>
-Array of two cardinals that define the top left corner of the current view in
-pixel, for each desktop.  For window managers that don't support paged
-desktops, this MUST always be set to (0,0).  
+Array of pairs of cardinals that define the top left corner of each desktops 
+viewport.  For window managers that don't support large desktops, this MUST 
+always be set to (0,0).  
 	</para>	
 	<para>
-A Pager can change the viewport for the current desktop by sending a
+A Pager can request to change the viewport for the current desktop by sending a
 _NET_DESKTOP_VIEWPORT client message to the root window:
 	</para>
 	<programlisting><![CDATA[
@@ -333,12 +609,13 @@ The Window Manager MAY choose to ignore this message, in which case _NET_DESKTOP
 		</para>
 	</sect2><sect2><title>_NET_CURRENT_DESKTOP</title>
 	<programlisting><![CDATA[
-_NET_CURRENT_DESKTOP <desktop>, CARDINAL[1]/32
+_NET_CURRENT_DESKTOP desktop, CARDINAL/32
 ]]></programlisting>
 	<para>
-The index of the current desktop, starts with desktop 0.  This MUST be set and
-updated by the Window Manager  If a Pager wants to switch to another virtual
-desktop, it MUST send a _NET_CURRENT_DESKTOP client message to the root window:
+The index of the current desktop. This is always an integer between 0 and 
+_NET_NUMBER_OF_DESKTOPS - 1. This MUST be set and updated by the Window 
+Manager  If a Pager wants to switch to another virtual desktop, it MUST send 
+a _NET_CURRENT_DESKTOP client message to the root window:
 	</para>
 	<programlisting><![CDATA[
 _NET_CURRENT_DESKTOP
@@ -351,33 +628,51 @@ _NET_CURRENT_DESKTOP
 _NET_DESKTOP_NAMES, UTF-8_STRING[]
 ]]></programlisting>
 	<para>
-The names of all virtual desktops. This is a NULL spearated list of strings in UTF-8 [1] encoding with 	an additional NULL at the end of the list. This property MAY be changed by a Pager or the Window Manager at any time.
+The names of all virtual desktops. This is a list of NULL-terminated strings in UTF-8 [1] encoding. This property MAY be changed by a Pager or the Window Manager at any time.
 	</para>
+<para>
+Note: The number of names could be different from _NET_NUMBER_OF_DESKTOPS.
+If it is less than _NET_NUMBER_OF_DESKTOPS - then the desktops with high
+numbers are unnamed. If it is larger than _NET_NUMBER_OF_DESKTOPS, then the 
+excess names outside of the _NET_NUMBER_OF_DESKTOPS are considered to be
+reserved in case number of desktops is increased.
+</para>
+<para>
+Rationale: The name is not a necessary attribute of a virtual desktop. Thus 
+the availability or unavailability of names has no impact on virtual desktop
+functionality. Since names are set by users and users are likely to preset 
+names for a fixed number of desktops, it doesn't make sense to shrink or grow 
+this list when the number of available desktops changes.
+</para>
 	</sect2><sect2><title>_NET_ACTIVE_WINDOW</title>
 	<programlisting><![CDATA[
 _NET_ACTIVE_WINDOW, WINDOW/32
 ]]></programlisting>
 	<para>
-The window handle of the currently active window.  This is a read-only property 
-set by the
+The window ID of the currently active window or None if no window has the focus.
+This is a read-only property set by the
 window manager.  If a client (for example, a taskbar) wants to activate
 another window, it MUST send a _NET_ACTIVE_WINDOW client message to the root
 window: 
 	</para>
 	<programlisting><![CDATA[
 _NET_ACTIVE_WINDOW
-  window  = the respective client window
+  window  = window to activate
   message_type = _NET_ACTIVE_WINDOW
   format = 32
-  data.l[0] = /* may be used later */
+  data.l[0] = 0 /* may be used later */
 ]]></programlisting>
 	</sect2><sect2><title>_NET_WORKAREA</title>
 	<programlisting><![CDATA[
-_NET_WORKAREA, CARDINAL[][4]/32
+_NET_WORKAREA, x, y, width, height CARDINAL[][4]/32
 ]]>
 	</programlisting>
 	<para>
-	This property MUST be set by WM upon calculating the work area for each desktop (the first quadruple = desktop 1).  Contains the left, right, top, bottom co-ordinates for each desktop.  Work area SHOULD be used by desktop applications to place desktop icons appropriately.
+This property MUST be set by WM upon calculating the work area for 
+each desktop.  Contains a geometry for each desktop.  These geometries are 
+specified relative to the viewport on each desktop and specify an area that is
+completely contained within the viewport.
+ Work area SHOULD be used by desktop applications to place desktop icons appropriately.
 	</para>
 	<para>
 	The window manager SHOULD calculate this space by taking the current page minus space occupied by dock and panel windows, as indicated by the <link linkend="NETWMSTRUT">_NET_WM_STRUT</link> property set on client windows.
@@ -386,7 +681,7 @@ _NET_WORKAREA, CARDINAL[][4]/32
 	<sect2>
 	<title>_NET_SUPPORTING_WM_CHECK</title>
 	<programlisting><![CDATA[
-_NET_SUPPORTING_WM_CHECK, XA_WINDOW/32
+_NET_SUPPORTING_WM_CHECK, WINDOW/32
 ]]></programlisting>
 	<para>
 The Window Manager MUST set this property on the root window to be the ID of a
@@ -407,10 +702,15 @@ Rationale:  The child window is used to distinguish an active window manager
 	<sect2>
 	<title>_NET_VIRTUAL_ROOTS</title>
 	<programlisting><![CDATA[
-_NET_VIRTUAL_ROOTS, XA_WINDOW[]/32
+_NET_VIRTUAL_ROOTS, WINDOW[]/32
 ]]></programlisting>
 	<para>
-The Window Manager MUST set this to a list of IDs for windows that are acting as virtual root windows.  To implement virtual desktops, some window managers reparent client windows to a child of the root window.  The property is present so that Pagers can determine which windows to watch for substructure notifies.
+To implement virtual desktops, some window managers reparent client windows to 
+a child of the root window.  Window managers using this technique MUST set 
+this property to a list of IDs for windows that are acting as virtual root 
+windows.  This property allows background setting programs to work with 
+virtual roots and allows clients to figure out the WM frame windows of their 
+windows.
 	</para>
 	</sect2>
 	</sect1>
@@ -440,7 +740,7 @@ The Window Manager MUST then attempt to close the window specified.
 	</sect2><sect2><title>_NET_WM_MOVERESIZE</title>
 	<programlisting><![CDATA[
 _NET_WM_MOVERESIZE
-  window = target app window
+  window = window to be moved or resized
   message_type = _NET_WM_MOVERESIZE
   format = 32
   data.l[0] = x_root 
@@ -464,6 +764,9 @@ _NET_WM_MOVERESIZE
 #define _NET_WM_MOVERESIZE_SIZE_LEFT         7
 #define _NET_WM_MOVERESIZE_MOVE              8   /* Movement only */
 ]]></programlisting>
+	<para>
+	The client MUST release all grabs on Pointer events, prior to sending such message.
+	</para>
 	</sect2>
 	</sect1>	
 	<sect1>
@@ -490,6 +793,27 @@ Rationale: For window managers that display a title different from the _NET_WM_N
         </para>
 	</sect2>
 
+	<sect2><title>_NET_WM_ICON_NAME</title>
+	<programlisting><![CDATA[
+_NET_WM_ICON_NAME, UTF-8_STRING
+]]></programlisting>
+	<para>
+The Client SHOULD set this to the title of the icon for this window in UTF-8 
+encoding.  If set, the Window Manager should use this in preference to 
+WM_ICON_NAME.
+	</para>
+	</sect2>
+
+	<sect2><title>_NET_WM_VISIBLE_ICON_NAME</title>
+	<programlisting><![CDATA[
+_NET_WM_VISIBLE_ICON_NAME, UTF-8_STRING
+]]></programlisting>
+	<para>
+If the Window Manager displays an icon name other than _NET_WM_ICON_NAME 
+the Window Manager MUST set this to the title displayed in UTF-8 encoding.
+	</para>
+	</sect2>
+
 	<sect2><title>_NET_WM_DESKTOP</title>
 	<programlisting><![CDATA[
 _NET_WM_DESKTOP <desktop>, CARDINAL/32
@@ -513,7 +837,7 @@ _NET_WM_DESKTOP
   window  = the respective client window
   message_type = _NET_WM_DESKTOP
   format = 32
-  data.l[0] = desktop
+  data.l[0] = new_desktop
 ]]></programlisting>
 	<para>
 	The Window Manager MUST keep this property updated on all windows.
@@ -580,7 +904,7 @@ be taken as this type.
 _NET_WM_STATE, ATOM[]
 ]]></programlisting>
 		<para>
-A list of hints describing the state window. Atoms present in the list MUST be
+A list of hints describing the window state. Atoms present in the list MUST be
 considered set, atoms not present in the list MUST be considered not set. The
 Window Manager SHOULD honor
 _NET_WM_STATE whenever a withdrawn window requests to be mapped.  A Client
@@ -598,6 +922,7 @@ _NET_WM_STATE_MAXIMIZED_VERT, ATOM
 _NET_WM_STATE_MAXIMIZED_HORZ, ATOM
 _NET_WM_STATE_SHADED, ATOM
 _NET_WM_STATE_SKIP_TASKBAR, ATOM
+_NET_WM_STATE_SKIP_PAGER, ATOM
 ]]></programlisting>
       <para>
 An implementation MAY add new atoms to this list. Implementations
@@ -623,8 +948,12 @@ _NET_WM_STATE_MAXIMIZED_{VERT,HORZ} indicates that the window is
 _NET_WM_STATE_SHADED indicates that the window is shaded.
 	</para>
 	<para>
-_NET_WM_SKIP_TASKBAR indicates that a window should not be included on a
+_NET_WM_SKIP_TASKBAR indicates that the window should not be included on a
 taskbar.
+	</para>
+	<para>
+_NET_WM_SKIP_PAGER indicates that the window should not be included on a
+pager.
 	</para>
 	<para>
 To change the state of a mapped window, a Client MUST send a _NET_WM_STATE
@@ -646,12 +975,13 @@ _NET_WM_STATE_TOGGLE        2    /* toggle property  */
 	</para>
 	</sect2><sect2><title>_NET_WM_STRUT</title>
 	<programlisting id="NETWMSTRUT"><![CDATA[
-_NET_WM_STRUT, CARDINAL[4]/32
+_NET_WM_STRUT, left, right, top, bottom, CARDINAL[4]/32
 ]]></programlisting>
 	<para>
 This property MUST be set by the Client if the window is to reserve space at
-the edge of the screen.  The property is a 4-tuple of cardinals, one for each
-border of the screen.  The order of the borders is left, right, top, bottom.
+the edge of the screen.  The property contains a 4 cardinals specifying the
+width of the reserved area at each border of the screen.  
+The order of the borders is left, right, top, bottom.
 The client MAY change this property anytime, therefore the Window Manager MUST
 watch out for property notify events.  
 	</para>
@@ -673,12 +1003,11 @@ SHOULD only set one strut.
 	</para>
 	</sect2><sect2><title>_NET_WM_ICON_GEOMETRY</title>
 <programlisting><![CDATA[
-_NET_WM_ICON_GEOMETRY, CARDINAL[4]
+_NET_WM_ICON_GEOMETRY, x, y, width, height, CARDINAL[4]/32
 ]]></programlisting>
 	<para>
-An array of x,y,w,h of type CARDINAL, format 32.  This optional property MAY
-be set by standalone tools like a taskbar or an iconbox.  It specifies the
-geometry of a possible icon in case the window is iconified.
+This optional property MAY be set by standalone tools like a taskbar or an 
+iconbox.  It specifies the geometry of a possible icon in case the window is iconified.
 	</para>
 	<para>
 Rationale: This makes it possible for a window manager to display a nice
@@ -746,11 +1075,11 @@ as follows:
 		</para>
 		<programlisting><![CDATA[
 type = ClientMessage
-window = <client window>
+window = the respective client window
 message_type = WM_PROTOCOLS
 format = 32
 data.l[0] = _NET_WM_PING
-data.l[1] = <timestamp>
+data.l[1] = timestamp
 ]]></programlisting>
 		<para>
 A participating Client receiving this message MUST send it back to the root
@@ -914,10 +1243,10 @@ was the frame for this window.
 		</para></listitem>
 	</itemizedlist>
 	<para>
-[1] ICCCM Version 2.0, ß4.1.2.3 and ß4.1.5
+[1] ICCCM Version 2.0, Åß4.1.2.3 and Åß4.1.5
 	</para>
 	<para>
-[2] ICCCM Version 2.0, ß4.2.3
+[2] ICCCM Version 2.0, Åß4.2.3
 	</para>
 	</sect2>
 	<sect2>
@@ -963,7 +1292,8 @@ If processes fail to respond to the _NET_WM_PING protocol _NET_WM_PID may be use
 		<para>Owen Taylor</para>
 		<para>Marko Macek</para>
 		<para>Greg Badros</para>
-	
+		<para>Matthias Clasen</para>
+		
 	</sect1>
 
 </article>
