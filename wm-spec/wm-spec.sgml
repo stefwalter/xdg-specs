@@ -1,6 +1,6 @@
 <!doctype article PUBLIC "-//Davenport//DTD DocBook V3.0//EN" [
 ]>
-<article>
+<article id="index">
 <artheader>
 <title>Extended Window Manager Hints</title>
 <date>15 March 2000</date>
