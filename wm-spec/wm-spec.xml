@@ -790,7 +790,36 @@ _NET_CLOSE_WINDOW
         tool, and therefore the Window Manager should always obey it.
 	</para>
 	</sect2>
-	</sect1>	
+    <sect2><title>_NET_REQUEST_FRAME_EXTENTS</title>
+	<programlisting><![CDATA[
+_NET_REQUEST_FRAME_EXTENTS
+  window = window for which to set _NET_FRAME_EXTENTS
+  message_type = _NET_REQUEST_FRAME_EXTENTS
+]]></programlisting>
+	<para>
+A Client whose window has not yet been mapped can request of the
+Window Manager an estimate of the frame extents it will be given upon
+mapping.  To retrieve such an estimate, the Client MUST send a
+_NET_REQUEST_FRAME_EXTENTS message to the root window.  The Window
+Manager MUST respond by estimating the prospective frame extents and
+setting the window's _NET_FRAME_EXTENTS property accordingly.  The
+Client MUST handle the resulting _NET_FRAME_EXTENTS PropertyNotify
+event.  So that the Window Manager has a good basis for estimation,
+the Client MUST set any window properties it intends to set
+<i>before</i> sending this message.  The Client MUST be able to cope
+with imperfect estimates.
+	</para>
+	<para>
+Rationale: A client cannot calculate the dimensions of its window's
+frame before the window is mapped, but some toolkits need this
+information.  Asking the window manager for an estimate of the extents
+is a workable solution.  The estimate may depend on the current theme,
+font sizes or other window properties.  The client can track changes
+to the frame's dimensions by listening for _NET_FRAME_EXTENTS
+PropertyNotify events.
+	</para>
+	</sect2>
+</sect1>
 	<sect1>
 	<title>Application Window Properties</title>
 	<sect2><title>_NET_WM_NAME</title>
@@ -1355,6 +1384,16 @@ action or is a "pop-up" window activated by a timer or some other
 event.
         </para>
     </sect2>
+	<sect2><title>_NET_FRAME_EXTENTS</title>
+	<programlisting><![CDATA[
+_NET_FRAME_EXTENTS, left, right, top, bottom, CARDINAL[4]/32
+]]></programlisting>
+	<para>
+The Window Manager MUST set _NET_FRAME_EXTENTS to the extents of the
+window's frame.  left, right, top and bottom are widths of the
+respective borders added by the Window Manager.
+	</para>
+	</sect2>
 </sect1>
 <sect1>
 	<title>Window Manager Protocols</title>
@@ -1865,12 +1904,17 @@ OR OTHER DEALINGS IN THE SOFTWARE.
 		<para>David Rosenthal</para>
                 <para>Lubos Lunak</para>
                 <para>Rob Adams</para>
+                <para>Thomas Fitzsimmons</para>
 	</sect1>
   <sect1>
     <title>Change history</title>
  	    <sect2>
  		<title>Changes since 1.2</title>
  		<itemizedlist>
+ 			<listitem><para>
+Added _NET_REQUEST_FRAME_EXTENTS and _NET_FRAME_EXTENTS to allow a
+client to retrieve its window's frame extents.
+ 			</para></listitem>
  			<listitem><para>
 Added new state _NET_WM_STATE_DEMANDS_ATTENTION.
  			</para></listitem>
