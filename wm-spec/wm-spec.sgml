@@ -16,7 +16,7 @@
 		<title>Version</title>
 		<para>
 This is DRAFT version 1.2 of the Extended Window Manager Hints (EWMH) spec,
-updated October 11 2001.
+updated October 17 2001.
 		</para>
 	</sect2>
 	<sect2>
@@ -741,7 +741,86 @@ _NET_WM_STATE_TOGGLE        2    /* toggle property  */
       <para>
 	See also the implementation notes on <link linkend="URGENCY">urgency</link> and <link linkend="NORESIZE">fixed size windows</link>.
 	</para>
-	</sect2><sect2><title>_NET_WM_STRUT</title>
+	</sect2>
+
+	<sect2>
+		<title>_NET_WM_ALLOWED_ACTIONS</title>
+		<programlisting><![CDATA[
+_NET_WM_ALLOWED_ACTIONS, ATOM[]
+]]></programlisting>
+		<para>
+A list of atoms indicating user operations that the window manager supports for
+this window. Atoms present in the list indicate allowed actions, atoms not
+present in the list indicate actions that are not supported for this window.
+The window manager MUST keep this property updated to reflect the 
+actions which are currently "active" or "sensitive" for a window.
+Taskbars, pagers, and other tools use _NET_WM_ALLOWED_ACTIONS to 
+decide which actions should be made available to the user.
+		</para>
+		<para>
+Possible atoms are:
+		</para>
+	<programlisting><![CDATA[
+_NET_WM_ACTION_MOVE, ATOM
+_NET_WM_ACTION_RESIZE, ATOM
+_NET_WM_ACTION_SHADE, ATOM
+_NET_WM_ACTION_STICK, ATOM
+_NET_WM_ACTION_MAXIMIZE_HORZ, ATOM
+_NET_WM_ACTION_MAXIMIZE_VERT, ATOM
+_NET_WM_ACTION_CHANGE_DESKTOP, ATOM
+_NET_WM_ACTION_CLOSE, ATOM
+]]></programlisting>
+      <para>
+An implementation MAY add new atoms to this list. Implementations
+without extensions MUST ignore any unknown atoms, effectively removing
+them from the list. These extension atoms MUST NOT start with the prefix
+_NET.
+      </para>
+      <para>
+Note that the actions listed here are those that the <emphasis>window
+manager</emphasis> will honor for this window. The operations must still be
+requested through the normal mechanisms outlined in this specification. For
+example, _NET_WM_ACTION_CLOSE does not mean that clients can send a
+WM_DELETE_WINDOW message to this window; it means that clients can use a
+_NET_CLOSE_WINDOW message to ask the window manager to do so.
+       </para>
+       <para>
+Window managers SHOULD ignore the value of _NET_WM_ALLOWED_ACTIONS when they 
+initially manage a window. This value may be left over from a previous window 
+manager with different policies.
+      </para>
+	<para>
+_NET_WM_ACTION_MOVE indicates that the window may be moved around the screen.
+	</para>
+	<para>
+_NET_WM_ACTION_RESIZE indicates that the window may be resized.
+(Implementation note: window managers can identify a non-resizable 
+window because its minimum and maximum size in WM_NORMAL_HINTS will be the same.)
+	</para>
+	<para>
+_NET_WM_ACTION_SHADE indicates that the window may be shaded.
+	</para>
+	<para>
+_NET_WM_ACTION_STICK indicates that the window may have its sticky state 
+toggled (as for _NET_WM_STATE_STICKY). Note that this state has to do with 
+viewports, not desktops.
+	</para>
+	<para>
+_NET_WM_ACTION_MAXIMIZE_HORZ indicates that the window may be maximized horizontally.
+	</para>
+	<para>
+_NET_WM_ACTION_MAXIMIZE_VERT indicates that the window may be maximized vertically.
+	</para>
+	<para>
+_NET_WM_ACTION_CHANGE_DESKTOP indicates that the window may be moved between desktops.
+	</para>
+	<para>
+_NET_WM_ACTION_CLOSE indicates that the window may be closed (i.e. a WM_DELETE_WINDOW 
+message may be sent).
+	</para>
+</sect2>
+
+<sect2><title>_NET_WM_STRUT</title>
 	<programlisting id="NETWMSTRUT"><![CDATA[
 _NET_WM_STRUT, left, right, top, bottom, CARDINAL[4]/32
 ]]></programlisting>
@@ -1249,6 +1328,9 @@ OR OTHER DEALINGS IN THE SOFTWARE.
  			</para></listitem>
  			<listitem><para>
  Added _NET_WM_STATE_FULLSCREEN.
+ 			</para></listitem>
+ 			<listitem><para>
+ Added _NET_WM_ALLOWED_ACTIONS.
  			</para></listitem>
  	</itemizedlist>
  	</sect2>
