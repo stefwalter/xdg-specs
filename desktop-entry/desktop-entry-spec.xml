@@ -1,5 +1,6 @@
-<!doctype article PUBLIC "-//OASIS//DTD DocBook V3.1//EN" [
-]>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+                  "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+				  ]>
 <article id="index">
   <artheader>
     <title>Desktop Entry Standard</title>
@@ -138,7 +139,7 @@ Name=Value</programlisting>
       category against the <replaceable>locale</replaceable> postfixes of all occurrences of the key,
       with the .ENCODING part stripped. (The .ENCODING is used when the
       Encoding key for the desktop entry file is Legacy-Mixed, see
-      <xref linkend="legacy-mixed">.)
+      <xref linkend="legacy-mixed"/>.)
     </para>
     <para>
       The matching is done as follows: if the current value of
@@ -185,7 +186,7 @@ Name=Value</programlisting>
     </para>
     <table>
       <title>Standard Keys</title>
-      <tgroup cols=5>
+      <tgroup cols="5">
 	<thead>
 	  <row>
 	    <entry>Key</entry>
@@ -297,7 +298,7 @@ Name=Value</programlisting>
 	    <entry>Actions</entry>
 	    <entry>
               additional actions possible, see MIME type discussion
-	      in <xref linkend="mime-types">
+	      in <xref linkend="mime-types"/>
 	    </entry>
 	    <entry>string(s)</entry>
 	    <entry>NO</entry>
@@ -694,7 +695,7 @@ Name=Value</programlisting>
     Recognized fields are as follows:
     </para>
     <informaltable>
-      <tgroup cols=2>
+      <tgroup cols="2">
 	<tbody>
 	  <row>
 	    <entry>%f</entry>
@@ -865,7 +866,7 @@ Exec=sp -edit %u</programlisting>
       will take place.  This is the preferred method for introducing
       changes.  If one particular party wishes to add a field for personal
       use, they should prefix the key with the string "X-PRODUCT",
-      i.e. "X-NewDesktop-Foo", following the precedent set by other IETF and RFC
+      i.e. "X-NewDesktop-Foo", following the precedent set by other IETF and RFC
       standards.
     </para>
     <para>
@@ -921,7 +922,7 @@ Icon=fooview-edit.png</programlisting>
       explicitely in the table.)
     </para>
     <informaltable>
-      <tgroup cols=2>
+      <tgroup cols="2">
 	<thead>
 	  <row>
 	    <entry>Encoding</entry>
