@@ -2,8 +2,8 @@
                   "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
 				  ]>
 <article id="index">
-  <artheader>
-    <title>Desktop Entry Standard</title>
+  <articleinfo>
+    <title>Desktop Entry Specification</title>
     <releaseinfo>Version 0.9.4</releaseinfo>
 	<date>7 July 2003</date>
     <authorgroup>
@@ -35,13 +35,13 @@
 	</affiliation>
       </author>
     </authorgroup>
-  </artheader>
+  </articleinfo>
 
   <sect1 id="introduction">
     <title>Introduction</title>
     <para>
       Both the KDE and GNOME desktop environments have adopted a similar
-      format for "desktop entries," or configuration files describing how a
+      format for "desktop entries", or configuration files describing how a
       particular program is to be launched, how it appears in menus, etc.
       It is to the larger community's benefit that a unified standard be
       agreed upon by all parties such that interoperation between the two
@@ -52,53 +52,56 @@
   <sect1 id="basic-format">
     <title>Basic format of the file</title>
     <para>
-      These desktop entry files should have the extension ".desktop".
-      Determining file type on basis of extension
-      makes determining the file type very easy and quick.  When no file
-      extension is present, the desktop system should fall back to
-      recognition via "magic detection."  Desktop entries which describe how
-      a directory is to be formatted/displayed should be simply called
-      ".directory".
+      These desktop entry files should have the extension
+      <filename>.desktop</filename>. Determining file type on basis of
+      extension makes determining the file type very easy and quick.
+      When no file extension is present, the desktop system should
+      fall back to recognition via "magic detection".  Desktop entries
+      which describe how a directory is to be formatted/displayed
+      should be simply called <filename>.directory</filename>.
     </para>
     <para>
       The basic format of the desktop entry file requires that there be a
-      "group" header named "[Desktop Entry]".
-      This "group" entry denotes that all {key,value} pairs following it
-      belong in the Desktop Entry group.  There may be other groups present
-      in the file (see MIME types discussion below), but this is the most
+      "group" header named <literal>[Desktop Entry]</literal>.
+      This "group" entry denotes that all
+      <literal>{key,value}</literal> pairs following it    belong in
+      the Desktop Entry group.  There may be other groups present in
+      the file (see MIME types discussion below), but this is the most
       important group which explicitly needs to be supported.  This group
-      should also be used as the "magic key" for automatic mime type
+      should also be used as the "magic key" for automatic MIME type
       detection.  There should be nothing proceeding this group in the
       desktop entry file but possibly one or more comments (see
       below).
     </para>
     <para>
-      Group headers may not contain the characters '[' and ']' as
-      those delimit the header.
+      Group headers may not contain the characters <literal>[</literal> and
+      <literal>]</literal> as those delimit the header.
     </para>
     <para>
-      Lines beginning with a "#" and blank lines are considered comments and will be
-      ignored, however they should be preserved across reads / writes of the
-      desktop entry file.
+      Lines beginning with a <literal>#</literal> and blank lines are
+      considered comments and will be ignored, however they should be
+      preserved across reads and writes of the desktop entry file.
     </para>
     <para>
       Compliant implementations MUST not remove any fields from the file,
       even if they don't support them.  Such fields must be maintained in a
-      list somewhere, and if the file is "rewritten," they will be included.
+      list somewhere, and if the file is "rewritten", they will be included.
       This ensures that any desktop-specific extensions will be preserved
       even if another system accesses and changes the file.
     </para>
     <para>
-      Entries in the file are {key,value} pairs in the format:
+      Entries in the file are <literal>{key,value}</literal> pairs in the format:
     </para>
     <programlisting>
 Name=Value</programlisting>
     <para>
-      Space before and after the equals sign should be ignored; the "="
+      Space before and after the equals sign should be ignored; the <literal>=</literal>
       sign is the actual delimiter.
     </para>
     <para>
-      The escape sequences \s, \n, \t, \r, and \\ are supported,
+      The escape sequences <literal>\s</literal>,
+      <literal>\n</literal>, <literal>\t</literal>,
+      <literal>\r</literal>, and <literal>\\</literal> are supported,
       meaning ASCII space, newline, tab, carriage return, and
       backslash, respectively.
     </para>
@@ -111,8 +114,8 @@ Name=Value</programlisting>
     </para>
     <para>
       The difference between string and localestring is that the value for
-      a string key must contain only ASCII characters and while the value
-      of a localestring key may contain UTF-8 characters. (See section 5.)
+      a string key must contain only ASCII characters while the value
+      of a localestring key may contain UTF-8 characters.
     </para>
     <para>
       Some keys can have multiple values; these should be separated by a
@@ -122,47 +125,57 @@ Name=Value</programlisting>
       escape mechanism.
     </para>
   </sect1>
-  <sect1 id="recognized-keys">
+  <sect1 id="recognized-keys">B
     <title>Recognized desktop entry keys</title>
     <para>
 	  Keys  with type localestring may be postfixed by [<replaceable>LOCALE</replaceable>],
 	  where <replaceable>LOCALE</replaceable> is the locale type of the
 	  entry.  <replaceable>LOCALE</replaceable> must be of the form
-	  lang[_COUNTRY][ ENCODING][ MODIFIER], where _COUNTRY, .ENCODING,
-	  and @MODIFIER may be omitted. If a postfixed key occurs, the same
+	  <literal><replaceable>lang</replaceable>_<replaceable>COUNTRY</replaceable>.<replaceable>ENCODING</replaceable>@<replaceable>MODIFIER</replaceable></literal>,
+	  where
+	  <literal>_<replaceable>COUNTRY</replaceable></literal>,
+	  <literal>.<replaceable>ENCODING</replaceable></literal>, 
+	  and <literal>@<replaceable>MODIFIER</replaceable></literal>
+	  may be omitted. If a postfixed key occurs, the same
 	  key must be also present without the postfix.
     </para>
     <para>
       When reading in the desktop entry file, the value of the key is
-      selected by matching the current POSIX locale for the LC_MESSAGES
-	  category against the <replaceable>locale</replaceable> postfixes
-	  of all occurrences of the key, with the .ENCODING part stripped.
-	  The .ENCODING field is used only when the Encoding key for the
-	  desktop entry file is Legacy-Mixed, (see <xref
-	  linkend="legacy-mixed"/>.)
+      selected by matching the current POSIX locale for the
+      <varname>LC_MESSAGES</varname> category against the
+      <replaceable>LOCALE</replaceable> postfixes of all occurrences
+      of the key, with the
+      <literal>.<replaceable>ENCODING</replaceable></literal> part
+      stripped. The
+      <literal>.<replaceable>ENCODING</replaceable></literal> field is
+      used only when the value of the <varname>Encoding</varname> key
+      for the desktop entry file is <constant>Legacy-Mixed</constant>
+      (see <xref linkend="legacy-mixed"/>.)
     </para>
     <para>
-	  The matching of is done as follows.  If LC_MESSAGES is of the form
-	  <replaceable>LANG</replaceable>_<replaceable>COUNTRY</replaceable>.<replaceable>ENCODING</replaceable>@<replaceable>MODIFIER</replaceable>,
+	  The matching of is done as follows.  If
+	  <varname>LC_MESSAGES</varname> is of the form
+	  <literal><replaceable>lang</replaceable>_<replaceable>COUNTRY</replaceable>.<replaceable>ENCODING</replaceable>@<replaceable>MODIFIER</replaceable></literal>, 
 	  then it will match a key of the form
-	  <replaceable>LANG</replaceable>_<replaceable>COUNTRY</replaceable>@<replaceable>MODIFIER</replaceable>.
+	  <literal><replaceable>lang</replaceable>_<replaceable>COUNTRY</replaceable>@<replaceable>MODIFIER</replaceable></literal>. 
 	  If such a key does not exist, it will attempt to match
-	  <replaceable>LANG</replaceable>_<replaceable>COUNTRY</replaceable>
+	  <literal><replaceable>lang</replaceable>_<replaceable>COUNTRY</replaceable></literal>
 	  followed by
-	  <replaceable>LANG</replaceable>@<replaceable>MODIFIER</replaceable>.
-	  Then, a match against <replaceable>LANG</replaceable> by itself
+	  <literal><replaceable>lang</replaceable>@<replaceable>MODIFIER</replaceable></literal>.
+	  Then, a match against <replaceable>lang</replaceable> by itself
 	  will be attempted.  Finally, if no matching key is found the
 	  required key without a locale specified is used.  The encoding
-	  from the LC_MESSAGES value is ignored when matching.
+	  from the <varname>LC_MESSAGES</varname> value is ignored
+	  when matching.
     </para>
     <para>
-      If LC_MESSAGES does not have a <replaceable>MODIFIER</replaceable>
+      If <varname>LC_MESSAGES</varname> does not have a <replaceable>MODIFIER</replaceable>
       field, then no key with a modifier will be matched.  Similarly, if
-      LC_MESSAGES does not have a <replaceable>COUNTRY</replaceable>
+      <varname>LC_MESSAGES</varname> does not have a <replaceable>COUNTRY</replaceable>
       field, then no key with a country specified will be matched.  If
-      LC_MESSAGES just has a <replaceable>LANG</replaceable> field, then
+      <varname>LC_MESSAGES</varname> just has a <replaceable>lang</replaceable> field, then
       it will do a straight match to a key with a similar value.  The
-      following table lists possible matches of various LC_MESSAGES in
+      following table lists possible matches of various <varname>LC_MESSAGES</varname> values in
       the order in which they are matched.  Note that the
       <replaceable>ENCODING</replaceable> field isn't shown.
     </para>
@@ -171,42 +184,42 @@ Name=Value</programlisting>
       <tgroup cols="2">
 <thead>
   <row>
-    <entry>LC_MESSAGES Value</entry>
-    <entry>Possible Keys in Order of Matching</entry>
+    <entry><varname>LC_MESSAGES</varname> value</entry>
+    <entry>Possible keys in order of matching</entry>
   </row>
 </thead>
 <tbody>
   <row>
-    <entry><replaceable>LANG</replaceable>_<replaceable>COUNTRY</replaceable>@<replaceable>MODIFIER</replaceable></entry>
+    <entry><literal><replaceable>lang</replaceable>_<replaceable>COUNTRY</replaceable>@<replaceable>MODIFIER</replaceable></literal></entry>
     <entry>
-      <replaceable>LANG</replaceable>_<replaceable>COUNTRY</replaceable>@<replaceable>MODIFIER</replaceable>,
-      <replaceable>LANG</replaceable>_<replaceable>COUNTRY</replaceable>,
-      <replaceable>LANG</replaceable>@<replaceable>MODIFIER</replaceable>,
-      <replaceable>LANG</replaceable>,
-      Default Value
+      <literal><replaceable>lang</replaceable>_<replaceable>COUNTRY</replaceable>@<replaceable>MODIFIER</replaceable></literal>,
+      <literal><replaceable>lang</replaceable>_<replaceable>COUNTRY</replaceable></literal>,
+      <literal><replaceable>lang</replaceable>@<replaceable>MODIFIER</replaceable></literal>,
+      <literal><replaceable>lang</replaceable></literal>,
+      default value
     </entry>
   </row>
   <row>
-    <entry><replaceable>LANG</replaceable>_<replaceable>COUNTRY</replaceable></entry>
+    <entry><literal><replaceable>lang</replaceable>_<replaceable>COUNTRY</replaceable></literal></entry>
     <entry>
-      <replaceable>LANG</replaceable>_<replaceable>COUNTRY</replaceable>,
-      <replaceable>LANG</replaceable>,
-      Default Value
+      <literal><replaceable>lang</replaceable>_<replaceable>COUNTRY</replaceable></literal>,
+      <replaceable>lang</replaceable>,
+      default value
     </entry>
   </row>
   <row>
-    <entry><replaceable>LANG</replaceable>@<replaceable>MODIFIER</replaceable></entry>
+    <entry><literal><replaceable>lang</replaceable>@<replaceable>MODIFIER</replaceable></literal></entry>
     <entry>
-      <replaceable>LANG</replaceable>@<replaceable>MODIFIER</replaceable>,
-      <replaceable>LANG</replaceable>,
-      Default Value
+      <literal><replaceable>lang</replaceable>@<replaceable>MODIFIER</replaceable></literal>,
+      <replaceable>lang</replaceable>,
+      default value
     </entry>
   </row>
   <row>
-    <entry><replaceable>LANG</replaceable></entry>
+    <entry><replaceable>lang</replaceable></entry>
     <entry>
-      <replaceable>LANG</replaceable>,
-      Default Value
+      <replaceable>lang</replaceable>,
+      default value
     </entry>
   </row>
 </tbody>
@@ -214,19 +227,19 @@ Name=Value</programlisting>
     </table>
     
     <para>
-      For example, if the current value of the LC_MESSAGES category
-      is sr_YU Latn and the desktop file includes:
+      For example, if the current value of the <varname>LC_MESSAGES</varname> category
+      is <literal>sr_YU@Latn</literal> and the desktop file includes:
     </para>
     <programlisting>
  Name=Foo
  Name[sr_YU]=...
- Name[sr Latn]=   
+ Name[sr@Latn]=...
  Name[sr]=...</programlisting>
     <para>
-      then the value of the Name keyed by "sr_YU" is used.
+      then the value of the <varname>Name</varname> keyed by <literal>sr_YU</literal> is used.
     </para>
     <para>
-      Case is significant.  The keys "Name" and "NAME" are not equivalent.
+      Case is significant.  The keys <varname>Name</varname> and <varname>NAME</varname> are not equivalent.
       The same holds for group names.  Key values are case sensitive as
       well.
     </para>
@@ -242,7 +255,7 @@ Name=Value</programlisting>
       is also present.
     </para>
     <para>
-      Some example keys: Name[C], Comment[it].
+      Some example keys: <varname>Name[C]</varname>, <varname>Comment[it]</varname>.
     </para>
     <table>
       <title>Standard Keys</title>
@@ -254,24 +267,31 @@ Name=Value</programlisting>
 	    <entry>Value Type</entry>
 	    <entry>REQ?</entry>
 	    <entry>MUST?</entry>
-		<entry>Type</entry>
+	    <entry>Type</entry>
 	  </row>
 	</thead>
 	<tbody>
 	  <row>
-	    <entry>Type</entry>
+	    <entry id="key-type"><varname>Type</varname></entry>
 	    <entry>
-		  There are 4 types of desktop entries: Application(1), Link(2), FSDevice(3) and Directory(4).
+	      There are 4 types of desktop entries:
+	      <constant>Application</constant>,
+	      <constant>Link</constant>, <constant>FSDevice</constant>
+	      and <constant>Directory</constant>.
 	    </entry>
 	    <entry>string</entry>
 	    <entry>YES</entry>
 	    <entry>YES</entry>
 	  </row>
 	  <row>
-	    <entry>Version</entry>
+	    <entry id="key-version"><varname>Version</varname></entry>
 	    <entry>
 	      Version of Desktop Entry Specification
-		  (While the version field is not required to be present, it should be in all newer implementations of the Desktop Entry specification. If the version number is not present, a "pre-standard" desktop entry file is to be assumed).
+	      (While the version field is not required to be present,
+	      it should be in all newer implementations of the Desktop
+	      Entry Specification. If the version number is not
+	      present, a "pre-standard" desktop entry file is to be
+	      assumed).
 	    </entry>
 	    <entry>numeric</entry>
 	    <entry>NO</entry>
@@ -279,9 +299,11 @@ Name=Value</programlisting>
 		<entry>1-4</entry>
 	  </row>
 	  <row>
-	    <entry>Encoding</entry>
+	    <entry id="key-encoding"><varname>Encoding</varname></entry>
 	    <entry>
-	      Encoding of the whole desktop entry file (UTF-8 or LegacyMixed).
+	      Encoding of the whole desktop entry file
+	      (<constant>UTF-8</constant> or
+	      <constant>Legacy-Mixed</constant>).
 	    </entry>
 	    <entry>string</entry>
 	    <entry>YES</entry>
@@ -289,7 +311,7 @@ Name=Value</programlisting>
 		<entry>1-4</entry>
 	  </row>
 	  <row>
-	    <entry>Name</entry>
+	    <entry id="key-name"><varname>Name</varname></entry>
 	    <entry>
           Specific name of the application, for example "Mozilla".
 	    </entry>
@@ -299,7 +321,7 @@ Name=Value</programlisting>
 		<entry>1-4</entry>
 	  </row>
 	  <row>
-	    <entry>GenericName</entry>
+	    <entry id="key-genericname"><varname>GenericName</varname></entry>
 	    <entry>
           Generic name of the application, for example "Web Browser".
 	    </entry>
@@ -309,13 +331,13 @@ Name=Value</programlisting>
 		<entry>1-4</entry>
 	  </row>
 	  <row>
-	    <entry>NoDisplay</entry>
+	    <entry id="key-nodisplay"><varname>NoDisplay</varname></entry>
 	    <entry>
-		  NoDisplay means "this application exists, but don't display it in the menus".
-		  This can be useful to e.g. associate this application with mimetypes, so that
+		  <varname>NoDisplay</varname> means "this application exists, but don't display it in the menus".
+		  This can be useful to e.g. associate this application with MIME types, so that
 		  it gets launched from a file manager (or other apps), without having a menu
 		  entry for it (there are tons of good reasons for this, including e.g. the
-		  netscape -remote, or kfmclient openURL kind of stuff).
+		  <literal>netscape -remote</literal>, or <literal>kfmclient openURL</literal> kind of stuff).
 	    </entry>
 	    <entry>boolean</entry>
 	    <entry>NO</entry>
@@ -323,11 +345,11 @@ Name=Value</programlisting>
 		<entry>1-4</entry>
 	  </row>
 	  <row>
-	    <entry>Comment</entry>
+	    <entry id="key-comment"><varname>Comment</varname></entry>
 	    <entry>
            Tooltip for the entry, for example "View sites on the
-           Internet"; should not be redundant with Name or 
-           GenericName.
+           Internet", should not be redundant with <varname>Name</varname> or 
+           <varname>GenericName</varname>.
 	    </entry>
 	    <entry>localestring</entry>
 	    <entry>NO</entry>
@@ -335,14 +357,14 @@ Name=Value</programlisting>
 		<entry>1-4</entry>
 	  </row>
 	  <row>
-	    <entry>Icon</entry>
+	    <entry id="key-icon"><varname>Icon</varname></entry>
 	    <entry>
           Icon to display in file manager, menus, etc.  If the
           name is an absolute path, the given file will be
           used. If the name is not an absolute path, an
           implementation-dependent search algorithm will be used
           to locate the icon. Icons may be localized with the
-          Icon[xx]= syntax.
+          <literal>Icon[xx]=</literal> syntax.
 	    </entry>
 	    <entry>string</entry>
 	    <entry>NO</entry>
@@ -350,13 +372,14 @@ Name=Value</programlisting>
 		<entry>1-4</entry>
 	  </row>
 	  <row>
-	    <entry>Hidden</entry>
+	    <entry id="key-hidden">Hidden</entry>
 	    <entry>
-		  Hidden should have been called Deleted. It means the user deleted (at his level)
+		  <varname>Hidden</varname> should have been called <varname>Deleted</varname>.
+		  It means the user deleted (at his level)
 		  something that was present (at an upper level, e.g. in the system dirs). It's
-		  strictly equivalent to the .desktop file not existing at all, as far as that user is
+		  strictly equivalent to the <filename>.desktop</filename> file not existing at all, as far as that user is
 		  concerned. This can also be used to "uninstall" existing files (e.g. due to a renaming)
-		  - by letting "make install" install a file with Hidden=true in it.
+		  - by letting <literal>make install</literal> install a file with <literal>Hidden=true</literal> in it.
 	    </entry>
 	    <entry>boolean</entry>
 	    <entry>NO</entry>
@@ -364,7 +387,7 @@ Name=Value</programlisting>
 		<entry>1-4</entry>
 	  </row>
 	  <row>
-	    <entry>FilePattern</entry>
+	    <entry id="key-filepattern"><varname>FilePattern</varname></entry>
 	    <entry>
 		  A list of regular expressions to match against for a
           file manager to determine if this entry's icon should be
@@ -377,9 +400,9 @@ Name=Value</programlisting>
 		<entry>1</entry>
 	  </row>
 	  <row>
-	    <entry>TryExec</entry>
+	    <entry id="key-tryexec"><varname>TryExec</varname></entry>
 	    <entry>
-          Filename of a binary on disk used to determine if the
+          File name of a binary on disk used to determine if the
           program is actually installed.  If not, entry may not
           show in menus, etc.
 	    </entry>
@@ -389,7 +412,7 @@ Name=Value</programlisting>
 		<entry>1</entry>
 	  </row>
 	  <row>
-	    <entry>Exec</entry>
+	    <entry id="key-exec"><varname>Exec</varname></entry>
 	    <entry>
            Program to execute, possibly with arguments.
 	    </entry>
@@ -399,9 +422,9 @@ Name=Value</programlisting>
 		<entry>1</entry>
 	  </row>
 	  <row>
-	    <entry>Path</entry>
+	    <entry id="key-path"><varname>Path</varname></entry>
 	    <entry>
-           If entry is type Application, the working directory to run the program in.
+           If entry is of type <constant>Application</constant>, the working directory to run the program in.
 	    </entry>
 	    <entry>string</entry>
 	    <entry>NO</entry>
@@ -409,9 +432,9 @@ Name=Value</programlisting>
 		<entry>1</entry>
 	  </row>
 	  <row>
-	    <entry>Terminal</entry>
+	    <entry id="key-terminal"><varname>Terminal</varname></entry>
 	    <entry>
-           Whether the program runs in a terminal window
+           Whether the program runs in a terminal window.
 	    </entry>
 	    <entry>boolean</entry>
 	    <entry>NO</entry>
@@ -419,9 +442,9 @@ Name=Value</programlisting>
 		<entry>1</entry>
 	  </row>
 	  <row>
-	    <entry>SwallowTitle</entry>
+	    <entry id="key-swallowtitle"><varname>SwallowTitle</varname></entry>
 	    <entry>
-           If entry is swallowed onto the panel, this should be the title of window
+           If entry is swallowed onto the panel, this should be the title of the window.
 	    </entry>
 	    <entry>localestring</entry>
 	    <entry>NO</entry>
@@ -429,7 +452,7 @@ Name=Value</programlisting>
 		<entry>1</entry>
 	  </row>
 	  <row>
-	    <entry>SwallowExec</entry>
+	    <entry id="key-swallowexec"><varname>SwallowExec</varname></entry>
 	    <entry>
            Program to exec if swallowed app is clicked.
 	    </entry>
@@ -439,7 +462,7 @@ Name=Value</programlisting>
 		<entry>1</entry>
 	  </row>
 	  <row>
-	    <entry>Actions</entry>
+	    <entry id="key-actions"><varname>Actions</varname></entry>
 	    <entry>
            Additional actions possible, see MIME type discussion in <xref linkend="mime-types"/>.
 	    </entry>
@@ -449,7 +472,7 @@ Name=Value</programlisting>
 		<entry>1</entry>
 	  </row>
 	  <row>
-	    <entry>MimeType</entry>
+	    <entry id="key-mimetype"><varname>MimeType</varname></entry>
 	    <entry>
            The MIME type(s) supported by this entry.
 	    </entry>
@@ -459,7 +482,7 @@ Name=Value</programlisting>
 		<entry>1</entry>
 	  </row>
 	  <row>
-	    <entry>SortOrder</entry>
+	    <entry id="key-sortorder"><varname>SortOrder</varname></entry>
 	    <entry>
            This may specify the order in which to display files.
 	    </entry>
@@ -469,7 +492,7 @@ Name=Value</programlisting>
 		<entry>4</entry>
 	  </row>
 	  <row>
-	    <entry>Dev</entry>
+	    <entry id="key-dev"><varname>Dev</varname></entry>
 	    <entry>
            The device to mount.
 	    </entry>
@@ -479,9 +502,9 @@ Name=Value</programlisting>
 		<entry>3</entry>
 	  </row>
 	  <row>
-	    <entry>FSType</entry>
+	    <entry id="key-fstype"><varname>FSType</varname></entry>
 	    <entry>
-           The type of filesystem to try to mount.
+           The type of file system to try to mount.
 	    </entry>
 	    <entry>string</entry>
 	    <entry>NO</entry>
@@ -489,7 +512,7 @@ Name=Value</programlisting>
 		<entry>3</entry>
 	  </row>
 	  <row>
-	    <entry>MountPoint</entry>
+	    <entry id="key-mountpoint"><varname>MountPoint</varname></entry>
 	    <entry>
            The mount point of the device in question.
 	    </entry>
@@ -499,9 +522,9 @@ Name=Value</programlisting>
 		<entry>3</entry>
 	  </row>
 	  <row>
-	    <entry>ReadOnly</entry>
+	    <entry id="key-readonly"><varname>ReadOnly</varname></entry>
 	    <entry>
-           Specifies whether or not the device is read-only.
+           Specifies whether or not the device is read only.
 	    </entry>
 	    <entry>boolean</entry>
 	    <entry>NO</entry>
@@ -509,10 +532,10 @@ Name=Value</programlisting>
 		<entry>3</entry>
 	  </row>
 	  <row>
-	    <entry>UnmountIcon</entry>
+	    <entry id="key-unmounticon"><varname>UnmountIcon</varname></entry>
 	    <entry>
-           Icon to display when device is not mounted Mounted devices display icon from Icon key.
-		   UnmountIcons may be localized with the UnmountIcon[xx]= syntax.
+           Icon to display when device is not mounted.  Mounted devices display icon from the <varname>Icon</varname> key.
+		   <varname>UnmountIcon</varname>s may be localized with the <literal>UnmountIcon[xx]=</literal> syntax.
 	    </entry>
 	    <entry>string</entry>
 	    <entry>NO</entry>
@@ -520,7 +543,7 @@ Name=Value</programlisting>
 		<entry>3</entry>
 	  </row>
 	  <row>
-	    <entry>URL</entry>
+	    <entry id="key-url"><varname>URL</varname></entry>
 	    <entry>
            If entry is Link type, the URL to access.
 	    </entry>
@@ -530,9 +553,12 @@ Name=Value</programlisting>
 		<entry>2</entry>
 	  </row>
 	  <row>
-	    <entry>Categories</entry>
+	    <entry id="key-categories"><varname>Categories</varname></entry>
 	    <entry>
-          Categories in which the entry should be shown in a menu (for possible values see the <ulink url="http://www.freedesktop.org/standards/menu-spec/">xdg-menu</ulink> specification).
+          Categories in which the entry should be shown in a menu (for
+          possible values see the <ulink
+          url="http://www.freedesktop.org/Standards/menu-spec">Desktop
+          Menu Specification</ulink>).
 	    </entry>
 	    <entry>string(s)</entry>
 	    <entry>NO</entry>
@@ -540,9 +566,15 @@ Name=Value</programlisting>
 		<entry>1</entry>
 	  </row>
 	  <row>
-	    <entry>OnlyShowIn / NotShowIn</entry>
+	    <entry id="key-onlyshowin"><varname>OnlyShowIn</varname>, <varname>NotShowIn</varname></entry>
 	    <entry>
-           A list of strings identifying the environments that should display/not display a given .desktop item. Only one of these keys, either OnlyShowIn or NotShowIn, may appear in a Group. (for possible values see the <ulink url="http://www.freedesktop.org/standards/menu-spec/">xdg-menu</ulink> specification)
+           A list of strings identifying the environments that should
+           display/not display a given desktop entry. Only one of
+           these keys, either <varname>OnlyShowIn</varname> or
+           <varname>NotShowIn</varname>, may appear in a group (for
+           possible values see the <ulink
+           url="http://www.freedesktop.org/Standards/menu-spec">Desktop
+           Menu Specification</ulink>).
 	    </entry>
 	    <entry>string(s)</entry>
 	    <entry>NO</entry>
@@ -550,11 +582,11 @@ Name=Value</programlisting>
 		<entry>1-4</entry>
 	  </row>
 	  <row>
-	    <entry>StartupNotify</entry>
+	    <entry id="key-startupnotify"><varname>StartupNotify</varname></entry>
 	    <entry>
 			If true, it is KNOWN that the application will send a "remove"
-			message when started with the DESKTOP_LAUNCH_ID environment variable
-			set (see the <ulink url="http://www.freedesktop.org/standards/startup-notification-spec/">startup notification spec</ulink> for more details).
+			message when started with the <envar>DESKTOP_LAUNCH_ID</envar> environment variable
+			set (see the <ulink url="http://www.freedesktop.org/Standards/startup-notification-spec">Startup Notification Protocol Specification</ulink> for more details).
 	    </entry>
 	    <entry>boolean</entry>
 	    <entry>NO</entry>
@@ -562,10 +594,10 @@ Name=Value</programlisting>
 		<entry>1</entry>
 	  </row>
 	  <row>
-	    <entry>StartupWMClass</entry>
+	    <entry id="key-startupwmclass"><varname>StartupWMClass</varname></entry>
 	    <entry>
 			If true, it is KNOWN that the application will map at least one
-			window with the given string as its WM class or WM name hint (see the <ulink url="http://www.freedesktop.org/standards/startup-notification-spec/">startup notification spec</ulink> for more details).
+			window with the given string as its WM class or WM name hint (see the <ulink url="http://www.freedesktop.org/Standards/startup-notification-spec">Startup Notification Protocol Specification</ulink> for more details).
 	    </entry>
 	    <entry>string</entry>
 	    <entry>NO</entry>
@@ -585,13 +617,13 @@ Name=Value</programlisting>
     <itemizedlist>
       <listitem>
        <para>
-         Key names must contain only the characters 'A-Za-z0-9-'
+         Key names must contain only the characters <literal>A-Za-z0-9-</literal>
        </para>
       </listitem>
       <listitem>
        <para>
-         Group names may contain all ASCII characters except for control 
-         characters and '[' and ']'.
+         Group names may contain all ASCII characters except for
+         <literal>[</literal> and <literal>]</literal> and control characters.
        </para>
       </listitem>
       <listitem>
@@ -602,14 +634,14 @@ Name=Value</programlisting>
       </listitem>
       <listitem>
        <para>
-          Values of type boolean must either be the string 'true' or
-          'false'.
+          Values of type boolean must either be the string <literal>true</literal> or
+          <literal>false</literal>.
        </para>
       </listitem>
       <listitem>
        <para>
           Numeric values must be a valid floating point number as recognized
-          by the %f specifier for scanf.
+          by the <literal>%f</literal> specifier for <function>scanf</function>.
        </para>
       </listitem>
     </itemizedlist>
@@ -620,30 +652,30 @@ Name=Value</programlisting>
     </para>
 	<para>
 	  The encoding for values of type localestring is determined by the
-	  Encoding field. 
+	  <varname>Encoding</varname> field. 
 	</para>
   </sect1>
   <sect1 id="exec-variables">
-    <title>List of valid Exec parameter variables</title>
+    <title>List of valid <varname>Exec</varname> parameter variables</title>
     <para>
-      Each "Exec" field may take a number of arguments which will be
+      Each <varname>Exec</varname> field may take a number of arguments which will be
       expanded by the file manager or program launcher and passed to the
       program if necessary.
     </para>
     <para>
-      Literal % characters must be escaped as %%, and adding new
+      Literal <literal>%</literal> characters must be escaped as <literal>%%</literal>, and adding new
       format characters is not allowed. It's a fatal error to have an
-      Exec field with a format character not given in the spec (exception
+      <varname>Exec</varname> field with a format character not given in the spec (exception
       to this are the deprecated format characters which can be ignored,
       that is expanded to no parameters, by the implementation).
       Again for emphasis: <emphasis>nonstandard extensions are 
-      not allowed here - you must add an X-Foo-Exec field if you have
-      nonstandard Exec lines</emphasis>.
+      not allowed here - you must add an <varname>X-Foo-Exec</varname> field if you have
+      nonstandard <varname>Exec</varname> lines</emphasis>.
     </para>
 	<para>
 	  The escaping of the exec parameters is done in the way the mailcap
 	  specification describes. Take a look at
-	  <ulink url="http://www.faqs.org/rfcs/rfc1524.html">RFC 1524</ulink>
+	  <ulink url="http://www.ietf.org/rfc/rfc1524">RFC 1524</ulink>
 	  for more information.
 	</para>
     <para>
@@ -653,85 +685,92 @@ Name=Value</programlisting>
       <tgroup cols="2">
 	<tbody>
 	  <row>
-	    <entry>%f</entry>
+	    <entry><literal>%f</literal></entry>
 	    <entry>
-	      a single file name, even if multiple files are selected.  The system
-	      reading the Desktop Entry should recognize that the program in
+	      A single file name, even if multiple files are selected.  The system
+	      reading the desktop entry should recognize that the program in
 	      question cannot handle multiple file arguments, and it should
 	      should probably spawn and execute multiple copies of a program
 	      for each selected file if the program is not able to handle
 	      additional file arguments. If files are not on the local file system
-	      (i.e. HTTP or FTP locations), the files will be copied to the local
-	      file system and %f will be expanded to point at the temporary
-	      file. Used for programs that do not understand URL syntax.
+	      (i.e. are on HTTP or FTP locations), the files will be copied to the local
+	      file system and <literal>%f</literal> will be expanded to point at the temporary
+	      file. Used for programs that do not understand the URL syntax.
 	    </entry>
 	  </row>
 	  <row>
-	    <entry>%F</entry>
+	    <entry><literal>%F</literal></entry>
 	    <entry>
-	      a list of files. Use for apps that can open several local
+	      A list of files. Use for apps that can open several local
 	      files at once.
 	    </entry>
 	  </row>
 	  <row>
-	    <entry>%u</entry>
+	    <entry><literal>%u</literal></entry>
 	    <entry>
-	      a single URL.
+	      A single URL.
 	    </entry>
 	  </row>
 	  <row>
-	    <entry>%U</entry>
+	    <entry><literal>%U</literal></entry>
 	    <entry>
-	      a list of URLs.
+	      A list of URLs.
 	    </entry>
 	  </row>
 	  <row>
-	    <entry>%d</entry>
+	    <entry><literal>%d</literal></entry>
 	    <entry>
-              directory containing the file that would be passed in a %f field
+              Directory containing the file that would be passed in a <literal>%f</literal> field.
 	    </entry>
 	  </row>
 	  <row>
-	    <entry>%D</entry>
+	    <entry><literal>%D</literal></entry>
 	    <entry>
-              list of directories containing the files that would be
-              passed in to a %F field
+              List of directories containing the files that would be
+              passed in to a <literal>%F</literal> field.
 	    </entry>
 	  </row>
 	  <row>
-	    <entry>%n</entry>
+	    <entry><literal>%n</literal></entry>
 	    <entry>
-	      a single filename (without path)
+	      A single filename (without path).
 	    </entry>
 	  </row>
 	  <row>
-	    <entry>%N</entry>
+	    <entry><literal>%N</literal></entry>
 	    <entry>
-	      a list of filenames (without path)
+	      A list of filenames (without paths).
 	    </entry>
 	  </row>
 	  <row>
 	    <entry>%i</entry>
 	    <entry>
-              the Icon field of the desktop entry expanded as two parameters, first "--icon" and then the contents of the Icon field (should not expand as any prameters if the Icon field is empty or missing)
+              The <varname>Icon</varname> field of the desktop entry
+              expanded as two parameters, first
+              <literal>--icon</literal> and then the contents of the
+              <varname>Icon</varname> field. Should not expand as any
+              parameters if the <varname>Icon</varname> field is empty
+              or missing.
 	    </entry>
 	  </row>
 	  <row>
-	    <entry>%c</entry>
+	    <entry><literal>%c</literal></entry>
 	    <entry>
-	      the translated Name field associated with the desktop entry
+	      The translated <varname>Name</varname> field associated with the desktop entry.
 	    </entry>
 	  </row>
 	  <row>
-	    <entry>%k</entry>
+	    <entry><literal>%k</literal></entry>
 	    <entry>
-	      the location of the desktop file as either a uri (if for example gotten from the vfolder system) or a local filename or empty if no location is known
+	      The location of the desktop file as either a URI (if for
+	      example gotten from the vfolder system) or a local
+	      filename or empty if no location is known.
 	    </entry>
 	  </row>
 	  <row>
-	    <entry>%v</entry>
+	    <entry><literal>%v</literal></entry>
 	    <entry>
-	      the name of the Device entry in the desktop file
+	      The name of the <varname>Device</varname> entry in the desktop file.
 	    </entry>
 	  </row>
 	</tbody>
@@ -742,35 +781,36 @@ Name=Value</programlisting>
     <title>Detailed discussion of supporting MIME types</title>
     <para>
       It is in every desktop's best interest to have thorough support for
-      mime types.  The old /etc/mailcap and /etc/mime.types files are rather
+      MIME types.  The old <filename>/etc/mailcap</filename> and
+      <filename>/etc/mime.types</filename> files are rather
       limited in scope and frankly, are outdated.  Various desktop systems
       have come up with different ways of extending this original system,
-      but none are compatible with each other.  The Desktop Entry Standard
+      but none are compatible with each other.  The Desktop Entry Specification
       hopes to be able to provide the beginnings of a solution to this
       problem.
     </para>
     <para>
-      At a very basic level, the "Exec" key provides the default action to
+      At a very basic level, the <varname>Exec</varname> key provides the default action to
       take when the program described by a desktop entry is used to open a
       document or data file.  Usually this consists of some action along the
-      lines of "kedit %f" or "ee %f".  This is a good
+      lines of <literal>kedit %f</literal> or <literal>ee %f</literal>.  This is a good
       start, but it isn't as flexible as it can be.
     </para>
     <para>
       Let us first establish that a program which supports a MIME type or
-      multiple mime types may be able to support multiple actions on those
+      multiple MIME types may be able to support multiple actions on those
       MIME types as well.  The desktop entry may want to define additional
-      actions in addition to the default.  The toplevel "Exec" key describes
+      actions in addition to the default.  The top level <varname>Exec</varname> key describes
       the default action; Let us define this action to also be known as the
       "Open" action.  Additional actions which might be possible include
-      View, Edit, Play, etc.  A further revision of this document will
+      "View", "Edit", "Play", etc.  A further revision of this document will
       probably specify several "standard" actions in addition to the default
       "Open" action, but in all cases, the number of actions is
       arbitrary.
     </para>
     <para>
-      Let us use a sound player as a simple example.  Call it sp.  The
-      default Exec (Open) action for this program would likely look
+      Let us use a sound player as a simple example.  Call it <literal>sp</literal>.  The
+      default <varname>Exec</varname> (Open) action for this program would likely look
       something like:
     </para>
     <programlisting>
@@ -778,7 +818,7 @@ Exec=sp %u</programlisting>
     <para>
       However, imagine the sound player also supports editing of sound files
       in a graphical manner.  We might wish to define an additional action
-      which could accomodate this.  Adding the action would be performed
+      which could accommodate this.  Adding the action would be performed
       like this:
     </para>
     <programlisting>
@@ -787,41 +827,45 @@ Actions=Edit;
 [Desktop Action Edit]
 Exec=sp -edit %u</programlisting>
     <para>
-      As you can see, defining the action "edit" will enable an additional
-      group of the name [Desktop Action <replaceable>actionname</replaceable>] to be read.  This
-      group can contain an additional Exec line, as well as possibly other
-      information like a new Name, Comment, Icon, and Path.  Thus
+      As you can see, defining the action "Edit" will enable an additional
+      group of the name <literal>[Desktop Action <replaceable>actionname</replaceable>]</literal> to be read.  This
+      group can contain an additional <varname>Exec</varname> line, as well as possibly other
+      information like a new <varname>Name</varname>,
+      <varname>Comment</varname>, <varname>Icon</varname>, and
+      <varname>Path</varname>.  Thus
       right-clicking on a .wav file will show both the default "Open" action
       and this "Edit" action to both be displayed as choices in the
       context-menu.  A left click (double or single, whichever the file
       manager implements) would cause the default action to take place.
-      These are implementation-specific details which are up to the
+      These are implementation specific details which are up to the
       implementer, and are not enforced by this standard.
     </para>
     <para>
-      If no DefaultApp is specified for a particular MIME type, any one of
+      If no <varname>DefaultApp</varname> is specified for a particular MIME type, any one of
       the programs registered which claim to be able to handle the MIME type
       may become the default handler.  This behaviour is undefined and
-      implementation-specific. KDE doesn't use a DefaultApp anymore, but assigns
-      a Preference number to each program, so that the highest number is the
+      implementation specific. KDE doesn't use a <varname>DefaultApp</varname> anymore, but assigns
+      a preference number to each program, so that the highest number is the
       one chosen for handling the MIME type.
     </para>
   </sect1>
   <sect1 id="extending">
     <title>Extending the format</title>
     <para>
-      If the standard is to be amended with a new {key,value} pair which
+      If the standard is to be amended with a new <literal>{key,value}</literal> pair which
       should be applicable to all supporting parties, a group discussion
       will take place.  This is the preferred method for introducing
       changes.  If one particular party wishes to add a field for personal
-      use, they should prefix the key with the string "X-PRODUCT",
-      i.e. "X-NewDesktop-Foo", following the precedent set by other IETF and RFC
+      use, they should prefix the key with the string <varname>X-<replaceable>PRODUCT</replaceable></varname>,
+      e.g. <varname>X-NewDesktop-Foo</varname>, following the precedent set by other IETF and RFC
       standards.
     </para>
     <para>
       Alternatively, fields can be placed in their own group, where they may
       then have arbitrary key names.  If this is the case, the group should
-      follow the scheme outlined above, i.e. [X-PRODUCT GROUPNAME] or
+      follow the scheme outlined above,
+      i.e. <literal>[X-<replaceable>PRODUCT</replaceable>
+      <replaceable>GROUPNAME</replaceable>]</literal> or
       something similar.  These steps will avoid namespace clashes between
       different yet similar environments.
     </para>
@@ -855,17 +899,21 @@ Icon=fooview-edit.png</programlisting>
   <appendix id="kde-items">
   <title>Currently reserved for use within KDE</title>
     <para>
-      During the time KDE added some extensions that are currently not prefixed by the "X-" prefix, but should be in future KDE releases.
+      During the time KDE added some extensions that are currently not
+      prefixed by the <literal>X-</literal> prefix, but should be in
+      future KDE releases.
     </para>
     <itemizedlist>
       <listitem>
         <para>
-         Keys added by KDE: ServiceTypes, DocPath, Keywords, InitialPreference
+         Keys added by KDE: <varname>ServiceTypes</varname>,
+         <varname>DocPath</varname>, <varname>Keywords</varname>,
+         <varname>InitialPreference</varname>
         </para>
       </listitem>
 	  <listitem>
         <para>
-         Types added by KDE: ServiceType, Service
+         Types added by KDE: <constant>ServiceType</constant>, <constant>Service</constant>
         </para>
       </listitem>
 	</itemizedlist>
@@ -873,55 +921,87 @@ Icon=fooview-edit.png</programlisting>
   <appendix id="deprecated-items">
   <title>Deprecated Items</title>
   <para>
-    As this standard is quite old there are some deprecated items that may or may not be used by serveral implementations.
+    As this standard is quite old there are some deprecated items that
+    may or may not be used by several implementations.
   </para>
     <itemizedlist>
       <listitem>
         <para>
-          Type=MimeType is deprecated as there is a new standard for this now: http://www.freedesktop.org/standards/shared-mime-info.html for more information. In consequence the Keys 'Patterns' (various file name extensions associated with the MIME type.) and 'DefaultApp' (the default application associated with this mime type) are also deprecated.
+          <literal>Type=MimeType</literal> is deprecated as there is a
+          new standard for this now, see the <ulink
+          url="http://www.freedesktop.org/Standards/shared-mime-info-spec">Shared
+          MIME-info Database specification</ulink> for more
+          information. In consequence the Keys
+          <varname>Patterns</varname> (various file name extensions
+          associated with the MIME type) and
+          <varname>DefaultApp</varname> (the default application
+          associated with this MIME type) are also deprecated.
         </para>
       </listitem>
       <listitem>
         <para>
-          Using .kdelnk instead of .desktop as file-extension is deprecated.
+          Using <filename>.kdelnk</filename> instead of
+          <filename>.desktop</filename> as the file extension is
+          deprecated.
         </para>
       </listitem>
       <listitem>
         <para>
-          Using "[KDE Desktop Entry]" instead of "[Desktop Entry]" as header is deprecated.
+          Using <literal>[KDE Desktop Entry]</literal> instead of
+          <literal>[Desktop Entry]</literal> as header is deprecated.
         </para>
       </listitem>
       <listitem>
         <para>
-          Encoding=LegacyMixed, which allowed localestrings in the encoding of the specified locale, is deprecated.
+          <literal>Encoding=Legacy-Mixed</literal>, which allowed
+          localestrings in the encoding of the specified locale, is
+          deprecated.
         </para>
       </listitem>
       <listitem>
         <para>
-          Deprecated ExecParameters: %m (the mini-icon associated with the desktop entry, this should be expanded as two parameters, "--miniicon" and the content of the Icon field, it can also be ignored by expanding it to no parameters)
+          Deprecated <varname>Exec</varname> parameters:
+          <literal>%m</literal> (the mini-icon associated with the
+          desktop entry, this should be expanded as two parameters,
+          <literal>--miniicon</literal> and the content of the
+          <varname>MiniIcon</varname> field, it can also be ignored by
+          expanding it to no parameters).
         </para>
       </listitem>
       <listitem>
         <para>
-          Deprecated Keys: MiniIcon (small icon for menus, etc), TerminalOptions (if the program runs in a terminal, any options that should be passed to the terminal emulator before actually executing the program), Protocols, Extensions, BinaryPattern, MapNotify.
+          Deprecated keys: <varname>MiniIcon</varname> (small icon for
+          menus, etc), <varname>TerminalOptions</varname> (if the
+          program runs in a terminal, any options that should be
+          passed to the terminal emulator before actually executing
+          the program), <varname>Protocols</varname>,
+          <varname>Extensions</varname>,
+          <varname>BinaryPattern</varname>,
+          <varname>MapNotify</varname>.
         </para>
       </listitem>
       <listitem>
         <para>
-    Historically some booleans have been represented by the numeric entries 0 or 1. With this version of the standard they are now to be represented as a boolean string. However, if an implementation is reading a pre-1.0 desktop entry, it should interpret 0 and 1 as false and true, respectively. 
+    Historically some booleans have been represented by the numeric
+    entries <constant>0</constant> or <constant>1</constant>. With
+    this version of the standard they are now to be represented as a
+    boolean string. However, if an implementation is reading a pre-1.0
+    desktop entry, it should interpret <constant>0</constant> and
+    <constant>1</constant> as <constant>false</constant> and
+    <constant>true</constant>, respectively. 
         </para>
       </listitem>
       <listitem>
         <para>
-          Historically lists have been comma separated . This is inconsistent with other lists which are separated by a semicolon. When reading a pre-1.0 desktop entry, comma separated lists should continue to be supported. 
+          Historically lists have been comma separated. This is inconsistent with other lists which are separated by a semicolon. When reading a pre-1.0 desktop entry, comma separated lists should continue to be supported. 
         </para>
       </listitem>
     </itemizedlist>
   </appendix>
   <appendix id="legacy-mixed">
-    <title>The Legacy-Mixed encoding (Deprecated)</title>
+    <title>The <constant>Legacy-Mixed</constant> Encoding (Deprecated)</title>
     <para>
-      The Legacy-Mixed encoding corresponds to the traditional encoding
+      The <constant>Legacy-Mixed</constant> encoding corresponds to the traditional encoding
       of desktop files in older versions of the GNOME and KDE desktop
       files. In this encoding, the encoding of each localestring key
       is determined by the locale tag for that key, if any. For keys
@@ -935,14 +1015,14 @@ Icon=fooview-edit.png</programlisting>
       appropriate error indication to the user.
     </para>
     <para>
-      In the absence of an Encoding line, the implementation may choose
+      In the absence of an <varname>Encoding</varname> line, the implementation may choose
       to autodetect the encoding of the file by using such factors
       as:
     </para>
     <itemizedlist>
       <listitem>
 	<para>
-	  The location of the file on the filesystem
+	  The location of the file on the file system
 	</para>
       </listitem>
       <listitem>
@@ -953,14 +1033,15 @@ Icon=fooview-edit.png</programlisting>
     </itemizedlist>
     <para>
       If the implementation does not perform such auto-detection, it should
-      treat a file without an Encoding key in the same way as a file with an
-      unsupported Encoding Key.
+      treat a file without an <varname>Encoding</varname> key in the same way as a file with an
+      unsupported <varname>Encoding</varname> Key.
     </para>
     <para>
-      If the locale tag includes an .ENCODING part, then that determines
+      If the locale tag includes an <literal>.<replaceable>ENCODING</replaceable></literal> part, then that determines
       the encoding for the line. Otherwise, the encoding is determined
-      by the language, or language-country pair from the locale tag, according
-      to the following table.
+      by the language, or
+      <literal><replaceable>lang</replaceable>_<replaceable>COUNTRY</replaceable></literal>
+      pair from the locale tag, according to the following table.
     </para>
     <informaltable>
       <tgroup cols="2">
@@ -1027,7 +1108,7 @@ Icon=fooview-edit.png</programlisting>
 	  <para>
 	    The name given here is listed here is typically the
 	    canonical name for the encoding in the GNU C Library's
-	    iconv facility Encodings marked with (*) are not
+	    <function>iconv</function> facility.  Encodings marked with (*) are not
 	    currently supported by the GNU C Library; for this reason,
 	    implementations may choose to ignore lines in desktop
 	    files that resolve to this encoding. Desktop files with
@@ -1058,16 +1139,16 @@ Icon=fooview-edit.png</programlisting>
       be currently in use. Implementors may choose to support
       encodings not in the above set. For tags without defaults listed
       in the above table, desktop file creators must specify the
-      ENCODING part of the locale tag.
+      <literal>.<replaceable>ENCODING</replaceable></literal> part of the locale tag.
     </para>
     <para>
-      Matching the ENCODING part of the locale tag against a locale
+      Matching the <literal>.<replaceable>ENCODING</replaceable></literal> part of the locale tag against a locale
       name or alias should be done by stripping all punctuation
       characters from both the tag and the name or alias, converting
       both name and alias to lowercase, and comparing the result.
-      This is necessary because, for example, "Big5" is frequently
-      found instead of "BIG5" and "georgianacademy" instead of
-      GEORGIAN-ACADEMY. Desktop files creators should, however, use
+      This is necessary because, for example, <literal>Big5</literal> is frequently
+      found instead of <literal>BIG5</literal> and <literal>georgianacademy</literal> instead of
+      <literal>GEORGIAN-ACADEMY</literal>. Desktop files creators should, however, use
       the name as it appears in the "Encoding" column above.
     </para>
   </appendix>

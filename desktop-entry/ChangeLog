@@ -1,3 +1,10 @@
+2004-04-18  Mark McLoughlin  <mark@skynet.ie>
+
+	Patch from Ville Skyttä <ville.skytta@iki.fi>
+
+	* desktop-entry-spec.xml: editorial changes, fixes for
+	typos and general cleanups.
+
 Mon Jul  7 18:26:14 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* destop-entry-spec.sgml: Merge changes by Havoc
