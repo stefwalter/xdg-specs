@@ -788,6 +788,14 @@ window.  This MAY be used by the Window Manager to kill windows which do not
 respond to the _NET_WM_PING protocol.
 		</para>
 	<para>
+If _NET_WM_PID is set, the ICCCM-specified property WM_CLIENT_MACHINE
+MUST also be set.  While the ICCCM only requests that WM_CLIENT_MACHINE is set
+<quote> to a string that forms the name of the machine running the client as
+seen from the machine running the server</quote> conformance to this
+specification requires that WM_CLIENT_MACHINE be set to the fully-qualified domain 
+name of the client's host.
+	</para>
+	<para>
 See also the implementation notes on <link linkend="KILLINGWINDOWS">killing hung processes</link>.
 	</para>
 	</sect2>
@@ -1093,7 +1101,46 @@ was the frame for this window.
 	<sect2 id="KILLINGWINDOWS">
 		<title>Killing Hung Processes</title>
 		<para>
-If processes fail to respond to the _NET_WM_PING protocol _NET_WM_PID may be used in combination with the ICCCM specified WM_CLIENT_MACHINE(STRING) to attempt to kill a process. 
+If processes fail to respond to the _NET_WM_PING protocol _NET_WM_PID may be
+used in combination with the ICCCM specified WM_CLIENT_MACHINE to 
+attempt to kill a process.
+		</para>
+
+		<para>
+WM_CLIENT_MACHINE must be set to the fully-qualified domain name of the client's
+host. This would normally be retrieved using gethostname(2).  When gethostname()
+is not available on the client's platform implementors may use the value of the
+nodename field of struct utsname as returned by uname(2).  An example of how to
+retrieve a value for WM_CLIENT_MACHINE:
+		</para>
+		<para>
+	<programlisting><![CDATA[
+int net_get_hostname (char *buf, size_t maxlen)
+{
+#ifdef HAVE_GETHOSTNAME
+	if (buf == NULL) return 0;
+
+	gethostname (buf, maxlen);
+	buf [maxlen - 1] = '\0';
+
+	return strlen(buf);
+#else
+	struct utsname name;
+	size_t len;
+
+	if (buf == NULL) return 0;
+
+	uname (&name);
+	len = strlen (name.nodename);
+
+	if (len >= maxlen) len = maxlen - 1;
+	strncpy (buf, name.nodename, len);
+	buf[len] = '\0';
+
+	return len;
+#endif
+}
+]]></programlisting>
 		</para>
 	</sect2>
 	</Sect1>
@@ -1166,6 +1213,17 @@ OR OTHER DEALINGS IN THE SOFTWARE.
 	</sect1>
   <Sect1>
     <title>Change history</title>
+ 	    <sect2>
+ 		<title>Changes since 1.1</title>
+ 		<itemizedlist>
+ 			<listitem><para>
+ Changed WM_CLIENT_NAME(STRING) from suggested to required for _NET_WM_PID.
+ 			</para></listitem>
+ 			<listitem><para>
+ Specification and sample code for the content of WM_CLIENT_NAME(STRING).
+ 			</para></listitem>
+ 	</itemizedlist>
+ 	</sect2>
     <sect2>
 		<title>Changes since 1.0</title>
 		<itemizedlist>
