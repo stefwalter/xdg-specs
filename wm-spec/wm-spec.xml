@@ -1455,7 +1455,7 @@ counter is not defined by this specification.
 		<para>
 A window manager uses this protocol by preceding a ConfigureNotify
 event sent to a client by a client message as follows:
-		<para>
+		</para>
 		<programlisting><![[CDATA[
 type = ClientMessage
 window = the respective client window
