@@ -1356,27 +1356,27 @@ entries</ulink>: <varname>Categories</varname>,
             </row><row>
               <entry>3DGraphics</entry>
               <entry>3D based graphical application</entry>
-			  <entry>Grahpics</entry>
+			  <entry>Graphics</entry>
 
             </row><row>
               <entry>RasterGraphics</entry>
               <entry>Raster based graphical application</entry>
-			  <entry>Grahpics</entry>
+			  <entry>Graphics</entry>
 
             </row><row>
               <entry>ScanTool</entry>
               <entry>Tool to scan a file/text</entry>
-			  <entry>Grahpics</entry>
+			  <entry>Graphics</entry>
 
             </row><row>
               <entry>VectorGraphics</entry>
               <entry>Vector based graphical application</entry>
-			  <entry>Grahpics</entry>
+			  <entry>Graphics</entry>
 
             </row><row>
               <entry>Viewer</entry>
               <entry>Tool to view e.g. a graphic or pdf file</entry>
-			  <entry>(Grahpics)</entry>
+			  <entry>(Graphics)</entry>
 
             </row><row>
               <entry>Settings</entry>
