@@ -1,4 +1,4 @@
-Development/	gideon.desktop	${LEGACY_DIR}/Development/gideon.desktop
+Development/	gideon-legacy.desktop	${LEGACY_DIR}/Development/gideon-legacy.desktop
 Development/	kbabel.desktop	${LEGACY_DIR}/Development/kbabel.desktop
 Development/	quanta.desktop	${LEGACY_DIR}/Development/quanta.desktop
 Editors/	KEdit.desktop	${XDG_DATA_DIR}/applications/KEdit.desktop

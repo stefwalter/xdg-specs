@@ -38,7 +38,7 @@ EOF
 
 installData ${XDG_DATA_DIR}/applications kwrite.desktop KEdit.desktop kate.desktop
 
-installData ${LEGACY_DIR}/Development gideon.desktop kbabel.desktop quanta.desktop
+installData ${LEGACY_DIR}/Development gideon-legacy.desktop kbabel.desktop quanta.desktop
 
 installData ${LEGACY_DIR} Kfind.desktop Home.desktop Help.desktop
 
