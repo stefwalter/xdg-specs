@@ -61,16 +61,15 @@
       should be simply called <filename>.directory</filename>.
     </para>
     <para>
-      The basic format of the desktop entry file requires that there be a
-      "group" header named <literal>[Desktop Entry]</literal>.
-      This "group" entry denotes that all
-      <literal>{key,value}</literal> pairs following it    belong in
-      the Desktop Entry group.  There may be other groups present in
-      the file (see MIME types discussion below), but this is the most
-      important group which explicitly needs to be supported.  This group
-      should also be used as the "magic key" for automatic MIME type
-      detection.  There should be nothing proceeding this group in the
-      desktop entry file but possibly one or more comments (see
+      The basic format of the desktop entry file requires that there be
+      a "group" header named <literal>[Desktop Entry]</literal>.  This
+      "group" entry denotes that all <literal>{key,value}</literal>
+      pairs following it belong in the Desktop Entry group.  There may
+      be other groups present in the file, but this is the most
+      important group which explicitly needs to be supported.  This
+      group should also be used as the "magic key" for automatic MIME
+      type detection.  There should be nothing proceeding this group in
+      the desktop entry file but possibly one or more comments (see
       below).
     </para>
     <para>
@@ -92,18 +91,16 @@
     <para>
       Entries in the file are <literal>{key,value}</literal> pairs in the format:
     </para>
-    <programlisting>
-Name=Value</programlisting>
+    <programlisting>Key=Value</programlisting>
     <para>
       Space before and after the equals sign should be ignored; the <literal>=</literal>
       sign is the actual delimiter.
     </para>
     <para>
-      The escape sequences <literal>\s</literal>,
-      <literal>\n</literal>, <literal>\t</literal>,
-      <literal>\r</literal>, and <literal>\\</literal> are supported,
-      meaning ASCII space, newline, tab, carriage return, and
-      backslash, respectively.
+      The escape sequences <literal>\s</literal>, <literal>\n</literal>,
+      <literal>\t</literal>, <literal>\r</literal>, and
+      <literal>\\</literal> are supported, meaning ASCII space, newline,
+      tab, carriage return, and backslash, respectively.
     </para>
   </sect1>
   <sect1 id="value-types">
@@ -113,16 +110,17 @@ Name=Value</programlisting>
       boolean (encoded as the string true/false), and numeric.
     </para>
     <para>
-      The difference between string and localestring is that the value for
-      a string key must contain only ASCII characters while the value
-      of a localestring key may contain UTF-8 characters.
+      Values of type <literal>string</literal> must contain only ASCII
+      characters excluding control characters.  Values of type
+      <literal>localestring</literal> are user displayable, and are
+      encoded in UTF-8 unless the <constant>Legacy-Mixed</constant>
+      Encoding is specified (see <xref linkend="legacy-mixed"/>.)
     </para>
     <para>
       Some keys can have multiple values; these should be separated by a
       semicolon.  Those keys which have several values should have a
-      semicolon as the trailing character. For lists of strings, 
-      semicolons are simply not allowed in the strings, there is no 
-      escape mechanism.
+      semicolon as the trailing character.  Semicolons in these values
+      need to be escaped using <literal>\;</literal>.
     </para>
   </sect1>
   <sect1 id="recognized-keys">
@@ -372,7 +370,7 @@ Name=Value</programlisting>
 		<entry>1-4</entry>
 	  </row>
 	  <row>
-	    <entry id="key-hidden">Hidden</entry>
+	    <entry id="key-hidden"><varname>Hidden</varname></entry>
 	    <entry>
 		  <varname>Hidden</varname> should have been called <varname>Deleted</varname>.
 		  It means the user deleted (at his level)
@@ -476,7 +474,7 @@ Name=Value</programlisting>
 	    <entry>
            The MIME type(s) supported by this entry.
 	    </entry>
-	    <entry>regexp(s)</entry>
+	    <entry>strings(s)</entry>
 	    <entry>NO</entry>
 	    <entry>NO</entry>
 		<entry>1</entry>
@@ -778,76 +776,80 @@ Name=Value</programlisting>
     </informaltable>
   </sect1>
   <sect1 id="mime-types">
-    <title>Detailed discussion of supporting MIME types</title>
+    <title>Registering MIME Types</title>
     <para>
-      It is in every desktop's best interest to have thorough support for
-      MIME types.  The old <filename>/etc/mailcap</filename> and
-      <filename>/etc/mime.types</filename> files are rather
-      limited in scope and frankly, are outdated.  Various desktop systems
-      have come up with different ways of extending this original system,
-      but none are compatible with each other.  The Desktop Entry Specification
-      hopes to be able to provide the beginnings of a solution to this
-      problem.
+      The <varname>MimeType</varname> key is used to indicate the MIME
+      Types that an application knows how to handle.  Applications that
+      can handle multiple MIME Types would list all of the ones it can
+      handle in a ';' separated list, as normal.  It is expected that
+      for some applications this list could become long.  An application
+      is expected to be able to reasonably open files of these types
+      using the command listed in the <varname>Exec</varname> keyword.
     </para>
     <para>
-      At a very basic level, the <varname>Exec</varname> key provides the default action to
-      take when the program described by a desktop entry is used to open a
-      document or data file.  Usually this consists of some action along the
-      lines of <literal>kedit %f</literal> or <literal>ee %f</literal>.  This is a good
-      start, but it isn't as flexible as it can be.
+      There should be no priority for MIME Types in this field, or any
+      form of priority in the desktop file.  Priority for applications
+      is handled external to the <filename>.desktop</filename> files.
     </para>
-    <para>
-      Let us first establish that a program which supports a MIME type or
-      multiple MIME types may be able to support multiple actions on those
-      MIME types as well.  The desktop entry may want to define additional
-      actions in addition to the default.  The top level <varname>Exec</varname> key describes
-      the default action; Let us define this action to also be known as the
-      "Open" action.  Additional actions which might be possible include
-      "View", "Edit", "Play", etc.  A further revision of this document will
-      probably specify several "standard" actions in addition to the default
-      "Open" action, but in all cases, the number of actions is
-      arbitrary.
-    </para>
-    <para>
-      Let us use a sound player as a simple example.  Call it <literal>sp</literal>.  The
-      default <varname>Exec</varname> (Open) action for this program would likely look
-      something like:
-    </para>
-    <programlisting>
-Exec=sp %u</programlisting>
-    <para>
-      However, imagine the sound player also supports editing of sound files
-      in a graphical manner.  We might wish to define an additional action
-      which could accommodate this.  Adding the action would be performed
-      like this:
-    </para>
-    <programlisting>
-Actions=Edit;
-
-[Desktop Action Edit]
-Exec=sp -edit %u</programlisting>
-    <para>
-      As you can see, defining the action "Edit" will enable an additional
-      group of the name <literal>[Desktop Action <replaceable>actionname</replaceable>]</literal> to be read.  This
-      group can contain an additional <varname>Exec</varname> line, as well as possibly other
-      information like a new <varname>Name</varname>,
-      <varname>Comment</varname>, <varname>Icon</varname>, and
-      <varname>Path</varname>.  Thus
-      right-clicking on a .wav file will show both the default "Open" action
-      and this "Edit" action to both be displayed as choices in the
-      context-menu.  A left click (double or single, whichever the file
-      manager implements) would cause the default action to take place.
-      These are implementation specific details which are up to the
-      implementer, and are not enforced by this standard.
-    </para>
-    <para>
-      If no <varname>DefaultApp</varname> is specified for a particular MIME type, any one of
-      the programs registered which claim to be able to handle the MIME type
-      may become the default handler.  This behaviour is undefined and
-      implementation specific. KDE doesn't use a <varname>DefaultApp</varname> anymore, but assigns
-      a preference number to each program, so that the highest number is the
-      one chosen for handling the MIME type.
-    </para>
+    <sect2 id="mime-caching">
+      <title>Caching MIME Types</title>
+      <para>
+	To make parsing of all the desktop files less costly, a
+	<command>update-desktop-database</command> program is provided
+	that will generate a cache file.  The concept is identical to
+	that of the 'update-mime-database' program in that it lets
+	applications avoid reading in (potentially) hundreds of files.
+	It will need to be run after every desktop file is installed.
+	One cache file is created for every directory in
+	$XDG_DATA_DIRS/applications/, and will create a file called
+	$XDG_DATA_DIRS/applications/mimeinfo.cache.
+      </para>
+      <para>
+	The format of the cache is similar to that of the desktop file,
+	and is just a list mapping mime-types to desktop files.  Here's
+	a quick example of what it would look like:
+      </para>
+      <programlisting>application/x-foo=foo.desktop;bar.desktop;
+application/x-bar=bar.desktop;</programlisting>
+      <para>
+	Each MIME Type is listed only once per cache file, and the
+	desktop-id is expected to exist in that particular directory.
+	That is to say, if the cache file is located at
+	<filename>/usr/share/applications/mimeinfo.cache</filename>,
+	bar.desktop refers to the file
+	<filename>/usr/share/applications/bar.desktop</filename>.
+      </para>
+    </sect2>
+    <sect2 id="mime-priority">
+      <title>Priority of MIME Types and desktop files</title>
+      <para>
+	There is also a preference list to determine preferred
+	application of a given MIME Type.  It defines the 'default'
+	application to handle a given MIME Type.  It has the same format
+	as the cache list.
+      </para>
+      <programlisting>mime/type=desktop-id.desktop;</programlisting>
+      <para>
+	If a mime type is listed multiple times (either in the same
+	file, or in another file further down the search path), the
+	latter mention wins.  If a listed file doesn't exist, or is
+	precluded through the <varname>OnlyShowIn</varname> or
+	<varname>NotShowIn</varname> files, they should be ignored.
+	This means that applications will have to keep a history of the
+	preferred applications that they run into, so that if the top
+	desktop file for a given MIME Type isn't available, the second
+	one can be tested, etc.
+      </para>
+      <para>
+	It is also worth noting who this mechanism is defined for.  It
+	is primarily intended for use by distributors/sysadmins to
+	provide a sane set of defaults for their users.  Additionally,
+	users themselves can use this mechanism to override the user
+	defaults.  We intentionally don't provide a way for application
+	authors themselves to list themselves as the default for a given
+	type, as we felt that that cannot work.
+      </para>
+    </sect2>
   </sect1>
   <sect1 id="extending">
     <title>Extending the format</title>

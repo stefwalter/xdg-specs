@@ -1,3 +1,8 @@
+Tue Jul 13 18:04:11 2004  Jonathan Blandford  <jrb@gnome.org>
+
+	* desktop-entry-spec.xml: Update the MIME description to make it
+	more relevent.
+
 2004-04-19  Mark McLoughlin  <mark@skynet.ie>
 
 	Pointed out by Ville Skyttä <ville.skytta@iki.fi>
