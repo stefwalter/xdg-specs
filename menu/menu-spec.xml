@@ -75,7 +75,7 @@
     <para>
       The basic scheme is very simple. Information about each application (menu
       item) is stored in a desktop entry (see <ulink
-        url="http://www.freedesktop.org/standards/desktop-entry-spec.html">Desktop
+        url="http://www.freedesktop.org/standards/desktop-entry-spec">Desktop
       Entry Standard</ulink>).  Then an XML configuration file defines the
       hierarchical arrangement (layout) of menu items, and which menu items are
       actually displayed.
@@ -175,7 +175,7 @@
     <title>Extensions to the desktop entry format</title>
     <para>
       This specification adds two new fields to <ulink
-url="http://www.freedesktop.org/standards/desktop-entry-spec.html">desktop
+url="http://www.freedesktop.org/standards/desktop-entry-spec">desktop
 entries</ulink>: <varname>Categories</varname>,
       <varname>OnlyShowIn</varname> and <varname>NotShowIn</varname>.
     </para>
@@ -1850,7 +1850,7 @@ entries</ulink>: <varname>Categories</varname>,
         <para>
           A desktop entry is a file with a name ending in the ".desktop"
           extension which conforms to the <ulink
-		  url="http://www.freedesktop.org/standards/desktop-entry-spec/">desktop
+		  url="http://www.freedesktop.org/standards/desktop-entry-spec">desktop
           entry specification</ulink>. It describes a menu item, including 
           a name, an icon, and what to do when the item is selected.
           Desktop entries are also known as ".desktop files."
@@ -1880,7 +1880,7 @@ entries</ulink>: <varname>Categories</varname>,
         <para>
           A directory entry is a file with a name ending in the ".directory"
           extension which conforms to the <ulink
-		  url="http://www.freedesktop.org/standards/desktop-entry-spec/">desktop
+		  url="http://www.freedesktop.org/standards/desktop-entry-spec">desktop
           entry specification</ulink>. It describes gives a localized name and 
           an icon for a submenu.
           Directory entries are also known as ".directory files."
