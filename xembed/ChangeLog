@@ -1,3 +1,8 @@
+Sun Apr 21 15:30:21 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* spec/xembed-spec.xml: Typo fixes from Matthias Clasen,
+	spelling checked.
+
 Sun Apr 21 09:20:30 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* Reorganize, add test cases in tests/

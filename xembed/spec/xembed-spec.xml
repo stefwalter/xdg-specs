@@ -102,7 +102,7 @@
 	  <para>
 	    A toplevel window is <firstterm>active</firstterm> if it
 	    currently is receiving keyboard events. (The window or a
-	    descendent has the X keyboard focus.) A widget within the
+	    descendant has the X keyboard focus.) A widget within the
 	    toplevel is active if the toplevel is active, regardless
 	    of whether that widget has the input focus within the
 	    toplevel.
@@ -188,7 +188,7 @@
       these areas. Communication in XEmbed is done by forwarding
       slightly modified XEvents using
       <function>XSendEvent()</function>,
-      by sending special xembed messages, and by setting X properties. In addition,
+      by sending special XEmbed messages, and by setting X properties. In addition,
       standard ICCCM features like WMNormalHints are used where
       appropriate.
     </para>
@@ -210,8 +210,8 @@
       <para>
 	Unfortunately, there are no such messages like WindowActivate
 	or WindowDeactivate in the X protocol. Instead, a window knows
-	that it is active when it receives keyboard focus (XFocusInEvent
-	with certain modes) or looses it (XFocusOutEvent with certain
+	that it is active when it receives keyboard focus (FocusIn
+	event with certain modes) or looses it (FocusOut event with certain
 	modes). This applies to embedded child windows only, when the
 	mouse pointer points onto one of the child's subwindows in the very
 	moment the window manager puts the X focus on the toplevel
@@ -255,7 +255,7 @@
 	their respective embedder. In order to support multiple levels of
 	embedding, events that stem from a SendEvent request had to be
 	forwarded as well. While this is a possible solution, it adds both
-	race conditions and inefficency
+	race conditions and inefficiency.
       </para>
       <para>
 	The solution proposed by XEmbed is is to beat X11 with its own
@@ -281,7 +281,7 @@
       <para>
 	The trouble with this is, that you should not use <function>XSetInputFocus()</function>
 	without a proper time stamp from the Server, to avoid race
-	conditions. Unfortunately, the XFocusIn even does not carry a
+	conditions. Unfortunately, the FocusIn event does not carry a
 	timestamp. The solution to this is, to ask the window manager for
 	the WM_TAKE_FOCUS window protocol. Thus, whenever the window is
 	activated, it will receive a WM_PROTOCOLS client message with
@@ -396,7 +396,7 @@
 	makes it possible to support embedded windows. Basically, the
 	embedder has to operate as drag-and-drop proxy for the client. Any
 	XDND messages like XdndEnter, Xdnd,Leave, etc. simply have to be
-	passed through. A toollkit's XDND implementation has to take this
+	passed through. A toolkit's XDND implementation has to take this
 	situation in consideration.
       </para>
     </sect2>
@@ -655,7 +655,7 @@
       <title>XEMBED_REQUEST_FOCUS</title>
       <para>
 	Sent from the client to the embedder when the client wants
-	focus. The most common ocassion is when the user clicks into one
+	focus. The most common occasion is when the user clicks into one
 	of the client's child widgets, for example a line editor, in order
 	to type something in.
       </para>
@@ -663,7 +663,7 @@
 	The message is passed along to the topmost embedder that
 	eventually responds with a XEMBED_FOCUS_IN message. The focus in
 	message is passed all the way back until it reaches the original
-	focus requestor. In the end, not only the original client has
+	focus requester. In the end, not only the original client has
 	focus, but also all its ancestor embedders.
       </para>
     </sect2>
@@ -716,7 +716,7 @@
       <title>XEMBED_FOCUS_NEXT</title>
       <para>
 	Sent from the client to the embedder when it reaches the end of
-	its logical tab chain after the user tabbed forwards. If the
+	its logical tab chain after the user tabbed forward. If the
 	embedder has siblings that accept tab focus, it will do a virtual
 	tab forward. As a result, it will loose focus itself and
 	consequently send an XEMBED_FOCUS_OUT message to the client
@@ -727,7 +727,7 @@
       <para>
 	Sent from the client to the embedder when it reaches the
 	beginning of its logical tab chain after the user tabbed
-	backwards. If the embedder has siblings that accept tab focus, it
+	backward. If the embedder has siblings that accept tab focus, it
 	will do a virtual tab backward. As a result, it will loose focus
 	itself and consequently send an XEMBED_FOCUS_OUT message to the
 	client
@@ -793,7 +793,7 @@
       </note>
       <para>
 	The modified bit field is a bitwise OR of values indicating
-	various accelerators; these indicate logical accelerator
+	various modifiers; these indicate logical accelerator
 	keys rather than corresponding directly to the bits in
 	the XKeyEvent state field.
       </para>
@@ -840,7 +840,7 @@
 	</tgroup>
       </table>
       <para>
-	Hint to implementators: It is the responsibility of the
+	Hint to implementors: It is the responsibility of the
 	embedder to keep track of all forwarded accelerators
 	and to remove them when the client window dies.
       </para>
@@ -957,7 +957,7 @@ untrap_errors(void)
       </para>
       <para>
 	Key events are forwarded by changing the event's window field
-	to the window handle of the client and sending the modifed
+	to the window handle of the client and sending the modified
 	message via <function>XSendEvent()</function> to the embedder,
 	with no event mask and propagation turned off.
       </para>
@@ -1071,7 +1071,7 @@ void send_xembed_message(
 	  messages qualify for that.
 	</para>
 	<para>
-	  Hint to implementators: Check that the xembed time stamp
+	  Hint to implementors: Check that the xembed time stamp
 	  is actually later than your current x time. While this cannot
 	  happen with ordinary XEvents, delayed client messages may have
 	  this effect. Be prepared that evil implementations may even
@@ -1220,7 +1220,7 @@ void send_xembed_message(
       <para>
 	Toolkits such as Qt and GTK+ have a concept of disabled
 	widgets. This notion is typically hierarchical, so if 
-	the embedder or a ancestory of the embedder becomes
+	the embedder or a ancestry of the embedder becomes
 	insensitive, widgets inside the client should be displayed as,
 	and act insensitive as well.
       </para>
@@ -1277,7 +1277,7 @@ void send_xembed_message(
     <sect2>
       <title>Propagation of key presses</title>
       <para>
-	It's frequently useful to have keybindings that trigger on
+	It's frequently useful to have key bindings that trigger on
 	a widget if the focus is on a child of that widget. For
 	instance, <keysym>Control</keysym><keysym>PageUp</keysym>
 	and <keysym>Control</keysym><keysym>PageUp</keysym> switch
@@ -1363,7 +1363,7 @@ void send_xembed_message(
 	  <listitem>
 	    <para>
 	      Added text about the independence of FOCUS_IN/OUT and
-	      ACTIVATE/DEACTIVE to the description of
+	      ACTIVATE/DEACTIVATE to the description of
 	      XEMBED_WINDOW_ACTIVATE / XEMBED_WINDOW_DEACTIVATE.
 	    </para>
 	  </listitem>
