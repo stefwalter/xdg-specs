@@ -82,6 +82,7 @@ for TEST in ${TESTS}; do
   fi
 done
 
+
 echo "OK tests:     ${SUCCEEDED}"
 
 if ! test -z "${FAILED}" ; then
@@ -89,4 +90,10 @@ if ! test -z "${FAILED}" ; then
     exit 1
 fi
 
-exit 0
+echo `echo ${SUCCEEDED} | wc -w`' tests passed, '`echo ${FAILED} | wc -w`' tests failed'
+
+if test -z "${FAILED}" ; then
+    exit 0
+else
+    exit 1
+fi
