@@ -53,7 +53,7 @@ to Pagers and Applications ie. all X clients, except for the Window Manager.
 	<sect2>
 		<title>Prerequisites for adoption of this specification</title>
 		<para>
-Window Managers and Clients which aim to fulfil this specification MUST adhere 
+Window Managers and Clients which aim to fulfill this specification MUST adhere 
 to the ICCCM on which this specification builds. If this specification 
 explicitly modifies the ICCCM Window Managers and Clients MUST fulfil these 
 modifications.
@@ -92,7 +92,7 @@ sometimes be useful.</para>
 <sect3>
 <title>Shading</title>
 <para>Some Desktop Environments offer shading (also known as rollup) as an alternative to 
-iconfication. A shaded window typically shows only the titlebar, the client 
+iconification. A shaded window typically shows only the titlebar, the client 
 window is hidden, thus shading is not useful for windows which are not 
 decorated with a titlebar.</para>
 </sect3>
@@ -223,7 +223,7 @@ Some Window Managers keep the toplevel windows not in a single linear stack,
 but subdivide the stack into several layers.  There is a lot of variation 
 among the features of layered stacking order implementations. The number of
 layers may or may not be fixed. The layer of a toplevel window may be explicit
-and directly modifyable or derived from other properties of the window, e.g. 
+and directly modifiable or derived from other properties of the window, e.g. 
 the <emphasis>type</emphasis> of the window. The stacking order may or may not
 be strict, i.e. not allow the user to raise or lower windows beyond their 
 layer.
