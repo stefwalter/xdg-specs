@@ -1438,6 +1438,57 @@ respond to this protocol within a reasonable time.
 		<para>
 See also the implementation notes on <link linkend="KILLINGWINDOWS">killing hung processes</link>.
 		</para>
+		<title>_NET_WM_SYNC_REQUEST</title>
+		<para>
+This protocol uses the XSync extension (see <ulink
+url="http://freedesktop.org/cgi-bin/viewcvs.cgi/xorg/xc/doc/hardcopy/Xext/sync.PS.gz">the
+protocol specification</ulink> and <ulink
+url="http://freedesktop.org/cgi-bin/viewcvs.cgi/xorg/xc/doc/hardcopy/Xext/synclib.PS.gz">
+the library documentation</ulink>) to let client and window manager
+synchronize the repaint of the window manager frame and the client
+window. A client indicates that it is willing to participate in the
+protocol by listing _NET_WM_SYNC_REQUEST in the WM_PROTOCOLS property
+of the client window and storing the XID of an XSync counter in the
+property _NET_WM_SYNC_REQUEST_COUNTER. The initial value of this
+counter is not defined by this specification.
+		</para>
+		<para>
+A window manager uses this protocol by preceding a ConfigureNotify
+event sent to a client by a client message as follows:
+		<para>
+		<programlisting><![[CDATA[
+type = ClientMessage
+window = the respective client window
+message_type = WM_PROTOCOLS
+format = 32
+data.l[0] = _NET_WM_SYNC_REQUEST
+data.l[1] = timestamp
+data.l[2] = low 32 bits of the update request number
+data.l[3] = high 32 bits of the update request number
+other data.l[] elements = 0
+]]></programlisting>
+		</para>
+		<para>
+After receiving one or more such message/ConfigureNotify pairs, and
+having handled all repainting associated with the ConfigureNotify
+events, the client MUST set the _NET_WM_SYNC_REQUEST_COUNTER to the 64
+bit number indicated by the data.l[2] and data.l[3] fields of the last
+client message received.
+		</para>
+		<para>
+By using either the Alarm or the Await mechanisms of the XSync
+extension, the window manager can know when the client has finished
+handling the ConfigureNotify events. The window manager SHOULD not
+resize the window faster than the client can keep up.
+		</para>
+		<para>
+The update request number in the client message is determined by the
+window manager, but is generally intended to be incremented by one for
+each message sent. Since the initial value of the XSync counter is not
+defined by this specification, the window manager MAY set the value of
+the XSync counter at any time, and MUST do so when it first manages a
+new window.
+		</para>
 	</sect2>
 </sect1>
 <sect1>
@@ -1905,12 +1956,17 @@ OR OTHER DEALINGS IN THE SOFTWARE.
                 <para>Lubos Lunak</para>
                 <para>Rob Adams</para>
                 <para>Thomas Fitzsimmons</para>
+		<para>S&oslash;ren Sandmann</para>
 	</sect1>
   <sect1>
     <title>Change history</title>
  	    <sect2>
  		<title>Changes since 1.2</title>
  		<itemizedlist>
+			<listitem><para>
+Added _NET_WM_SYNC_REQUEST to allow synchronized repaint of
+application window and window manager frame during opaque resize.
+			</para></listitem>
  			<listitem><para>
 Added _NET_REQUEST_FRAME_EXTENTS and _NET_FRAME_EXTENTS to allow a
 client to retrieve its window's frame extents.
