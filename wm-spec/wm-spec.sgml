@@ -1167,6 +1167,32 @@ OR OTHER DEALINGS IN THE SOFTWARE.
   <Sect1>
     <title>Change history</title>
     <sect2>
+		<title>Changes since 1.0</title>
+		<itemizedlist>
+			<listitem><para>
+Fix doctype, add author info, update data.
+			</para></listitem>
+			<listitem><para>
+Change specification description wording to be more inclusive, and to reflect the joint nature of the specification.
+			</para></listitem>
+			<listitem><para>
+Fix miscellaneous typographical, grammar and spelling errors.
+			</para></listitem>
+			<listitem><para>
+Clarified _NET_SUPPORTED to include ALL atoms, not just the property names.
+			</para></listitem>
+			<listitem><para>
+Various corrections to use of MUST and SHOULD.
+			</para></listitem>
+			<listitem><para>
+Fix problem in _NET_WM_ICON where 'bytes' should have been 'cardinals'
+			</para></listitem>
+			<listitem><para>
+Replaced ISO-8559-1 characters with entities.
+			</para></listitem>
+	</itemizedlist>
+	</sect2>
+    <sect2>
 		<title>Changes since 1.0pre5</title>
 		<itemizedlist>
 			<listitem><para>
