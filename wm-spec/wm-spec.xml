@@ -319,6 +319,7 @@ _NET_NUMBER_OF_DESKTOPS
   message_type = _NET_NUMBER_OF_DESKTOPS
   format = 32
   data.l[0] = new_number_of_desktops
+  other data.l[] elements = 0
 ]]></programlisting>
 	<para>
 The Window Manager is free to honor or reject this request. If the request is honored _NET_NUMBER_OF_DESKTOPS MUST be set to the new number of desktops, _NET_VIRTUAL_ROOTS MUST be set to store the new number of desktop virtual root window IDs and _NET_DESKTOP_VIEWPORT and _NET_WORKAREA must also be changed accordingly. The _NET_DESKTOP_NAMES property MAY remain unchanged.
@@ -348,6 +349,7 @@ _NET_DESKTOP_GEOMETRY
   format = 32
   data.l[0] = new_width
   data.l[1] = new_height
+  other data.l[] elements = 0
 ]]></programlisting> 
 		<para>
 The Window Manager MAY choose to ignore this message, in which case _NET_DESKTOP_GEOMETRY property will remain unchanged.
@@ -373,6 +375,7 @@ _NET_DESKTOP_VIEWPORT
   format = 32
   data.l[0] = new_vx
   data.l[1] = new_vy
+  other data.l[] elements = 0
 ]]></programlisting> 
 		<para>
 The Window Manager MAY choose to ignore this message, in which case _NET_DESKTOP_VIEWPORT property will remain unchanged.
@@ -392,6 +395,7 @@ _NET_CURRENT_DESKTOP
   message_type = _NET_CURRENT_DESKTOP 
   format = 32
   data.l[0] = new_index
+  other data.l[] elements = 0
 ]]></programlisting>
 	</sect2><sect2><title>_NET_DESKTOP_NAMES</title>
 	<programlisting><![CDATA[
@@ -433,6 +437,7 @@ _NET_ACTIVE_WINDOW
   message_type = _NET_ACTIVE_WINDOW
   format = 32
   data.l[0] = 0 /* may be used later */
+  other data.l[] elements = 0
 ]]></programlisting>
 	</sect2><sect2><title>_NET_WORKAREA</title>
 	<programlisting><![CDATA[
@@ -615,6 +620,7 @@ _NET_SHOWING_DESKTOP
   message_type = _NET_SHOWING_DESKTOP 
   format = 32
   data.l[0] = boolean 0 or 1
+  other data.l[] elements = 0
 ]]></programlisting> 
  The Window Manager may choose to ignore this client message.
        </para>
@@ -637,6 +643,7 @@ _NET_CLOSE_WINDOW
   message_type = _NET_CLOSE_WINDOW
   format = 32
   data.l[0] = 0 /* may be used later */
+  other data.l[] elements = 0
 ]]></programlisting>
 	<para>
 The Window Manager MUST then attempt to close the window specified.
@@ -693,6 +700,7 @@ _NET_WM_MOVERESIZE
   data.l[1] = y_root
   data.l[2] = direction
   data.l[3] = button
+  other data.l[] elements = 0
 ]]></programlisting>
 	<para>
 	This message allows Clients to initiate window movement or 
@@ -818,6 +826,7 @@ _NET_WM_DESKTOP
   message_type = _NET_WM_DESKTOP
   format = 32
   data.l[0] = new_desktop
+  other data.l[] elements = 0
 ]]></programlisting>
 	<para>
 	The Window Manager MUST keep this property updated on all windows.
@@ -1282,6 +1291,7 @@ message_type = WM_PROTOCOLS
 format = 32
 data.l[0] = _NET_WM_PING
 data.l[1] = timestamp
+other data.l[] elements = 0
 ]]></programlisting>
 		<para>
 A participating Client receiving this message MUST send it back to the root
