@@ -4,15 +4,15 @@
 <article id="index">
   <artheader>
     <title>Desktop Menu Specification</title>
-    <releaseinfo>Version 0.4</releaseinfo>
-    <date>31 May 2003</date>
+    <releaseinfo>Version 0.5</releaseinfo>
+    <date>31 July 2003</date>
     <authorgroup>
       <author>
 	<firstname>Waldo</firstname>
 	<surname>Bastian</surname>
 	<affiliation>
 	  <address>
-	    <email>waldo@kde.org</email>
+	    <email>bastian@kde.org</email>
 	  </address>
 	</affiliation>
       </author>
@@ -298,23 +298,39 @@ entries</ulink>: <varname>Categories</varname> and
                 content of this element is a directory name. Desktop entries
                 in this directory are scanned and added to the pool of entries 
                 which can be included in this &lt;Menu&gt; and its submenus.
+                Only files ending in ".desktop" should be used, other files are
+                ignored.
               </para>
               <para>
                 Desktop entries in the pool of available entries are identified
-                by their <firstterm>relative path</firstterm> (see <xref
-				linkend="term-relative-path"/>).
+                by their <firstterm>desktop-file id</firstterm> (see <xref
+				linkend="term-desktop-file-id"/>). 
+                The desktop-file id of a desktop entry is equal to its filename, 
+                with any path components removed.
+                So given a &lt;AppDir&gt;
+                <filename>/foo/bar</filename> and desktop entry
+                <filename>/foo/bar/Hello.desktop</filename> the desktop
+                entry would get a desktop-file id of <filename>Hello.desktop</filename>
+              </para>
+              <para>
+                If the directory contains sub-directories then these sub-directories
+                should be (recursively) scanned as well. The name of the subdirectory 
+                should be added as prefix to the desktop-file id together with a dash character ("-")
+                So given a &lt;AppDir&gt;
+                <filename>/foo/bar</filename> and desktop entry
+                <filename>/foo/bar/booz/Hello.desktop</filename> the desktop
+                entry would get a desktop-file id of <filename>booz-Hello.desktop</filename>
+                A desktop entry <filename>/foo/bar/bo/oz/Hello.desktop</filename> would result
+                in a desktop-file id of <filename>bo-oz-Hello.desktop</filename
               </para>
               <para>
                 &lt;AppDir&gt; elements appearing later in the menu file have
-                priority in case of collisions between relative paths.
+                priority in case of collisions between desktop-file ids.
               </para>
               <para>
                 If the filename given as an &lt;AppDir&gt; is not an absolute
                 path, it should be located relative to the location of the menu
-                file being parsed. An &lt;AppDir&gt; should be recursively
-                scanned, finding all desktop entries below the given directory.
-                Only files ending in ".desktop" should be used, other files are
-                ignored.
+                file being parsed. 
               </para>
               <para>
                 Duplicate &lt;AppDir&gt; elements (that specify the same
@@ -514,11 +530,7 @@ entries</ulink>: <varname>Categories</varname> and
               <para>
                 The &lt;Filename&gt; element is the most basic matching rule.
                 It matches a desktop entry if the desktop entry has the given
-                relative path. Absolute paths <emphasis>must not be used</emphasis>, 
-                and relative paths must be the canonical form used to reference 
-                a desktop entry in the pool of desktop entries (they can't 
-                contain ".." or anything of that nature, and can't contain 
-				extra "/" characters). See <xref linkend="term-relative-path"/>.
+                desktop-file id. See <xref linkend="term-application-id"/>.
               </para>
             </listitem>
           </varlistentry>
@@ -658,13 +670,10 @@ entries</ulink>: <varname>Categories</varname> and
                 <literal>prefix</literal>. Normally, given a &lt;LegacyDir&gt;
                 <filename>/foo/bar</filename> and desktop entry
                 <filename>/foo/bar/baz/Hello.desktop</filename> the desktop
-                entry would be included as
-                <filename>baz/Hello.desktop</filename>.  Given a prefix of
-                <literal>boo-</literal>, it would instead be loaded as
-                <filename>boo-Hello.desktop</filename>. In other words, if a
-                prefix is present it replaces the relative path to the desktop
-                or directory entry. The prefix may contain path separator ('/')
-                characters.
+                entry would get a desktop-file id of <filename>Hello.desktop</filename>.
+                Given a prefix of <literal>boo-</literal>, it would instead be 
+                assigned the desktop-file id <filename>boo-Hello.desktop</filename>. 
+                The prefix should not contain path separator ('/') characters.
               </para>
             </listitem>
           </varlistentry>
@@ -675,12 +684,11 @@ entries</ulink>: <varname>Categories</varname> and
                 This element may only appear below &lt;Menu&gt;. The element has
                 no content. The element should be treated as if it were a list
                 of &lt;LegacyDir&gt; elements containing the traditional desktop
-                file locations supported by KDE. When expanding
-                &lt;KDELegacyDirs&gt; to a list of &lt;LegacyDir&gt;, the
+                file locations supported by KDE with a hard coded prefix of "kde-". 
+                When expanding &lt;KDELegacyDirs&gt; to a list of &lt;LegacyDir&gt;, the
                 locations that are earlier in the search path go later in the
                 &lt;Menu&gt; so that they have priority.
-                [FIXME what are the exact &lt;LegacyDir prefix="???"&gt; that 
-                this expands to?]
+                The search path can be obtained by running <filename>kde-config --path apps</filename>
               </para>
             </listitem>
           </varlistentry>
@@ -852,6 +860,26 @@ entries</ulink>: <varname>Categories</varname> and
       the system menu specifies by placing elements after the &lt;MergeFile&gt;
       that incorporates the system file.
     </para>
+    <para>
+      To prevent that a desktop entry from one party inadvertently cancels out 
+      the desktop entry from another party because both happen to get the same 
+      desktop-file id it is recommended that providers of desktop-files ensure that
+      all desktop-file ids start with a vendor prefix. A vendor prefix
+      consists of [a-zA-Z] and is terminated with a dash ("-"). Open Source
+      projects and commercial parties are encouraged  to use a word or phrase,
+      preferably their name, as prefix for which they hold a trademark. Open Source
+      applications can also ask to make use of the vendor prefix of another open
+      source project (such as GNOME or KDE) they consider themselves affiliated
+      with, at the discretion of these projects.
+    </para>
+    <para>
+      For example, to ensure that GNOME applications start with a vendor prefix of "gnome-",
+      it could either add "gnome-" to all the desktop files it installs in 
+      <filename><replaceable>datadir</replaceable>/applications/</filename> or it could
+      install desktop files in a <filename><replaceable>datadir</replaceable>/applications/gnome</filename>
+      subdirectory. When including legacy menu hierarchies the <literal>prefix</literal> argument
+      of the &lt;LegacyDir&gt; element can be used to specify a prefix.
+    </para>
   </sect1>
 
   <sect1 id="query-algorithm">
@@ -866,11 +894,11 @@ entries</ulink>: <varname>Categories</varname> and
     <para>
       For each &lt;Menu&gt; element, build a pool of desktop entries by
       collecting entries found in each &lt;AppDir&gt; for the menu element.  If
-      two entries have the same relative path, the entry for the earlier (closer
+      two entries have the same desktop-file id, the entry for the earlier (closer
       to the top of the file) &lt;AppDir&gt; must be discarded. Next, add to the
       pool the entries for any &lt;AppDir&gt;s specified by ancestor
       &lt;Menu&gt; elements. If a parent menu has a duplicate entry (same
-      relative path), the entry for the child menu has priority.
+      desktop-file id), the entry for the child menu has priority.
     </para>
     <para>
       Next, walk through all &lt;Include&gt; and &lt;Exclude&gt; statements.
@@ -1465,6 +1493,23 @@ entries</ulink>: <varname>Categories</varname> and
       </glossdef>
     </glossentry>
 
+    <glossentry id="term-desktop-file-id"><glossterm>Desktop-File Id</glossterm>
+      <glossdef>
+        <para>
+          The id to identify a desktop entry with. 
+          For example, if <filename>/usr/share/applications</filename> is
+          specified as an &lt;AppDir&gt;, and <filename>/opt/fop</filename>
+          as a &lt;LegacyDir&gt; with a prefix of <literal>foo-</literal>
+          then 
+          <filename>/usr/share/applications/foo/bar.desktop</filename>, 
+          <filename>/usr/share/applications/foo-bar.desktop</filename>
+          and
+          <filename>/opt/fop/Settings/bar.desktop</filename> all have
+          the same desktop-file id <literal>foo-bar.desktop</literal>
+        </para>
+      </glossdef>
+    </glossentry>
+
     <glossentry id="term-directory-entry"><glossterm>Directory entry</glossterm>
       <glossdef>
         <para>
@@ -1493,12 +1538,12 @@ entries</ulink>: <varname>Categories</varname> and
     <glossentry id="term-relative-path"><glossterm>Relative path</glossterm>
       <glossdef>
         <para>
-          The canonical path to a desktop or directory entry, relative to the
-          &lt;AppDir&gt; or &lt;DirectoryDir&gt; containing the
-          entry. For example, if <filename>/usr/share/applications</filename> is
-          specified as an &lt;AppDir&gt;, the relative path to
-          <filename>/usr/share/applications/foo/bar.desktop</filename> is
-          <filename>foo/bar.desktop</filename>.
+          The canonical path to a directory entry, relative to the
+          &lt;DirectoryDir&gt; containing the
+          entry. For example, if <filename>/usr/share/desktop-directories</filename> is
+          specified as an &lt;DirectoryDir&gt;, the relative path to
+          <filename>/usr/share/desktop-directories/foo/bar.directory</filename> is
+          <filename>foo/bar.directory</filename>.
         </para>
       </glossdef>
     </glossentry>
