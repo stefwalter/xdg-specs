@@ -1,4 +1,4 @@
-<!-- For explanations see http://www.freedesktop.org/standards/menu/draft/menu-spec/ -->
+<!-- For explanations see http://www.freedesktop.org/standards/menu-spec/ -->
 <!ELEMENT Menu (
 	Name, (
 	  Directory
