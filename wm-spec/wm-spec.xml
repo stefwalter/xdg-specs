@@ -155,7 +155,7 @@ can be shown on the screen at a time.  There is some variation among the
 features of virtual desktop implementations.  There may be a fixed number 
 of desktops, or new ones may be created dynamically.  The size of the desktops 
 may be fixed or variable.  If the desktops are larger than the root window, 
-their viewports (see <xref linkend="largedesks">) may be independent or forced
+their viewports (see <xref linkend="largedesks"/>) may be independent or forced
 to be at the same position.</para>
 <para>A window manager which implements virtual desktops generally offers a way for the user
 to move clients between desktops.  Clients may be allowed to occupy more than
@@ -163,9 +163,9 @@ one desktop simultaneously.</para>
 <sect3>
 <title>Implementation note</title>
 <para>There are at least two options for implementing virtual desktops.  
-The first is to use multiple virtual roots (see <xref linkend="largedesksimpl">) and change the current 
+The first is to use multiple virtual roots (see <xref linkend="largedesksimpl"/>) and change the current 
 desktop by manipulating the stacking order of the virtual roots.  This is 
-completely ICCCM compliant, but has the issues outlined in <xref linkend="largedesksimpl"></para>
+completely ICCCM compliant, but has the issues outlined in <xref linkend="largedesksimpl"/></para>
 <para>The second option is to keep all managed windows as children of the root 
 window and unmap the frames of those which are not on the current
 desktop. Unmapped windows should be placed in IconicState, according to 
@@ -181,7 +181,7 @@ communicate to pagers that the window should not be represented as
 <para>A pager offers a different UI for window management tasks.  It shows a 
 miniature view of the desktop(s) representing managed windows by small 
 rectangles and allows the user to initiate various window manager actions by manipulating 
-these representations.  Typically offered actions are activation (see <xref linkend="activation">), 
+these representations.  Typically offered actions are activation (see <xref linkend="activation"/>), 
 moving, restacking, iconification, maximization and closing.  On a large 
 desktop, the pager may offer a way to move the viewport.  On virtual desktops, 
 the pager may offer ways to move windows between desktops and to change the 
@@ -997,19 +997,19 @@ _NET_WM_STATE_FULLSCREEN indicates that the window should fill the entire
 	</para>
         <para>
 _NET_WM_STATE_ABOVE indicates that the window should be on top of most 
-windows (see <xref linkend="STACKINGORDER"> for details). 
+windows (see <xref linkend="STACKINGORDER"/> for details). 
         </para>
 
         <para>
 _NET_WM_STATE_BELOW indicates that the window should be below most 
-windows (see <xref linkend="STACKINGORDER"> for details). 
+windows (see <xref linkend="STACKINGORDER"/> for details). 
        </para>
 
        <para>
 	_NET_WM_STATE_ABOVE and _NET_WM_STATE_BELOW are mainly meant for user
 	preferences and should not be used by applications e.g. for drawing 
 	attention to their dialogs (the Urgency
-	hint should be used in that case, see <xref linkend="URGENCY">).' 
+	hint should be used in that case, see <xref linkend="URGENCY"/>).' 
        </para>
 
 	<para>
@@ -1825,7 +1825,7 @@ WM_TRANSIENT_FOR=root dialect.
  			<listitem><para>
  Explain _NET_DESKTOP_GEOMETRY and _NET_WM_HANDLED_ICONS in more detail and
  improve the explanation of WM_CLIENT_MACHINE in 
- <xref linkend="KILLINGWINDOWS">. 
+ <xref linkend="KILLINGWINDOWS"/>. 
  			</para></listitem>                        
  			<listitem><para>
  Add Lubos Lunak to the list of contributors.
