@@ -187,7 +187,7 @@ parse_settings (unsigned char *data,
   CARD32 serial;
   CARD32 n_entries;
   CARD32 i;
-  XSettingsSetting *setting;
+  XSettingsSetting *setting = NULL;
   
   local_byte_order = xsettings_byte_order ();
 
