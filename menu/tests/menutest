@@ -1,0 +1,83 @@
+#!/bin/bash
+
+function installData()
+{
+  local DIR=$1
+  shift 1
+  mkdir -p ${DIR}
+  for file in $*; do 
+    cp data/${file} ${DIR}
+  done
+}
+
+if [ "x${MENUTEST}" == "x" ]; then
+  echo 'To run the test set $MENUTEST to your menu-spec implementation.'
+  exit 1
+fi
+
+if [ "x${MENUTESTDIR}" == "x" ]; then
+  MENUTESTDIR=/tmp/menutestdir
+  echo Using ${MENUTESTDIR} as test directory, override with '$MENUTESTDIR.'
+else
+  echo Using ${MENUTESTDIR} as test directory.
+fi
+
+export MENUTESTDIR
+
+TESTS=$*
+
+if [ "x${TESTS}" == "x" ]; then
+  TESTS=$(eval echo "test-*[^~]")
+  if [ "x${TESTS}" == "xtest-*[^~]" ]; then
+    echo No tests found in ${PWD}
+    exit 1
+  fi
+fi
+
+
+for TEST in ${TESTS}; do
+  rm -rf ${MENUTESTDIR} 2> /dev/null
+  mkdir ${MENUTESTDIR}
+  RESULT=$(echo ${TEST}|sed -e 's^test-^result-^')
+
+  if [ ! -e ${RESULT} ]; then
+    echo 'Result file ('${RESULT}') for '${TEST}' missing'
+  else
+    (
+    echo Running: ${TEST}
+
+    # Some predefined values
+    XDG_CONFIG_HOME=${MENUTESTDIR}/xdg_config_home
+    XDG_DATA_HOME=${MENUTESTDIR}/xdg_data_home
+    XDG_CONFIG_DIR=${MENUTESTDIR}/xdg_config_dir
+    XDG_DATA_DIR=${MENUTESTDIR}/xdg_data_dir
+    XDG_CONFIG_DIRS=$XDG_CONFIG_DIR
+    XDG_DATA_DIRS=$XDG_DATA_DIR
+
+    export XDG_CONFIG_HOME
+    export XDG_DATA_HOME
+    export XDG_CONFIG_DIR
+    export XDG_DATA_DIR
+    export XDG_CONFIG_DIRS
+    export XDG_DATA_DIRS
+
+     . ${TEST}
+
+    $MENUTEST > ${MENUTESTDIR}/result1 2> ${MENUTESTDIR}/log
+    ./expand ${RESULT} > ${MENUTESTDIR}/result2
+    )
+
+    if diff -q ${MENUTESTDIR}/result1 ${MENUTESTDIR}/result2 > /dev/null; then
+      echo ${TEST}' OK'
+    else
+      sort ${MENUTESTDIR}/result1 > ${MENUTESTDIR}/result1.sorted
+      sort ${MENUTESTDIR}/result2 > ${MENUTESTDIR}/result2.sorted
+      if diff -u ${MENUTESTDIR}/result1.sorted ${MENUTESTDIR}/result2.sorted > ${MENUTESTDIR}/result.diff; then
+        echo ${TEST}' OK (different order)'
+      else
+        echo ${TEST}' Failed'
+        cat ${MENUTESTDIR}/result.diff
+      fi
+    fi
+  fi
+done
