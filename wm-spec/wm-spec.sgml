@@ -10,7 +10,7 @@
 	<sect2>
 		<title>Version</title>
 		<para>
-This spec is version 1.0pre1.
+This spec is version 1.0pre2.
 		</para>
 	</sect2>
 	<sect2>
@@ -42,6 +42,17 @@ explicitly modifies the ICCCM Window Managers and Clients MUST fulfil these
 modifications.
 		</para>
 	</sect2>
+	<sect2>
+		<title>Changes since 1.0pre1</title>
+		<itemizedlist>
+			<listitem><para>
+Removed implementation note concerning Gnome's (potential) file manager behaviour.
+			</para></listitem>
+			<listitem><para>
+The Window Movement section of the implementation notes has been revised.
+			</para></listitem>
+		</itemizedlist>
+	</sect2>		
 	<sect2>
 		<title>Changes since 1.9f</title>
 		<itemizedlist>
@@ -703,9 +714,6 @@ managing lots of small shaped windows. The file manager draws the background
 on this window.  There should be a root property with a window handle for use
 in applications that want to draw the background (xearth).
 		</para>
-		<para>
-Several GNOME file manager developers have accepted this model
-		</para>
 	</sect2>
 	<sect2>
 		<title>Implementing enhanced support for application transient windows</title>
@@ -738,13 +746,104 @@ unlikely to break anything, it seems reasonable to document it as standard.
 	<sect2>
 	<title>Window Movement</title>
 	<para>
-According to the ICCCM, applications should not see unnecessary differences
-between running with or without a window manager. Therefore window movements
-for already mapped windows, such as ones requested by XMoveWindow(Display,
-Window, X, Y) have to move the window Window to the coordinates (X, Y) and not
-cause the window's window manager frame window to end up at (X, Y).  
+Window manager implementors should refer to the ICCCM for definitive
+specifications of how to handle MapRequest and ConfigureRequest events.
+However, since these aspects of the ICCCM are easily misread, this
+document offers the following clarifications:
 	</para>
+	<itemizedlist>
+		<listitem><para>
+Window managers MUST honour the win_gravity field of WM_NORMAL_HINTS
+   for both MapRequest _and_ ConfigureRequest events [1]
+		</para></listitem>
+		<listitem><para>
+Applications are free to change their win_gravity setting at any time
+		</para>
+		<para>
+If application changes its gravity then Window manager should adjust the
+reference point, so that client window will not move as the result.
+For example if client's gravity was NorthWestGravity and reference point
+was
+at the top-left corner of the frame window, then after change of gravity to
+the SouthEast reference point should be adjusted to point to the
+lower-right
+corner of the frame.
+		</para></listitem>
+		<listitem><para>
+When generating synthetic ConfigureNotify events, the position given
+   MUST be the top-left corner of the client window in relation to the
+   origin of the root window (i.e., ignoring win_gravity) [2]
+		</para></listitem>
+		<listitem><para>
+XMoveWindow( w, x, y) behaviour depends on the window gravity:
+		</para>
+		<para>
+StaticGravity:
+		</para>
+		<para>
+     window's left top corner will be placed at (x,y)
+		</para>
+		<para>
+NorthWestGravity:
+		</para>
+		<para>
+     window frame's left top corner will be placed at (x,y)
+		</para>
+		<para>
+NorthEastGravity:
+		</para>
+		<para>
+     window frame's right top corner will be placed at (x,y)
+		</para>
+		<para>
 
+SouthWestGravity:
+		</para>
+		<para>
+     window frame's left bottom corner will be placed at (x,y)
+		</para>
+		<para>
+
+SouthEastGravity:
+		</para>
+		<para>
+     window frame's right bottom corner will be placed at (x,y)
+		</para>
+		<para>
+
+CenterGravity:
+		</para>
+		<para>
+     window frame's center will be placed at (x,y)
+		</para>
+		<para>
+
+(x,y) will become a new "reference point" for the client window.
+		</para></listitem>
+		<listitem><para>
+Implementation Note for Application developers:
+		</para>
+		<para>
+When client window is resized - its reference point does not move.
+So for example if window has SouthEastGravity and it is resized -
+the bottom-right corner of its frame will not move but instead
+top-left corner will be adjusted by the difference in size.
+		</para></listitem>
+		<listitem><para>
+Implementation Note for WM developers :
+		</para>
+		<para>
+when calculating reference point at the time of initial placement -
+initial window's width should be taken into consideration, as if it
+was the frame for this window.
+		</para></listitem>
+	</itemizedlist>
+	<para>
+[1] ICCCM Version 2.0, §4.1.2.3 and §4.1.5
+	</para>
+	<para>
+[2] ICCCM Version 2.0, §4.2.3
+	</para>
 	</sect2>
 	<sect2>
 	<title>Window-in-Window MDI</title>
