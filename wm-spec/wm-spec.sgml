@@ -1,6 +1,6 @@
 <!doctype article PUBLIC "-//OASIS//DTD DocBook V4.1//EN" [
 <!entity version "DRAFT version 1.2">
-<!entity date "September 7, 2002">
+<!entity date "September 14, 2002">
 ]>
 <article id="index">
 <articleinfo>
@@ -328,8 +328,10 @@ If the number of desktops is shrinking and _NET_CURRENT_DESKTOP is out of the ne
 _NET_DESKTOP_GEOMETRY width, height, CARDINAL[2]/32
 ]]></programlisting>
 		<para>
-Array of two cardinals that defines the common size of all desktops. 
-This property SHOULD be set by the Window Manager. 
+	Array of two cardinals that defines the common size of all desktops
+	(this is equal to the screen size if the Window Manager doesn't support
+	large desktops, otherwise it's equal to the virtual size of the
+	desktop). This property SHOULD be set by the Window Manager. 
 		</para>
 		<para>
 A Pager can request a change in  the desktop geometry by sending a _NET_DESKTOP_GEOMETRY client
@@ -641,12 +643,21 @@ _NET_MOVERESIZE_WINDOW
   window = window to be moved or resized
   message_type = _NET_MOVERESIZE_WINDOW
   format = 32
-  data.l[0] = gravity
-  data.l[1] = x
+  data.l[0] = gravity and flags 
+  data.l[1] = x 
   data.l[2] = y
   data.l[3] = width
   data.l[4] = height
 ]]></programlisting>
+        <para>
+        The low byte of data.l[0] contains the gravity to use; it may contain 
+	any value allowed for the WM_SIZE_HINTS.win_gravity property:
+	NorthWest (1), North (2), NorthEast (3), West (4), Center (5), East
+	(6), SouthWest (7), South (8), SouthEast (9) and Static (10). A 
+	gravity of 0 indicates that the Window Manager should use the gravity
+	specified in WM_SIZE_HINTS.win_gravity. The bits 8 to 11 indicate the
+	presence of x, y, width and height. 
+        </para>
 	<para>
 	Pagers wanting to move or resize a window may send a
 	_NET_MOVERESIZE_WINDOW client message request to the root window
@@ -1526,11 +1537,11 @@ attempt to kill a process.
 		</para>
 
 		<para>
-WM_CLIENT_MACHINE must be set to the fully-qualified domain name of the client's
-host. This would normally be retrieved using gethostname(2).  When gethostname()
-is not available on the client's platform implementors may use the value of the
-nodename field of struct utsname as returned by uname(2).  An example of how to
-retrieve a value for WM_CLIENT_MACHINE:
+WM_CLIENT_MACHINE is usually set by calling XSetWMProperties(). The hostname for the current host can be be retrieved using gethostname(), when gethostname()
+is not available on the platform implementors may use the value of the
+nodename field of struct utsname as returned by uname(). Note also that the value of WM_CLIENT_MACHINE is not guaranteed
+to be a fully fully-qualified domain name of the host. An example of how to
+retrieve the hostname:
 		</para>
 		<para>
 	<programlisting><![CDATA[
@@ -1668,7 +1679,7 @@ OR OTHER DEALINGS IN THE SOFTWARE.
 		<para>Greg Badros</para>
 		<para>Matthias Clasen</para>
 		<para>David Rosenthal</para>
-		
+                <para>Lubos Lunak</para>
 	</sect1>
   <Sect1>
     <title>Change history</title>
@@ -1720,6 +1731,13 @@ OR OTHER DEALINGS IN THE SOFTWARE.
  			</para></listitem>
  			<listitem><para>
  Improve markup of citations. 
+ 			</para></listitem>                        
+ 			<listitem><para>
+ Explain _NET_DESKTOP_GEOMETRY in more detail and improve the explanation
+ of WM_CLIENT_MACHINE in <xref linkend="KILLINGWINDOWS">.
+ 			</para></listitem>                        
+ 			<listitem><para>
+ Add Lubos Lunak to the list of contributors.
  			</para></listitem>                        
  	</itemizedlist>
  	</sect2>
