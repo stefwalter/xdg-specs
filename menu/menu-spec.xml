@@ -4,8 +4,8 @@
 <article id="index">
   <artheader>
     <title>Desktop Menu Specification</title>
-    <releaseinfo>Version 0.6</releaseinfo>
-    <date>5 September 2003</date>
+    <releaseinfo>Version 0.7</releaseinfo>
+    <date>15 September 2003</date>
     <authorgroup>
       <author>
 	<firstname>Waldo</firstname>
@@ -52,6 +52,15 @@
 	  </address>
 	</affiliation>
       </author>
+      <author>
+	<firstname>Heinrich</firstname>
+	<surname>Wendel</surname>
+	<affiliation>
+	  <address>
+	    <email>h_wendel@cojobo.net</email>
+	  </address>
+	</affiliation>
+      </author>
     </authorgroup>
   </artheader>
 
@@ -76,6 +85,12 @@
       entry hierarchies, and the need to allow third parties to extend the menu
       layout. Both of these issues are addressed by the idea of
       <firstterm>merging</firstterm> two menu layouts.
+    </para>
+    <para>
+      In addition to a strict definition of the contents of each menu this 
+      specification also forsees in a number of layout / presentation hints.
+      This part of the specification is optional, implementations may chose to
+      ignore these hints.
     </para>
   </sect1>
   <sect1 id="paths">
@@ -108,7 +123,7 @@
           <term><varname>$XDG_CONFIG_DIRS</varname>/menus/<replaceable>menu-file-basename</replaceable>-merged/</term>
           <listitem>
             <para>
-              One of the default merge directories included in the
+              The default merge directories included in the
               &lt;DefaultMergeDirs&gt; element.  By convention, third parties
               may add new &lt;Menu&gt; files in this
               location. <replaceable>menu-file-basename</replaceable> means the
@@ -161,8 +176,8 @@
     <para>
       This specification adds two new fields to <ulink
 url="http://www.freedesktop.org/standards/desktop-entry-spec.html">desktop
-entries</ulink>: <varname>Categories</varname> and
-      <varname>OnlyShowIn</varname>.
+entries</ulink>: <varname>Categories</varname>,
+      <varname>OnlyShowIn</varname> and <varname>NotShowIn</varname>.
     </para>
     <para>
       The <varname>Categories</varname> field is a list of strings used to
@@ -185,6 +200,15 @@ entries</ulink>: <varname>Categories</varname> and
       <varname>OnlyShowIn</varname> field is present, a given environment should
       only display the menu item if the string identifying that environment is
       present.  The strings are case-sensitive. <xref
+	  linkend="onlyshowin-registry"/> enumerates the strings to use for
+      some common environments.
+    </para>
+    <para>
+      The <varname>NotShowIn</varname> field is a list of strings identifying
+      the environments that should not display a given menu item.  If an
+      <varname>NotShowIn</varname> field is present, a given environment should
+      only display the menu item if the string identifying that environment is
+      not present.  The strings are case-sensitive. <xref
 	  linkend="onlyshowin-registry"/> enumerates the strings to use for
       some common environments.
     </para>
@@ -755,6 +779,117 @@ entries</ulink>: <varname>Categories</varname> and
               </para>
             </listitem>
           </varlistentry>
+          <varlistentry>
+            <term>&lt;Layout [show_empty="false"]&gt;</term>
+            <listitem>
+              <para>
+                The &lt;Layout&gt; element is an optional part of this specification.
+                Implementations that do not support the &lt;Layout&gt; element should
+                preserve any &lt;Layout&gt; elements and their contents as far as
+                possible.
+                Each &lt;Menu&gt; may optionally contain a &lt;Layout&gt; element. 
+                If multipe elements appear then only the last such element is relevant.
+                The purpose of this element is to offer suggestions for the presentation
+                of the menu. 
+                If a menu does not contain a &lt;Layout&gt; element or if it contains
+                an empty &lt;Layout&gt; element then the default layout should be used.
+                The &lt;Layout&gt; element may contain &lt;Filename&gt;, &lt;Menuname&gt;,
+                &lt;Separator&gt; and &lt;Merge&gt; elements. The &lt;Layout&gt; element
+                defines a suggested layout for the menu starting from top to bottom.
+                References to desktop entries that are not contained in this 
+                menu as defined by the &lt;Include&gt; and &lt;Exclude&gt; elements should 
+                be ignored. References to sub-menus that are not directly contained in this
+                menu as defined by the &lt;Menu&gt; elements should be ignored.
+                The show_empty attribute defines whether a menu that contains no desktop
+                entries and no sub-menus should be shown at all. The show_empty attribute 
+                can be "true" or "false". The default is "false".
+              </para>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>&lt;DefaultLayout&gt;</term>
+            <listitem>
+              <para>
+                The &lt;DefaultLayout&gt; element is an optional part of this specification.
+                Implementations that do not support the &lt;DefaultLayout&gt; element should
+                preserve any &lt;DefaultLayout&gt; elements and their contents as far as
+                possible.
+                Each &lt;Menu&gt; may optionally contain a &lt;DefaultLayout&gt; element
+                which defines the default-layout for the current menu and all its sub-menus.
+                If a menu has a &lt;DefaultLayout&gt; element then this will override
+                any default-layout specified by a parent menu.
+                The default-layout defines the suggested layout if a &lt;Menu&gt; element 
+                does either not have &lt;Layout&gt; element or if it has an empty &lt;Layout&gt; element.
+                If no default-layout has been specified then the layout as specified by the following
+                elements should be assumed:
+                &lt;DefaultLayout&gt;&lt;Merge type="menus"/&gt;&lt;Merge type="files"/&gt;&lt;/DefaultLayout&gt;
+              </para>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>&lt;Menuname [inline="false"] [inline_limit="4"] [inline_header="true"] [inline_alias="false"]&gt;</term>
+            <listitem>
+              <para>
+                This element may only appear as a child of a &lt;Layout&gt; or &lt;DefaultLayout&gt;
+                menu. Its contents references an immediate sub-menu of the current menu as defined 
+                with the &lt;Menu&gt; element, as such it should never contain a slash. 
+                If no such sub-menu exists the element should be ignored.
+                It may have an inline attribute that can be either "true" or "false", the default is "false". 
+                If the inline attribute is "true" the menu that is referenced may be copied into the 
+                current menu at the current point instead of being inserted as sub-menu of the current menu.
+                The optional inline_limit attribute defines the maximum number of entries that can be inlined.
+                If the sub-menu has more entries than inline_limit, the sub-menu will not be inlined.
+                If the inline_limit is 0 (zero) there is no limit. The default inline_limit is 4.
+                The optional inline_title attribute defines whether an inlined menu should be preceeded with
+                a header entry listing the caption of the sub-menu. 
+                The inline_title attribute can be either "true" or "false", the default is "true".
+                The optional inline_alias attribute defines whether a single inlined entry should adopt the
+                caption of the inlined menu. In such case no additional header entry will be added regardless
+                of the value of the inline_title attribute.
+                The inline_alias attribute can be either "true" or "false", the default is "false".
+                Example: if a menu has a sub-menu titled "WordProcessor" with a single entry "OpenOffice 4.2", 
+                and both inline="true" and inline_alias="true" are specified then this would result in the 
+                "OpenOffice 4.2" entry being inlined in the current menu but the "OpenOffice 4.2" caption 
+                of the entry would be replaced with "WordProcessor".
+              </para>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>&lt;Separator&gt;</term>
+            <listitem>
+              <para>
+                This element may only appear as a child of a &lt;Layout&gt; or &lt;DefaultLayout&gt;
+                menu. It indicates a suggestion to draw a visual separator at this point in the menu.
+                &lt;Separator&gt; elements at the start of a menu, at the end of a menu or that directly
+                follow other &lt;Separator&gt; elements may be ignored.
+              </para>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>&lt;Merge type="menus"|"files"|"all"/&gt;</term>
+            <listitem>
+              <para>
+                This element may only appear as a child of a &lt;Layout&gt; or &lt;DefaultLayout&gt;
+                menu. It indicates the point where desktop entries and sub-menus that are not explicitly 
+                mentioned within the &lt;Layout&gt; or &lt;DefaultLayout&gt; element are to be inserted. 
+                It has a type attribute that indicates which elements should be inserted: 
+                type="menus" 
+                means that all sub-menus that are not explicitly mentioned should be inserted in
+                alphabetical order of their visual caption at this point. 
+                type="files" 
+                means that all desktop entries
+                contained in this menu that are not explicitly mentioned should be inserted in
+                alphabetical order of their visual caption at this point. 
+                type="all" means that a mix of all sub-menus
+                and all desktop entries that are not explicitly mentioned should be inserted in
+                alphabetical order of their visual caption at this point.
+                Each &lt;Layout&gt; or &lt;DefaultLayout&gt; element shall have exactly one &lt;Merge type="all"&gt;
+                element or it shall have exactly one &lt;Merge type="files"&gt; and exactly one
+                &lt;Merge type="menus"&gt; element. An excemption is made for a completely empty &lt;Layout&gt; 
+                element which may be used to indicate that the default-layout should be used instead.
+              </para>
+            </listitem>
+          </varlistentry>
         </variablelist>
       </para>
     </sect2>
@@ -1051,6 +1186,14 @@ entries</ulink>: <varname>Categories</varname> and
 
             &lt;-- Merge legacy hierarchy --&gt;
             &lt;LegacyDir&gt;/usr/share/applnk&lt;/LegacyDir&gt;
+
+            &lt;-- Define default layout --&gt;
+            &lt;DefaultLayout&gt;
+              &lt;Merge type="menus"/&gt;
+              &lt;Merge type="files"/&gt;
+              &lt;Separator/&gt;
+              &lt;Menuname&gt;More&lt;/Menuname&gt;
+            &lt;/DefaultLayout&gt;
 
             &lt;-- some random moves, maybe to clean up legacy dirs, 
                    maybe from menu editing --&gt;
