@@ -125,7 +125,7 @@ Name=Value</programlisting>
       escape mechanism.
     </para>
   </sect1>
-  <sect1 id="recognized-keys">B
+  <sect1 id="recognized-keys">
     <title>Recognized desktop entry keys</title>
     <para>
 	  Keys  with type localestring may be postfixed by [<replaceable>LOCALE</replaceable>],

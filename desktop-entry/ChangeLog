@@ -1,3 +1,9 @@
+2004-04-19  Mark McLoughlin  <mark@skynet.ie>
+
+	Pointed out by Ville Skyttä <ville.skytta@iki.fi>
+
+	* desktop-entry-spec.xml: fix minor typo.
+
 2004-04-18  Mark McLoughlin  <mark@skynet.ie>
 
 	Patch from Ville Skyttä <ville.skytta@iki.fi>
