@@ -1,0 +1,45 @@
+dnl Process this file with autoconf to produce a configure script.
+
+AC_INIT(spec/xembed-spec.xml)
+
+dnl $Format: "AM_INIT_AUTOMAKE(xembed, $ReleaseVersion$)" $
+AM_INIT_AUTOMAKE(xembed, 0.5)
+
+dnl Specify a configuration file
+AM_CONFIG_HEADER(config.h)
+
+dnl Initialize libtool
+AM_PROG_LIBTOOL
+
+dnl Initialize maintainer mode
+AM_MAINTAINER_MODE
+
+AC_PROG_CC
+AM_PROG_CC_STDC
+AC_PROG_INSTALL
+
+changequote(,)dnl
+if test "x$GCC" = "xyes"; then
+  case " $CFLAGS " in
+  *[\ \	]-Wall[\ \	]*) ;;
+  *) CFLAGS="$CFLAGS -Wall" ;;
+  esac
+fi
+changequote([,])dnl
+
+dnl Check for GTK+
+dnl
+AM_PATH_GTK_2_0(2.0.0,:, AC_MSG_ERROR([GTK+-2.0.0 or better required]))
+
+dnl Checks for KDE
+dnl
+KDE_USE_QT(3)
+AC_PATH_KDE
+
+dnl Output the Makefiles
+
+AC_OUTPUT([
+Makefile
+spec/Makefile
+tests/Makefile
+])
