@@ -1,3 +1,18 @@
+Thu Feb 26 19:55:29 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* xsettings-client.[ch]: Add
+	xsettings_client_set_grab_func(),
+	xsettings_client_set_ungrab_func() to allow users to
+	control exactly how server grabs are done. (In case
+	the user has a refcounted grab facility, for instance.)
+	(Patch by Soeren Sandmann)
+
+	* xsettings-client.c: Use XInternAtoms() to reduce
+	roundtrips.
+
+	* xsettings-client.c: Fix a memory leak for
+	XGetWindowProperty() on type mismatch.
+
 Mon Dec  2 20:24:02 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* xsettings.xml: Fix ordering of color components.
