@@ -263,8 +263,10 @@ _NET_SUPPORTED, ATOM[]/32
 ]]></programlisting>
 	<para>
 This property MUST be set by the Window Manager to indicate which hints it
-supports.  This assumes that backwards incompatible changes will not be made
-to the hints (without being renamed).  
+supports.  For example: considering _NET_WM_STATE 
+both this atom and all supported states e.g. _NET_WM_STATE_MODAL, 
+_NET_WM_STATE_STICKY, would be listed. This assumes that backwards 
+incompatible changes will not be made to the hints (without being renamed). 
 	</para>
 	</sect2><sect2><title>_NET_CLIENT_LIST</title>
 	<programlisting><![CDATA[
