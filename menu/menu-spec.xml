@@ -842,12 +842,12 @@ entries</ulink>: <varname>Categories</varname>,
                 The optional inline_limit attribute defines the maximum number of entries that can be inlined.
                 If the sub-menu has more entries than inline_limit, the sub-menu will not be inlined.
                 If the inline_limit is 0 (zero) there is no limit.
-                The optional inline_title attribute defines whether an inlined menu should be preceded with
+                The optional inline_header attribute defines whether an inlined menu should be preceded with
                 a header entry listing the caption of the sub-menu. 
-                The inline_title attribute can be either "true" or "false".
+                The inline_header attribute can be either "true" or "false".
                 The optional inline_alias attribute defines whether a single inlined entry should adopt the
                 caption of the inlined menu. In such case no additional header entry will be added regardless
-                of the value of the inline_title attribute.
+                of the value of the inline_header attribute.
                 The inline_alias attribute can be either "true" or "false".
                 Example: if a menu has a sub-menu titled "WordProcessor" with a single entry "OpenOffice 4.2", 
                 and both inline="true" and inline_alias="true" are specified then this would result in the 
