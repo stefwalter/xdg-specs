@@ -31,6 +31,10 @@ fi
 FAILED=
 SUCCEEDED=
 for TEST in ${TESTS}; do
+  if [ "${TEST}" == "CVS" ]; then
+    continue
+  fi
+
   echo
   rm -rf ${MENUTESTDIR} 2> /dev/null
   mkdir ${MENUTESTDIR}

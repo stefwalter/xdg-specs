@@ -1,3 +1,13 @@
+2005-02-18  Mark McLoughlin  <mark@skynet.ie>
+
+	Problem pointed out by Waldo.
+
+	* menutest: don't try and run the "CVS" test :)
+	
+	* tests/m/result,
+	  tests/n/result: items in a hidden or deleted menu
+	should be considered allocated.
+
 2004-12-08  Mark McLoughlin  <mark@skynet.ie>
 
 	* tests/2/result,
