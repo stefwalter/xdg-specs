@@ -10,7 +10,7 @@
 	<sect2>
 		<title>Version</title>
 		<para>
-This spec is version 1.9f.
+This spec is version 1.0pre1.
 		</para>
 	</sect2>
 	<sect2>
@@ -33,6 +33,44 @@ pagers and taskbars.  "Application" refers to other clients.  "Clients" refers
 to Pagers + Applications ie. all X clients, except for the Window Manager.
 		</para>
 	</sect2>
+	<sect2>
+		<title>Prerequisites for adoption of this specification</title>
+		<para>
+Window Managers and Clients which aim to fulfil this specification MUST adhere 
+to the ICCCM on which this specification builds. If this specification 
+explicitly modifies the ICCCM Window Managers and Clients MUST fulfil these 
+modifications.
+		</para>
+	</sect2>
+	<sect2>
+		<title>Changes since 1.9f</title>
+		<itemizedlist>
+			<listitem><para>
+Revised revision number for first accepted release 1.9XX -> 1.0preXX.
+			</para></listitem>
+			<listitem><para>
+Prerequisites for adoption of this specification added.
+			</para></listitem>
+			<listitem><para>
+Tidied formatting of _NET_CURRENT_DESKTOP for consistency.
+			</para></listitem>
+			<listitem><para>
+Tidied formatting of _NET_ACTIVE_WINDOW  for consistency. Removed doubled text.
+			</para></listitem>
+			<listitem><para>
+Tidied formatting of _NET_WM_DESKTOP for consistency.
+			</para></listitem>
+			<listitem><para>
+Killing Hung Processes implementation note added. _NET_WM_PID and _NET_WM_PING now link to this.
+			</para></listitem>
+			<listitem><para>
+Clarified x_root and y_root meaning for _NET_WM_MOVERESIZE.
+			</para></listitem>
+			<listitem><para>
+Added contributor list.
+			</para></listitem>
+		</itemizedlist>
+	</sect2>		
 	<sect2>
 		<title>Changes since 1.9e</title>
 		<itemizedlist>
@@ -241,9 +279,14 @@ _NET_CURRENT_DESKTOP <desktop>, CARDINAL[1]/32
 	<para>
 The index of the current desktop, starts with desktop 0.  This MUST be set and
 updated by the Window Manager  If a Pager wants to switch to another virtual
-desktop, it MUST send a _NET_CURRENT_DESKTOP client message to the root window
-(type _NET_CURRENT_DESKTOP, format 32, l[0]=&lt;new index&gt;)
+desktop, it MUST send a _NET_CURRENT_DESKTOP client message to the root window:
 	</para>
+	<programlisting><![CDATA[
+_NET_CURRENT_DESKTOP
+  message_type = _NET_CURRENT_DESKTOP 
+  format = 32
+  data.l[0] = new_index
+]]></programlisting>
 	</sect2><sect2><title>_NET_DESKTOP_NAMES</title>
 	<programlisting><![CDATA[
 _NET_DESKTOP_NAMES
@@ -257,13 +300,19 @@ changed by a Pager or the Window Mangaer at any time.
 _NET_ACTIVE_WINDOW, WINDOW/32
 ]]></programlisting>
 	<para>
-The window handle of the currently active window.  This is a read-only
-property set by the Window Manager.  This is a read-only property set by the
+The window handle of the currently active window.  This is a read-only property 
+set by the
 window manager.  If a client (for example, a taskbar) wants to activate
 another window, it MUST send a _NET_ACTIVE_WINDOW client message to the root
-window  (type _NET_ACTIVE_WINDOW, format 32, l[0]=0
-/* may be used later */, window is the respective client window) 
+window: 
 	</para>
+	<programlisting><![CDATA[
+_NET_ACTIVE_WINDOW
+  window  = the respective client window
+  message_type = _NET_ACTIVE_WINDOW
+  format = 32
+  data.l[0] = /* may be used later */
+]]></programlisting>
 	</sect2><sect2><title>_NET_WORKAREA</title>
 	<programlisting><![CDATA[
 _NET_WORKAREA, CARDINAL[][4]/32
@@ -324,7 +373,7 @@ _NET_WM_MOVERESIZE
 	This message allows an application to initiate window movement or resizing.  This allows the application to define its own move and size "grips", whilst letting the window manager control the actual move/resize.  This means that all moves / resizes can happen in a consistent manner as defined by the WM.
 	</para>
 	<para>
-	When sending this message, x_root and y_root SHOULD indicate the position of the mouse click [[PDW: with respect to what?]] and direction MUST indicate whether this is a move or resize event, and if it is a resize event, which edges of the window the size grip applies to.
+	When sending this message, x_root and y_root MUST indicate the position of the mouse click with respect to the root window and direction MUST indicate whether this is a move or resize event, and if it is a resize event, which edges of the window the size grip applies to.
 	</para>
 	<programlisting><![CDATA[
 #define _NET_WM_MOVERESIZE_SIZE_TOPLEFT      0
@@ -379,9 +428,15 @@ requests to be mapped.
 	</para>
 	<para>
 A Client can request a change of desktop for a non-withdrawn window by sending
-a _NET_WM_DESKTOP client message to the root window (window is the respective
-window, type _NET_WM_DESKTOP, format 32, l[0]=&lt;desktop&gt;)
+a _NET_WM_DESKTOP client message to the root window:
 	</para>
+	<programlisting><![CDATA[
+_NET_WM_DESKTOP
+  window  = the respective client window
+  message_type = _NET_WM_DESKTOP
+  format = 32
+  data.l[0] = desktop
+]]></programlisting>
 	<para>
 	The Window Manager MUST keep this property updated on all windows.
 	</para>
@@ -571,6 +626,9 @@ If set, this property MUST contain the process ID of the client owning this
 window.  This MAY be used by the Window Manager to kill windows which do not
 respond to the _NET_WM_PING protocol.
 		</para>
+	<para>
+See also the implementation notes on <link linkend="KILLINGWINDOWS">killing hung processes</link>.
+	</para>
 	</sect2>
 	<sect2><title>_NET_WM_HANDLED_ICONS</title>
 	<programlisting><![CDATA[
@@ -617,6 +675,9 @@ to uniquely identify the ping.
 		<para>
 The Window Manager MAY kill the Client (using _NET_WM_PID) if it fails to
 respond to this protocol within a reasonable time.
+		</para>
+		<para>
+See also the implementation notes on <link linkend="KILLINGWINDOWS">killing hung processes</link>.
 		</para>
 	</sect2>
 </sect1>
@@ -691,5 +752,37 @@ cause the window's window manager frame window to end up at (X, Y).
 	The authors of this specification acknowledge that there is no standard method to allow the Window Manager to manage windows that a part of a Window-in-Window MDI application.  Application authors are advised to use some other form of MDI, or to propose a mechanism to be included in the next revision of this specification.
 	</para>
 	</sect2>
+	<sect2 id="KILLINGWINDOWS">
+		<title>Killing Hung Processes</title>
+		<para>
+If processes fail to respond to the _NET_WM_PING protocol _NET_WM_PID may be used in combination with the ICCCM specified WM_CLIENT_MACHINE(STRING) to attempt to kill a process. 
+		</para>
+	</sect2>
 	</sect1>
+	<sect1>
+	<title>Contributors</title>
+	
+		<para>Sasha Vasko</para>
+		<para>Bradley T. Hughes</para>
+		<para>Dominik Vogt</para>
+		<para>Havoc Pennington</para>
+		<para>Jeff Raven</para>
+		<para>Jim Gettys</para>
+		<para>John Harper</para>
+		<para>Julian Adams</para>
+		<para>Matthias Ettrich</para>
+		<para>Micheal Rogers</para>
+		<para>Nathan Clemons</para>
+		<para>Navindra Umanee</para>
+		<para>Tim Janik</para>
+		<para>Tomi Ollila</para>
+		<para>Sam Lantinga</para>
+		<para>The Rasterman</para>
+		<para>Paul Warren</para>
+		<para>Owen Taylor</para>
+		<para>Marko Macek</para>
+		<para>Greg Badros</para>
+	
+	</sect1>
+
 </article>
