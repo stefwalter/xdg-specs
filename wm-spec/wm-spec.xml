@@ -395,8 +395,13 @@ _NET_CURRENT_DESKTOP
   message_type = _NET_CURRENT_DESKTOP 
   format = 32
   data.l[0] = new_index
+  data.l[1] = timestamp
   other data.l[] elements = 0
 ]]></programlisting>
+		<para>
+Note that the timestamp may be 0 for clients using an older version of
+this spec, in which case the timestamp field should be ignored.
+		</para>
 	</sect2><sect2><title>_NET_DESKTOP_NAMES</title>
 	<programlisting><![CDATA[
 _NET_DESKTOP_NAMES, UTF8_STRING[]
