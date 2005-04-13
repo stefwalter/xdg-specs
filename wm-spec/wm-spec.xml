@@ -1083,8 +1083,10 @@ state.
 </para>
 	<para>
 _NET_WM_STATE_FULLSCREEN indicates that the window should fill the entire
-	screen and have no window decorations. For example, a presentation
-	program would use this hint.
+	screen and have no window decorations. Additionally the Window
+	Manager is responsible for restoring the original geometry after a
+	switch from fullscreen back to normal window. For example, a
+	presentation program would use this hint.
 	</para>
         <para>
 _NET_WM_STATE_ABOVE indicates that the window should be on top of most 
@@ -2021,6 +2023,10 @@ _NET_WM_PING message now has the client window identified in data.l[2] field.
                         </para></listitem>
                         <listitem><para>
 Added _NET_WM_USER_TIME to detect user activity in windows.
+                        </para></listitem>
+                        <listitem><para>
+Explicitly specify that the window manager should restore original geometry
+when _NET_WM_STATE_FULLSCREEN is reset.
                         </para></listitem>
 	        </itemizedlist>
             </sect2>
