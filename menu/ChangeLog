@@ -1,3 +1,8 @@
+2005-03-30  Waldo Bastian <bastian@kde.org>
+
+        * menu-spec.xml: Change semantics and remove restrictions on <Move>
+        element to facilitate menu editing.
+
 2005-03-23  Waldo Bastian <bastian@kde.org>
 
         * menu-spec.xml: Clearify DTD conformance and version compatibility

@@ -1,6 +1,6 @@
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
                   "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
-  <!ENTITY version "0.92">
+  <!ENTITY version "1.0.draft-1">
   <!ENTITY dtd-version "1.0">
 				  ]>
 
@@ -789,23 +789,8 @@ entries</ulink>: <varname>Categories</varname>,
                 with the new folders.
               </para>
               <para>
-                &lt;Move&gt; may or may not be useful for implementing menu 
+                &lt;Move&gt; is also useful for implementing menu
 				editing, see <xref linkend="menu-editing"/>.
-              </para>
-              <para>
-                Duplicate &lt;Move&gt; elements are merged as specified in <xref
-				linkend="merge-algorithm"/>.  Note that duplicates (two moves of
-                the same path) can be detected easily because of the following
-                rule: a move must reside at the lowest possible point.
-              </para>
-              <para>
-                In other words, all moves have exactly one permissible location
-                in the &lt;Menu&gt; hierarchy. Implementations can trivially
-                detect violations of this rule: the &lt;Old&gt; and &lt;New&gt;
-                paths may never share a common prefix. Moving "Foo/Bar" to
-                "Foo/Baz" must be done with a &lt;Move&gt; element that's a
-                child of the "Foo" &lt;Menu&gt;, i.e. by moving "Bar" to "Baz", not 
-                by moving "Foo/Bar" to "Foo/Baz".
               </para>
             </listitem>
           </varlistentry>
@@ -1011,12 +996,6 @@ entries</ulink>: <varname>Categories</varname>,
         </listitem>
         <listitem>
           <para>
-            Resolve duplicate &lt;Move&gt; operations (with the same 
-            origin path) by keeping the last one.
-          </para>
-        </listitem>
-        <listitem>
-          <para>
             Recurse into each child &lt;Menu&gt;, performing this list of 
             steps for each child in order.
           </para>
@@ -1024,9 +1003,10 @@ entries</ulink>: <varname>Categories</varname>,
       </orderedlist>
     </para>
     <para>
-      After recursing once to remove duplicates, resolve &lt;Move&gt; elements
-      for each menu starting with the top level and recursing into child menus.
-      So the deepest menus have their &lt;Move&gt; operations performed last.
+      After recursing once to remove duplicates, recurse a second time to
+      resolve &lt;Move&gt; elements for each menu starting with any child
+      menu before handling the more top level menus.
+      So the deepest menus have their &lt;Move&gt; operations performed first.
       Within each &lt;Menu&gt;, execute &lt;Move&gt; operations in the order
       that they appear. If the destination path does not exist, simply relocate
       the origin &lt;Menu&gt; element, and change its &lt;Name&gt; field to
@@ -2002,15 +1982,20 @@ entries</ulink>: <varname>Categories</varname>,
         <literal>&lt;Include&gt;&lt;Filename&gt;foo.desktop&lt;/Filename&gt;&lt;/Include&gt;</literal>.
       </para>
       <para>
-        If the user moves a folder, you might try to use &lt;Move&gt; elements
-        to represent that, but it's tricky. (Move A/B/C to D/E/F, then move D/E
-        to D/G, note that D/E/F still contains A/B/C while only the original D/E
-        was moved to D/G.) In order to move a folder, you have to "fix up"
-        all moves that move things <emphasis>into</emphasis> the folder being
-        moved to instead move things into the folder's new location.
+        If the user moves a folder you can use &lt;Move&gt; elements
+        to represent the move. &lt;Move&gt; elements used for menu-editing
+        should always be added to the most top-level menu to ensure that moves
+        are performed in the order in which they are specified; moves specified
+        in child menus are always performed before moves specified in a more
+        top level menu regardless of their location in the menu file.
       </para>
       <para>
         To delete a folder, simply append the &lt;Deleted&gt; element.
+      </para>
+      <para>
+        When adding a new folder or moving an existing folder, menu editing
+        implementations are advised not to re-use the menu path of a previously
+        deleted folder.
       </para>
       <para>
         Menu editors probably need to do some kind of consolidation/compression 
