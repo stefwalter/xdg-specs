@@ -665,10 +665,12 @@ _NET_CLOSE_WINDOW
   message_type = _NET_CLOSE_WINDOW
   format = 32
   data.l[0] = timestamp
+  data.l[1] = source indication
   other data.l[] elements = 0
 ]]></programlisting>
 	<para>
 The Window Manager MUST then attempt to close the window specified.
+See <xref linkend="sourceindication"/> for details on the source indication.
 	</para>
 	<para>
 	Rationale: A Window Manager might be more clever than the usual method (send WM_DELETE message if the protocol is selected, XKillClient otherwise).  It might introduce a timeout, for example.  Instead of duplicating the code, the Window Manager can easily do the job.
@@ -693,7 +695,10 @@ _NET_MOVERESIZE_WINDOW
 	(6), SouthWest (7), South (8), SouthEast (9) and Static (10). A 
 	gravity of 0 indicates that the Window Manager should use the gravity
 	specified in WM_SIZE_HINTS.win_gravity. The bits 8 to 11 indicate the
-	presence of x, y, width and height. 
+	presence of x, y, width and height. The bits 12 to 15 indicate the 
+	source (see <xref linkend="sourceindication"/>), so 0001 indicates
+	the application and 0010 indicates a Pager or a Taskbar.
+	The remaining bits should be set to zero.
         </para>
 	<para>
 	Pagers wanting to move or resize a window may send a
@@ -722,14 +727,15 @@ _NET_WM_MOVERESIZE
   data.l[1] = y_root
   data.l[2] = direction
   data.l[3] = button
-  other data.l[] elements = 0
+  data.l[4] = source indication
 ]]></programlisting>
 	<para>
 	This message allows Clients to initiate window movement or 
         resizing.  They can define their own move and size
 	"grips", whilst letting the Window Manager control the actual operation.
 	This means that all moves/resizes can happen in a consistent manner as 
-	defined by the Window Manager.
+	defined by the Window Manager. See <xref linkend="sourceindication"/>
+	for details on the source indication.
 	</para>
 	<para>
 	When sending this message in response to a button press event, button 
@@ -786,7 +792,7 @@ _NET_RESTACK_WINDOW
 ]]></programlisting>
 	<para>
         This request is similar to ConfigureRequest with CWSibling and CWStackMode flags. It should be used only by pagers,
-        applications can use normal ConfigureRequests. The source indication field should be therefore set to 1,
+        applications can use normal ConfigureRequests. The source indication field should be therefore set to 2,
         see <xref linkend="sourceindication"/> for details.
 	</para>
 	<para>
@@ -906,9 +912,12 @@ _NET_WM_DESKTOP
   message_type = _NET_WM_DESKTOP
   format = 32
   data.l[0] = new_desktop
+  data.l[1] = source indication
   other data.l[] elements = 0
 ]]></programlisting>
 	<para>
+	See <xref linkend="sourceindication"/> for details on the source
+	indication.
 	The Window Manager MUST keep this property updated on all windows.
 	</para>
 	</sect2><sect2><title>_NET_WM_WINDOW_TYPE</title>
@@ -1116,13 +1125,24 @@ the window got the required attention (usually, that it got activated).
 
 	<para>
 To change the state of a mapped window, a Client MUST send a _NET_WM_STATE
-client message to the root window  (window is the respective window, type
-_NET_WM_STATE, format 32, l[0]=&lt;the action, as listed below&gt;,
-l[1]=&lt;First property to alter&gt;, l[2]=&lt;Second property to alter&gt;).
+client message to the root window:
+	</para>
+<programlisting><![CDATA[
+  window  = the respective client window
+  message_type = _NET_WM_STATE
+  format = 32
+  data.l[0] = the action, as listed below
+  data.l[1] = first property to alter
+  data.l[2] = second property to alter
+  data.l[3] = source indication
+  other data.l[] elements = 0
+]]></programlisting>
+	<para>
 This message allows two properties to be changed simultaneously, specifically
 to allow both horizontal and vertical maximization to be altered together.
-l[2] MUST be set to zero if only one property is to be changed. l[0], the
-action, MUST be one of:
+l[2] MUST be set to zero if only one property is to be changed.
+See <xref linkend="sourceindication"/> for details on the source indication.
+l[0], the action, MUST be one of:
 	</para>
 	<programlisting><![CDATA[
 _NET_WM_STATE_REMOVE        0    /* remove/unset property */
@@ -1970,6 +1990,7 @@ OR OTHER DEALINGS IN THE SOFTWARE.
                 <para>Lubos Lunak</para>
                 <para>Rob Adams</para>
                 <para>Thomas Fitzsimmons</para>
+                <para>Olivier Chapuis</para>
 		<para>S&oslash;ren Sandmann</para>
 	</sect1>
   <sect1>
@@ -1977,6 +1998,10 @@ OR OTHER DEALINGS IN THE SOFTWARE.
  	    <sect2>
  		<title>Changes since 1.2</title>
  		<itemizedlist>
+ 			<listitem><para>
+Added source indication to _NET_CLOSE_WINDOW, _NET_WM_MOVERESIZE,
+_NET_MOVERESIZE_WINDOW, _NET_WM_DESKTOP and _NET_WM_STATE message.
+			</para></listitem>
 			<listitem><para>
 Added _NET_WM_SYNC_REQUEST to allow synchronized repaint of
 application window and window manager frame during opaque resize.
