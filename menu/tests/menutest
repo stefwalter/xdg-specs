@@ -10,6 +10,13 @@ function installData()
   done
 }
 
+function installDataAs()
+{
+  local DIR=$1
+  mkdir -p ${DIR}
+  cp data/$2 ${DIR}/$3
+}
+
 if [ "x${MENUTEST}" == "x" ]; then
   echo 'To run the test set $MENUTEST to your menu-spec implementation.'
   exit 1

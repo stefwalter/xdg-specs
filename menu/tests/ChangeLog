@@ -1,3 +1,12 @@
+2005-04-20  Waldo Bastian <bastian@kde.org>
+
+	* tests/s/result,
+	  tests/s/test: Test that .desktop files under $HOME correctly
+	override .desktop files at system level
+
+	* tests/t/result,
+	  tests/t/test: Test order in which <Move> elements are processed
+
 2005-02-18  Mark McLoughlin  <mark@skynet.ie>
 
 	Make it a bit more difficult in order to catch:
