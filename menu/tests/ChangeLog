@@ -1,3 +1,9 @@
+2005-04-25  Mark McLoughlin  <mark@skynet.ie>
+
+	* tests/u: add test for recursive inclusion of .menu files.
+	Also know as the "get really hosed and eat all the RAM
+	you can find" test.
+
 2005-04-20  Waldo Bastian <bastian@kde.org>
 
 	* tests/s/result,
