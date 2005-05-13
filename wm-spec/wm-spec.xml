@@ -1,6 +1,6 @@
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
 "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
-<!ENTITY version "Final version 1.3">
+<!ENTITY version "Draft version 1.4.draft-1">
 <!ENTITY date "May 13, 2005">
 ]>
 <article id="index">
@@ -1995,6 +1995,11 @@ OR OTHER DEALINGS IN THE SOFTWARE.
 	</sect1>
   <sect1>
     <title>Change history</title>
+ 	    <sect2>
+ 		<title>Changes since 1.3</title>
+ 		<itemizedlist>
+	        </itemizedlist>
+            </sect2>
  	    <sect2>
  		<title>Changes since 1.2</title>
  		<itemizedlist>
