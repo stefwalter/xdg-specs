@@ -1235,7 +1235,7 @@ _NET_WM_ACTION_FULLSCREEN indicates that the window may be brought to
 _NET_WM_ACTION_CHANGE_DESKTOP indicates that the window may be moved between desktops.
 	</para>
 	<para>
-_NET_WM_ACTION_CLOSE indicates that the window may be closed (i.e. a WM_DELETE_WINDOW 
+_NET_WM_ACTION_CLOSE indicates that the window may be closed (i.e. a _NET_CLOSE_WINDOW
 message may be sent).
 	</para>
 </sect2>
