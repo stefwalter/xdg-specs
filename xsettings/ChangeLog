@@ -1,3 +1,7 @@
+2005-08-09  Owen Taylor  <otaylor@redhat.com>
+
+	* xsettings-client.c (read_settings): Fix a typo (Travis Spencer)
+
 Thu Feb 26 19:55:29 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* xsettings-client.[ch]: Add
