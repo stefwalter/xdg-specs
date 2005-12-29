@@ -1,4 +1,4 @@
-Games/BoardGame/	gataxx.desktop	/tmp/menutestdir/xdg_data_dir/applications/gataxx.desktop
-Games/BoardGame/	mahjongg.desktop	/tmp/menutestdir/xdg_data_dir/applications/mahjongg.desktop
-Games/	freecell.desktop	/tmp/menutestdir/xdg_data_dir/applications/freecell.desktop
-Games/	glines.desktop	/tmp/menutestdir/xdg_data_dir/applications/glines.desktop
+Games/BoardGame/	gataxx.desktop	${XDG_DATA_DIR}/applications/gataxx.desktop
+Games/BoardGame/	mahjongg.desktop	${XDG_DATA_DIR}/applications/mahjongg.desktop
+Games/	freecell.desktop	${XDG_DATA_DIR}/applications/freecell.desktop
+Games/	glines.desktop	${XDG_DATA_DIR}/applications/glines.desktop

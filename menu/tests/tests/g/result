@@ -1,3 +1,3 @@
-Applications/	KEdit.desktop	/tmp/menutestdir/xdg_config_dir/menus/apps/KEdit.desktop
-Applications/	kate.desktop	/tmp/menutestdir/xdg_config_dir/menus/apps/kate.desktop
-Applications/	kwrite.desktop	/tmp/menutestdir/xdg_config_dir/menus/apps/kwrite.desktop
+Applications/	KEdit.desktop	${XDG_CONFIG_DIR}/menus/apps/KEdit.desktop
+Applications/	kate.desktop	${XDG_CONFIG_DIR}/menus/apps/kate.desktop
+Applications/	kwrite.desktop	${XDG_CONFIG_DIR}/menus/apps/kwrite.desktop

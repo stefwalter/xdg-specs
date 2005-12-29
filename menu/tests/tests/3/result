@@ -1,2 +1,2 @@
-BoardGames/	gataxx.desktop	/tmp/menutestdir/xdg_data_dir/applications/gataxx.desktop
-BoardGames/	mahjongg.desktop	/tmp/menutestdir/xdg_data_dir/applications/mahjongg.desktop
+BoardGames/	gataxx.desktop	${XDG_DATA_DIR}/applications/gataxx.desktop
+BoardGames/	mahjongg.desktop	${XDG_DATA_DIR}/applications/mahjongg.desktop

@@ -1,1 +1,1 @@
-Other/	freecell.desktop	/tmp/menutestdir/xdg_data_dir/applications/freecell.desktop
+Other/	freecell.desktop	${XDG_DATA_DIR}/applications/freecell.desktop

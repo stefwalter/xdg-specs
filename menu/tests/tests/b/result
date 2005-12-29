@@ -1,5 +1,5 @@
-Applications/	KEdit.desktop	/tmp/menutestdir/xdg_data_dir/applications/KEdit.desktop
-Applications/	gataxx.desktop	/tmp/menutestdir/xdg_data_dir/applications/gataxx.desktop
-Applications/	kate.desktop	/tmp/menutestdir/xdg_data_dir/applications/kate.desktop
-Applications/	kwrite.desktop	/tmp/menutestdir/xdg_data_dir/applications/kwrite.desktop
-Applications/	quanta.desktop	/tmp/menutestdir/xdg_data_dir/applications/quanta.desktop
+Applications/	KEdit.desktop	${XDG_DATA_DIR}/applications/KEdit.desktop
+Applications/	gataxx.desktop	${XDG_DATA_DIR}/applications/gataxx.desktop
+Applications/	kate.desktop	${XDG_DATA_DIR}/applications/kate.desktop
+Applications/	kwrite.desktop	${XDG_DATA_DIR}/applications/kwrite.desktop
+Applications/	quanta.desktop	${XDG_DATA_DIR}/applications/quanta.desktop

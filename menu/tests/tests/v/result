@@ -1,2 +1,2 @@
-Applications/	kwrite.desktop	/tmp/menutestdir/xdg_data_dir/applications/kwrite.desktop
-Editors/	kwrite.desktop	/tmp/menutestdir/xdg_data_dir/applications/kwrite.desktop
+Applications/	kwrite.desktop	${XDG_DATA_DIR}/applications/kwrite.desktop
+Editors/	kwrite.desktop	${XDG_DATA_DIR}/applications/kwrite.desktop
