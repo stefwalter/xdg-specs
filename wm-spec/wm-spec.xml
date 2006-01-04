@@ -759,9 +759,11 @@ _NET_WM_MOVERESIZE
 #define _NET_WM_MOVERESIZE_MOVE              8   /* movement only */
 #define _NET_WM_MOVERESIZE_SIZE_KEYBOARD     9   /* size via keyboard */
 #define _NET_WM_MOVERESIZE_MOVE_KEYBOARD    10   /* move via keyboard */
+#define _NET_WM_MOVERESIZE_CANCEL           11   /* cancel operation */
 ]]></programlisting>
 	<para>
-	The Client MUST release all grabs prior to sending such message.
+	The Client MUST release all grabs prior to sending such message (except
+        for the _NET_WM_MOVERESIZE_CANCEL message).
 	</para>
         <para>
         The Window Manager can use the button field to determine the
@@ -769,8 +771,13 @@ _NET_WM_MOVERESIZE
         _NET_WM_MOVERESIZE message. Since there is a race condition between 
 	a client sending the _NET_WM_MOVERESIZE message and the user releasing 
 	the button, Window Managers are advised to offer some other means to 
-	terminate the operation, e.g. by pressing the ESC key.  
-        </para>
+	terminate the operation, e.g. by pressing the ESC key. The special value
+	_NET_WM_MOVERESIZE_CANCEL also allows clients to cancel the operation
+	by sending such message if they detect the release themselves
+	(clients should send it if they get the button release after sending
+	the move resize message, indicating that the WM did not get a grab in time
+	to get the release).
+	</para>
 	</sect2>
 	<sect2><title>_NET_RESTACK_WINDOW</title>
 	<programlisting><![CDATA[
@@ -1995,6 +2002,14 @@ OR OTHER DEALINGS IN THE SOFTWARE.
 	</sect1>
   <sect1>
     <title>Change history</title>
+ 	    <sect2>
+ 		<title>Changes since 1.3</title>
+ 		<itemizedlist>
+ 			<listitem><para>
+Added _NET_WM_MOVERESIZE_CANCEL.
+			</para></listitem>
+	        </itemizedlist>
+            </sect2>
  	    <sect2>
  		<title>Changes since 1.2</title>
  		<itemizedlist>
