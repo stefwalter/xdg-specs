@@ -81,8 +81,9 @@
     <title>Autostart Of Applications During Startup</title>
     <para>
       By placing an application's .desktop file
-      in one of the autostart directories the application will be
-      automatically launched during startup of the user's desktop environment.
+      in one of the Autostart directories the application will be
+      automatically launched during startup of the user's desktop environment after the user
+      has logged in.
     </para>
     <sect2>
       <title>Autostart Directories</title>
