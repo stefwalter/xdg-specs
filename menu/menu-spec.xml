@@ -1,6 +1,6 @@
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
                   "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
-  <!ENTITY version "1.0.draft-1">
+  <!ENTITY version "1.0.draft-3">
   <!ENTITY dtd-version "1.0">
 				  ]>
 
@@ -8,7 +8,7 @@
   <articleinfo>
     <title>Desktop Menu Specification</title>
     <releaseinfo>Version &version;</releaseinfo>
-    <date>15 March 2005</date>
+    <date>21 March 2006</date>
     <authorgroup>
       <author>
 	<firstname>Waldo</firstname>
@@ -1938,6 +1938,27 @@ entries</ulink>: <varname>Categories</varname>,
       </itemizedlist>
     </para>
     <para>
+      If an application is intended to be installed by root on a system wide
+      basis then /usr/share should be used as value for
+      <replaceable>datadir</replaceable> and /etc/xdg should be used as value
+      for <replaceable>sysconfdir</replaceable>.
+      In case the /usr/share hierarchy is not writable it is recommended to
+      use /usr/local/share as value for <replaceable>datadir</replaceable>
+      instead.
+    </para>
+    <para>
+      If an application is intended to be installed by an unprivileged user
+      for exclusive use by that user only then
+      <varname>$XDG_DATA_HOME</varname> should be used as value
+      for <replaceable>datadir</replaceable> and
+      <varname>$XDG_CONFIG_HOME</varname> should be used as value
+      for <replaceable>sysconfdir</replaceable>. 
+      If <varname>$XDG_DATA_HOME</varname> is not set, the default value of
+      $HOME/.local/share should be used for it.
+      If <varname>$XDG_CONFIG_HOME</varname> is not set, the default value of
+      $HOME/.config should be used for it.
+    </para>
+    <para>
       Also, at least for a good long while, installing a directory hierarchy to
       the old GNOME/KDE specific locations such as /usr/share/applnk and
       /usr/share/gnome/apps should work. There are two ways to support 
@@ -2014,8 +2035,8 @@ entries</ulink>: <varname>Categories</varname>,
           A desktop entry is a file with a name ending in the ".desktop"
           extension which conforms to the <ulink
 		  url="http://www.freedesktop.org/Standards/desktop-entry-spec">desktop
-          entry specification</ulink>. It describes a menu item, including 
-          a name, an icon, and what to do when the item is selected.
+          entry specification</ulink> with <literal>Type=Application</literal>.
+          It describes a menu item, including a name, an icon, and what to do when the item is selected.
           Desktop entries are also known as ".desktop files."
         </para>
       </glossdef>
@@ -2044,8 +2065,8 @@ entries</ulink>: <varname>Categories</varname>,
           A directory entry is a file with a name ending in the ".directory"
           extension which conforms to the <ulink
 		  url="http://www.freedesktop.org/Standards/desktop-entry-spec">desktop
-          entry specification</ulink>. It describes gives a localized name and 
-          an icon for a submenu.
+          entry specification</ulink> with <literal>Type=Directory</literal>.
+          It provides a localized name and an icon for a submenu.
           Directory entries are also known as ".directory files."
         </para>
       </glossdef>
