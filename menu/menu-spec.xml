@@ -1,6 +1,6 @@
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
                   "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
-  <!ENTITY version "1.0.draft-3">
+  <!ENTITY version "1.0.draft-4">
   <!ENTITY dtd-version "1.0">
 				  ]>
 
@@ -8,14 +8,14 @@
   <articleinfo>
     <title>Desktop Menu Specification</title>
     <releaseinfo>Version &version;</releaseinfo>
-    <date>21 March 2006</date>
+    <date>28 March 2006</date>
     <authorgroup>
       <author>
 	<firstname>Waldo</firstname>
 	<surname>Bastian</surname>
 	<affiliation>
 	  <address>
-	    <email>bastian@kde.org</email>
+	    <email>waldo.bastian@intel.com</email>
 	  </address>
 	</affiliation>
       </author>
@@ -1906,88 +1906,182 @@ entries</ulink>: <varname>Categories</varname>,
     </para>
   </appendix>
   <appendix id="third-party-howto">
-    <title>How to add your application to the menus</title>
-    <para>
-      The short answer for third party applications is:
-      <itemizedlist>
-        <listitem>
-          <para>
-            Install desktop entries to
-            <replaceable>datadir</replaceable>/applications/ for each menu
-            item. Please namespace the filename, as in "vendor-foo.desktop", or
-            use a subdirectory of
-            <replaceable>datadir</replaceable>/applications/ so you have
-            "vendor/foo.desktop." Please be sure all desktop entries are valid
-            (see the <ulink
-            url="http://www.freedesktop.org/software/desktop-file-utils/">
-            desktop-file-utils</ulink> package for a validation utility).
-          </para>
-        </listitem>
-        <listitem>
-          <para>
-            Install an XML menu file to <replaceable>sysconfdir</replaceable>/desktop/menus/applications-merged/ to add any submenus, if your desktop entries aren't already 
-            included in some common categories.
-          </para>
-        </listitem>
-        <listitem>
-          <para>
-            Install any directory entries needed for your submenus to <replaceable>datadir</replaceable>/desktop-directories/, taking care to namespace and validate
-            the directory entries.
-          </para>
-        </listitem>
-      </itemizedlist>
-    </para>
-    <para>
-      If an application is intended to be installed by root on a system wide
-      basis then /usr/share should be used as value for
-      <replaceable>datadir</replaceable> and /etc/xdg should be used as value
-      for <replaceable>sysconfdir</replaceable>.
-      In case the /usr/share hierarchy is not writable it is recommended to
-      use /usr/local/share as value for <replaceable>datadir</replaceable>
-      instead.
-    </para>
-    <para>
-      If an application is intended to be installed by an unprivileged user
-      for exclusive use by that user only then
-      <varname>$XDG_DATA_HOME</varname> should be used as value
-      for <replaceable>datadir</replaceable> and
-      <varname>$XDG_CONFIG_HOME</varname> should be used as value
-      for <replaceable>sysconfdir</replaceable>. 
-      If <varname>$XDG_DATA_HOME</varname> is not set, the default value of
-      $HOME/.local/share should be used for it.
-      If <varname>$XDG_CONFIG_HOME</varname> is not set, the default value of
-      $HOME/.config should be used for it.
-    </para>
-    <para>
-      Also, at least for a good long while, installing a directory hierarchy to
-      the old GNOME/KDE specific locations such as /usr/share/applnk and
-      /usr/share/gnome/apps should work. There are two ways to support 
-      both the old and new menu systems at the same time:
-      <itemizedlist>
-        <listitem>
-          <para>
-            If you add a <varname>Categories</varname> line to the desktop
-            entries in the legacy hierarchy, implementations of this
-            specification will ignore their location in the legacy hierarchy,
-            and arrange them according to <varname>Categories</varname> instead.
-            This allows you to install a single desktop file that works in all
-            cases, though on the down side it's in a legacy location.
-          </para>
-        </listitem>
-        <listitem>
-          <para>
-            If you add the line <literal>OnlyShowIn=Old;</literal> to a desktop
-            entry, then old legacy implementations that ignore
-            <varname>OnlyShowIn</varname> will still show the desktop entry, but
-            implementations of this specification will not. Thus you can 
-            add an "<literal>OnlyShowIn=Old;</literal>" entry to the legacy 
-            hierarchy, and a new-style desktop entry to 
-            <replaceable>datadir</replaceable>/applications/, and still get 
-            only one entry in the menus.
-          </para>
-        </listitem>
-      </itemizedlist>
-    </para>
+    <title>Integrating your application in the menus</title>
+    <sect1 id="adding-items">
+      <title>Adding menu items</title>
+      <para>
+        The following steps describe how a third party application can add
+        menu items to the menu system:
+        <itemizedlist>
+          <listitem>
+            <para>
+              Install desktop entries to
+              <replaceable>datadir</replaceable>/applications/ for each menu
+              item. Please namespace the filename, as in "vendor-foo.desktop", or
+              use a subdirectory of
+              <replaceable>datadir</replaceable>/applications/ so you have
+              "vendor/foo.desktop." Please be sure all desktop entries are valid
+              (see the <ulink
+              url="http://www.freedesktop.org/software/desktop-file-utils/">
+              desktop-file-utils</ulink> package for a validation utility).
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Install an XML menu file to <replaceable>sysconfdir</replaceable>/desktop/menus/applications-merged/ to add any submenus, if your desktop entries aren't already 
+              included in some common categories.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Install any directory entries needed for your submenus to <replaceable>datadir</replaceable>/desktop-directories/, taking care to namespace and validate
+              the directory entries.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+    </sect1>
+    <sect1 id="locations">
+      <title>Install Locations</title>
+      <para>
+        If an application is intended to be installed by root on a system wide
+        basis then /usr/share is recommended to be used as value for
+        <replaceable>datadir</replaceable> and /etc/xdg is recommended to be
+        used as value for <replaceable>sysconfdir</replaceable>.
+        In case the /usr/share hierarchy is not writable it is recommended to
+        use /usr/local/share as value for <replaceable>datadir</replaceable>
+        instead.
+      </para>
+      <para>
+        If an application is intended to be installed by an unprivileged user
+        for exclusive use by that user only then
+        <varname>$XDG_DATA_HOME</varname> should be used as value
+        for <replaceable>datadir</replaceable> and
+        <varname>$XDG_CONFIG_HOME</varname> should be used as value
+        for <replaceable>sysconfdir</replaceable>. 
+        If <varname>$XDG_DATA_HOME</varname> is not set, the default value of
+        $HOME/.local/share should be used for it.
+        If <varname>$XDG_CONFIG_HOME</varname> is not set, the default value of
+        $HOME/.config should be used for it.
+      </para>
+    </sect1>
+    <sect1 id="menu-add-example">
+      <title>Example</title>
+      <para>
+        The company ShinyThings Inc. has developed an application named
+        <emphasis>WebMirror 1.0</emphasis> and would like to add its own
+        submenu to the system menus consisting of a <emphasis>WebMirror</emphasis>
+        menu item and a <emphasis>WebMirror Admin Tool</emphasis>
+        menu item. The company will use "shinythings" as its vendor id.
+        For the purpose of this example all menu items will be available
+        in two languages, English and Dutch.
+        The language code for Dutch is <emphasis>nl</emphasis>.
+      </para>
+      <para>
+        First the company needs to create two .desktop files that describe
+        the two menu items:
+        <informalexample>
+          <programlisting>
+          <replaceable>datadir</replaceable>/applications/shinythings-webmirror.desktop:
+
+          [Desktop Entry]
+          Encoding=UTF-8
+          Type=Application
+
+          Exec=webmirror
+          Icon=webmirror
+
+          Name=WebMirror
+          Name[nl]=WebSpiegel
+          </programlisting>
+        </informalexample>
+        and
+        <informalexample>
+          <programlisting>
+          <replaceable>datadir</replaceable>/applications/shinythings-webmirror-admin.desktop:
+
+          [Desktop Entry]
+          Encoding=UTF-8
+          Type=Application
+
+          Exec=webmirror-admintool
+          Icon=webmirror-admintool
+
+          Name=WebMirror Admin Tool
+          Name[nl]=WebSpiegel Administratie Tool
+          </programlisting>
+        </informalexample>
+        A .directory file needs to be installed to provide a title and icon
+        for the sub-menu itself:
+        <informalexample>
+          <programlisting>
+          <replaceable>datadir</replaceable>/desktop-directories/shinythings-webmirror.directory:
+
+          [Desktop Entry]
+          Encoding=UTF-8
+
+          Icon=webmirror
+
+          Name=WebMirror
+          Name[nl]=WebSpiegel
+          </programlisting>
+        </informalexample>
+        And finally, a .menu file needs to be provided that links it all
+        togther:
+        <informalexample>
+          <programlisting>
+          <replaceable>sysconfdir</replaceable>/menus/application-merged/shinythings-webmirror.menu:
+
+          &lt;!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 0.8//EN"
+                    "http://www.freedesktop.org/standards/menu-spec/menu-0.8.dtd"&gt;
+          &lt;Menu&gt;
+            &lt;Menu&gt;
+              &lt;Name&gt;WebMirror&lt;/Name&gt;
+              &lt;Directory&gt;shinythings-webmirror.directory&lt;/Directory&gt;
+              &lt;Include&gt;
+                &lt;Filename&gt;shinythings-webmirror.desktop&lt;/Filename&gt;
+                &lt;Filename&gt;shinythings-webmirror-admin.desktop&lt;/Filename&gt;
+              &lt;/Include&gt;
+            &lt;/Menu&gt;
+          </programlisting>
+        </informalexample>
+            
+      </para>
+    </sect1>
+    <sect1 id="compatibility">
+      <title>Backward Compatibility</title>
+      <para>
+        For a limited time, installing a directory hierarchy to
+        the old GNOME/KDE specific locations such as /usr/share/applnk and
+        /usr/share/gnome/apps will continue to work as way to add your
+        application to the menu system as well. There are two ways to support 
+        both the old and new menu systems at the same time:
+        <itemizedlist>
+          <listitem>
+            <para>
+              If you add a <varname>Categories</varname> line to the desktop
+              entries in the legacy hierarchy, implementations of this
+              specification will ignore their location in the legacy hierarchy,
+              and arrange them according to <varname>Categories</varname> instead.
+              This allows you to install a single desktop file that works in all
+              cases, though on the down side it's in a legacy location.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              If you add the line <literal>OnlyShowIn=Old;</literal> to a desktop
+              entry, then old legacy implementations that ignore
+              <varname>OnlyShowIn</varname> will still show the desktop entry, but
+              implementations of this specification will not. Thus you can 
+              add an "<literal>OnlyShowIn=Old;</literal>" entry to the legacy 
+              hierarchy, and a new-style desktop entry to 
+              <replaceable>datadir</replaceable>/applications/, and still get 
+              only one entry in the menus.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+    </sect1>
   </appendix>
   <appendix id="implementation-notes">
     <title>Implementation notes</title>

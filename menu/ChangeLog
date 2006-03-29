@@ -1,3 +1,11 @@
+2006-03-28  Waldo Bastian <waldo.bastin@intel.com>
+
+        * menu-spec.xml: Added example for installing sub-menu.  
+
+2006-03-21  Waldo Bastian <waldo.bastin@intel.com>
+
+        * menu-spec.xml: Recommend to use /usr/share for datadir
+
 2005-03-30  Waldo Bastian <bastian@kde.org>
 
         * menu-spec.xml: Change semantics and remove restrictions on <Move>
