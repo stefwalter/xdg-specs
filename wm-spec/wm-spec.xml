@@ -29,16 +29,16 @@ versions.
 	<sect2>
 		<title>What is this spec?</title>
 		<para>
-This spec defines interactions between window managers, applications,
-and the utilities that form part of a desktop environment.  It builds
-on the Inter-Client Communication Conventions Manual <citation><link
-	    linkend="ICCCM">ICCCM</link></citation>, which defines  
-window manager interactions at a lower level. The ICCCM does not provide ways
-to implement many features that modern desktop users expect. The GNOME and KDE
-desktop projects originally developed their own extensions to the ICCCM to
-support these features; this spec replaces those custom extensions
-with a standardized set of ICCCM additions that any desktop
-environment can adopt.
+This spec defines interactions between window managers, compositing
+managers, applications, and the utilities that form part of a desktop
+environment.  It builds on the Inter-Client Communication Conventions
+Manual <citation><link linkend="ICCCM">ICCCM</link></citation>, which
+defines window manager interactions at a lower level. The ICCCM does
+not provide ways to implement many features that modern desktop users
+expect. The GNOME and KDE desktop projects originally developed their
+own extensions to the ICCCM to support these features; this spec
+replaces those custom extensions with a standardized set of ICCCM
+additions that any desktop environment can adopt.
 		</para>
 	</sect2>
 	<sect2>
@@ -222,6 +222,20 @@ manipulated within their parent window just like ordinary top-level
 windows on the root window.</para>
 </sect2>
 <sect2>
+      <title>Override-redirect windows</title>
+      <para>
+Override-redirect windows are ignored by traditional window managers,
+but not by compositing managers. Compositing managers are responsible
+for painting all windows to the screen, including override-redirect
+windows.
+</para>
+      <para>
+To enable compositing managers to decorate override-redirect window
+properly, for example by making them translucent or by changing the
+shape of the windows, this spec allows clients to set properties on
+override-redirect windows indicating the function of the windows.
+</sect2>
+<sect2>
 <title>Layered stacking order</title>
 <para>
 Some window managers keep the toplevel windows not in a single linear stack,
@@ -240,9 +254,11 @@ layer.
 <itemizedlist>
 <listitem><para>Allow clients to influence their initial state with respect 
 to maximization, shading, stickiness, desktop, stacking order.</para></listitem>
-<listitem><para>Improve the window managers ability to vary window 
+<listitem><para>Improve the window manager's ability to vary window 
 decorations and maintain the stacking order by allowing clients to hint the 
 window manager about the type of their windows.</para></listitem>
+<listitem><para>Improve the compositing manager's ability to apply
+decorations and effects to override-redirect windows</para></listitem>
 <listitem><para>Enable pagers and taskbars to be implemented as separate 
 clients and allow them to work with any compliant window manager.</para></listitem>
 </itemizedlist>
@@ -941,6 +957,11 @@ window type atoms from the list below.  This is to allow for extension of the
 list of types whilst providing default behavior for Window Managers that do
 not recognize the extensions.  
 	</para>
+      <para>
+This hint SHOULD also be set for override-redirect windows to allow
+compositing managers to apply consistent decorations to menus,
+tooltips etc.
+</para>
 	<para>
 Rationale:  This hint is intended to replace the MOTIF hints.  One of the
 objections to the MOTIF hints is that they are a purely visual description of
@@ -958,6 +979,12 @@ _NET_WM_WINDOW_TYPE_MENU, ATOM
 _NET_WM_WINDOW_TYPE_UTILITY, ATOM
 _NET_WM_WINDOW_TYPE_SPLASH, ATOM
 _NET_WM_WINDOW_TYPE_DIALOG, ATOM
+_NET_WM_WINDOW_TYPE_DROPDOWN_MENU, ATOM
+_NET_WM_WINDOW_TYPE_POPUP_MENU, ATOM
+_NET_WM_WINDOW_TYPE_TOOLTIP, ATOM
+_NET_WM_WINDOW_TYPE_NOTIFICATION, ATOM
+_NET_WM_WINDOW_TYPE_COMBO, ATOM
+_NET_WM_WINDOW_TYPE_DND, ATOM
 _NET_WM_WINDOW_TYPE_NORMAL, ATOM
 ]]></programlisting>	
 	<para>
@@ -971,10 +998,14 @@ _NET_WM_WINDOW_TYPE_DOCK indicates a dock or panel feature.  Typically a
 Window Manager would keep such windows on top of all other windows.  
 	</para>
 	<para>
-_NET_WM_WINDOW_TYPE_TOOLBAR and _NET_WM_WINDOW_TYPE_MENU indicate toolbar and
-pinnable menu windows, respectively (i.e. toolbars and menus "torn off" from 
-the main application). Windows of this type may set the WM_TRANSIENT_FOR 
-hint indicating the main application window.
+_NET_WM_WINDOW_TYPE_TOOLBAR and _NET_WM_WINDOW_TYPE_MENU indicate
+toolbar and pinnable menu windows, respectively (i.e. toolbars and
+menus "torn off" from the main application). Windows of this type may
+set the WM_TRANSIENT_FOR hint indicating the main application
+window. Note that the _NET_WM_WINDOW_TYPE_MENU should be set on 
+torn-off managed windows, where _NET_WM_WINDOW_TYPE_DROPDOWN_MENU and
+_NET_WM_WINDOW_TYPE_POPUP_MENU are typically used on override-redirect
+windows.
 	</para>
 	<para>
 _NET_WM_WINDOW_TYPE_UTILITY indicates a small persistent utility window, such as
@@ -990,19 +1021,63 @@ displayed as an application is starting up.
 	</para>
 	<para>
 _NET_WM_WINDOW_TYPE_DIALOG indicates that this is a dialog window.  If
-_NET_WM_WINDOW_TYPE is not set, then windows with WM_TRANSIENT_FOR set MUST
-be taken as this type.  
+_NET_WM_WINDOW_TYPE is not set, then managed windows with
+WM_TRANSIENT_FOR set MUST be taken as this type. Override-redirect
+windows with WM_TRANSIENT_FOR, but without _NET_WM_WINDOW_TYPE must be
+taken as _NET_WM_WINDOW_TYPE_NORMAL.
 	</para>
-	<para>
-_NET_WM_WINDOW_TYPE_NORMAL indicates that this is a normal, top-level window.
-Windows with neither _NET_WM_WINDOW_TYPE nor WM_TRANSIENT_FOR set MUST
-be taken as this type.
-	</para>
-	</sect2>
-	<sect2>
-		<title>_NET_WM_STATE</title>
-		<programlisting><![CDATA[
-_NET_WM_STATE, ATOM[]
+      <para>
+_NET_WM_WINDOW_TYPE_DROPDOWN_MENU indicates that the
+window in question is a dropdown menu, ie., the kind of menu that
+typically appears when the user clicks on a menubar, as opposed to a
+popup menu which typically appears when the user right-clicks on an
+object. This property is typically used on override-redirect windows.
+      </para>
+      <para>
+_NET_WM_WINDOW_TYPE_POPUP_MENU indicates that the
+window in question is a popup menu, ie., the kind of menu that
+typically appears when the user right clicks on an object, as opposed
+to a dropdown menu which typically appears when the user clicks on a
+menubar. This property is typically used on override-redirect windows.
+      </para>
+      <para>
+_NET_WM_WINDOW_TYPE_TOOLTIP indicates that the window
+in question is a tooltip, ie., a short piece of explanatory text that
+typically appear after the mouse cursor hovers over an object for a
+while. This property is typically used on override-redirect windows.
+      </para>
+      <para>
+_NET_WM_WINDOW_TYPE_NOTIFICATION indicates a
+notification. An example of a notification would be a bubble appearing
+with informative text such as "Your laptop is running out of power"
+etc. This property is typically used on override-redirect windows.
+      </para>
+      <para>
+_NET_WM_WINDOW_TYPE_COMBO should be used on the windows that are
+popped up by combo boxes. An example is a window that appears below a
+text field with a list of suggested completions. This property is
+typically used on override-redirect windows.
+      </para>
+      <para>
+_NET_WM_WINDOW_TYPE_DND indicates that the window is being
+dragged. Clients should set this hint when the window in question
+contains a representation of an object being dragged from one place to
+another. An example would be a window containing an icon that is being
+dragged from one file manager window to another. This property is
+typically used on override-redirect windows.
+      </para>
+      <para>
+_NET_WM_WINDOW_TYPE_NORMAL indicates that this is a normal, top-level
+window, either managed or override-redirect.  Managed windows with
+neither _NET_WM_WINDOW_TYPE nor WM_TRANSIENT_FOR set MUST be taken as
+this type. Override-redirect windows without _NET_WM_WINDOW_TYPE, must
+be taken as this type, whether or not they have WM_TRANSIENT_FOR set.
+</para>
+    </sect2>
+    <sect2>
+      <title>_NET_WM_STATE</title>
+      <programlisting><![CDATA[
+      _NET_WM_STATE, ATOM[]
 ]]></programlisting>
 		<para>
 A list of hints describing the window state. Atoms present in the list MUST be
@@ -1532,6 +1607,46 @@ window.
 		</para>
 	</sect2>
 </sect1>
+
+<sect1>
+    <title>Compositing Managers</title>
+    <para>
+A compositing manager is an X client that uses the Composite extension
+to redirect all windows to offscreen pixmaps, and the Damage extension
+to track when painting occur on those offscreen pixmaps. It is the
+responsibility of the compositing manager to paint the pixmaps on the
+screen, possibly adding effects like translucency or deformations.
+</para>
+    <para>
+This section specifies interactions between compositing managers
+and applications.
+</para>
+    <sect2>
+      <title>_NET_WM_CM_S<literal>n</literal> Manager Selection</title>
+      <para>
+For each screen they manage, compositing manager MUST acquire
+ownership of a selection named _NET_WM_CM_S<literal>n</literal>, where
+<literal>n</literal> is the screen number. Compositing managers MUST
+comply with the conventions for "Manager Selections" described in
+section 2.8 of the <citation><link linkend="ICCCM">ICCCM</link></citation>.
+</para>
+    </sect2>
+    <sect2>
+      <title>WM_TRANSIENT_FOR for override-redirect windows</title> 
+      <para>
+The WM_TRANSIENT_FOR property is defined by the <citation><link
+linkend="ICCCM">ICCCM</link></citation>.for managed windows. This
+specification extends the use of the property to override-redirect
+windows. If an override-redirect is a pop-up on behalf of another
+window, then the Client SHOULD set WM_TRANSIENT_FOR on the
+override-redirect to this other window.
+      </para>
+      <para>
+As an example, a Client should set WM_TRANSIENT_FOR on dropdown menus
+to the toplevel application window that contains the menubar.
+      </para>
+    </sect2>
+</sect1>
 <sect1>
 	<title>Implementation notes</title>
 	<sect2>
@@ -2007,6 +2122,18 @@ OR OTHER DEALINGS IN THE SOFTWARE.
  		<itemizedlist>
  			<listitem><para>
 Added _NET_WM_MOVERESIZE_CANCEL.
+			</para></listitem>
+			<listitem><para>
+New window types to be used on override-redirect windows:
+_NET_WM_WINDOW_TYPE_DROPDOWN_MENU, _NET_WM_WINDOW_TYPE_POPUP_MENU,
+_NET_WM_WINDOW_TYPE_TOOLTIP, _NET_WM_WINDOW_TYPE_NOTIFICATION,
+_NET_WM_WINDOW_TYPE_COMBO, and _NET_WM_WINDOW_TYPE_DND
+			</para></listitem>
+			<listitem><para>
+New _NET_WM_CM_Sn manager selection for compositing managers.
+			</para></listitem>
+			<listitem><para>
+Added note WM_TRANSIENT_FOR for override-redirect windows
 			</para></listitem>
 	        </itemizedlist>
             </sect2>
