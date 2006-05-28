@@ -4,8 +4,8 @@
 <article id="index">
   <articleinfo>
     <title>Desktop Entry Specification</title>
-    <releaseinfo>Version 0.9.4</releaseinfo>
-	<date>7 July 2003</date>
+    <releaseinfo>Version 0.9.5</releaseinfo>
+	<date>28 May 2006</date>
     <authorgroup>
       <author>
 	<firstname>Preston</firstname>
@@ -31,6 +31,15 @@
 	<affiliation>
 	  <address>
 	    <email>otaylor@gtk.org</email>
+	  </address>
+	</affiliation>
+      </author>
+      <author>
+	<firstname>Vincent</firstname>
+	<surname>Untz</surname>
+	<affiliation>
+	  <address>
+	    <email>vuntz@gnome.org</email>
 	  </address>
 	</affiliation>
       </author>
@@ -61,25 +70,8 @@
       should be simply called <filename>.directory</filename>.
     </para>
     <para>
-      The basic format of the desktop entry file requires that there be
-      a "group" header named <literal>[Desktop Entry]</literal>.  This
-      "group" entry denotes that all <literal>{key,value}</literal>
-      pairs following it belong in the Desktop Entry group.  There may
-      be other groups present in the file, but this is the most
-      important group which explicitly needs to be supported.  This
-      group should also be used as the "magic key" for automatic MIME
-      type detection.  There should be nothing proceeding this group in
-      the desktop entry file but possibly one or more comments (see
-      below).
-    </para>
-    <para>
-      Group headers may not contain the characters <literal>[</literal> and
-      <literal>]</literal> as those delimit the header.
-    </para>
-    <para>
-      Lines beginning with a <literal>#</literal> and blank lines are
-      considered comments and will be ignored, however they should be
-      preserved across reads and writes of the desktop entry file.
+      Desktop entry files are encoded as lines of 8-bit characters separated
+      by LF characters. Case is significant everywhere in the file.
     </para>
     <para>
       Compliant implementations MUST not remove any fields from the file,
@@ -88,45 +80,120 @@
       This ensures that any desktop-specific extensions will be preserved
       even if another system accesses and changes the file.
     </para>
+    <sect2 id="comments">
+      <title>Comments</title>
     <para>
-      Entries in the file are <literal>{key,value}</literal> pairs in the format:
-    </para>
-    <programlisting>Key=Value</programlisting>
-    <para>
-      Space before and after the equals sign should be ignored; the <literal>=</literal>
-      sign is the actual delimiter.
+      Lines beginning with a <literal>#</literal> and blank lines are
+      considered comments and will be ignored, however they should be
+      preserved across reads and writes of the desktop entry file.
     </para>
     <para>
-      The escape sequences <literal>\s</literal>, <literal>\n</literal>,
-      <literal>\t</literal>, <literal>\r</literal>, and
-      <literal>\\</literal> are supported, meaning ASCII space, newline,
-      tab, carriage return, and backslash, respectively.
+      Comment lines are uninterpreted and may contain any character
+      (except for LF). However, using UTF-8 for comment lines that
+      contain characters not in ASCII is encouraged.
     </para>
+    </sect2>
+    <sect2 id="group-header">
+      <title>Group headers</title>
+      <para>
+	A group header with name <literal>groupname</literal> is a line in the
+	format:
+      </para>
+      <programlisting>[groupname]</programlisting>
+      <para>
+	Group names may contain all ASCII characters except for
+	<literal>[</literal> and <literal>]</literal> and control characters.
+      </para>
+      <para>
+	All <literal>{key,value}</literal> pairs following a group header until
+	a new group header belong to the group.
+      </para>
+      <para>
+	The basic format of the desktop entry file requires that there be
+	a group header named <literal>Desktop Entry</literal>.  There may
+	be other groups present in the file, but this is the most
+	important group which explicitly needs to be supported.  This
+	group should also be used as the "magic key" for automatic MIME
+	type detection.  There should be nothing preceding this group in
+	the desktop entry file but possibly one or more comments.
+      </para>
+    </sect2>
+    <sect2 id="entries">
+      <title>Entries</title>
+      <para>
+	Entries in the file are <literal>{key,value}</literal> pairs in the
+	format:
+      </para>
+      <programlisting>Key=Value</programlisting>
+      <para>
+	Space before and after the equals sign should be ignored; the
+	<literal>=</literal> sign is the actual delimiter.
+      </para>
+      <para>
+	Key names must contain only the characters <literal>A-Za-z0-9-</literal>
+      </para>
+      <para>
+	As the case is significant, the keys <varname>Name</varname> and
+	<varname>NAME</varname> are not equivalent.
+      </para>
+    </sect2>
   </sect1>
   <sect1 id="value-types">
     <title>Possible value types</title>
     <para>
-      The value types recognized are string, localestring, regexp,
-      boolean (encoded as the string true/false), and numeric.
+      The value types recognized are <literal>string</literal>,
+      <literal>localestring</literal>, <literal>regexp</literal>,
+      <literal>boolean</literal>, and
+      <literal>numeric</literal>.
+    </para>
+    <itemizedlist>
+      <listitem>
+       <para>
+	 Values of type <literal>string</literal> may contain all ASCII
+	 characters except for control characters.
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+	 Values of type <literal>localestring</literal> are user displayable,
+	 and are encoded in UTF-8.
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+	  Values of type <literal>boolean</literal> must either be the string
+	  <literal>true</literal> or <literal>false</literal>.
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+	  Values of type <literal>numeric</literal> must be a valid floating
+	  point number as recognized by the <literal>%f</literal> specifier for
+	  <function>scanf</function>.
+       </para>
+      </listitem>
+    </itemizedlist>
+    <para>
+      The escape sequences <literal>\s</literal>, <literal>\n</literal>,
+      <literal>\t</literal>, <literal>\r</literal>, and
+      <literal>\\</literal> are supported for values of type
+      <literal>string</literal> and <literal>localestring</literal>, meaning
+      ASCII space, newline, tab, carriage return, and backslash, respectively.
     </para>
     <para>
-      Values of type <literal>string</literal> must contain only ASCII
-      characters excluding control characters.  Values of type
-      <literal>localestring</literal> are user displayable, and are
-      encoded in UTF-8 unless the <constant>Legacy-Mixed</constant>
-      Encoding is specified (see <xref linkend="legacy-mixed"/>.)
-    </para>
-    <para>
-      Some keys can have multiple values; these should be separated by a
-      semicolon.  Those keys which have several values should have a
-      semicolon as the trailing character.  Semicolons in these values
-      need to be escaped using <literal>\;</literal>.
+      Some keys can have multiple values. In such a case, the value of the key
+      is specified as a plural: for example, <literal>string(s)</literal>. The
+      multiple values should be separated by a semicolon.  Those keys which
+      have several values should have a semicolon as the trailing character.
+      Semicolons in these values need to be escaped using
+      <literal>\;</literal>.
     </para>
   </sect1>
-  <sect1 id="recognized-keys">
-    <title>Recognized desktop entry keys</title>
+  <sect1 id="localized-keys">
+    <title>Localized values for keys</title>
     <para>
-	  Keys  with type localestring may be postfixed by [<replaceable>LOCALE</replaceable>],
+	  Keys  with type <literal>localestring</literal> may be postfixed by
+	  [<replaceable>LOCALE</replaceable>],
 	  where <replaceable>LOCALE</replaceable> is the locale type of the
 	  entry.  <replaceable>LOCALE</replaceable> must be of the form
 	  <literal><replaceable>lang</replaceable>_<replaceable>COUNTRY</replaceable>.<replaceable>ENCODING</replaceable>@<replaceable>MODIFIER</replaceable></literal>,
@@ -144,11 +211,7 @@
       <replaceable>LOCALE</replaceable> postfixes of all occurrences
       of the key, with the
       <literal>.<replaceable>ENCODING</replaceable></literal> part
-      stripped. The
-      <literal>.<replaceable>ENCODING</replaceable></literal> field is
-      used only when the value of the <varname>Encoding</varname> key
-      for the desktop entry file is <constant>Legacy-Mixed</constant>
-      (see <xref linkend="legacy-mixed"/>.)
+      stripped.
     </para>
     <para>
 	  The matching of is done as follows.  If
@@ -236,13 +299,11 @@
     <para>
       then the value of the <varname>Name</varname> keyed by <literal>sr_YU</literal> is used.
     </para>
+  </sect1>
+  <sect1 id="recognized-keys">
+    <title>Recognized desktop entry keys</title>
     <para>
-      Case is significant.  The keys <varname>Name</varname> and <varname>NAME</varname> are not equivalent.
-      The same holds for group names.  Key values are case sensitive as
-      well.
-    </para>
-    <para>
-      Keys are either OPTIONAL or REQUIRED.  If a key is optional it may or
+      Keys are either OPTIONAL or REQUIRED.  If a key is OPTIONAL it may or
       may not be present in the file.  However, if it isn't, the
       implementation of the standard should not blow up, it must provide
       some sane defaults.  Additionally, keys either MUST or MAY be
@@ -273,9 +334,9 @@
 	    <entry id="key-type"><varname>Type</varname></entry>
 	    <entry>
 	      There are 4 types of desktop entries:
-	      <constant>Application</constant>,
-	      <constant>Link</constant>, <constant>FSDevice</constant>
-	      and <constant>Directory</constant>.
+	      <constant>Application</constant> (type 1),
+	      <constant>Link</constant> (type 2), <constant>FSDevice</constant>
+	      (type 3) and <constant>Directory</constant> (type 4).
 	    </entry>
 	    <entry>string</entry>
 	    <entry>YES</entry>
@@ -293,18 +354,6 @@
 	    </entry>
 	    <entry>numeric</entry>
 	    <entry>NO</entry>
-	    <entry>YES</entry>
-		<entry>1-4</entry>
-	  </row>
-	  <row>
-	    <entry id="key-encoding"><varname>Encoding</varname></entry>
-	    <entry>
-	      Encoding of the whole desktop entry file
-	      (<constant>UTF-8</constant> or
-	      <constant>Legacy-Mixed</constant>).
-	    </entry>
-	    <entry>string</entry>
-	    <entry>YES</entry>
 	    <entry>YES</entry>
 		<entry>1-4</entry>
 	  </row>
@@ -361,10 +410,9 @@
           name is an absolute path, the given file will be
           used. If the name is not an absolute path, an
           implementation-dependent search algorithm will be used
-          to locate the icon. Icons may be localized with the
-          <literal>Icon[xx]=</literal> syntax.
+          to locate the icon.
 	    </entry>
-	    <entry>string</entry>
+	    <entry>localestring</entry>
 	    <entry>NO</entry>
 	    <entry>YES</entry>
 		<entry>1-4</entry>
@@ -380,6 +428,22 @@
 		  - by letting <literal>make install</literal> install a file with <literal>Hidden=true</literal> in it.
 	    </entry>
 	    <entry>boolean</entry>
+	    <entry>NO</entry>
+	    <entry>NO</entry>
+		<entry>1-4</entry>
+	  </row>
+	  <row>
+	    <entry id="key-onlyshowin"><varname>OnlyShowIn</varname>, <varname>NotShowIn</varname></entry>
+	    <entry>
+           A list of strings identifying the environments that should
+           display/not display a given desktop entry. Only one of
+           these keys, either <varname>OnlyShowIn</varname> or
+           <varname>NotShowIn</varname>, may appear in a group (for
+           possible values see the <ulink
+           url="http://www.freedesktop.org/Standards/menu-spec">Desktop
+           Menu Specification</ulink>).
+	    </entry>
+	    <entry>string(s)</entry>
 	    <entry>NO</entry>
 	    <entry>NO</entry>
 		<entry>1-4</entry>
@@ -440,26 +504,6 @@
 		<entry>1</entry>
 	  </row>
 	  <row>
-	    <entry id="key-swallowtitle"><varname>SwallowTitle</varname></entry>
-	    <entry>
-           If entry is swallowed onto the panel, this should be the title of the window.
-	    </entry>
-	    <entry>localestring</entry>
-	    <entry>NO</entry>
-	    <entry>NO</entry>
-		<entry>1</entry>
-	  </row>
-	  <row>
-	    <entry id="key-swallowexec"><varname>SwallowExec</varname></entry>
-	    <entry>
-           Program to exec if swallowed app is clicked.
-	    </entry>
-	    <entry>string</entry>
-	    <entry>NO</entry>
-	    <entry>NO</entry>
-		<entry>1</entry>
-	  </row>
-	  <row>
 	    <entry id="key-actions"><varname>Actions</varname></entry>
 	    <entry>
            Additional actions possible, see MIME type discussion in <xref linkend="mime-types"/>.
@@ -474,20 +518,56 @@
 	    <entry>
            The MIME type(s) supported by this entry.
 	    </entry>
-	    <entry>strings(s)</entry>
+	    <entry>string(s)</entry>
 	    <entry>NO</entry>
 	    <entry>NO</entry>
 		<entry>1</entry>
 	  </row>
 	  <row>
-	    <entry id="key-sortorder"><varname>SortOrder</varname></entry>
+	    <entry id="key-categories"><varname>Categories</varname></entry>
 	    <entry>
-           This may specify the order in which to display files.
+          Categories in which the entry should be shown in a menu (for
+          possible values see the <ulink
+          url="http://www.freedesktop.org/Standards/menu-spec">Desktop
+          Menu Specification</ulink>).
 	    </entry>
 	    <entry>string(s)</entry>
 	    <entry>NO</entry>
 	    <entry>NO</entry>
-		<entry>4</entry>
+		<entry>1</entry>
+	  </row>
+	  <row>
+	    <entry id="key-startupnotify"><varname>StartupNotify</varname></entry>
+	    <entry>
+			If true, it is KNOWN that the application will send a "remove"
+			message when started with the <envar>DESKTOP_LAUNCH_ID</envar> environment variable
+			set (see the <ulink url="http://www.freedesktop.org/Standards/startup-notification-spec">Startup Notification Protocol Specification</ulink> for more details).
+	    </entry>
+	    <entry>boolean</entry>
+	    <entry>NO</entry>
+	    <entry>NO</entry>
+		<entry>1</entry>
+	  </row>
+	  <row>
+	    <entry id="key-startupwmclass"><varname>StartupWMClass</varname></entry>
+	    <entry>
+			If true, it is KNOWN that the application will map at least one
+			window with the given string as its WM class or WM name hint (see the <ulink url="http://www.freedesktop.org/Standards/startup-notification-spec">Startup Notification Protocol Specification</ulink> for more details).
+	    </entry>
+	    <entry>string</entry>
+	    <entry>NO</entry>
+	    <entry>NO</entry>
+		<entry>1</entry>
+	  </row>
+	  <row>
+	    <entry id="key-url"><varname>URL</varname></entry>
+	    <entry>
+           If entry is Link type, the URL to access.
+	    </entry>
+	    <entry>string</entry>
+	    <entry>NO</entry>
+	    <entry>YES</entry>
+		<entry>2</entry>
 	  </row>
 	  <row>
 	    <entry id="key-dev"><varname>Dev</varname></entry>
@@ -541,117 +621,18 @@
 		<entry>3</entry>
 	  </row>
 	  <row>
-	    <entry id="key-url"><varname>URL</varname></entry>
+	    <entry id="key-sortorder"><varname>SortOrder</varname></entry>
 	    <entry>
-           If entry is Link type, the URL to access.
-	    </entry>
-	    <entry>string</entry>
-	    <entry>NO</entry>
-	    <entry>YES</entry>
-		<entry>2</entry>
-	  </row>
-	  <row>
-	    <entry id="key-categories"><varname>Categories</varname></entry>
-	    <entry>
-          Categories in which the entry should be shown in a menu (for
-          possible values see the <ulink
-          url="http://www.freedesktop.org/Standards/menu-spec">Desktop
-          Menu Specification</ulink>).
+           This may specify the order in which to display files.
 	    </entry>
 	    <entry>string(s)</entry>
 	    <entry>NO</entry>
 	    <entry>NO</entry>
-		<entry>1</entry>
-	  </row>
-	  <row>
-	    <entry id="key-onlyshowin"><varname>OnlyShowIn</varname>, <varname>NotShowIn</varname></entry>
-	    <entry>
-           A list of strings identifying the environments that should
-           display/not display a given desktop entry. Only one of
-           these keys, either <varname>OnlyShowIn</varname> or
-           <varname>NotShowIn</varname>, may appear in a group (for
-           possible values see the <ulink
-           url="http://www.freedesktop.org/Standards/menu-spec">Desktop
-           Menu Specification</ulink>).
-	    </entry>
-	    <entry>string(s)</entry>
-	    <entry>NO</entry>
-	    <entry>NO</entry>
-		<entry>1-4</entry>
-	  </row>
-	  <row>
-	    <entry id="key-startupnotify"><varname>StartupNotify</varname></entry>
-	    <entry>
-			If true, it is KNOWN that the application will send a "remove"
-			message when started with the <envar>DESKTOP_LAUNCH_ID</envar> environment variable
-			set (see the <ulink url="http://www.freedesktop.org/Standards/startup-notification-spec">Startup Notification Protocol Specification</ulink> for more details).
-	    </entry>
-	    <entry>boolean</entry>
-	    <entry>NO</entry>
-	    <entry>NO</entry>
-		<entry>1</entry>
-	  </row>
-	  <row>
-	    <entry id="key-startupwmclass"><varname>StartupWMClass</varname></entry>
-	    <entry>
-			If true, it is KNOWN that the application will map at least one
-			window with the given string as its WM class or WM name hint (see the <ulink url="http://www.freedesktop.org/Standards/startup-notification-spec">Startup Notification Protocol Specification</ulink> for more details).
-	    </entry>
-	    <entry>string</entry>
-	    <entry>NO</entry>
-	    <entry>NO</entry>
-		<entry>1</entry>
+		<entry>4</entry>
 	  </row>
 	</tbody>
       </tgroup>
     </table>
-  </sect1>
-  <sect1 id="character-encoding">
-    <title>Character set encoding of the file</title>
-    <para>
-      Desktop entry files are encoded as lines of 8-bit characters separated
-      by LF characters.
-    </para>
-    <itemizedlist>
-      <listitem>
-       <para>
-         Key names must contain only the characters <literal>A-Za-z0-9-</literal>
-       </para>
-      </listitem>
-      <listitem>
-       <para>
-         Group names may contain all ASCII characters except for
-         <literal>[</literal> and <literal>]</literal> and control characters.
-       </para>
-      </listitem>
-      <listitem>
-       <para>
-         Values of type string may contain all ASCII characters except
-         for control characters.
-       </para>
-      </listitem>
-      <listitem>
-       <para>
-          Values of type boolean must either be the string <literal>true</literal> or
-          <literal>false</literal>.
-       </para>
-      </listitem>
-      <listitem>
-       <para>
-          Numeric values must be a valid floating point number as recognized
-          by the <literal>%f</literal> specifier for <function>scanf</function>.
-       </para>
-      </listitem>
-    </itemizedlist>
-    <para>
-      Comment lines are uninterpreted and may contain any character 
-      (except for LF). However, using UTF-8 for comment lines that
-      contain characters not in ASCII is encouraged.
-    </para>
-	<para>
-	  The encoding for values of type localestring is determined by the
-	  <varname>Encoding</varname> field. 
-	</para>
   </sect1>
   <sect1 id="exec-variables">
     <title>List of valid <varname>Exec</varname> parameter variables</title>
@@ -741,7 +722,7 @@
 	    </entry>
 	  </row>
 	  <row>
-	    <entry>%i</entry>
+	    <entry><literal>%i</literal></entry>
 	    <entry>
               The <varname>Icon</varname> field of the desktop entry
               expanded as two parameters, first
@@ -878,7 +859,6 @@ application/x-bar=bar.desktop;</programlisting>
 [Desktop Entry]
 Version=1.0
 Type=Application
-Encoding=UTF-8
 Name=Foo Viewer
 Comment=The best viewer for Foo objects available!
 TryExec=fooview
@@ -955,9 +935,11 @@ Icon=fooview-edit.png</programlisting>
       </listitem>
       <listitem>
         <para>
-          <literal>Encoding=Legacy-Mixed</literal>, which allowed
-          localestrings in the encoding of the specified locale, is
-          deprecated.
+	  The <literal>Encoding</literal> key is deprecated. It was used to
+	  specify whether keys of type <literal>localestring</literal> were
+	  encoded in UTF-8 or in the specified locale. Possible values are
+	  <literal>UTF-8</literal> and <literal>Legacy-Mixed</literal>. See
+	  <xref linkend="legacy-mixed"/> for more details.
         </para>
       </listitem>
       <listitem>
@@ -973,13 +955,24 @@ Icon=fooview-edit.png</programlisting>
       <listitem>
         <para>
           Deprecated keys: <varname>MiniIcon</varname> (small icon for
-          menus, etc), <varname>TerminalOptions</varname> (if the
+          menus, etc.), <varname>TerminalOptions</varname> (if the
           program runs in a terminal, any options that should be
           passed to the terminal emulator before actually executing
           the program), <varname>Protocols</varname>,
           <varname>Extensions</varname>,
           <varname>BinaryPattern</varname>,
           <varname>MapNotify</varname>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+	  The <literal>SwallowTitle</literal> and
+	  <literal>SwallowExec</literal> keys are deprecated.
+	  The <literal>SwallowTitle</literal> key is of type
+	  <literal>localestring</literal> and specifies the title of the window
+	  if is swallowed onto the panel. The <literal>SwallowExec</literal>
+	  key is of type <literal>string</literal> and specifies the
+	  program to exec if swallowed app is clicked.
         </para>
       </listitem>
       <listitem>
@@ -1003,12 +996,12 @@ Icon=fooview-edit.png</programlisting>
   <appendix id="legacy-mixed">
     <title>The <constant>Legacy-Mixed</constant> Encoding (Deprecated)</title>
     <para>
-      The <constant>Legacy-Mixed</constant> encoding corresponds to the traditional encoding
-      of desktop files in older versions of the GNOME and KDE desktop
-      files. In this encoding, the encoding of each localestring key
-      is determined by the locale tag for that key, if any. For keys
-      without a locale tag, the value must contain only ASCII 
-      characters.
+      The <constant>Legacy-Mixed</constant> encoding corresponds to the
+      traditional encoding of desktop files in older versions of the GNOME and
+      KDE desktop files. In this encoding, the encoding of each
+      <literal>localestring</literal> key is determined by the locale tag for
+      that key, if any, instead of being UTF-8. For keys without a locale tag,
+      the value must contain only ASCII characters.
     </para>
     <para>
       If the file specifies an unsupported encoding, the implementation

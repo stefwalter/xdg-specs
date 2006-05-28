@@ -1,3 +1,11 @@
+2006-05-28  Vincent Untz <vuntz@gnome.org>
+        * cleanup of text and some reorg for clearity
+        * move all of the legacy-mixed encoding stuff to the appendix
+        * deprecate the Swallow* keys
+        * improve definition of group headers
+        * reorder the list of standard keys so they are sorted by type
+        See http://lists.freedesktop.org/archives/xdg/2006-May/008131.html
+
 Tue Jul 13 18:04:11 2004  Jonathan Blandford  <jrb@gnome.org>
 
 	* desktop-entry-spec.xml: Update the MIME description to make it
