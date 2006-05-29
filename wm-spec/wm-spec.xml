@@ -234,6 +234,7 @@ To enable compositing managers to decorate override-redirect window
 properly, for example by making them translucent or by changing the
 shape of the windows, this spec allows clients to set properties on
 override-redirect windows indicating the function of the windows.
+</para>
 </sect2>
 <sect2>
 <title>Layered stacking order</title>
