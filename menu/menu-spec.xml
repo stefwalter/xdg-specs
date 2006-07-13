@@ -1,6 +1,6 @@
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
                   "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
-  <!ENTITY version "1.0.draft-4">
+  <!ENTITY version "1.0.draft-5">
   <!ENTITY dtd-version "1.0">
 				  ]>
 
@@ -8,7 +8,7 @@
   <articleinfo>
     <title>Desktop Menu Specification</title>
     <releaseinfo>Version &version;</releaseinfo>
-    <date>28 March 2006</date>
+    <date>13 July 2006</date>
     <authorgroup>
       <author>
 	<firstname>Waldo</firstname>
@@ -2032,9 +2032,10 @@ entries</ulink>: <varname>Categories</varname>,
           <programlisting>
           <replaceable>sysconfdir</replaceable>/menus/application-merged/shinythings-webmirror.menu:
 
-          &lt;!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 0.8//EN"
-                    "http://www.freedesktop.org/standards/menu-spec/menu-0.8.dtd"&gt;
+          &lt;!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu &dtd-version;//EN"
+          "http://www.freedesktop.org/standards/menu-spec/menu-&dtd-version;.dtd"&gt;
           &lt;Menu&gt;
+            &lt;Name&gt;Applications&lt;/Name&gt;
             &lt;Menu&gt;
               &lt;Name&gt;WebMirror&lt;/Name&gt;
               &lt;Directory&gt;shinythings-webmirror.directory&lt;/Directory&gt;
