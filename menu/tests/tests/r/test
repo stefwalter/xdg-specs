@@ -2,9 +2,9 @@ echo ">>> the <MergeFile> tag ..."
 
 # Tests the type attribute in <MergeFile>
 
-# Generate applications.menu
+# Generate ${DIRTY_HACK}applications.menu
 mkdir -p ${XDG_CONFIG_HOME}/menus
-./expand > ${XDG_CONFIG_HOME}/menus/applications.menu <<EOF
+./expand > ${XDG_CONFIG_HOME}/menus/${DIRTY_HACK}applications.menu <<EOF
  <!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 1.0//EN"
   "http://www.freedesktop.org/standards/menu-spec/1.0/menu.dtd">
 
@@ -40,7 +40,7 @@ mkdir -p ${XDG_CONFIG_DIR}/menus
 </Menu>
 EOF
 
-./expand > ${XDG_CONFIG_DIR}/menus/applications.menu <<EOF
+./expand > ${XDG_CONFIG_DIR}/menus/${DIRTY_HACK}applications.menu <<EOF
  <!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 1.0//EN"
   "http://www.freedesktop.org/standards/menu-spec/1.0/menu.dtd">
 

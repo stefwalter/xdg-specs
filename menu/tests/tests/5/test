@@ -1,8 +1,8 @@
 echo ">>> the <All> Keyword"
 
-# Generate applications.menu
+# Generate ${DIRTY_HACK}applications.menu
 mkdir -p ${XDG_CONFIG_DIR}/menus
-./expand > ${XDG_CONFIG_DIR}/menus/applications.menu <<EOF
+./expand > ${XDG_CONFIG_DIR}/menus/${DIRTY_HACK}applications.menu <<EOF
  <!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 1.0//EN"
   "http://www.freedesktop.org/standards/menu-spec/1.0/menu.dtd">
 
