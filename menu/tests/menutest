@@ -90,10 +90,22 @@ for TEST in ${TESTS}; do
         echo '>>> OK (different order)'
         SUCCEEDED="${SUCCEEDED} ${TEST}"
       else
-        echo '>>> Failed'
-        cat ${MENUTESTDIR}/result.diff
-        cat ${MENUTESTDIR}/log
-        FAILED="${FAILED} ${TEST}"
+        grep ${MENUTESTDIR} ${MENUTESTDIR}/result1 > ${MENUTESTDIR}/result1.filtered 2> /dev/null
+        if diff -q ${MENUTESTDIR}/result1.filtered ${MENUTESTDIR}/result2 > /dev/null; then
+          echo '>>> OK (additional system items)'
+          SUCCEEDED="${SUCCEEDED} ${TEST}"
+        else
+          grep ${MENUTESTDIR} ${MENUTESTDIR}/result1.sorted > ${MENUTESTDIR}/result1.filtered 2> /dev/null
+          if diff -u ${MENUTESTDIR}/result1.filtered ${MENUTESTDIR}/result2.sorted > ${MENUTESTDIR}/result.diff; then
+            echo '>>> OK (different order, additional system items)'
+            SUCCEEDED="${SUCCEEDED} ${TEST}"
+          else
+            echo '>>> Failed'
+            cat ${MENUTESTDIR}/result.diff
+            cat ${MENUTESTDIR}/log
+            FAILED="${FAILED} ${TEST}"
+          fi
+        fi
       fi
     fi
   fi
