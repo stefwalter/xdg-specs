@@ -4,8 +4,8 @@
 <article id="index">
   <articleinfo>
     <title>Desktop Entry Specification</title>
-    <releaseinfo>Version 0.9.5</releaseinfo>
-	<date>28 May 2006</date>
+    <releaseinfo>Version 0.9.6</releaseinfo>
+	<date>7 Aug 2006</date>
     <authorgroup>
       <author>
 	<firstname>Preston</firstname>
@@ -40,6 +40,15 @@
 	<affiliation>
 	  <address>
 	    <email>vuntz@gnome.org</email>
+	  </address>
+	</affiliation>
+      </author>
+      <author>
+	<firstname>Waldo</firstname>
+	<surname>Bastian</surname>
+	<affiliation>
+	  <address>
+	    <email>waldo.bastian@intel.com</email>
 	  </address>
 	</affiliation>
       </author>
@@ -105,6 +114,9 @@
 	<literal>[</literal> and <literal>]</literal> and control characters.
       </para>
       <para>
+	Multiple groups may not have the same name.
+      </para>
+      <para>
 	All <literal>{key,value}</literal> pairs following a group header until
 	a new group header belong to the group.
       </para>
@@ -130,11 +142,16 @@
 	<literal>=</literal> sign is the actual delimiter.
       </para>
       <para>
-	Key names must contain only the characters <literal>A-Za-z0-9-</literal>
+	Key names must contain only the characters
+	<literal>A-Za-z0-9-</literal>.
       </para>
       <para>
 	As the case is significant, the keys <varname>Name</varname> and
 	<varname>NAME</varname> are not equivalent.
+      </para>
+      <para>
+	Multiple keys in the same group may not have the same name. Keys in
+	different groups may have the same name.
       </para>
     </sect2>
   </sect1>
@@ -449,19 +466,6 @@
 		<entry>1-4</entry>
 	  </row>
 	  <row>
-	    <entry id="key-filepattern"><varname>FilePattern</varname></entry>
-	    <entry>
-		  A list of regular expressions to match against for a
-          file manager to determine if this entry's icon should be
-          displayed. Usually simply the name of the main
-          executable and friends.
-	    </entry>
-	    <entry>regexp(s)</entry>
-	    <entry>NO</entry>
-	    <entry>NO</entry>
-		<entry>1</entry>
-	  </row>
-	  <row>
 	    <entry id="key-tryexec"><varname>TryExec</varname></entry>
 	    <entry>
           File name of a binary on disk used to determine if the
@@ -516,7 +520,7 @@
 	  <row>
 	    <entry id="key-mimetype"><varname>MimeType</varname></entry>
 	    <entry>
-           The MIME type(s) supported by this entry.
+           The MIME type(s) supported by this application.
 	    </entry>
 	    <entry>string(s)</entry>
 	    <entry>NO</entry>
@@ -540,8 +544,12 @@
 	    <entry id="key-startupnotify"><varname>StartupNotify</varname></entry>
 	    <entry>
 			If true, it is KNOWN that the application will send a "remove"
-			message when started with the <envar>DESKTOP_LAUNCH_ID</envar> environment variable
-			set (see the <ulink url="http://www.freedesktop.org/Standards/startup-notification-spec">Startup Notification Protocol Specification</ulink> for more details).
+			message when started with the DESKTOP_LAUNCH_ID environment variable set.
+			If false, it is KNOWN that the application does not work
+			with startup notification at all (does not shown any window, breaks
+			even when using StartupWMClass, etc.).
+			If absent, a reasonable handling is up to implementations (assuming false,
+			using StartupWMClass, etc.). (See the <ulink url="http://www.freedesktop.org/Standards/startup-notification-spec">Startup Notification Protocol Specification</ulink> for more details).
 	    </entry>
 	    <entry>boolean</entry>
 	    <entry>NO</entry>
@@ -551,7 +559,7 @@
 	  <row>
 	    <entry id="key-startupwmclass"><varname>StartupWMClass</varname></entry>
 	    <entry>
-			If true, it is KNOWN that the application will map at least one
+			If specified, it is known that the application will map at least one
 			window with the given string as its WM class or WM name hint (see the <ulink url="http://www.freedesktop.org/Standards/startup-notification-spec">Startup Notification Protocol Specification</ulink> for more details).
 	    </entry>
 	    <entry>string</entry>
@@ -620,48 +628,95 @@
 	    <entry>NO</entry>
 		<entry>3</entry>
 	  </row>
-	  <row>
-	    <entry id="key-sortorder"><varname>SortOrder</varname></entry>
-	    <entry>
-           This may specify the order in which to display files.
-	    </entry>
-	    <entry>string(s)</entry>
-	    <entry>NO</entry>
-	    <entry>NO</entry>
-		<entry>4</entry>
-	  </row>
 	</tbody>
       </tgroup>
     </table>
   </sect1>
   <sect1 id="exec-variables">
-    <title>List of valid <varname>Exec</varname> parameter variables</title>
+    <title>The <varname>Exec</varname> key</title>
     <para>
-      Each <varname>Exec</varname> field may take a number of arguments which will be
-      expanded by the file manager or program launcher and passed to the
-      program if necessary.
+      The <varname>Exec</varname> key must contain a command line.
+      A command line consists of an executable program optionally followed
+      by one or more arguments.
+      The executable program can either be specified with its full path or
+      with the name of the executable only. If no full path is provided the
+      executable is looked up in the $PATH used by the desktop environment.   
+      Arguments are separated by a space.
     </para>
     <para>
-      Literal <literal>%</literal> characters must be escaped as <literal>%%</literal>, and adding new
-      format characters is not allowed. It's a fatal error to have an
-      <varname>Exec</varname> field with a format character not given in the spec (exception
-      to this are the deprecated format characters which can be ignored,
-      that is expanded to no parameters, by the implementation).
-      Again for emphasis: <emphasis>nonstandard extensions are 
-      not allowed here - you must add an <varname>X-Foo-Exec</varname> field if you have
-      nonstandard <varname>Exec</varname> lines</emphasis>.
+      Arguments may be quoted in whole. If an argument contains a reserved
+      character the argument must be quoted. The rules for quoting of
+      arguments is also applicable to the executable name or path of the
+      executable program as provided.
     </para>
-	<para>
-	  The escaping of the exec parameters is done in the way the mailcap
-	  specification describes. Take a look at
-	  <ulink url="http://www.ietf.org/rfc/rfc1524">RFC 1524</ulink>
-	  for more information.
-	</para>
     <para>
-    Recognized fields are as follows:
+      Quoting must be done by enclosing the argument between double quotes
+      and escaping the double quote character, backtick character ("`"),
+      dollar sign ("$") and backslash character ("\") by preceding it with an
+      additional backslash character. Implementations must undo quoting before
+      expanding field codes and before passing the argument to the executable
+      program. Reserved characters are space (" "), tab, newline, double
+      quote, single quote ("'"), greater-than sign ("&gt;"), less-than sign
+      ("&lt;"), tilde ("~"), vertical bar ("|"), ampersand ("&amp;"),
+      semicolon (";"), dollar sign ("$"), asterisk ("*"), question mark ("?"),
+      equal sign ("="), hash mark ("#"), parenthesis ("(") and (")") and
+      backtick character ("`").
+    </para>
+    <para>
+      Note that the general escape rule for values of type string states that
+      the backslash character can be escaped as ("\\") as well and that this
+      escape rule is applied before the quoting rule. As such, to
+      unambiguously represent a literal backslash character in a quoted
+      argument in a desktop entry file requires the use of four successive
+      backslash characters ("\\\\"). Likewise, a literal dollar sign in a
+      quoted argument in a desktop entry file is unambiguously represented
+      with ("\\$").
+    </para>
+    <para>
+      A number of special field codes have been defined which will be
+      expanded by the file manager or program launcher when encountered
+      in the command line.
+      Field codes consist of the percentage character ("%") followed by
+      an alpha character. Literal percentage characters must be escaped
+      as <literal>%%</literal>.
+      Deprecated field codes should be removed from the command line and
+      ignored.
+      Field codes are expanded only once, the string that is used to
+      replace the field code should not be checked for field codes itself.
+    </para>
+    <para>
+      Command lines that contain a field code that is not listed in this
+      specification are invalid and must not be processed, in particular
+      implementations may not introduce support for field codes not listed
+      in this specification. Extensions, if any, should be introduced by
+      means of a new key.
+    </para>
+    <para>
+      Implementations must take care not to expand field codes into multiple
+      arguments unless explicitly instructed by this specification.
+      This means that name fields, filenames and other replacements that
+      can contain spaces must be passed as a single argument
+      to the executable program after expansion.
+    </para>
+    <para>
+      Although the <varname>Exec</varname> key is defined to have a value
+      of the type string, which is limited to ASCII characters, field code
+      expansion may introduce non-ASCII characters in arguments.
+      Implementations must take care that all characters in arguments
+      passed to the executable program are properly encoded according to
+      the applicable locale setting.
+    </para>
+    <para>
+    Recognized field codes are as follows:
     </para>
     <informaltable>
       <tgroup cols="2">
+	<thead>
+	  <row>
+	    <entry>Code</entry>
+	    <entry>Description</entry>
+	  </row>
+	</thead>
 	<tbody>
 	  <row>
 	    <entry><literal>%f</literal></entry>
@@ -682,6 +737,8 @@
 	    <entry>
 	      A list of files. Use for apps that can open several local
 	      files at once.
+	      Each file is passed as a separate argument to
+	      the executable program.
 	    </entry>
 	  </row>
 	  <row>
@@ -694,6 +751,8 @@
 	    <entry><literal>%U</literal></entry>
 	    <entry>
 	      A list of URLs.
+	      Each URL is passed as a separate argument to
+	      the executable program.
 	    </entry>
 	  </row>
 	  <row>
@@ -707,6 +766,8 @@
 	    <entry>
               List of directories containing the files that would be
               passed in to a <literal>%F</literal> field.
+	      Each directory is passed as a separate argument to
+	      the executable program.
 	    </entry>
 	  </row>
 	  <row>
@@ -719,23 +780,27 @@
 	    <entry><literal>%N</literal></entry>
 	    <entry>
 	      A list of filenames (without paths).
+	      Each filename is passed as a separate argument to
+	      the executable program.
 	    </entry>
 	  </row>
 	  <row>
 	    <entry><literal>%i</literal></entry>
 	    <entry>
-              The <varname>Icon</varname> field of the desktop entry
-              expanded as two parameters, first
-              <literal>--icon</literal> and then the contents of the
-              <varname>Icon</varname> field. Should not expand as any
-              parameters if the <varname>Icon</varname> field is empty
+              The <varname>Icon</varname> key of the desktop entry
+              expanded as two arguments, first
+              <literal>--icon</literal> and then the value of the
+              <varname>Icon</varname> key. Should not expand to any
+              arguments if the <varname>Icon</varname> key is empty
               or missing.
 	    </entry>
 	  </row>
 	  <row>
 	    <entry><literal>%c</literal></entry>
 	    <entry>
-	      The translated <varname>Name</varname> field associated with the desktop entry.
+	      The translated name of the application as listed in
+	      the appropriate <varname>Name</varname> key in the
+	      desktop entry.
 	    </entry>
 	  </row>
 	  <row>
@@ -749,7 +814,14 @@
 	  <row>
 	    <entry><literal>%v</literal></entry>
 	    <entry>
-	      The name of the <varname>Device</varname> entry in the desktop file.
+	      The device as listed in the <varname>Dev</varname> key in
+	      the desktop file.
+	    </entry>
+	  </row>
+	  <row>
+	    <entry><literal>%m</literal></entry>
+	    <entry>
+	      Deprecated.
 	    </entry>
 	  </row>
 	</tbody>
@@ -760,18 +832,17 @@
     <title>Registering MIME Types</title>
     <para>
       The <varname>MimeType</varname> key is used to indicate the MIME
-      Types that an application knows how to handle.  Applications that
-      can handle multiple MIME Types would list all of the ones it can
-      handle in a ';' separated list, as normal.  It is expected that
+      Types that an application knows how to handle. It is expected that
       for some applications this list could become long.  An application
       is expected to be able to reasonably open files of these types
-      using the command listed in the <varname>Exec</varname> keyword.
+      using the command listed in the <varname>Exec</varname> key.
     </para>
     <para>
       There should be no priority for MIME Types in this field, or any
       form of priority in the desktop file.  Priority for applications
       is handled external to the <filename>.desktop</filename> files.
     </para>
+<!--
     <sect2 id="mime-caching">
       <title>Caching MIME Types</title>
       <para>
@@ -815,7 +886,7 @@ application/x-bar=bar.desktop;</programlisting>
 	file, or in another file further down the search path), the
 	latter mention wins.  If a listed file doesn't exist, or is
 	precluded through the <varname>OnlyShowIn</varname> or
-	<varname>NotShowIn</varname> files, they should be ignored.
+	<varname>NotShowIn</varname> keys, they should be ignored.
 	This means that applications will have to keep a history of the
 	preferred applications that they run into, so that if the top
 	desktop file for a given MIME Type isn't available, the second
@@ -831,6 +902,7 @@ application/x-bar=bar.desktop;</programlisting>
 	type, as we felt that that cannot work.
       </para>
     </sect2>
+-->
   </sect1>
   <sect1 id="extending">
     <title>Extending the format</title>
@@ -864,7 +936,7 @@ Comment=The best viewer for Foo objects available!
 TryExec=fooview
 Exec=fooview %F
 Icon=fooview.png
-MimeType=image/x-foo
+MimeType=image/x-foo;
 X-KDE-Library=libfooview
 X-KDE-FactoryName=fooviewfactory
 X-KDE-ServiceType=FooService
@@ -944,12 +1016,12 @@ Icon=fooview-edit.png</programlisting>
       </listitem>
       <listitem>
         <para>
-          Deprecated <varname>Exec</varname> parameters:
+          Deprecated <varname>Exec</varname> field codes:
           <literal>%m</literal> (the mini-icon associated with the
-          desktop entry, this should be expanded as two parameters,
+          desktop entry, this should be expanded as two arguments,
           <literal>--miniicon</literal> and the content of the
-          <varname>MiniIcon</varname> field, it can also be ignored by
-          expanding it to no parameters).
+          <varname>MiniIcon</varname> key, it can also be ignored by
+          expanding it to no arguments).
         </para>
       </listitem>
       <listitem>
@@ -973,6 +1045,25 @@ Icon=fooview-edit.png</programlisting>
 	  if is swallowed onto the panel. The <literal>SwallowExec</literal>
 	  key is of type <literal>string</literal> and specifies the
 	  program to exec if swallowed app is clicked.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+	  The <literal>SortOrder</literal> key is deprecated. It is of type
+	  <literal>string(s)</literal> and may be used to specify the order in
+	  which to display files. The <ulink
+          url="http://www.freedesktop.org/Standards/menu-spec">Desktop
+          Menu Specification</ulink> defines another mechanism for defining the
+	  order of menu items.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+	  The <literal>FilePattern</literal> key is deprecated. It is of type
+	  <literal>regexp(s)</literal>. The value is a list of regular
+	  expressions to match against for a file manager to determine if this
+	  entry's icon should be displayed. Usually simply the name of the main
+	  executable and friends.
         </para>
       </listitem>
       <listitem>
@@ -1010,7 +1101,7 @@ Icon=fooview-edit.png</programlisting>
       appropriate error indication to the user.
     </para>
     <para>
-      In the absence of an <varname>Encoding</varname> line, the implementation may choose
+      In the absence of an <varname>Encoding</varname> key, the implementation may choose
       to autodetect the encoding of the file by using such factors
       as:
     </para>
@@ -1029,7 +1120,7 @@ Icon=fooview-edit.png</programlisting>
     <para>
       If the implementation does not perform such auto-detection, it should
       treat a file without an <varname>Encoding</varname> key in the same way as a file with an
-      unsupported <varname>Encoding</varname> Key.
+      unsupported <varname>Encoding</varname> key.
     </para>
     <para>
       If the locale tag includes an <literal>.<replaceable>ENCODING</replaceable></literal> part, then that determines
