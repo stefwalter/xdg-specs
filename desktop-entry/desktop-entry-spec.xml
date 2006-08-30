@@ -350,10 +350,13 @@
 	  <row>
 	    <entry id="key-type"><varname>Type</varname></entry>
 	    <entry>
-	      There are 4 types of desktop entries:
+	      This specification defines 3 types of desktop entries:
 	      <constant>Application</constant> (type 1),
-	      <constant>Link</constant> (type 2), <constant>FSDevice</constant>
-	      (type 3) and <constant>Directory</constant> (type 4).
+	      <constant>Link</constant> (type 2)
+	      and <constant>Directory</constant> (type 3).
+	      To allow the addition of new types in the future, 
+	      implementations should ignore desktop entries with an
+	      unknown type.
 	    </entry>
 	    <entry>string</entry>
 	    <entry>YES</entry>
@@ -372,7 +375,7 @@
 	    <entry>numeric</entry>
 	    <entry>NO</entry>
 	    <entry>YES</entry>
-		<entry>1-4</entry>
+		<entry>1-3</entry>
 	  </row>
 	  <row>
 	    <entry id="key-name"><varname>Name</varname></entry>
@@ -382,7 +385,7 @@
 	    <entry>localestring</entry>
 	    <entry>YES</entry>
 	    <entry>YES</entry>
-		<entry>1-4</entry>
+		<entry>1-3</entry>
 	  </row>
 	  <row>
 	    <entry id="key-genericname"><varname>GenericName</varname></entry>
@@ -392,7 +395,7 @@
 	    <entry>localestring</entry>
 	    <entry>NO</entry>
 	    <entry>YES</entry>
-		<entry>1-4</entry>
+		<entry>1-3</entry>
 	  </row>
 	  <row>
 	    <entry id="key-nodisplay"><varname>NoDisplay</varname></entry>
@@ -406,7 +409,7 @@
 	    <entry>boolean</entry>
 	    <entry>NO</entry>
 	    <entry>NO</entry>
-		<entry>1-4</entry>
+		<entry>1-3</entry>
 	  </row>
 	  <row>
 	    <entry id="key-comment"><varname>Comment</varname></entry>
@@ -418,21 +421,22 @@
 	    <entry>localestring</entry>
 	    <entry>NO</entry>
 	    <entry>YES</entry>
-		<entry>1-4</entry>
+		<entry>1-3</entry>
 	  </row>
 	  <row>
 	    <entry id="key-icon"><varname>Icon</varname></entry>
 	    <entry>
           Icon to display in file manager, menus, etc.  If the
           name is an absolute path, the given file will be
-          used. If the name is not an absolute path, an
-          implementation-dependent search algorithm will be used
-          to locate the icon.
+          used. If the name is not an absolute path, the algorithm described
+	  in the <ulink
+	  url="http://freedesktop.org/wiki/Standards/icon-theme-spec">Icon
+	  Theme Specification</ulink> will be used to locate the icon.
 	    </entry>
 	    <entry>localestring</entry>
 	    <entry>NO</entry>
 	    <entry>YES</entry>
-		<entry>1-4</entry>
+		<entry>1-3</entry>
 	  </row>
 	  <row>
 	    <entry id="key-hidden"><varname>Hidden</varname></entry>
@@ -447,7 +451,7 @@
 	    <entry>boolean</entry>
 	    <entry>NO</entry>
 	    <entry>NO</entry>
-		<entry>1-4</entry>
+		<entry>1-3</entry>
 	  </row>
 	  <row>
 	    <entry id="key-onlyshowin"><varname>OnlyShowIn</varname>, <varname>NotShowIn</varname></entry>
@@ -463,7 +467,7 @@
 	    <entry>string(s)</entry>
 	    <entry>NO</entry>
 	    <entry>NO</entry>
-		<entry>1-4</entry>
+		<entry>1-3</entry>
 	  </row>
 	  <row>
 	    <entry id="key-tryexec"><varname>TryExec</varname></entry>
@@ -576,57 +580,6 @@
 	    <entry>NO</entry>
 	    <entry>YES</entry>
 		<entry>2</entry>
-	  </row>
-	  <row>
-	    <entry id="key-dev"><varname>Dev</varname></entry>
-	    <entry>
-           The device to mount.
-	    </entry>
-	    <entry>string</entry>
-	    <entry>NO</entry>
-	    <entry>NO</entry>
-		<entry>3</entry>
-	  </row>
-	  <row>
-	    <entry id="key-fstype"><varname>FSType</varname></entry>
-	    <entry>
-           The type of file system to try to mount.
-	    </entry>
-	    <entry>string</entry>
-	    <entry>NO</entry>
-	    <entry>NO</entry>
-		<entry>3</entry>
-	  </row>
-	  <row>
-	    <entry id="key-mountpoint"><varname>MountPoint</varname></entry>
-	    <entry>
-           The mount point of the device in question.
-	    </entry>
-	    <entry>string</entry>
-	    <entry>NO</entry>
-	    <entry>NO</entry>
-		<entry>3</entry>
-	  </row>
-	  <row>
-	    <entry id="key-readonly"><varname>ReadOnly</varname></entry>
-	    <entry>
-           Specifies whether or not the device is read only.
-	    </entry>
-	    <entry>boolean</entry>
-	    <entry>NO</entry>
-	    <entry>NO</entry>
-		<entry>3</entry>
-	  </row>
-	  <row>
-	    <entry id="key-unmounticon"><varname>UnmountIcon</varname></entry>
-	    <entry>
-           Icon to display when device is not mounted.  Mounted devices display icon from the <varname>Icon</varname> key.
-		   <varname>UnmountIcon</varname>s may be localized with the <literal>UnmountIcon[xx]=</literal> syntax.
-	    </entry>
-	    <entry>string</entry>
-	    <entry>NO</entry>
-	    <entry>NO</entry>
-		<entry>3</entry>
 	  </row>
 	</tbody>
       </tgroup>
@@ -953,24 +906,78 @@ Icon=fooview-edit.png</programlisting>
   <appendix id="kde-items">
   <title>Currently reserved for use within KDE</title>
     <para>
-      During the time KDE added some extensions that are currently not
-      prefixed by the <literal>X-</literal> prefix, but should be in
-      future KDE releases.
+      For historical reasons KDE is using some KDE-specific extensions
+      that are currently not prefixed by a <literal>X-KDE-</literal> prefix.
     </para>
     <itemizedlist>
       <listitem>
         <para>
-         Keys added by KDE: <varname>ServiceTypes</varname>,
+         KDE specific keys: <varname>ServiceTypes</varname>,
          <varname>DocPath</varname>, <varname>Keywords</varname>,
          <varname>InitialPreference</varname>
         </para>
       </listitem>
 	  <listitem>
         <para>
-         Types added by KDE: <constant>ServiceType</constant>, <constant>Service</constant>
+         KDE specific types: <constant>ServiceType</constant>,
+         <constant>Service</constant> and <constant>FSDevice</constant>
         </para>
       </listitem>
 	</itemizedlist>
+    <para>
+      KDE uses the following additional keys for desktop entries of the
+      <constant>FSDevice</constant> type.
+    </para>
+    <table>	
+      <title>FSDevice Specific Keys</title>
+      <tgroup cols="3">
+	<thead>
+	  <row>
+	    <entry>Key</entry>
+	    <entry>Description</entry>
+	    <entry>Value Type</entry>
+	  </row>
+	</thead>
+	<tbody>
+	  <row>
+	    <entry id="key-dev"><varname>Dev</varname></entry>
+	    <entry>
+           The device to mount.
+	    </entry>
+	    <entry>string</entry>
+	  </row>
+	  <row>
+	    <entry id="key-fstype"><varname>FSType</varname></entry>
+	    <entry>
+           The type of file system to try to mount.
+	    </entry>
+	    <entry>string</entry>
+	  </row>
+	  <row>
+	    <entry id="key-mountpoint"><varname>MountPoint</varname></entry>
+	    <entry>
+           The mount point of the device in question.
+	    </entry>
+	    <entry>string</entry>
+	  </row>
+	  <row>
+	    <entry id="key-readonly"><varname>ReadOnly</varname></entry>
+	    <entry>
+           Specifies whether or not the device is read only.
+	    </entry>
+	    <entry>boolean</entry>
+	  </row>
+	  <row>
+	    <entry id="key-unmounticon"><varname>UnmountIcon</varname></entry>
+	    <entry>
+           Icon to display when device is not mounted.  Mounted devices display icon from the <varname>Icon</varname> key.
+		   <varname>UnmountIcon</varname>s may be localized with the <literal>UnmountIcon[xx]=</literal> syntax.
+	    </entry>
+	    <entry>string</entry>
+	  </row>
+	</tbody>
+      </tgroup>
+    </table>
   </appendix>
   <appendix id="deprecated-items">
   <title>Deprecated Items</title>

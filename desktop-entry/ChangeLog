@@ -1,3 +1,7 @@
+2006-08-30  Waldo Bastian <waldo.bastian@intel.com>
+        * list FSDevice type as KDE specific
+        * refer to Icon Theme Specification
+
 2006-08-22  Waldo Bastian <waldo.bastian@intel.com>
         * clarification of Exec key
         * correction of StartupWMClass, clarify StartupNotify (Lubos Lunak)
