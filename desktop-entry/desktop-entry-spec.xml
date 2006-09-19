@@ -159,7 +159,7 @@
     <title>Possible value types</title>
     <para>
       The value types recognized are <literal>string</literal>,
-      <literal>localestring</literal>, <literal>regexp</literal>,
+      <literal>localestring</literal>,
       <literal>boolean</literal>, and
       <literal>numeric</literal>.
     </para>
@@ -1047,8 +1047,8 @@ X-KDE-ServiceType=FooService</programlisting>
       </listitem>
       <listitem>
         <para>
-	  The <literal>FilePattern</literal> key is deprecated. It is of type
-	  <literal>regexp(s)</literal>. The value is a list of regular
+	  The <literal>FilePattern</literal> key is deprecated.
+	  The value is a list of regular
 	  expressions to match against for a file manager to determine if this
 	  entry's icon should be displayed. Usually simply the name of the main
 	  executable and friends.
