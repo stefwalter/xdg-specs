@@ -107,31 +107,70 @@
       Here are the files defined by this specification:
       <variablelist>
         <varlistentry>
-          <term><varname>$XDG_CONFIG_DIRS</varname>/menus/applications.menu</term>
+
+<term><varname>$XDG_CONFIG_DIRS</varname>/menus/<varname>${XDG_MENU_PREFIX}</varname>applications.menu</term>
           <listitem>
             <para>
-              This file contains the XML definition of the main application menu 
-              layout. The first file found in the search path should be used;
-              other files are ignored.  This implies that if the user has 
-              their own applications.menu, it replaces the system wide one. 
-              (Though the user's menu may explicitly merge the system wide one.)
+              This file contains the XML definition of the main application
+              menu layout. The first file found in the search path should be
+              used; other files are ignored. This implies that if the user
+              has their own <varname>${XDG_MENU_PREFIX}</varname>applications.menu,
+              it replaces the system wide one.
+              (Though the user's menu may explicitly merge the system wide
+              one.)
             </para>
             <para>
-              Other menu files may exist, but are not specified in this
-              document.
+              Systems that offer multiple desktop environments and that want
+              to use distinct menu layouts in the different environments can
+              use differently prefixed .menu files. In this case the
+              <varname>$XDG_MENU_PREFIX</varname> environment variable must
+              be set by the system to reflect the .menu file that is being
+              used.
+            </para>
+            <para>
+              For example if a system contains both the GNOME and the KDE
+              desktop environments it can decide to use
+              gnome-applications.menu as the menu layout in GNOME sessions
+              and kde-applications.menu as the menu layout in KDE sessions.
+              To correctly reflect this, it should set the
+              <varname>$XDG_MENU_PREFIX</varname> environment variable to
+              "gnome-" respectively "kde-".
+            </para>
+            <para>
+              Implementations may chose to use .menu files with other names
+              for tasks or menus other than the main application menu. Such
+              usage is not covered by this specification.
             </para>
           </listitem>
         </varlistentry>
         <varlistentry>
-          <term><varname>$XDG_CONFIG_DIRS</varname>/menus/<replaceable>menu-file-basename</replaceable>-merged/</term>
+          <term><varname>$XDG_CONFIG_DIRS</varname>/menus/applications-merged/</term>
           <listitem>
             <para>
               The default merge directories included in the
               &lt;DefaultMergeDirs&gt; element.  By convention, third parties
-              may add new &lt;Menu&gt; files in this
-              location. <replaceable>menu-file-basename</replaceable> means the
-              "applications" from "applications.menu" for example. So the merge
-              directory would be "applications-merged".
+              may add new &lt;Menu&gt; files in this location to create their
+              own sub-menus.
+            </para>
+            <para>
+              Note that a system that uses either gnome-applications.menu or
+              kde-applications.menu depending on the desktop environment in
+              use must still use applications-merged as the default merge
+              directory in both cases.
+            </para>
+            <para>
+              Implementations may chose to use .menu files with names other
+              than application.menu for tasks or menus other than the main
+              application menu. In that case the first part of the name of
+              the default merge directory is derived from the name of the
+              .menu file. 
+            </para>
+            <para>
+              For example in a system that uses a preferences.menu file to
+              describe an additional menu, the default merge directories
+              included in the &lt;DefaultMergeDirs&gt; element in the
+              preferences.menu file would become
+              <varname>$XDG_CONFIG_DIRS</varname>/menus/preferences-merged/
             </para>
           </listitem>
         </varlistentry>
