@@ -365,12 +365,10 @@
 	  <row>
 	    <entry id="key-version"><varname>Version</varname></entry>
 	    <entry>
-	      Version of Desktop Entry Specification
-	      (While the version field is not required to be present,
-	      it should be in all newer implementations of the Desktop
-	      Entry Specification. If the version number is not
-	      present, a "pre-standard" desktop entry file is to be
-	      assumed).
+	      Version of the Desktop Entry Specification that the
+	      desktop entry conforms with. Entries that confirm with this 
+	      version of the specification should use <literal>1.0</literal>.
+	      Note that the version field is not required to be present.
 	    </entry>
 	    <entry>numeric</entry>
 	    <entry>NO</entry>
