@@ -2,13 +2,13 @@
                   "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
   <!ENTITY version "1.0.draft-5">
   <!ENTITY dtd-version "1.0">
-				  ]>
+            	  ]>
 
 <article id="index">
   <articleinfo>
     <title>Desktop Menu Specification</title>
     <releaseinfo>Version &version;</releaseinfo>
-    <date>13 July 2006</date>
+    <date>19 September 2006</date>
     <authorgroup>
       <author>
 	<firstname>Waldo</firstname>
@@ -217,18 +217,18 @@
     <title>Extensions to the desktop entry format</title>
     <para>
       This specification adds three new fields to <ulink
-url="http://www.freedesktop.org/Standards/desktop-entry-spec">desktop
-entries</ulink>: <varname>Categories</varname>,
+      url="http://www.freedesktop.org/Standards/desktop-entry-spec">desktop
+      entries</ulink>: <varname>Categories</varname>,
       <varname>OnlyShowIn</varname> and <varname>NotShowIn</varname>.
     </para>
     <para>
       The <varname>Categories</varname> field is a list of strings used to
       classify menu items. For example, applications in the
-      <literal>AudioVideo</literal> category might end up in the "Sound &amp;
-	  Video" submenu. <xref linkend="category-registry"/> enumerates the 
-      standard categories. Categories not in this document must be prefixed
-      by the string "X-" indicating that they are extensions. Categories 
-      are case-sensitive.
+      <literal>AudioVideo</literal> category might end up in the
+      "Sound &amp; Video" submenu. <xref linkend="category-registry"/>
+      enumerates the standard categories. Categories not in this document
+      must be prefixed by the string "X-" indicating that they are extensions.
+      Categories are case-sensitive.
     </para>
     <para>
       Desktop entries should list all categories that clearly apply. They should
@@ -332,7 +332,6 @@ entries</ulink>: <varname>Categories</varname>,
             <term>System Identifier for &version;</term>
             <listitem>
               <para>
-
 <literal>http://www.freedesktop.org/standards/menu-spec/menu-&dtd-version;.dtd</literal>
               </para>
             </listitem>
@@ -380,7 +379,7 @@ entries</ulink>: <varname>Categories</varname>,
               <para>
                 Desktop entries in the pool of available entries are identified
                 by their <firstterm>desktop-file id</firstterm> (see <xref
-				linkend="term-desktop-file-id"/>). 
+            	linkend="term-desktop-file-id"/>). 
                 The desktop-file id of a desktop entry is equal to its filename, 
                 with any path components removed.
                 So given a &lt;AppDir&gt;
@@ -413,7 +412,7 @@ entries</ulink>: <varname>Categories</varname>,
                 directory) should be ignored, but the <emphasis>last</emphasis>
                 duplicate in the file should be used when establishing the order
                 in which to scan the directories. This is important when merging
-				(see <xref linkend="merge-algorithm"/>). The order of
+            	(see <xref linkend="merge-algorithm"/>). The order of
                 &lt;AppDir&gt; elements with respect to &lt;Include&gt; and
                 &lt;Exclude&gt; elements is not relevant, also to facilitate
                 merging.
@@ -451,7 +450,7 @@ entries</ulink>: <varname>Categories</varname>,
               <para>
                   Directory entries in the pool of available entries are identified
                   by their <firstterm>relative path</firstterm> (see <xref
-				  linkend="term-relative-path"/>).
+            	  linkend="term-relative-path"/>).
               </para>
               <para>
                 If two directory entries have duplicate relative paths, the one from 
@@ -491,7 +490,7 @@ entries</ulink>: <varname>Categories</varname>,
                 elements can thus be referenced by a menu path, for example
                 "Applications/Graphics." The &lt;Name&gt; field must not contain
                 the slash character ("/"); implementations should discard 
-				any name containing a slash. See also <xref linkend="term-menu-path"/>.
+            	any name containing a slash. See also <xref linkend="term-menu-path"/>.
               </para>
             </listitem>
           </varlistentry>
@@ -580,8 +579,8 @@ entries</ulink>: <varname>Categories</varname>,
                 included in the menu. &lt;Include&gt; and &lt;Exclude&gt;
                 elements for a given &lt;Menu&gt; are processed in order,
                 with queries earlier in the file handled first. This has
-				implications for merging, see <xref linkend="merge-algorithm"/>.
-				See <xref linkend="query-algorithm"/> for full details on 
+            	implications for merging, see <xref linkend="merge-algorithm"/>.
+            	See <xref linkend="query-algorithm"/> for full details on 
                     how to process &lt;Include&gt; and &lt;Exclude&gt; elements.
               </para>
             </listitem>
@@ -769,7 +768,7 @@ entries</ulink>: <varname>Categories</varname>,
                 content of this element is a directory name.  Each directory
                 listed in a &lt;LegacyDir&gt; element will be an old-style
                 legacy hierarchy of desktop entries, see <xref
-				linkend="legacy-hierarchies"/> for how to load such a
+            	linkend="legacy-hierarchies"/> for how to load such a
                 hierarchy. Implementations must not load legacy hierarchies that
                 are not explicitly specified in the menu file (because for
                 example the menu file may not be the main menu).  If the
@@ -818,7 +817,7 @@ entries</ulink>: <varname>Categories</varname>,
                 elements indicating how to rename a descendant of the current
                 &lt;Menu&gt;. If the destination path already exists, the moved
                 menu is merged with the destination menu (see <xref
-				linkend="merge-algorithm"/> for details).
+            	linkend="merge-algorithm"/> for details).
               </para>
               <para>
                 &lt;Move&gt; is used primarily to fix up legacy directories.
@@ -829,7 +828,7 @@ entries</ulink>: <varname>Categories</varname>,
               </para>
               <para>
                 &lt;Move&gt; is also useful for implementing menu
-				editing, see <xref linkend="menu-editing"/>.
+            	editing, see <xref linkend="menu-editing"/>.
               </para>
             </listitem>
           </varlistentry>
@@ -841,7 +840,7 @@ entries</ulink>: <varname>Categories</varname>,
                 must be followed by a &lt;New&gt; element.  The content of both
                 &lt;Old&gt; and &lt;New&gt; should be a menu path
                 (slash-separated concatenation of &lt;Name&gt; fields, see 
-				<xref linkend="term-menu-path"/>).
+            	<xref linkend="term-menu-path"/>).
                 Paths are interpreted relative to the menu containing 
                 the &lt;Move&gt; element.
               </para>
@@ -895,7 +894,7 @@ entries</ulink>: <varname>Categories</varname>,
                 any default-layout specified by a parent menu.
                 The default-layout defines the suggested layout if a &lt;Menu&gt; element 
                 does either not have &lt;Layout&gt; element or if it has an empty &lt;Layout&gt; element.
-				For explanations of the various attributes see the &lt;Menuname&gt; element.
+            	For explanations of the various attributes see the &lt;Menuname&gt; element.
                 If no default-layout has been specified then the layout as specified by the following
                 elements should be assumed:
                 &lt;DefaultLayout show_empty="false" inline="false" inline_limit="4" inline_header="true" inline_alias="false"&gt;&lt;Merge type="menus"/&gt;&lt;Merge type="files"/&gt;&lt;/DefaultLayout&gt;
@@ -910,7 +909,7 @@ entries</ulink>: <varname>Categories</varname>,
                 menu. Its contents references an immediate sub-menu of the current menu as defined 
                 with the &lt;Menu&gt; element, as such it should never contain a slash. 
                 If no such sub-menu exists the element should be ignored.
-				This element may have various attributes, the default values are taken from the DefaultLayout key.
+            	This element may have various attributes, the default values are taken from the DefaultLayout key.
                 The show_empty attribute defines whether a menu that contains no desktop
                 entries and no sub-menus should be shown at all. The show_empty attribute 
                 can be "true" or "false".
@@ -1319,594 +1318,615 @@ entries</ulink>: <varname>Categories</varname>,
   <appendix id="category-registry">
     <title>Registered Categories</title>
     <para>
-      Remember, these are case-sensitive. 
-      When using a category described in the list below it is strongly 
-      recommended to also include the category listed under Related 
-      Categories. If a category has multiple related categories the most
-      suitable related category should be included.
+      This section contains a number of well known categories and
+      suggestions on how to use them. The list of Main Categories consist
+      of those categories that every conforming desktop environment MUST
+      support. By including one of these categories in an application's
+      desktop entry file the application will be ensured that it will
+      show up in a section of the application menu dedicated to this
+      category. The list of Additional Categories provides categories
+      that can be used to provide more fine grained information about
+      the application. Additional Categories should always be used in
+      combination with one of the Main Categories.  
+    </para>
+    <para>    
+      The table below lists all Main Categories. 
+      Note that category names are case-sensitive.
       <informaltable>
-        <tgroup cols="2">
+        <tgroup cols="3">
           <thead>
             <row>
-              <entry>Category</entry>
+              <entry>Main Category</entry>
               <entry>Description</entry>
-			  <entry>Related Categories</entry>
+              <entry>Notes</entry>
             </row>
           </thead>
           <tbody>
             <row>
-              <entry>Legacy</entry> 
-              <entry>Keyword that must be added to menu
-              entries merged from legacy locations. May not actually exist in a
-              desktop entry (should be stripped out if found there). If the same
-              directory is given as both a &lt;LegacyDir&gt; and an
-              &lt;AppDir&gt;, its desktop entries should be labeled "Legacy"
-              only if the &lt;LegacyDir&gt; appears later in the file than the
-              &lt;AppDir&gt;</entry>
-
+              <entry>AudioVideo</entry>
+              <entry>A multimedia (audio/video) application</entry>
             </row><row>
-              <entry>Core</entry>
-              <entry>Important application, core to the desktop such as a file manager or a help browser</entry>
-			  <entry></entry>
-
+              <entry>Audio</entry>
+              <entry>An audio application</entry>
+              <entry>Desktop entry must include AudioVideo as well</entry> 
+            </row><row>
+              <entry>Video</entry>
+              <entry>A video application</entry>
+              <entry>Desktop entry must include AudioVideo as well</entry> 
             </row><row>
               <entry>Development</entry>
               <entry>An application for development</entry>
-			  <entry></entry>
-
             </row><row>
+              <entry>Education</entry>
+              <entry>Educational software</entry>
+            </row><row>
+              <entry>Game</entry>
+              <entry>A game</entry>
+            </row><row>
+              <entry>Graphics</entry>
+              <entry>Graphical application</entry>
+            </row><row>
+              <entry>Network</entry>
+              <entry>Network application such as a web browser</entry>
+            </row><row>
+              <entry>Office</entry>
+              <entry>An office type application</entry>
+            </row><row>
+              <entry>Settings</entry>
+              <entry>Settings applications</entry>
+              <entry>Entries may appear in a separate menu or as part of a
+              "Control Center"</entry>
+            </row><row>
+              <entry>System</entry>
+              <entry>System application, "System Tools" such as say a log viewer or network monitor</entry>
+            </row><row>
+              <entry>Utility</entry>
+              <entry>Small utility application, "Accessories"</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+    </para>
+    <para>
+      The table below describes Additional Categories. The Related
+      Categories column lists one or more categories that are suggested
+      to be used in conjunction with the Additional Category. Note that at
+      least one Main Category must be included in the desktop entry's list
+      of categories. If multiple Main Categories are included in a single
+      desktop entry file, the entry may appear more than once in the menu.
+      If the Related Categories column is blank, the
+      Additional Category can be used with any Main Category.
+      <informaltable>
+        <tgroup cols="3">
+          <thead>
+            <row>
+              <entry>Additional Category</entry>
+              <entry>Description</entry>
+              <entry>Related Categories</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
               <entry>Building</entry>
               <entry>A tool to build applications</entry>
-			  <entry>Development</entry>
+              <entry>Development</entry>
 
             </row><row>
               <entry>Debugger</entry>
               <entry>A tool to debug applications</entry>
-			  <entry>Development</entry>
+              <entry>Development</entry>
 
             </row><row>
               <entry>IDE</entry>
               <entry>IDE application</entry>
-			  <entry>Development</entry>
+              <entry>Development</entry>
 
             </row><row>
               <entry>GUIDesigner</entry>
               <entry>A GUI designer application</entry>
-			  <entry>Development</entry>
+              <entry>Development</entry>
 
             </row><row>
               <entry>Profiling</entry>
               <entry>A profiling tool</entry>
-			  <entry>Development</entry>
+              <entry>Development</entry>
 
             </row><row>
               <entry>RevisionControl</entry>
               <entry>Applications like cvs or subversion</entry>
-			  <entry>Development</entry>
+              <entry>Development</entry>
 
             </row><row>
               <entry>Translation</entry>
               <entry>A translation tool</entry>
-			  <entry>Development</entry>
-
-            </row><row>
-              <entry>Office</entry>
-              <entry>An office type application</entry>
+              <entry>Development</entry>
 
             </row><row>
               <entry>Calendar</entry>
               <entry>Calendar application</entry>
-			  <entry>Office</entry>
+              <entry>Office</entry>
 
             </row><row>
               <entry>ContactManagement</entry>
               <entry>E.g. an address book</entry>
-			  <entry>Office</entry>
+              <entry>Office</entry>
 
             </row><row>
               <entry>Database</entry>
               <entry>Application to manage a database</entry>
-			  <entry>Office or Development or AudioVideo</entry>
+              <entry>Office or Development or AudioVideo</entry>
 
-			</row><row>
+            </row><row>
               <entry>Dictionary</entry>
               <entry>A dictionary</entry>
-			  <entry>Office</entry>
+              <entry>Office</entry>
 
             </row><row>
               <entry>Chart</entry>
               <entry>Chart application</entry>
-			  <entry>Office</entry>
+              <entry>Office</entry>
 
             </row><row>
               <entry>Email</entry>
               <entry>Email application</entry>
-			  <entry>Office;Network</entry>
+              <entry>Office;Network</entry>
 
             </row><row>
               <entry>Finance</entry>
               <entry>Application to manage your finance</entry>
-			  <entry>Office</entry>
+              <entry>Office</entry>
 
             </row><row>
               <entry>FlowChart</entry>
               <entry>A flowchart application</entry>
-			  <entry>Office</entry>
+              <entry>Office</entry>
 
             </row><row>
               <entry>PDA</entry>
               <entry>Tool to manage your PDA</entry>
-			  <entry>Office</entry>
+              <entry>Office</entry>
 
             </row><row>
               <entry>ProjectManagement</entry>
               <entry>Project management application</entry>
-			  <entry>Office;Development</entry>
+              <entry>Office;Development</entry>
 
             </row><row>
               <entry>Presentation</entry>
               <entry>Presentation software</entry>
-			  <entry>Office</entry>
+              <entry>Office</entry>
 
             </row><row>
               <entry>Spreadsheet</entry>
               <entry>A spreadsheet</entry>
-			  <entry>Office</entry>
+              <entry>Office</entry>
 
             </row><row>
               <entry>WordProcessor</entry>
               <entry>A word processor</entry>
-			  <entry>Office</entry>
-
-            </row><row>
-              <entry>Graphics</entry>
-              <entry>Graphical application</entry>
+              <entry>Office</entry>
 
             </row><row>
               <entry>2DGraphics</entry>
               <entry>2D based graphical application</entry>
-			  <entry>Graphics</entry>
+              <entry>Graphics</entry>
 
             </row><row>
               <entry>VectorGraphics</entry>
               <entry>Vector based graphical application</entry>
-			  <entry>2DGraphics</entry>
+              <entry>Graphics;2DGraphics</entry>
 
             </row><row>
               <entry>RasterGraphics</entry>
               <entry>Raster based graphical application</entry>
-			  <entry>2DGraphics</entry>
+              <entry>Graphics;2DGraphics</entry>
 
             </row><row>
               <entry>3DGraphics</entry>
               <entry>3D based graphical application</entry>
-			  <entry>Graphics</entry>
+              <entry>Graphics</entry>
 
             </row><row>
               <entry>Scanning</entry>
               <entry>Tool to scan a file/text</entry>
-			  <entry>Graphics</entry>
+              <entry>Graphics</entry>
 
             </row><row>
               <entry>OCR</entry>
               <entry>Optical character recognition application</entry>
-			  <entry>Scanning</entry>
+              <entry>Graphics;Scanning</entry>
 
             </row><row>
               <entry>Photography</entry>
               <entry>Camera tools, etc.</entry>
-			  <entry>Graphics or Office</entry>
+              <entry>Graphics or Office</entry>
 
             </row><row>
               <entry>Viewer</entry>
               <entry>Tool to view e.g. a graphic or pdf file</entry>
-			  <entry>Graphics or Office</entry>
-
-            </row><row>
-              <entry>Settings</entry>
-              <entry>Settings applications</entry>
+              <entry>Graphics or Office</entry>
 
             </row><row>
               <entry>DesktopSettings</entry>
               <entry>Configuration tool for the GUI</entry>
-			  <entry>Settings</entry>
+              <entry>Settings</entry>
 
             </row><row>
               <entry>HardwareSettings</entry>
               <entry>A tool to manage hardware components, like sound cards, video cards or printers</entry>
-			  <entry>Settings</entry>
+              <entry>Settings</entry>
 
             </row><row>
               <entry>PackageManager</entry>
               <entry>A package manager application</entry>
-			  <entry>Settings</entry>
-
-            </row><row>
-              <entry>Network</entry>
-              <entry>Network application such as a web browser</entry>
-			  <entry>(Settings)</entry>
+              <entry>Settings</entry>
 
             </row><row>
               <entry>Dialup</entry>
               <entry>A dial-up program</entry>
-			  <entry>Network</entry>
+              <entry>Network</entry>
 
             </row><row>
               <entry>InstantMessaging</entry>
               <entry>An instant messaging client</entry>
-			  <entry>Network</entry>
+              <entry>Network</entry>
 
             </row><row>
               <entry>IRCClient</entry>
               <entry>An IRC client</entry>
-			  <entry>Network</entry>
+              <entry>Network</entry>
 
             </row><row>
               <entry>FileTransfer</entry>
               <entry>Tools like FTP or P2P programs</entry>
-			  <entry>Network</entry>
+              <entry>Network</entry>
 
             </row><row>
               <entry>HamRadio</entry>
               <entry>HAM radio software</entry>
-			  <entry>Network or Audio</entry>
+              <entry>Network or Audio</entry>
 
             </row><row>
               <entry>News</entry>
               <entry>A news reader or a news ticker</entry>
+              <entry>Network</entry>
 
             </row><row>
               <entry>P2P</entry>
               <entry>A P2P program</entry>
-			  <entry>Network</entry>
+              <entry>Network</entry>
 
             </row><row>
               <entry>RemoteAccess</entry>
               <entry>A tool to remotely manage your PC</entry>
-			  <entry>Network</entry>
+              <entry>Network</entry>
 
             </row><row>
               <entry>Telephony</entry>
               <entry>Telephony via PC</entry>
-			  <entry>Network</entry>
+              <entry>Network</entry>
 
             </row><row>
               <entry>WebBrowser</entry>
               <entry>A web browser</entry>
-			  <entry>Network</entry>
+              <entry>Network</entry>
 
             </row><row>
               <entry>WebDevelopment</entry>
               <entry>A tool for web developers</entry>
-			  <entry>Network or Development</entry>
-
-            </row><row>
-              <entry>AudioVideo</entry>
-              <entry>A multimedia (audio/video) application</entry>
-
-            </row><row>
-              <entry>Audio</entry>
-              <entry>An audio application</entry>
-			  <entry>AudioVideo</entry>
+              <entry>Network or Development</entry>
 
             </row><row>
               <entry>Midi</entry>
               <entry>An app related to MIDI</entry>
-			  <entry>Audio</entry>
+              <entry>AudioVideo;Audio</entry>
 
             </row><row>
               <entry>Mixer</entry>
               <entry>Just a mixer</entry>
-			  <entry>Audio</entry>
+              <entry>AudioVideo;Audio</entry>
 
             </row><row>
               <entry>Sequencer</entry>
               <entry>A sequencer</entry>
-			  <entry>Audio</entry>
+              <entry>AudioVideo;Audio</entry>
 
             </row><row>
               <entry>Tuner</entry>
               <entry>A tuner</entry>
-			  <entry>Audio</entry>
-
-            </row><row>
-              <entry>Video</entry>
-              <entry>A video application</entry>
-			  <entry>AudioVideo</entry>
+              <entry>AudioVideo;Audio</entry>
 
             </row><row>
               <entry>TV</entry>
               <entry>A TV application</entry>
-			  <entry>Video</entry>
+              <entry>AudioVideo;Video</entry>
 
             </row><row>
               <entry>AudioVideoEditing</entry>
               <entry>Application to edit audio/video files</entry>
-			  <entry>Audio or Video or AudioVideo</entry>
+              <entry>Audio or Video or AudioVideo</entry>
 
             </row><row>
               <entry>Player</entry>
               <entry>Application to play audio/video files</entry>
-			  <entry>Audio or Video or AudioVideo</entry>
+              <entry>Audio or Video or AudioVideo</entry>
 
             </row><row>
               <entry>Recorder</entry>
               <entry>Application to record audio/video files</entry>
-			  <entry>Audio or Video or AudioVideo</entry>
+              <entry>Audio or Video or AudioVideo</entry>
 
             </row><row>
               <entry>DiscBurning</entry>
               <entry>Application to burn a disc</entry>
-			  <entry>AudioVideo</entry>
-
-            </row><row>
-              <entry>Game</entry>
-              <entry>A game</entry>
+              <entry>AudioVideo</entry>
 
             </row><row>
               <entry>ActionGame</entry>
               <entry>An action game</entry>
-			  <entry>Game</entry>
+              <entry>Game</entry>
 
             </row><row>
               <entry>AdventureGame</entry>
               <entry>Adventure style game</entry>
-			  <entry>Game</entry>
+              <entry>Game</entry>
 
             </row><row>
               <entry>ArcadeGame</entry>
               <entry>Arcade style game</entry>
-			  <entry>Game</entry>
+              <entry>Game</entry>
 
             </row><row>
               <entry>BoardGame</entry>
               <entry>A board game</entry>
-			  <entry>Game</entry>
+              <entry>Game</entry>
 
             </row><row>
               <entry>BlocksGame</entry>
               <entry>Falling blocks game</entry>
-			  <entry>Game</entry>
+              <entry>Game</entry>
 
             </row><row>
               <entry>CardGame</entry>
               <entry>A card game</entry>
-			  <entry>Game</entry>
+              <entry>Game</entry>
 
             </row><row>
               <entry>KidsGame</entry>
               <entry>A game for kids</entry>
-			  <entry>Game</entry>
+              <entry>Game</entry>
 
             </row><row>
               <entry>LogicGame</entry>
               <entry>Logic games like puzzles, etc</entry>
-			  <entry>Game</entry>
+              <entry>Game</entry>
 
             </row><row>
               <entry>RolePlaying</entry>
               <entry>A role playing game</entry>
-			  <entry>Game</entry>
+              <entry>Game</entry>
 
             </row><row>
               <entry>Simulation</entry>
               <entry>A simulation game</entry>
-			  <entry>Game</entry>
+              <entry>Game</entry>
 
             </row><row>
               <entry>SportsGame</entry>
               <entry>A sports game</entry>
-			  <entry>Game</entry>
+              <entry>Game</entry>
 
             </row><row>
               <entry>StrategyGame</entry>
               <entry>A strategy game</entry>
-			  <entry>Game</entry>
-
-            </row><row>
-              <entry>Education</entry>
-              <entry>Educational software</entry>
+              <entry>Game</entry>
 
             </row><row>
               <entry>Art</entry>
               <entry>Software to teach arts</entry>
-			  <entry>Education</entry>
+              <entry>Education</entry>
 
             </row><row>
               <entry>Construction</entry>
               <entry></entry>
-			  <entry>Education</entry>
+              <entry>Education</entry>
 
             </row><row>
               <entry>Music</entry>
               <entry>Musical software</entry>
-			  <entry>AudioVideo;Education</entry>
+              <entry>AudioVideo;Education</entry>
 
             </row><row>
               <entry>Languages</entry>
               <entry>Software to learn foreign languages</entry>
-			  <entry>Education</entry>
+              <entry>Education</entry>
 
             </row><row>
               <entry>Science</entry>
               <entry>Scientific software</entry>
-			  <entry>Education</entry>
+              <entry>Education</entry>
 
             </row><row>
               <entry>Astronomy</entry>
               <entry>Astronomy software</entry>
-			  <entry>Science</entry>
+              <entry>Education;Science</entry>
 
             </row><row>
               <entry>Biology</entry>
               <entry>Biology software</entry>
-			  <entry>Science</entry>
+              <entry>Education;Science</entry>
 
             </row><row>
               <entry>Chemistry</entry>
               <entry>Chemistry software</entry>
-			  <entry>Science</entry>
+              <entry>Education;Science</entry>
 
             </row><row>
               <entry>Geology</entry>
               <entry>Geology software</entry>
-			  <entry>Science</entry>
+              <entry>Education;Science</entry>
 
             </row><row>
               <entry>Math</entry>
               <entry>Math software</entry>
-			  <entry>Science</entry>
+              <entry>Education;Science</entry>
 
             </row><row>
               <entry>MedicalSoftware</entry>
               <entry>Medical software</entry>
-			  <entry>Science</entry>
+              <entry>Education;Science</entry>
 
             </row><row>
               <entry>Physics</entry>
               <entry>Physics software</entry>
-			  <entry>Science</entry>
-
-            </row><row>
-              <entry>Teaching</entry>
-              <entry>An education program for teachers</entry>
-			  <entry>Education</entry>
+              <entry>Education;Science</entry>
 
             </row><row>
               <entry>Amusement</entry>
               <entry>A simple amusement</entry>
-			  <entry></entry>
+              <entry></entry>
 
-            </row><row>
-              <entry>Applet</entry>
-              <entry>An applet that will run inside a panel or another such application, likely desktop specific</entry>
-			  <entry></entry>
 
             </row><row>
               <entry>Archiving</entry>
               <entry>A tool to archive/backup data</entry>
-			  <entry></entry>
+              <entry>Utility</entry>
 
             </row><row>
               <entry>Electronics</entry>
               <entry>Electronics software, e.g. a circuit designer</entry>
-			  <entry></entry>
+              <entry></entry>
 
             </row><row>
               <entry>Emulator</entry>
               <entry>Emulator of another platform, such as a DOS emulator</entry>
-			  <entry></entry>
+              <entry>System or Game</entry>
 
             </row><row>
               <entry>Engineering</entry>
               <entry>Engineering software, e.g. CAD programs</entry>
-			  <entry></entry>
+              <entry></entry>
 
             </row><row>
               <entry>FileManager</entry>
               <entry>A file manager</entry>
-			  <entry></entry>
-
-            </row><row>
-              <entry>Shell</entry>
-              <entry>A shell (an actual specific shell such as
-              <filename>bash</filename> or <filename>tcsh</filename>, not a TerminalEmulator)</entry>
-
-            </row><row>
-              <entry>Screensaver</entry>
-              <entry>A screen saver (launching this desktop entry should activate the screen saver)</entry>
-			  <entry></entry>
+              <entry>System</entry>
 
             </row><row>
               <entry>TerminalEmulator</entry>
               <entry>A terminal emulator application</entry>
-			  <entry></entry>
-
-            </row><row>
-              <entry>TrayIcon</entry>
-              <entry>An application that is primarily an icon for the "system tray" or "notification area" (apps that open a normal window and just happen to have a tray icon as well should not list this category)</entry>
-			  <entry></entry>
-
-            </row><row>
               <entry>System</entry>
-              <entry>System application, "System Tools" such as say a log viewer or network monitor</entry>
-			  <entry>(Settings)</entry>
 
             </row><row>
               <entry>Filesystem</entry>
               <entry>A file system tool</entry>
-			  <entry>System</entry>
+              <entry>System</entry>
 
             </row><row>
               <entry>Monitor</entry>
               <entry>Monitor application/applet that monitors some resource or activity</entry>
-			  <entry>System</entry>
+              <entry>System</entry>
 
             </row><row>
               <entry>Security</entry>
               <entry>A security tool</entry>
-			  <entry>Settings or System</entry>
-
-            </row><row>
-              <entry>Utility</entry>
-              <entry>Small utility application, "Accessories"</entry>
-			  <entry></entry>
+              <entry>Settings or System</entry>
 
             </row><row>
               <entry>Accessibility</entry>
               <entry>Accessibility</entry>
-			  <entry>Settings or Utility</entry>
+              <entry>Settings or Utility</entry>
 
             </row><row>
               <entry>Calculator</entry>
               <entry>A calculator</entry>
-			  <entry>Utility</entry>
+              <entry>Utility</entry>
 
             </row><row>
               <entry>Clock</entry>
               <entry>A clock application/applet</entry>
-			  <entry>Utility</entry>
+              <entry>Utility</entry>
 
             </row><row>
               <entry>TextEditor</entry>
               <entry>A text editor</entry>
-			  <entry>Utility</entry>
+              <entry>Utility</entry>
+
+            </row><row>
+              <entry>Core</entry>
+              <entry>Important application, core to the desktop such as a file manager or a help browser</entry>
+              <entry></entry>
 
             </row><row>
               <entry>KDE</entry>
               <entry>Application based on KDE libraries</entry>
-			  <entry>QT</entry>
+              <entry>QT</entry>
 
             </row><row>
               <entry>GNOME</entry>
               <entry>Application based on GNOME libraries</entry>
-			  <entry>GTK</entry>
+              <entry>GTK</entry>
 
             </row><row>
               <entry>GTK</entry>
               <entry>Application based on GTK+ libraries</entry>
-			  <entry></entry>
+              <entry></entry>
 
             </row><row>
               <entry>Qt</entry>
               <entry>Application based on Qt libraries</entry>
-			  <entry></entry>
+              <entry></entry>
 
             </row><row>
               <entry>Motif</entry>
               <entry>Application based on Motif libraries</entry>
-			  <entry></entry>
+              <entry></entry>
 
             </row><row>
               <entry>Java</entry>
               <entry>Application based on Java GUI libraries, such as AWT or Swing</entry>
-			  <entry></entry>
+              <entry></entry>
 
             </row><row>
               <entry>ConsoleOnly</entry>
               <entry>Application that only works inside a terminal (text-based or command line application)</entry>
-			  <entry></entry>
+              <entry></entry>
 
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+
+    </para>
+    <para>
+      The table below describes Reserved Categories.
+      Reserved Categories have a specific desktop specific meaning
+      that has not been standardized (yet). Desktop entry files that use
+      a reserved category MUST also include an appropriate OnlyShowIn= entry
+      to restrict themselves to those environments that properly support the
+      reserved category as used.
+      <informaltable>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Reserved Category</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>Screensaver</entry>
+              <entry>A screen saver (launching this desktop entry should activate the screen saver)</entry>
+            </row><row>
+              <entry>TrayIcon</entry>
+              <entry>An application that is primarily an icon for the "system tray" or "notification area" (apps that open a normal window and just happen to have a tray icon as well should not list this category)</entry>
+            </row><row>
+              <entry>Applet</entry>
+              <entry>An applet that will run inside a panel or another such application, likely desktop specific</entry>
+            </row><row>
+              <entry>Shell</entry>
+              <entry>A shell (an actual specific shell such as
+              <filename>bash</filename> or <filename>tcsh</filename>, not a TerminalEmulator)</entry>
             </row>
           </tbody>
         </tgroup>
