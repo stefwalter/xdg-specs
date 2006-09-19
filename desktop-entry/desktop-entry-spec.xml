@@ -512,16 +512,6 @@
 		<entry>1</entry>
 	  </row>
 	  <row>
-	    <entry id="key-actions"><varname>Actions</varname></entry>
-	    <entry>
-           Additional actions possible, see MIME type discussion in <xref linkend="mime-types"/>.
-	    </entry>
-	    <entry>string(s)</entry>
-	    <entry>NO</entry>
-	    <entry>YES</entry>
-		<entry>1</entry>
-	  </row>
-	  <row>
 	    <entry id="key-mimetype"><varname>MimeType</varname></entry>
 	    <entry>
            The MIME type(s) supported by this application.
@@ -892,16 +882,7 @@ Icon=fooview.png
 MimeType=image/x-foo;
 X-KDE-Library=libfooview
 X-KDE-FactoryName=fooviewfactory
-X-KDE-ServiceType=FooService
-
-[Desktop Action Inverse]
-Exec=fooview --inverse %f
-Name=Foo Viewer (inverse image)
-
-[Desktop Action Edit]
-Exec=fooview --edit %f
-Name=Foo Viewer (edit image)
-Icon=fooview-edit.png</programlisting>
+X-KDE-ServiceType=FooService</programlisting>
   </appendix>
   <appendix id="kde-items">
   <title>Currently reserved for use within KDE</title>
