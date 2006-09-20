@@ -323,8 +323,7 @@
       Keys are either OPTIONAL or REQUIRED.  If a key is OPTIONAL it may or
       may not be present in the file.  However, if it isn't, the
       implementation of the standard should not blow up, it must provide
-      some sane defaults.  Additionally, keys either MUST or MAY be
-      supported by a particular implementation.
+      some sane defaults.
     </para>
     <para>
       Some keys only make sense in the context when another particular key
@@ -342,7 +341,6 @@
 	    <entry>Description</entry>
 	    <entry>Value Type</entry>
 	    <entry>REQ?</entry>
-	    <entry>MUST?</entry>
 	    <entry>Type</entry>
 	  </row>
 	</thead>
@@ -360,7 +358,6 @@
 	    </entry>
 	    <entry>string</entry>
 	    <entry>YES</entry>
-	    <entry>YES</entry>
 	  </row>
 	  <row>
 	    <entry id="key-version"><varname>Version</varname></entry>
@@ -372,8 +369,7 @@
 	    </entry>
 	    <entry>numeric</entry>
 	    <entry>NO</entry>
-	    <entry>YES</entry>
-		<entry>1-3</entry>
+            <entry>1-3</entry>
 	  </row>
 	  <row>
 	    <entry id="key-name"><varname>Name</varname></entry>
@@ -382,8 +378,7 @@
 	    </entry>
 	    <entry>localestring</entry>
 	    <entry>YES</entry>
-	    <entry>YES</entry>
-		<entry>1-3</entry>
+            <entry>1-3</entry>
 	  </row>
 	  <row>
 	    <entry id="key-genericname"><varname>GenericName</varname></entry>
@@ -392,8 +387,7 @@
 	    </entry>
 	    <entry>localestring</entry>
 	    <entry>NO</entry>
-	    <entry>YES</entry>
-		<entry>1-3</entry>
+            <entry>1-3</entry>
 	  </row>
 	  <row>
 	    <entry id="key-nodisplay"><varname>NoDisplay</varname></entry>
@@ -406,8 +400,7 @@
 	    </entry>
 	    <entry>boolean</entry>
 	    <entry>NO</entry>
-	    <entry>NO</entry>
-		<entry>1-3</entry>
+            <entry>1-3</entry>
 	  </row>
 	  <row>
 	    <entry id="key-comment"><varname>Comment</varname></entry>
@@ -418,8 +411,7 @@
 	    </entry>
 	    <entry>localestring</entry>
 	    <entry>NO</entry>
-	    <entry>YES</entry>
-		<entry>1-3</entry>
+            <entry>1-3</entry>
 	  </row>
 	  <row>
 	    <entry id="key-icon"><varname>Icon</varname></entry>
@@ -433,8 +425,7 @@
 	    </entry>
 	    <entry>localestring</entry>
 	    <entry>NO</entry>
-	    <entry>YES</entry>
-		<entry>1-3</entry>
+            <entry>1-3</entry>
 	  </row>
 	  <row>
 	    <entry id="key-hidden"><varname>Hidden</varname></entry>
@@ -448,8 +439,7 @@
 	    </entry>
 	    <entry>boolean</entry>
 	    <entry>NO</entry>
-	    <entry>NO</entry>
-		<entry>1-3</entry>
+            <entry>1-3</entry>
 	  </row>
 	  <row>
 	    <entry id="key-onlyshowin"><varname>OnlyShowIn</varname>, <varname>NotShowIn</varname></entry>
@@ -464,8 +454,7 @@
 	    </entry>
 	    <entry>string(s)</entry>
 	    <entry>NO</entry>
-	    <entry>NO</entry>
-		<entry>1-3</entry>
+            <entry>1-3</entry>
 	  </row>
 	  <row>
 	    <entry id="key-tryexec"><varname>TryExec</varname></entry>
@@ -476,8 +465,7 @@
 	    </entry>
 	    <entry>string</entry>
 	    <entry>NO</entry>
-	    <entry>NO</entry>
-		<entry>1</entry>
+            <entry>1</entry>
 	  </row>
 	  <row>
 	    <entry id="key-exec"><varname>Exec</varname></entry>
@@ -486,8 +474,7 @@
 	    </entry>
 	    <entry>string</entry>
 	    <entry>NO</entry>
-	    <entry>YES</entry>
-		<entry>1</entry>
+            <entry>1</entry>
 	  </row>
 	  <row>
 	    <entry id="key-path"><varname>Path</varname></entry>
@@ -496,8 +483,7 @@
 	    </entry>
 	    <entry>string</entry>
 	    <entry>NO</entry>
-	    <entry>YES</entry>
-		<entry>1</entry>
+            <entry>1</entry>
 	  </row>
 	  <row>
 	    <entry id="key-terminal"><varname>Terminal</varname></entry>
@@ -506,8 +492,7 @@
 	    </entry>
 	    <entry>boolean</entry>
 	    <entry>NO</entry>
-	    <entry>YES</entry>
-		<entry>1</entry>
+            <entry>1</entry>
 	  </row>
 	  <row>
 	    <entry id="key-mimetype"><varname>MimeType</varname></entry>
@@ -516,8 +501,7 @@
 	    </entry>
 	    <entry>string(s)</entry>
 	    <entry>NO</entry>
-	    <entry>NO</entry>
-		<entry>1</entry>
+            <entry>1</entry>
 	  </row>
 	  <row>
 	    <entry id="key-categories"><varname>Categories</varname></entry>
@@ -529,8 +513,7 @@
 	    </entry>
 	    <entry>string(s)</entry>
 	    <entry>NO</entry>
-	    <entry>NO</entry>
-		<entry>1</entry>
+            <entry>1</entry>
 	  </row>
 	  <row>
 	    <entry id="key-startupnotify"><varname>StartupNotify</varname></entry>
@@ -545,8 +528,7 @@
 	    </entry>
 	    <entry>boolean</entry>
 	    <entry>NO</entry>
-	    <entry>NO</entry>
-		<entry>1</entry>
+            <entry>1</entry>
 	  </row>
 	  <row>
 	    <entry id="key-startupwmclass"><varname>StartupWMClass</varname></entry>
@@ -556,8 +538,7 @@
 	    </entry>
 	    <entry>string</entry>
 	    <entry>NO</entry>
-	    <entry>NO</entry>
-		<entry>1</entry>
+            <entry>1</entry>
 	  </row>
 	  <row>
 	    <entry id="key-url"><varname>URL</varname></entry>
@@ -566,8 +547,7 @@
 	    </entry>
 	    <entry>string</entry>
 	    <entry>NO</entry>
-	    <entry>YES</entry>
-		<entry>2</entry>
+            <entry>2</entry>
 	  </row>
 	</tbody>
       </tgroup>
