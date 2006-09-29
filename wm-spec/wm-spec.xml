@@ -1,7 +1,7 @@
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
 "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
-<!ENTITY version "Draft version 1.4.draft-1">
-<!ENTITY date "May 13, 2005">
+<!ENTITY version "Draft version 1.4.draft-2">
+<!ENTITY date "Fri September 29, 2006">
 ]>
 <article id="index">
 <articleinfo>
@@ -1470,7 +1470,8 @@ This property contains the XServer time at which last user activity in this
 window took place.
         </para>
         <para>
-Clients should set this property on every new toplevel window, before mapping
+Clients should set this property on every new toplevel window (or on the window 
+pointed out by the _NET_WM_USER_TIME_WINDOW property), before mapping
 the window, to the timestamp of the user interaction that caused the window to
 appear.  A client that only deals with core events, might, for example, use the
 timestamp of the last KeyPress or ButtonPress event. ButtonRelease and
@@ -1498,8 +1499,29 @@ action or is a "pop-up" window activated by a timer or some other
 event.
         </para>
     </sect2>
+
+	<sect2><title>_NET_WM_USER_TIME_WINDOW</title>
+	<programlisting><![CDATA[  
+_NET_WM_USER_TIME_WINDOW WINDOW/32
+]]></programlisting>
+        <para>
+This property contains the XID of a window on which the client sets
+the _NET_WM_USER_TIME property. Clients should check whether the 
+window manager supports _NET_WM_USER_TIME_WINDOW and fall back to 
+setting the _NET_WM_USER_TIME property on the toplevel window if it 
+doesn't. 
+        </para>
+        <para>
+Rationale: Storing the frequently changing _NET_WM_USER_TIME property
+on the toplevel window itself causes every application that is   
+interested in any of the properties of that window to be woken up   
+on every keypress, which is particularly bad for laptops running on 
+battery power.
+        </para>
+	</sect2>
+
 	<sect2><title>_NET_FRAME_EXTENTS</title>
-	<programlisting><![CDATA[
+	<programlisting><![CDATA[  
 _NET_FRAME_EXTENTS, left, right, top, bottom, CARDINAL[4]/32
 ]]></programlisting>
 	<para>
@@ -2135,6 +2157,9 @@ New _NET_WM_CM_Sn manager selection for compositing managers.
 			</para></listitem>
 			<listitem><para>
 Added note WM_TRANSIENT_FOR for override-redirect windows
+			</para></listitem>
+			<listitem><para>
+Added _NET_WM_USER_TIME_WINDOW.
 			</para></listitem>
 	        </itemizedlist>
             </sect2>
