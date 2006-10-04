@@ -735,8 +735,7 @@
 	  <row>
 	    <entry><literal>%v</literal></entry>
 	    <entry>
-	      The device as listed in the <varname>Dev</varname> key in
-	      the desktop file.
+	      Deprecated.
 	    </entry>
 	  </row>
 	  <row>
@@ -987,7 +986,8 @@ X-KDE-ServiceType=FooService</programlisting>
           desktop entry, this should be expanded as two arguments,
           <literal>--miniicon</literal> and the content of the
           <varname>MiniIcon</varname> key, it can also be ignored by
-          expanding it to no arguments).
+          expanding it to no arguments) and %v (the device as listed
+          in the <varname>Dev</varname> key in the desktop file).
         </para>
       </listitem>
       <listitem>
