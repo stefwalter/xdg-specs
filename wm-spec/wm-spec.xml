@@ -1631,6 +1631,40 @@ window.
 	</sect2>
 </sect1>
 
+
+<sect1>
+	<title>Other Properties</title>
+	<sect2>
+		<title>_NET_WM_FULL_PLACEMENT</title>
+		<para>
+By including this hint in _NET_WM_SUPPORTED_LIST the Window Manager announces
+that it performs reasonable window placement for all window types it supports
+(for example centering dialogs on the mainwindow or whatever handling the
+Window Manager considers reasonable). This in turn means that Clients,
+when they detect that this hint is supported, SHOULD NOT abuse or often even
+use PPosition and USPosition hints for requesting placement. In particular:
+		</para>
+<itemizedlist>
+<listitem><para>USPosition is reserved to be used only to indicate that the position was 
+specified by the user and MUST NOT be used for anything else (see ICCCM 
+section 4.1.2.3 for details)</para></listitem>
+<listitem><para>PPosition SHOULD be used for for specifying position only if a specific 
+position should be used. Position SHOULD NOT be specified for "default" 
+placement such as centering dialog windows on their mainwindow.</para></listitem>
+</itemizedlist>
+                <para>
+Rationale: Window managers can often perform better placement (that may be 
+even configurable) for windows than the application. However at the time of 
+writing this it is problematic for Window managers to decide when to use them 
+because many applications abuse positioning flags and/or provide unnecessary 
+default positions.
+                </para>
+                <para>
+Note: The property is not used anywhere else besides being listed in _NET_WM_SUPPORTED_LIST.
+                </para>
+        </sect2>
+</sect1>
+
 <sect1>
     <title>Compositing Managers</title>
     <para>
@@ -2160,6 +2194,9 @@ Added note WM_TRANSIENT_FOR for override-redirect windows
 			</para></listitem>
 			<listitem><para>
 Added _NET_WM_USER_TIME_WINDOW.
+			</para></listitem>
+			<listitem><para>
+Added _NET_WM_FULL_PLACEMENT.
 			</para></listitem>
 	        </itemizedlist>
             </sect2>
