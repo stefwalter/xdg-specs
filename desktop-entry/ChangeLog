@@ -1,3 +1,7 @@
+2006-10-30  Waldo Bastian <waldo.bastian@intel.com>
+        * Remove equal sign from reserved characters in Exec args
+        * Add backslash to list of reserved characters in Exec args
+
 2006-10-04  Waldo Bastian <waldo.bastian@intel.com>
         * Deprecate %v, it is FSDevice specific
 
