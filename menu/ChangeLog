@@ -1,8 +1,55 @@
-2006-03-28  Waldo Bastian <waldo.bastin@intel.com>
+2007-01-18  Waldo Bastian <waldo.bastian@intel.com>
+
+        * Added support for LSB's tet testing framework
+
+	* Renamed test to more meaningful names:
+	1 -> Category
+	2 -> OnlyUnallocated
+	3 -> Deleted
+	4 -> Move
+	5 -> All
+	6 -> Filename
+	7 -> And
+	8 -> Or
+	9 -> Exclude
+	a -> DesktopFileID
+	b -> menu-multiple-matching
+	c -> Directory
+	d -> submenu-collision
+	e -> LegacyDir-relative
+	f -> Move-collapsing
+	g -> AppDir-relative
+	h -> DirectoryDir-relative
+	i -> DefaultMergeDirs
+	j -> MergeDir-relative
+	k -> MergeFile-relative
+	l -> MergeFile2
+	m -> NoDisplay
+	n -> NoDisplay2
+	o -> boolean-logic
+	p -> MergeFile3
+	q -> MergeFile-parent
+	r -> MergeFile-path
+	s -> desktop-name-collision
+	t -> Move-ordering
+	u -> MergeFile-recursive
+	v -> NotOnlyUnallocated-default
+	w -> LegacyDir-Move
+	x -> Move-submenu
+	y -> Merge-combined
+
+	* Added the following new tests:
+	AppDir
+	DirectoryDir
+	MergeDir-absolute
+	MergeFile-absolute
+	official-categories
+
+2006-03-28  Waldo Bastian <waldo.bastian@intel.com>
 
         * menu-spec.xml: Added example for installing sub-menu.  
 
-2006-03-21  Waldo Bastian <waldo.bastin@intel.com>
+2006-03-21  Waldo Bastian <waldo.bastian@intel.com>
 
         * menu-spec.xml: Recommend to use /usr/share for datadir
 

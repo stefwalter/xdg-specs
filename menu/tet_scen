@@ -1,0 +1,5 @@
+all
+	"Starting menu tests"
+	/tests/tet_menutest
+	"finished menu tests"
+
