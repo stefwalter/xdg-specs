@@ -35,9 +35,9 @@ be used:
 
 to run all tests
 
-	MENUTEST="foo -bar" TESTS="a b" ./menutest
+	MENUTEST="foo -bar" TESTS="Deleted Directory" ./menutest
 
-to run test a and b only
+to run the tests named "Deleted" and "Directory" only
 
 All tests contain of a test setup script named "test" and a file describing
 the expected menu named "result".
