@@ -1,3 +1,7 @@
+2007-02-06  Waldo Bastian <waldo.bastian@intel.com>
+        * Added scondary menu categories
+        * Bumped version to 1.0
+
 2007-01-18  Waldo Bastian <waldo.bastian@intel.com>
 
         * Added support for LSB's tet testing framework

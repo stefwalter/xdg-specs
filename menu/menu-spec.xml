@@ -1,6 +1,6 @@
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
                   "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
-  <!ENTITY version "1.0.draft-5">
+  <!ENTITY version "1.0">
   <!ENTITY dtd-version "1.0">
             	  ]>
 
@@ -8,7 +8,7 @@
   <articleinfo>
     <title>Desktop Menu Specification</title>
     <releaseinfo>Version &version;</releaseinfo>
-    <date>19 September 2006</date>
+    <date>6 February 2007</date>
     <authorgroup>
       <author>
 	<firstname>Waldo</firstname>
@@ -70,7 +70,7 @@
   <sect1 id="introduction">
     <title>Introduction</title>
     <para>
-      This DRAFT document defines how to construct a user-visible hierarchy of
+      This document defines how to construct a user-visible hierarchy of
       applications, typically displayed as a menu. It allows third-party
       software to add menu items that work for all desktops, and allows system
       administrators to edit menus in a way that affects all desktops.
@@ -1459,7 +1459,7 @@
             </row><row>
               <entry>Dictionary</entry>
               <entry>A dictionary</entry>
-              <entry>Office</entry>
+              <entry>Office;TextTools</entry>
 
             </row><row>
               <entry>Chart</entry>
@@ -1542,9 +1542,19 @@
               <entry>Graphics or Office</entry>
 
             </row><row>
+              <entry>Publishing</entry>
+              <entry>Desktop Publishing applications and Color Management tools</entry>
+              <entry>Graphics or Office</entry>
+
+            </row><row>
               <entry>Viewer</entry>
               <entry>Tool to view e.g. a graphic or pdf file</entry>
               <entry>Graphics or Office</entry>
+
+            </row><row>
+              <entry>TextTools</entry>
+              <entry>A text tool utiliy</entry>
+	      <entry>Utility</entry>
 
             </row><row>
               <entry>DesktopSettings</entry>
@@ -1554,7 +1564,12 @@
             </row><row>
               <entry>HardwareSettings</entry>
               <entry>A tool to manage hardware components, like sound cards, video cards or printers</entry>
-              <entry>Settings</entry>
+	      <entry>Settings</entry>
+
+            </row><row>
+              <entry>Printing</entry>
+              <entry>A tool to manage printers</entry>
+              <entry>HardwareSettings;Settings</entry>
 
             </row><row>
               <entry>PackageManager</entry>
@@ -1570,6 +1585,11 @@
               <entry>InstantMessaging</entry>
               <entry>An instant messaging client</entry>
               <entry>Network</entry>
+
+            </row><row>
+              <entry>Chat</entry>
+              <entry>A chat client</entry>
+	      <entry>Network</entry>
 
             </row><row>
               <entry>IRCClient</entry>
@@ -1604,6 +1624,16 @@
             </row><row>
               <entry>Telephony</entry>
               <entry>Telephony via PC</entry>
+	      <entry>Network</entry>
+
+            </row><row>
+              <entry>TelephonyTools</entry>
+              <entry>Telephony tools, to dial a number, manage PBX, ...</entry>
+	      <entry>Utility</entry>
+
+            </row><row>
+              <entry>VideoConference</entry>
+              <entry>Video Conference software</entry>
               <entry>Network</entry>
 
             </row><row>
@@ -1747,6 +1777,11 @@
               <entry>Education</entry>
 
             </row><row>
+              <entry>ArtificialIntelligence</entry>
+              <entry>Artificial Intelligence software</entry>
+	      <entry>Education;Science</entry>
+
+            </row><row>
               <entry>Astronomy</entry>
               <entry>Astronomy software</entry>
               <entry>Education;Science</entry>
@@ -1762,14 +1797,64 @@
               <entry>Education;Science</entry>
 
             </row><row>
+              <entry>ComputerScience</entry>
+              <entry>ComputerSience software</entry>
+	      <entry>Education;Science</entry>
+
+            </row><row>
+              <entry>DataVisualization</entry>
+              <entry>Data visualization software</entry>
+	      <entry>Education;Science</entry>
+
+            </row><row>
+              <entry>Economy</entry>
+              <entry>Economy software</entry>
+	      <entry>Education</entry>
+
+            </row><row>
+              <entry>Electricity</entry>
+              <entry>Electricity software</entry>
+	      <entry>Education;Science</entry>
+
+	    </row><row>
+              <entry>Geography</entry>
+              <entry>Geography software</entry>
+	      <entry>Education</entry>
+
+	    </row><row>
               <entry>Geology</entry>
               <entry>Geology software</entry>
+	      <entry>Education;Science</entry>
+
+	    </row><row>
+              <entry>Geoscience</entry>
+              <entry>Geoscience software</entry>
               <entry>Education;Science</entry>
+
+            </row><row>
+              <entry>History</entry>
+              <entry>History software</entry>
+	      <entry>Education</entry>
+
+            </row><row>
+              <entry>ImageProcessing</entry>
+              <entry>Image Processing software</entry>
+	      <entry>Education;Science</entry>
+
+            </row><row>
+              <entry>Literature</entry>
+              <entry>Literature software</entry>
+	      <entry>Education</entry>
 
             </row><row>
               <entry>Math</entry>
               <entry>Math software</entry>
-              <entry>Education;Science</entry>
+	      <entry>Education;Science</entry>
+
+            </row><row>
+              <entry>NumericalAnalysis</entry>
+              <entry>Numerical analysis software</entry>
+	      <entry>Education;Science;Math</entry>
 
             </row><row>
               <entry>MedicalSoftware</entry>
@@ -1779,7 +1864,22 @@
             </row><row>
               <entry>Physics</entry>
               <entry>Physics software</entry>
-              <entry>Education;Science</entry>
+	      <entry>Education;Science</entry>
+
+            </row><row>
+              <entry>Robotics</entry>
+              <entry>Robotics software</entry>
+	      <entry>Education;Science</entry>
+
+            </row><row>
+              <entry>Sports</entry>
+              <entry>Sports software</entry>
+	      <entry>Education</entry>
+
+            </row><row>
+              <entry>ParallelComputing</entry>
+              <entry>Parallel computing software</entry>
+	      <entry>Education;Science;ComputerScience</entry>
 
             </row><row>
               <entry>Amusement</entry>
@@ -1791,6 +1891,11 @@
               <entry>Archiving</entry>
               <entry>A tool to archive/backup data</entry>
               <entry>Utility</entry>
+
+            </row><row>
+              <entry>Compression</entry>
+	      <entry>A tool to manage compressed data/archives</entry>
+	      <entry>Utility;Archiving</entry>
 
             </row><row>
               <entry>Electronics</entry>
@@ -1808,9 +1913,14 @@
               <entry></entry>
 
             </row><row>
+              <entry>FileTools</entry>
+              <entry>A file tool utility</entry>
+	      <entry>Utility or System</entry>
+
+            </row><row>
               <entry>FileManager</entry>
               <entry>A file manager</entry>
-              <entry>System</entry>
+              <entry>System;FileTools</entry>
 
             </row><row>
               <entry>TerminalEmulator</entry>
@@ -1851,6 +1961,11 @@
               <entry>TextEditor</entry>
               <entry>A text editor</entry>
               <entry>Utility</entry>
+
+            </row><row>
+              <entry>Documentation</entry>
+              <entry>Help or documentation</entry>
+	      <entry></entry>
 
             </row><row>
               <entry>Core</entry>
