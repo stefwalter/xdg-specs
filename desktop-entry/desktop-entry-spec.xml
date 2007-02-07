@@ -4,8 +4,8 @@
 <article id="index">
   <articleinfo>
     <title>Desktop Entry Specification</title>
-    <releaseinfo>Version 0.9.8</releaseinfo>
-	<date>31 Oct 2006</date>
+    <releaseinfo>Version 1.0</releaseinfo>
+	<date>6 Feb 2007</date>
     <authorgroup>
       <author>
 	<firstname>Preston</firstname>
@@ -666,7 +666,8 @@
 	  <row>
 	    <entry><literal>%u</literal></entry>
 	    <entry>
-	      A single URL.
+	      A single URL. Local files may either be passed as
+	      file: URLs or as file path. 
 	    </entry>
 	  </row>
 	  <row>
@@ -674,36 +675,32 @@
 	    <entry>
 	      A list of URLs.
 	      Each URL is passed as a separate argument to
-	      the executable program.
+	      the executable program. Local files may either be passed as
+	      file: URLs or as file path. 
 	    </entry>
 	  </row>
 	  <row>
 	    <entry><literal>%d</literal></entry>
 	    <entry>
-              Directory containing the file that would be passed in a <literal>%f</literal> field.
+	      Deprecated.
 	    </entry>
 	  </row>
 	  <row>
 	    <entry><literal>%D</literal></entry>
 	    <entry>
-              List of directories containing the files that would be
-              passed in to a <literal>%F</literal> field.
-	      Each directory is passed as a separate argument to
-	      the executable program.
+	      Deprecated.
 	    </entry>
 	  </row>
 	  <row>
 	    <entry><literal>%n</literal></entry>
 	    <entry>
-	      A single filename (without path).
+	      Deprecated.
 	    </entry>
 	  </row>
 	  <row>
 	    <entry><literal>%N</literal></entry>
 	    <entry>
-	      A list of filenames (without paths).
-	      Each filename is passed as a separate argument to
-	      the executable program.
+	      Deprecated.
 	    </entry>
 	  </row>
 	  <row>
@@ -748,6 +745,17 @@
 	</tbody>
       </tgroup>
     </informaltable>
+    <para>
+      A command line may contain at most one %f, %u, %F or %U field code.
+      If the application should not open any
+      file the %f, %u, %F and %U field codes must be removed from the
+      command line and ignored.
+    </para>
+    <para>
+      Field codes must not be used inside a quoted argument, the result of
+      field code expansion inside a quoted argument is undefined. The %F and
+      %U field codes may only be used as an argument on their own.
+    </para>
   </sect1>
   <sect1 id="mime-types">
     <title>Registering MIME Types</title>
@@ -987,8 +995,11 @@ X-KDE-ServiceType=FooService</programlisting>
           desktop entry, this should be expanded as two arguments,
           <literal>--miniicon</literal> and the content of the
           <varname>MiniIcon</varname> key, it can also be ignored by
-          expanding it to no arguments) and %v (the device as listed
-          in the <varname>Dev</varname> key in the desktop file).
+          expanding it to no arguments), %v (the device as listed
+          in the <varname>Dev</varname> key in the desktop file),
+          %d (the directory of a file), %D (the directories of
+          files), %n (the base name of a file) and %N (the base names
+          of files).
         </para>
       </listitem>
       <listitem>
