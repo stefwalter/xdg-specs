@@ -1265,6 +1265,8 @@ _NET_WM_ACTION_MAXIMIZE_VERT, ATOM
 _NET_WM_ACTION_FULLSCREEN, ATOM
 _NET_WM_ACTION_CHANGE_DESKTOP, ATOM
 _NET_WM_ACTION_CLOSE, ATOM
+_NET_WM_ACTION_ABOVE, ATOM
+_NET_WM_ACTION_BELOW, ATOM
 ]]></programlisting>
       <para>
 An implementation MAY add new atoms to this list. Implementations
@@ -1320,6 +1322,12 @@ _NET_WM_ACTION_CHANGE_DESKTOP indicates that the window may be moved between des
 	<para>
 _NET_WM_ACTION_CLOSE indicates that the window may be closed (i.e. a _NET_CLOSE_WINDOW
 message may be sent).
+	</para>
+	<para>
+_NET_WM_ACTION_ABOVE indicates that the window may placed in the "above" layer of windows (i.e. will respond to _NET_WM_STATE_ABOVE changes; see also <xref linkend="STACKINGORDER"/> for details).
+	</para>
+	<para>
+_NET_WM_ACTION_BELOW indicates that the window may placed in the "below" layer of windows (i.e. will respond to _NET_WM_STATE_BELOW changes; see also <xref linkend="STACKINGORDER"/> for details)).
 	</para>
 </sect2>
 
