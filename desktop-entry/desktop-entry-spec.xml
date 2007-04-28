@@ -230,7 +230,7 @@
       stripped.
     </para>
     <para>
-	  The matching of is done as follows.  If
+	  The matching is done as follows.  If
 	  <varname>LC_MESSAGES</varname> is of the form
 	  <literal><replaceable>lang</replaceable>_<replaceable>COUNTRY</replaceable>.<replaceable>ENCODING</replaceable>@<replaceable>MODIFIER</replaceable></literal>, 
 	  then it will match a key of the form

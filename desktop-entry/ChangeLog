@@ -1,18 +1,26 @@
 2007-04-28  Vincent Untz  <vuntz@gnome.org>
 
+	* desktop-entry-spec.xml: small typo
+	http://lists.freedesktop.org/archives/xdg/2007-March/009437.html
+
+2007-04-28  Vincent Untz  <vuntz@gnome.org>
+
 	* desktop-entry-spec.xml: this changes the type of the version from
 	numeric to string. It's needed if we consider the possibility that
 	there are some desktop entry files out there using 0.9.x as a value
 	for this key. The change doesn't break anything.
+	http://lists.freedesktop.org/archives/xdg/2007-March/009437.html
 
 2007-04-28  Vincent Untz  <vuntz@gnome.org>
 
 	* desktop-entry-spec.xml: UnmountIcon is a localestring key.
+	http://lists.freedesktop.org/archives/xdg/2007-March/009437.html
 
 2007-04-28  Vincent Untz  <vuntz@gnome.org>
 
 	* desktop-entry-spec.xml: clarify that lists should always end with a
 	semicolon, even if there's only one value.
+	http://lists.freedesktop.org/archives/xdg/2007-March/009437.html
 
 2007-02-06  Waldo Bastian <waldo.bastian@intel.com>
 	* Clearify that %U may result in either local paths or file: URLs
