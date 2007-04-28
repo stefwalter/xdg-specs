@@ -333,6 +333,13 @@
       <constant>Application</constant>.
     </para>
     <para>
+      If a REQUIRED key is only valid in the context of another key set to a
+      specific value, then it has to be present only if the other key is set to
+      the specific value. For example, the <varname>URL</varname> key has to be
+      present when and only when when the value of the <varname>Type</varname>
+      key is <constant>Link</constant>.
+    </para>
+    <para>
       Some example keys: <varname>Name[C]</varname>, <varname>Comment[it]</varname>.
     </para>
     <table>
@@ -476,7 +483,7 @@
            Program to execute, possibly with arguments.
 	    </entry>
 	    <entry>string</entry>
-	    <entry>NO</entry>
+	    <entry>YES</entry>
             <entry>1</entry>
 	  </row>
 	  <row>
@@ -549,7 +556,7 @@
            If entry is Link type, the URL to access.
 	    </entry>
 	    <entry>string</entry>
-	    <entry>NO</entry>
+	    <entry>YES</entry>
             <entry>2</entry>
 	  </row>
 	</tbody>

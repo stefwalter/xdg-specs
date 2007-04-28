@@ -1,5 +1,11 @@
 2007-04-28  Vincent Untz  <vuntz@gnome.org>
 
+	* desktop-entry-spec.xml: a desktop file of type Application should
+	always have an Exec key. Same for Link Type and URL key.
+	http://lists.freedesktop.org/archives/xdg/2007-March/009437.html
+
+2007-04-28  Vincent Untz  <vuntz@gnome.org>
+
 	* desktop-entry-spec.xml: desktop files of type Directory have a
 	.directory extension right now (at least in GNOME), but according to
 	the spec, this is wrong. The patch fixes this. Also, it removes a
