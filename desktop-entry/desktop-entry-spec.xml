@@ -200,10 +200,9 @@
     <para>
       Some keys can have multiple values. In such a case, the value of the key
       is specified as a plural: for example, <literal>string(s)</literal>. The
-      multiple values should be separated by a semicolon.  Those keys which
-      have several values should have a semicolon as the trailing character.
-      Semicolons in these values need to be escaped using
-      <literal>\;</literal>.
+      multiple values should be separated by a semicolon, and the value of the
+      key should have a semicolon as trailing character. Semicolons in these
+      values need to be escaped using <literal>\;</literal>.
     </para>
   </sect1>
   <sect1 id="localized-keys">

@@ -1,3 +1,8 @@
+2007-04-28  Vincent Untz  <vuntz@gnome.org>
+
+	* desktop-entry-spec.xml: clarify that lists should always end with a
+	semicolon, even if there's only one value.
+
 2007-02-06  Waldo Bastian <waldo.bastian@intel.com>
 	* Clearify that %U may result in either local paths or file: URLs
 	* Deprecate %d, %n, %D and %N. They aren't usable on Gnome and
