@@ -1,5 +1,14 @@
 2007-04-28  Vincent Untz  <vuntz@gnome.org>
 
+	* desktop-entry-spec.xml: desktop files of type Directory have a
+	.directory extension right now (at least in GNOME), but according to
+	the spec, this is wrong. The patch fixes this. Also, it removes a
+	small part of text explaining the name of a desktop file describing a
+	directory.
+	http://lists.freedesktop.org/archives/xdg/2007-March/009437.html
+
+2007-04-28  Vincent Untz  <vuntz@gnome.org>
+
 	* desktop-entry-spec.xml:clarify a bit the text about keys that only
 	makes sense in a specific context. Also, state that the keys should
 	not be used outside of this context. For example, the URL key should

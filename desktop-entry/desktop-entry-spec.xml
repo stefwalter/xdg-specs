@@ -70,13 +70,13 @@
   <sect1 id="basic-format">
     <title>Basic format of the file</title>
     <para>
-      These desktop entry files should have the extension
-      <filename>.desktop</filename>. Determining file type on basis of
-      extension makes determining the file type very easy and quick.
+      Desktop entry files should have the <filename>.desktop</filename>
+      extension, except for files of <varname>Type</varname>
+      <constant>Directory</constant> which should have the
+      <filename>.directory</filename> extension. Determining file type on basis
+      of extension makes determining the file type very easy and quick.
       When no file extension is present, the desktop system should
-      fall back to recognition via "magic detection".  Desktop entries
-      which describe how a directory is to be formatted/displayed
-      should be simply called <filename>.directory</filename>.
+      fall back to recognition via "magic detection".
     </para>
     <para>
       Desktop entry files are encoded as lines of 8-bit characters separated
