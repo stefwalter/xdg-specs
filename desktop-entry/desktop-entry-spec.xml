@@ -366,7 +366,7 @@
 	      version of the specification should use <literal>1.0</literal>.
 	      Note that the version field is not required to be present.
 	    </entry>
-	    <entry>numeric</entry>
+	    <entry>string</entry>
 	    <entry>NO</entry>
             <entry>1-3</entry>
 	  </row>

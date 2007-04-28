@@ -1,5 +1,12 @@
 2007-04-28  Vincent Untz  <vuntz@gnome.org>
 
+	* desktop-entry-spec.xml: this changes the type of the version from
+	numeric to string. It's needed if we consider the possibility that
+	there are some desktop entry files out there using 0.9.x as a value
+	for this key. The change doesn't break anything.
+
+2007-04-28  Vincent Untz  <vuntz@gnome.org>
+
 	* desktop-entry-spec.xml: UnmountIcon is a localestring key.
 
 2007-04-28  Vincent Untz  <vuntz@gnome.org>
