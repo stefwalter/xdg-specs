@@ -937,9 +937,8 @@ X-KDE-ServiceType=FooService</programlisting>
 	    <entry id="key-unmounticon"><varname>UnmountIcon</varname></entry>
 	    <entry>
            Icon to display when device is not mounted.  Mounted devices display icon from the <varname>Icon</varname> key.
-		   <varname>UnmountIcon</varname>s may be localized with the <literal>UnmountIcon[xx]=</literal> syntax.
 	    </entry>
-	    <entry>string</entry>
+	    <entry>localestring</entry>
 	  </row>
 	</tbody>
       </tgroup>

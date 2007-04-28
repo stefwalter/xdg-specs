@@ -1,5 +1,9 @@
 2007-04-28  Vincent Untz  <vuntz@gnome.org>
 
+	* desktop-entry-spec.xml: UnmountIcon is a localestring key.
+
+2007-04-28  Vincent Untz  <vuntz@gnome.org>
+
 	* desktop-entry-spec.xml: clarify that lists should always end with a
 	semicolon, even if there's only one value.
 
