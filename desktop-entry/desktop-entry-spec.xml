@@ -186,7 +186,7 @@
        <para>
 	  Values of type <literal>numeric</literal> must be a valid floating
 	  point number as recognized by the <literal>%f</literal> specifier for
-	  <function>scanf</function>.
+	  <function>scanf</function> in the <literal>C</literal> locale.
        </para>
       </listitem>
     </itemizedlist>

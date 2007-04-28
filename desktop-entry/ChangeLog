@@ -1,5 +1,13 @@
 2007-04-28  Vincent Untz  <vuntz@gnome.org>
 
+	* desktop-entry-spec.xml: scanf behavior is locale-dependent, and the
+	numeric type shouldn't be. Specify that the value is a floating point
+	number as recognized by scanf in the C locale.
+	Thanks to Dan Winship <danw@gnome.org> for catching this.
+	http://lists.freedesktop.org/archives/xdg/2007-April/009732.html
+
+2007-04-28  Vincent Untz  <vuntz@gnome.org>
+
 	* desktop-entry-spec.xml: clarify description for the TryExec key.
 	http://lists.freedesktop.org/archives/xdg/2007-March/009556.html
 
