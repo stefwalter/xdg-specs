@@ -571,7 +571,8 @@
       by one or more arguments.
       The executable program can either be specified with its full path or
       with the name of the executable only. If no full path is provided the
-      executable is looked up in the $PATH used by the desktop environment.   
+      executable is looked up in the $PATH environment variable used by the
+      desktop environment.   
       The name or path of the executable program may not contain the equal
       sign ("="). Arguments are separated by a space.
     </para>
