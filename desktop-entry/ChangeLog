@@ -1,5 +1,10 @@
 2007-04-28  Vincent Untz  <vuntz@gnome.org>
 
+	* desktop-entry-spec.xml: clarify description for the TryExec key.
+	http://lists.freedesktop.org/archives/xdg/2007-March/009556.html
+
+2007-04-28  Vincent Untz  <vuntz@gnome.org>
+
 	* desktop-entry-spec.xml: change "the $PATH" to "the $PATH environment
 	variable".
 	http://lists.freedesktop.org/archives/xdg/2007-March/009552.html

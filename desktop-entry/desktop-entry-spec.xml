@@ -469,9 +469,11 @@
 	  <row>
 	    <entry id="key-tryexec"><varname>TryExec</varname></entry>
 	    <entry>
-          File name of a binary on disk used to determine if the
-          program is actually installed.  If not, entry may not
-          show in menus, etc.
+          Path to an executable file on disk used to determine if the program
+          is actually installed. If the path is not an absolute path, the file
+          is looked up in the $PATH environment variable. If the file is not
+          present or if it is not executable, the entry may be ignored (not be
+          used in menus, for example).
 	    </entry>
 	    <entry>string</entry>
 	    <entry>NO</entry>
