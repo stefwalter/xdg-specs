@@ -326,7 +326,11 @@
     </para>
     <para>
       Some keys only make sense in the context when another particular key
-      is also present.
+      is also present and set to a specific value. Those keys should not be
+      used if the particular key is not present or not set to the specific
+      value. For example, the <varname>Terminal</varname> key can only be used
+      when the value of the <varname>Type</varname> key is
+      <constant>Application</constant>.
     </para>
     <para>
       Some example keys: <varname>Name[C]</varname>, <varname>Comment[it]</varname>.

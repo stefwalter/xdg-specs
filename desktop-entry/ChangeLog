@@ -1,5 +1,13 @@
 2007-04-28  Vincent Untz  <vuntz@gnome.org>
 
+	* desktop-entry-spec.xml:clarify a bit the text about keys that only
+	makes sense in a specific context. Also, state that the keys should
+	not be used outside of this context. For example, the URL key should
+	not be present if the type is not Link.
+	http://lists.freedesktop.org/archives/xdg/2007-March/009437.html
+
+2007-04-28  Vincent Untz  <vuntz@gnome.org>
+
 	* desktop-entry-spec.xml: small typo
 	http://lists.freedesktop.org/archives/xdg/2007-March/009437.html
 
