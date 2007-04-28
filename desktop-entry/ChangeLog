@@ -1,5 +1,10 @@
 2007-04-28  Vincent Untz  <vuntz@gnome.org>
 
+	* desktop-entry-spec.xml: improve the description of the Comment key.
+	http://lists.freedesktop.org/archives/xdg/2007-March/009440.html
+
+2007-04-28  Vincent Untz  <vuntz@gnome.org>
+
 	* desktop-entry-spec.xml: a desktop file of type Application should
 	always have an Exec key. Same for Link Type and URL key.
 	http://lists.freedesktop.org/archives/xdg/2007-March/009437.html

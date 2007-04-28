@@ -415,9 +415,9 @@
 	  <row>
 	    <entry id="key-comment"><varname>Comment</varname></entry>
 	    <entry>
-           Tooltip for the entry, for example "View sites on the
-           Internet", should not be redundant with <varname>Name</varname> or 
-           <varname>GenericName</varname>.
+	    Tooltip for the entry, for example "View sites on the
+	    Internet". The value should not be redundant with the values of
+	    <varname>Name</varname> and <varname>GenericName</varname>.
 	    </entry>
 	    <entry>localestring</entry>
 	    <entry>NO</entry>
