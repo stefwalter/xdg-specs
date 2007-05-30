@@ -1,3 +1,9 @@
+2007-05-30  Vincent Untz  <vuntz@gnome.org>
+
+	* desktop-entry-spec.xml: s/DESKTOP_LAUNCH_ID/DESKTOP_STARTUP_ID/
+	Thanks to Dan Winship <danw@gnome.org> for catching this.
+	Bug #11081.
+
 2007-04-28  Vincent Untz  <vuntz@gnome.org>
 
 	* desktop-entry-spec.xml: scanf behavior is locale-dependent, and the

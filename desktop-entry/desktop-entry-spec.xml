@@ -531,7 +531,7 @@
 	    <entry id="key-startupnotify"><varname>StartupNotify</varname></entry>
 	    <entry>
 			If true, it is KNOWN that the application will send a "remove"
-			message when started with the DESKTOP_LAUNCH_ID environment variable set.
+			message when started with the DESKTOP_STARTUP_ID environment variable set.
 			If false, it is KNOWN that the application does not work
 			with startup notification at all (does not shown any window, breaks
 			even when using StartupWMClass, etc.).
