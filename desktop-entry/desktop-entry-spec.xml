@@ -79,8 +79,9 @@
       fall back to recognition via "magic detection".
     </para>
     <para>
-      Desktop entry files are encoded as lines of 8-bit characters separated
-      by LF characters. Case is significant everywhere in the file.
+      Desktop entry files are encoded in UTF-8. A file is interpreted as a
+      series of lines that are separated by linefeed characters. Case is
+      significant everywhere in the file.
     </para>
     <para>
       Compliant implementations MUST not remove any fields from the file,

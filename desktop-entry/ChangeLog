@@ -1,3 +1,10 @@
+2007-07-27  Vincent Untz  <vuntz@gnome.org>
+
+	* desktop-entry-spec.xml: don't say that the files are encoded as
+	lines of 8-bit characters, which is wrong for UTF-8. Use something a
+	bit better proposed by Matthias Clasen <mclasen@redhat.com>
+	Bug #11417.
+
 2007-05-30  Vincent Untz  <vuntz@gnome.org>
 
 	* desktop-entry-spec.xml: s/DESKTOP_LAUNCH_ID/DESKTOP_STARTUP_ID/
