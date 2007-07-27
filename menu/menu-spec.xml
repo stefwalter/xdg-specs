@@ -2102,7 +2102,7 @@
           </listitem>
           <listitem>
             <para>
-              Install an XML menu file to <replaceable>sysconfdir</replaceable>/desktop/menus/applications-merged/ to add any submenus, if your desktop entries aren't already 
+              Install an XML menu file to <replaceable>sysconfdir</replaceable>/menus/applications-merged/ to add any submenus, if your desktop entries aren't already 
               included in some common categories.
             </para>
           </listitem>

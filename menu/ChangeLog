@@ -1,3 +1,9 @@
+2007-07-27  Vincent Untz  <vuntz@gnome.org>
+
+	* menu-spec.xml: change sysconfdir/desktop/menus/ to sysconfdir/menus/
+	in one place.
+	Fix bug #8289.
+
 2007-02-06  Waldo Bastian <waldo.bastian@intel.com>
         * Added scondary menu categories
         * Bumped version to 1.0
