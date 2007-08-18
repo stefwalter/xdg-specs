@@ -254,6 +254,10 @@
 	  linkend="onlyshowin-registry"/> enumerates the strings to use for
       some common environments.
     </para>
+    <para>
+      Environments not in this document must be prefixed by the string "X-"
+      indicating that they are extensions. Environments are case-sensitive.
+    </para>
     <sect2 id="desktop-entry-extensions-examples">
       <title>Examples of using <varname>Categories</varname> and <varname>OnlyShowIn</varname></title>
       <para>
