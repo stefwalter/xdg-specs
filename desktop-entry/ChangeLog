@@ -1,3 +1,8 @@
+2008-03-04  Vincent Untz  <vuntz@gnome.org>
+
+	* desktop-entry-spec.xml: bump version to 1.1-draft, so we can publish
+	it. See http://bugs.freedesktop.org/show_bug.cgi?id=14097
+
 2007-09-10  Vincent Untz  <vuntz@gnome.org>
 
 	* desktop-entry-spec.xml: fix Icon key in example: it was using the
