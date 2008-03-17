@@ -1637,6 +1637,63 @@ counter at any time, and MUST do so when it first manages a new
 window.
 		</para>
 	</sect2>
+    <sect2>
+		<title>_NET_WM_FULLSCREEN_MONITORS</title>
+		<programlisting><![CDATA[
+_NET_WM_FULLSCREEN_MONITORS, CARDINAL[4]/32
+]]></programlisting>
+      <para>
+A read-only list of 4 monitor indices indicating the top, bottom, left, and
+right edges of the window when the fullscreen state is enabled. The indices
+are from the set returned by the Xinerama extension.
+      </para>
+      <para>
+Windows transient for the window with _NET_WM_FULLSCREEN_MONITORS set, such as
+those with type _NEW_WM_WINDOW_TYPE_DIALOG, are generally expected to be
+positioned (e.g. centered) with respect to only one of the monitors. This
+might be the monitor containing the mouse pointer or the monitor containing the
+non-full-screen window.
+      </para>
+      <para>
+A Client wishing to change this list MUST send a _NET_WM_FULLSCREEN_MONITORS
+client message to the root window. The Window Manager MUST
+keep this list updated to reflect the current state of the window.
+      </para>
+<programlisting><![CDATA[
+  window  = the respective client window
+  message_type = _NET_WM_FULLSCREEN_MONITORS
+  format = 32
+  data.l[0] = the monitor whose top edge defines the top edge of the fullscreen window
+  data.l[1] = the monitor whose bottom edge defines the bottom edge of the fullscreen window
+  data.l[2] = the monitor whose left edge defines the left edge of the fullscreen window
+  data.l[3] = the monitor whose right edge defines the right edge of the fullscreen window
+  data.l[4] = source indication
+]]></programlisting>
+      <para>
+See <xref linkend="sourceindication"/> for details on the source indication.
+      </para>
+      <para>
+Virtual machine software may use this hint to have a virtual operating system
+instance that sees multiple monitors. The application window stretches over
+several monitors, giving the appearance that these monitors have been taken
+over by the guest virtual machine.
+      </para>
+      <para>
+This hint might also be used by a movie or presentation application allowing
+users to display the media spanned over several monitors.
+      </para>
+      <para>
+In both cases, the application would have some user interface allowing users
+to configure which monitors the application fullscreens to. The window manager
+need not provide such an interface, though it could.
+      </para>
+      <para>
+In the event of a change in monitor configuration, the application is
+responsible for re-computing the monitors on which it wants to appear.
+The window manager may continue using the same monitor indices as before
+or simply clear the list, returning to "normal" fullscreen.
+      </para>
+   	</sect2>
 </sect1>
 
 
@@ -2179,6 +2236,7 @@ OR OTHER DEALINGS IN THE SOFTWARE.
                 <para>Thomas Fitzsimmons</para>
                 <para>Olivier Chapuis</para>
 		<para>S&oslash;ren Sandmann</para>
+                <para>Grant Patterson</para>
 	</sect1>
   <sect1>
     <title>Change history</title>
@@ -2205,6 +2263,9 @@ Added _NET_WM_USER_TIME_WINDOW.
 			</para></listitem>
 			<listitem><para>
 Added _NET_WM_FULL_PLACEMENT.
+			</para></listitem>
+			<listitem><para>
+Added _NET_WM_FULLSCREEN_MONITORS.
 			</para></listitem>
 	        </itemizedlist>
             </sect2>
