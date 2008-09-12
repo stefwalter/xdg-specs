@@ -143,8 +143,8 @@
 	<literal>=</literal> sign is the actual delimiter.
       </para>
       <para>
-	Key names must contain only the characters
-	<literal>A-Za-z0-9-</literal>.
+	Only the characters <literal>A-Za-z0-9-</literal> may be used in
+	key names.
       </para>
       <para>
 	As the case is significant, the keys <varname>Name</varname> and
