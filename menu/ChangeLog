@@ -1,5 +1,9 @@
 2009-01-10  Vincent Untz  <vuntz@gnome.org>
 
+	* menu-spec.xml: bump version to 1.1-draft
+
+2009-01-10  Vincent Untz  <vuntz@gnome.org>
+
 	* menu-spec.xml: add LXDE as registered desktop environment for
 	OnlyShowIn.
 	See http://lists.freedesktop.org/archives/xdg/2008-December/010103.html
