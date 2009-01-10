@@ -1,3 +1,9 @@
+2009-01-10  Vincent Untz  <vuntz@gnome.org>
+
+	* systemtray-spec.xml: add _NET_SYSTEM_TRAY_VISUAL and a description of
+	visual and background pixmap handling..
+	See http://lists.freedesktop.org/archives/xdg/2009-January/010122.html
+
 2004-11-30  Mark McLoughlin  <mark@skynet.ie>
 
 	* systemtray-spec.xml: add _NET_SYSTEM_TRAY_ORIENTATION.

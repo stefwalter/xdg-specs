@@ -5,8 +5,8 @@
 <article id="index">
   <articleinfo>
     <title>System Tray Protocol Specification</title>
-    <releaseinfo>Version 0.2</releaseinfo>
-    <date>23 November 2004</date>
+    <releaseinfo>Version 0.3</releaseinfo>
+    <date>10 January 2009</date>
     <authorgroup>
       <author>
 	<firstname>Havoc</firstname>
@@ -206,6 +206,39 @@ void send_message(
     </para>
   </sect1>
 
+  <sect1 id="visuals">
+    <title>Visual and background pixmap handling</title>
+    <para>
+      If the _NET_SYSTEM_TRAY_VISUAL property (see below) is present,
+      tray icon windows should be created using that visual. If the
+      property is not present, then tray icon windows should be
+      created using the default visual of the screen.
+    </para>
+    <para>
+      Historically, to allow the appearance of icons with transparent
+      backgrounds on servers that did not support visuals with an
+      alpha channel or the Composite extension, a convention was
+      adopted where a background pixmap was set on the XEMBED embedder
+      window, aligned properly to match the contents of the embedder
+      window's parent, the tray icon window was set to have a
+      background of ParentRelative, and drawing of the icon done on
+      top of this background.
+    </para>
+    <para>
+      Setting the background of a window to ParentRelative when the
+      depth of the window does not match the depth of the window's
+      parent, or reparenting a window with a ParentRelative
+      background into a parent with a non-matching depth produces a
+      BadMatch error, so the embedder window must be created to match
+      the visual of the tray icon window, even if the tray icon window
+      does not have the visual provided in _NET_SYSTEM_TRAY_VISUAL. If
+      convenient, the tray manager may set an appropriate background
+      pixmap on the embedder window to provide the appearance of
+      transparency. However, the preferred method of transparency is
+      to use a visual with an alpha channel in _NET_SYSTEM_TRAY_VISUAL.
+    </para>
+  </sect1>
+
   <sect1 id="hints">
     <title>Tray icon hints</title>
     <para>
@@ -277,6 +310,24 @@ The property should be set by the tray manager to indicate the current
 orientation of the tray. Tray icons may use this hint in order to
 maintain the icon's aspect ratio and also as an indication of how the
 icon contents should be laid out.
+      </para>
+
+    </sect2>
+
+    <sect2>
+      <title>_NET_SYSTEM_TRAY_VISUAL</title>
+      <programlisting><![CDATA[
+_NET_SYSTEM_TRAY_VISUAL visual_id VISUALID/32
+]]>
+      </programlisting>
+
+      <para>
+The property should be set by the tray manager to indicate the preferred
+visual for icon windows. To avoid ambiguity about the colormap to use
+this visual must either be the default visual for the screen or it
+must be a TrueColor visual. If this property is set to a visual with
+an alpha channel, the tray manager must use the Composite extension to
+composite the icon against the background using PictOpOver.
       </para>
 
     </sect2>
@@ -352,6 +403,19 @@ icon contents should be laid out.
 
   <appendix id="changes">
     <title>Change history</title>
+    <formalpara>
+      <title>Version 0.3, 10 January 2009, Owen Taylor</title>    
+      <para>
+	<itemizedlist>
+	  <listitem>
+	    <para>
+              Added the _NET_SYSTEM_TRAY_VISUAL hint and a
+              description of visual and background pixmap handling.
+	    </para>
+	  </listitem>
+	</itemizedlist>
+      </para>
+    </formalpara>
     <formalpara>
       <title>Version 0.2, 23 November 2004, Mark McLoughlin</title>    
       <para>
