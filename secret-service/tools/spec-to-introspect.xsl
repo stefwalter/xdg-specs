@@ -8,18 +8,19 @@
 
     Copyright 2009  Michael Leupold <lemma@confuego.org>
 
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License as
-    published by the Free Software Foundation; either version 2 of
-    the License, or (at your option) any later version.
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Lesser General Public
+    License as published by the Free Software Foundation; either
+    version 2.1 of the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
+    This library is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Lesser General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Lesser General Public
+    License along with this library; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 -->
 
 <!--
@@ -30,6 +31,8 @@
      - tp:docstring may contain XHTML which this template doesn't handle
 -->
 
+    <xsl:include href="resolve-type.xsl"/>
+
     <!-- main template -->
     <xsl:template match="tp:spec">
         <node>
@@ -38,87 +41,6 @@
             <!-- TODO: <xsl:apply-templates select="tp:mapping"/> -->
             <xsl:apply-templates select="node/interface"/>
         </node>
-    </xsl:template>
-
-    <!-- Resolve the type a node has. This will first look at tp:type and
-         - if not found - use the type attribute -->
-    <xsl:template name="ResolveType">
-        <xsl:param name="node"/>
-        <xsl:choose>
-            <xsl:when test="$node//@tp:type">
-                <xsl:call-template name="TpType">
-                    <xsl:with-param name="type" select="$node//@tp:type"/>
-                </xsl:call-template>
-            </xsl:when>
-            <xsl:when test="$node//@type">
-                <xsl:call-template name="DBusType">
-                    <xsl:with-param name="type" select="$node//@type"/>
-                </xsl:call-template>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:message terminate="yes">
-                    Node doesn't contain a type.
-                </xsl:message>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:template>
-
-    <!-- Map a D-Bus type to its EggDBus counterpart -->
-    <xsl:template name="DBusType">
-        <xsl:param name="type"/>
-        <xsl:choose>
-            <xsl:when test="$type='o'">ObjectPath</xsl:when>
-            <xsl:when test="$type='s'">String</xsl:when>
-            <xsl:when test="$type='y'">Byte</xsl:when>
-            <xsl:when test="$type='b'">Boolean</xsl:when>
-            <xsl:when test="$type='n'">Int16</xsl:when>
-            <xsl:when test="$type='q'">UInt16</xsl:when>
-            <xsl:when test="$type='i'">Int32</xsl:when>
-            <xsl:when test="$type='u'">UInt32</xsl:when>
-            <xsl:when test="$type='x'">Int64</xsl:when>
-            <xsl:when test="$type='t'">UInt64</xsl:when>
-            <xsl:when test="$type='d'">Double</xsl:when>
-            <xsl:when test="$type='g'">Signature</xsl:when>
-            <xsl:when test="starts-with($type, 'a')">
-                Array&lt;
-                <xsl:call-template name="DBusType">
-                    <xsl:with-param name="type" select="substring($type, 2)"/>
-                </xsl:call-template>
-                &gt;
-            </xsl:when>
-            <!-- TODO: doesn't implement dict-entries and structs -->
-            <xsl:otherwise>
-                <xsl:message terminate="yes">
-                    Unknown DBus Type <xsl:value-of select="$type"/>
-                </xsl:message>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:template>
-
-    <!-- Resolve tp:type attributes by searching for matching tp:struct
-         and tp:mapping elements -->
-    <xsl:template name="TpType">
-        <xsl:param name="type"/>
-        <xsl:choose>
-            <xsl:when test="/tp:spec/tp:struct[@name=$type]">
-                <xsl:value-of select="$type"/>
-            </xsl:when>
-            <xsl:when test="/tp:spec/tp:mapping[@name=$type]">
-                Dict&lt;
-                <xsl:call-template name="ResolveType">
-                    <xsl:with-param name="node" select="/tp:spec/tp:mapping[@name=$type]/tp:member[@name='Key']"/>
-                </xsl:call-template>,
-                <xsl:call-template name="ResolveType">
-                    <xsl:with-param name="node" select="/tp:spec/tp:mapping[@name=$type]/tp:member[@name='Value']"/>
-                </xsl:call-template>
-                &gt;
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:message terminate="yes">
-                    Unspecified type <xsl:value-of select="$type"/>.
-                </xsl:message>
-            </xsl:otherwise>
-        </xsl:choose>
     </xsl:template>
 
     <!-- handle most of the D-Bus introspection elements -->
@@ -151,7 +73,7 @@
                         </xsl:variable>
                         <annotation name="org.gtk.EggDBus.Type">
                             <xsl:attribute name="value">
-                                <xsl:value-of select="normalize-space($type)"/>
+                                <xsl:value-of select="translate(translate($type, ' ', ''), '&#xa;', '')"/>
                             </xsl:attribute>
                         </annotation>
                     </xsl:when>
