@@ -192,47 +192,47 @@
 
   <xsl:template name="do-types">
     <xsl:if test="tp:simple-type">
-      <sect1>
+      <section>
         <title>Simple types</title>
         <xsl:apply-templates select="tp:simple-type"/>
-      </sect1>
+      </section>
     </xsl:if>
 
     <xsl:if test="tp:enum">
-      <sect1>
+      <section>
         <title>Enumerated types</title>
         <xsl:apply-templates select="tp:enum"/>
-      </sect1>
+      </section>
     </xsl:if>
 
     <xsl:if test="tp:flags">
-      <sect1>
+      <section>
         <title>Sets of flags</title>
         <xsl:apply-templates select="tp:flags"/>
-      </sect1>
+      </section>
     </xsl:if>
 
     <xsl:if test="tp:struct">
-      <sect1>
+      <section>
         <title>Struct types</title>
         <xsl:apply-templates select="tp:struct"/>
-      </sect1>
+      </section>
     </xsl:if>
 
     <xsl:if test="tp:mapping">
-      <sect1>
+      <section>
         <title>Map types</title>
         <xsl:apply-templates select="tp:mapping"/>
-      </sect1>
+      </section>
     </xsl:if>
 
     <xsl:if test="tp:external-type">
-      <sect1>
+      <section>
         <title>Types defined elsewhere</title>
         <glosslist>
           <xsl:apply-templates select="tp:external-type"/>
         </glosslist>
-      </sect1>
+      </section>
     </xsl:if>
   </xsl:template>
 
@@ -266,7 +266,7 @@
   <xsl:template match="tp:copyright"/>
   <xsl:template match="tp:license"/>
 
-  <xsl:template match="interface"><sect1>
+  <xsl:template match="interface"><section>
     <title id="{@name}"><literal><xsl:value-of select="@name"/></literal></title>
 
     <xsl:if test="@tp:causes-havoc">
@@ -302,21 +302,21 @@
     <xsl:apply-templates select="tp:deprecated"/>
 
     <xsl:if test="method">
-      <sect2>
+      <section>
         <title>Methods</title>
         <xsl:apply-templates select="method"/>
-      </sect2>
+      </section>
     </xsl:if>
 
     <xsl:if test="signal">
-      <sect2>
+      <section>
         <title>Signals</title>
         <xsl:apply-templates select="signal"/>
-      </sect2>
+      </section>
     </xsl:if>
 
     <xsl:if test="tp:property">
-      <sect3>
+      <section>
         <title>Telepathy Properties</title>
         <para>
           Accessed using the
@@ -327,11 +327,11 @@
         <glosslist>
           <xsl:apply-templates select="tp:property"/>
         </glosslist>
-      </sect3>
+      </section>
     </xsl:if>
 
     <xsl:if test="property">
-      <sect2>
+      <section>
         <title>D-Bus Properties</title>
         <para>
           Accessed using the org.freedesktop.DBus.Properties interface.
@@ -339,12 +339,12 @@
         <glosslist>
           <xsl:apply-templates select="property"/>
         </glosslist>
-      </sect2>
+      </section>
     </xsl:if>
 
     <xsl:call-template name="do-types"/>
 
-  </sect1></xsl:template>
+  </section></xsl:template>
 
   <xsl:template match="tp:flags">
 
@@ -362,7 +362,7 @@
       </xsl:message>
     </xsl:if>
 
-    <sect3>
+    <section>
       <title id="type-{@name}"><literal><xsl:value-of select="@name"/></literal></title>
       <xsl:apply-templates select="tp:docstring" />
       <xsl:apply-templates select="tp:added"/>
@@ -400,7 +400,7 @@
           </glossentry>
         </xsl:for-each>
       </glosslist>
-    </sect3>
+    </section>
   </xsl:template>
 
   <xsl:template match="tp:enum">
@@ -419,7 +419,7 @@
       </xsl:message>
     </xsl:if>
 
-    <sect3>
+    <section>
       <title id="type-{@name}"><literal><xsl:value-of select="@name"/></literal></title>
       <xsl:apply-templates select="tp:docstring" />
       <xsl:apply-templates select="tp:added"/>
@@ -457,7 +457,7 @@
           </glossentry>
         </xsl:for-each>
       </glosslist>
-    </sect3>
+    </section>
   </xsl:template>
 
   <xsl:template match="property">
@@ -546,7 +546,7 @@
   </xsl:template>
 
   <xsl:template match="tp:mapping">
-    <sect2>
+    <section>
       <title id="type-{@name}">
         <literal><xsl:value-of select="@name"/></literal>
       </title>
@@ -558,13 +558,13 @@
           <xsl:value-of select="@array-name"/>.
         </para>
       </xsl:if>
-      <sect3>
+      <section>
         <title>Members</title>
         <glosslist>
           <xsl:apply-templates select="tp:member" mode="descriptionwithtype"/>
         </glosslist>
-      </sect3>
-    </sect2>
+      </section>
+    </section>
   </xsl:template>
 
   <xsl:template match="tp:docstring" mode="in-index"/>
@@ -590,7 +590,7 @@
       </xsl:message>
     </xsl:if>
 
-    <sect3>
+    <section>
       <title id="type-{@name}">
         <literal><xsl:value-of select="@name"/> − <xsl:value-of select="@type"/></literal>
       </title>
@@ -600,7 +600,7 @@
         <xsl:apply-templates select="tp:changed"/>
         <xsl:apply-templates select="tp:deprecated"/>
       </para>
-    </sect3>
+    </section>
   </xsl:template>
 
   <xsl:template match="tp:external-type">
@@ -642,7 +642,7 @@
   </xsl:template>
 
   <xsl:template match="tp:struct">
-    <sect2>
+    <section>
       <title id="type-{@name}">
         <literal>
           <xsl:value-of select="@name"/>
@@ -673,7 +673,7 @@
       <glosslist>
         <xsl:apply-templates select="tp:member" mode="description"/>
       </glosslist>
-    </sect2>
+    </section>
   </xsl:template>
 
   <xsl:template match="arg" mode="paramdef">
@@ -755,7 +755,7 @@
       </xsl:choose>
     </xsl:for-each>
 
-    <sect3>
+    <section>
       <title id="{concat(../@name, concat('.', @name))}">
         <literal><xsl:value-of select="concat(../@name, concat('.', @name))"/></literal>
       </title>
@@ -810,7 +810,7 @@
             </para>
           </formalpara>
         </xsl:if>
-    </sect3>
+    </section>
   </xsl:template>
 
   <xsl:template name="tp-type">
@@ -1032,7 +1032,7 @@
       </xsl:choose>
     </xsl:for-each>
 
-    <sect3>
+    <section>
       <title id="{concat(../@name, concat('.', @name))}">
         <literal><xsl:value-of select="concat(../@name, concat('.', @name))"/></literal>
       </title>
@@ -1066,7 +1066,7 @@
           </tgroup>
         </table>
       </xsl:if>
-    </sect3>
+    </section>
   </xsl:template>
 
   <xsl:template match="/tp:spec">
