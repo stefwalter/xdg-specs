@@ -192,7 +192,7 @@
   </xsl:template>
 
   <xsl:template name="generic-types">
-    <chapter>
+    <chapter id="types">
         <title>Types</title>
         <xsl:call-template name="do-types"/>
     </chapter>
@@ -1043,13 +1043,13 @@
           <xsl:value-of select="tp:version"/>
         </xsl:if> -->
       </bookinfo>
-      <chapter>
+      <chapter id="interfaces">
         <title>Interfaces</title>
         <xsl:apply-templates select="//node"/>
       </chapter>
       <xsl:call-template name="generic-types"/>
       <xsl:if test="tp:errors">
-        <chapter>
+        <chapter id="errors">
             <xsl:apply-templates select="tp:errors"/>
         </chapter>
       </xsl:if>

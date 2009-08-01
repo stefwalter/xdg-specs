@@ -72,10 +72,10 @@
 			choose to use a textual format to combine these values into one. For example, the
 			'desktop' key file format, or XML or another form of markup.</para>
 
-			<para>Secrets may be <link linkend='transfer-of-secrets'>encrypted when transferred</link>
+			<para>Secrets may be <link linkend='transfer-secrets'>encrypted when transferred</link>
 			 to the client application and vice versa.</para>
 
-			<para>The <link linkend='eggdbus-structmain-Secret'>Secret structure</link> encapsulates
+			<para>The <link linkend='type-Secret'>Secret structure</link> encapsulates
 			a secret value along with it's transfer encryption parameters.</para>
 		</chapter>
 
@@ -84,10 +84,10 @@
 
 			<para>Each secret is stored together with
 			<link linkend='lookup-attributes'>lookup attributes</link> and a label. These together
-			form an <link linkend='eggdbus-interface-org.freedesktop.Secrets.Item'>item</link>.</para>
+			form an <link linkend='org.freedesktop.Secrets.Item'>item</link>.</para>
 
 			<para>A group of items together form a
-			<link linkend='eggdbus-interface-org.freedesktop.Secrets.Collection'>collection</link>.
+			<link linkend='org.freedesktop.Secrets.Collection'>collection</link>.
 			A collection is similar in concept to the terms 'keyring' or 'wallet'.</para>
 
 			<para>Collections and items are represented as DBus objects, and each have their own
@@ -105,18 +105,18 @@
 
 			<para>The service must prevent locked collections or items from modification. On
 			such an invalid access the
-			<link linkend='eggdbus-constant-Error.org.freedesktop.Secrets.Error.IsLocked'>IsLocked</link>
+			<link linkend='org.freedesktop.Secrets.Error.IsLocked'>IsLocked</link>
 			 error should be raised.</para>
 
 			<para>Client applications without special requirements should store in the default
 			collection. Use the
-			<link linkend='eggdbus-property-org.freedesktop.Secrets.Service:DefaultCollection'>DefaultCollection</link>
+			<link linkend='org.freedesktop.Secrets.Service.DefaultCollection'>DefaultCollection</link>
 			property on the Service interface to determine the default collection. In addition
 			the default collection is always accessible through a
 			<link linkend='object-paths'>specific object path</link>.</para>
 
 			<para>Client applications with special needs can create a new collection by calling the
-			<link linkend='eggdbus-property-org.freedesktop.Secrets.Service.CreateCollection'>CreateCollection()</link>
+			<link linkend='org.freedesktop.Secrets.Service.CreateCollection'>CreateCollection()</link>
 			method on the Service interface. A client application must have
 			<link linkend='sessions'>opened a session</link> before a collection can be created. The </para>
 
@@ -124,20 +124,20 @@
 			items within it may only be unlocked by the application that created the collection.
 			Service implementors may choose not to implement this feature and should ignore the
 			private argument when
-			<link linkend='eggdbus-method-org.freedesktop.Secrets.Service.CreateCollection'>creating a collection</link>.
+			<link linkend='org.freedesktop.Secrets.Service.CreateCollection'>creating a collection</link>.
 			Client applications that demand this feature, should check the the
-			<link linkend='eggdbus-property-org.freedesktop.Secrets.Collection:Private'>Private property</link>
+			<link linkend='org.freedesktop.Secrets.Collection.Private'>Private property</link>
 			after creating a collection to see if the request for a private collection was ignored.</para>
 
 			<para>A collection can be deleted by calling the
-			<link linkend='eggdbus-property-org.freedesktop.Secrets.Collection.Delete'>Delete()</link>
+			<link linkend='org.freedesktop.Secrets.Collection.Delete'>Delete()</link>
 			method on the Service interface. A client application must have
 			<link linkend='sessions'>opened a session</link> before a collection can be created.
 			However the collection does not need to be unlocked. In addition private collections can
 			be deleted by any application.</para>
 		</chapter>
 
-		<chapter>
+		<chapter id="lookup-attributes">
 			<title>Lookup Attributes</title>
 
 			<para>Attributes can and should be stored with a secret to facilitate lookup
@@ -167,16 +167,16 @@
 			between the client application and the service.</para>
 
 			<para>A session is established by calling the service's
-			<link linkend='eggdbus-method-org.freedesktop.Secrets.Service.OpenSession'>OpenSession()</link>
+			<link linkend='org.freedesktop.Secrets.Service.OpenSession'>OpenSession()</link>
 			method. Once established, a session is bound to calling application's connection to
 			the DBus session bus. Generally only one session can be established per client
 			application. Calling OpenSession() a second time results in an
-			<link linkend='eggdbus-constant-Error.org.freedesktop.Secrets.Error.AlreadyExists'>AlreadyExists</link>
+			<link linkend='org.freedesktop.Secrets.Error.AlreadyExists'>AlreadyExists</link>
 			error.</para>
 
 			<para>A session is closed when the client application disconnects from the DBus
 			session bus. Alternatively the client application can call the
-			<link linkend='eggdbus-method-org.freedesktop.Secrets.Session.Close'>Close()</link>
+			<link linkend='org.freedesktop.Secrets.Session.Close'>Close()</link>
 			method on the session interface. Once a session is closed all session specific
 			negotiations and authentication should be dropped by the service.</para>
 		</chapter>
@@ -205,7 +205,7 @@
 			a common way to store secrets. It's predecessors are the desktop specific APIs
 			used by GNOME Keyring and KWallet.</para>
 
-			<sect1>
+			<section>
 				<title>Negotiation of Algorithms</title>
 
 				<para>In order to encrypt secrets in transit, the service and the client
@@ -214,13 +214,13 @@
 
 				<para>The client application opens a <link linkend='sessions'>session</link>
 				with the service, and then calls the
-				<link linkend='eggdbus-method-org.freedesktop.Secrets.Session.Negotiate'>
+				<link linkend='org.freedesktop.Secrets.Session.Negotiate'>
 				Negotiate() method</link> on that session. The algorithms argument to the
 				Negotiate() method specifies a set of algorithms to be used together for
 				key agreement and encryption. The other arguments are algorithm specific.</para>
 
 				<para>If a service does not support a specific set of algorithms, a
-				<link linkend='eggdbus-constant-Error.org.freedesktop.Secrets.Error.NotSupported'>NotSupported</link>
+				<link linkend='org.freedesktop.Secrets.Error.NotSupported'>NotSupported</link>
 				error is returned, and the client is free to try another set of algorithms.
 				The <emphasis>plain</emphasis> algorithm is almost always supported.</para>
 
@@ -231,19 +231,19 @@
 				<para>Once an algorithm has been negotiated, it is used for all transfer of secrets
 				between the service and the client application in both directions. Algorithm
 				specific parameters may be transfered with each
-				<link linkend='eggdbus-structmain-Secret'>secret</link>.</para>
-			</sect1>
+				<link linkend='type-Secret'>secret</link>.</para>
+			</section>
 
-			<sect1>
+			<section>
 				<title>Algorithm: plain</title>
 
 				<simplelist type='vert'>
 				<member>Algorithm string: <emphasis>plain</emphasis></member>
-				<member><link linkend='eggdbus-method-org.freedesktop.Secrets.Session.Negotiate'>
+				<member><link linkend='org.freedesktop.Secrets.Session.Negotiate'>
 					Negotiate input</link>:  empty string</member>
-				<member><link linkend='eggdbus-method-org.freedesktop.Secrets.Session.Negotiate'>
+				<member><link linkend='org.freedesktop.Secrets.Session.Negotiate'>
 					Negotiate output</link>:  empty string</member>
-				<member><link linkend='eggdbus-struct-Secret'>
+				<member><link linkend='type-Secret'>
 					Secret parameter</link>:  empty string</member>
 				</simplelist>
 
@@ -251,23 +251,23 @@
 
 				<para>It is strongly recommended that a service implementing this API support
 				the <emphasis>plain</emphasis> algorithm.</para>
-			</sect1>
+			</section>
 
-			<sect1>
+			<section>
 				<title>Algorithm: dh-ietf1024-aes128-cbc-pkcs7</title>
 
 				<simplelist type='vert'>
 				<member>Algorithm string: <emphasis>dh-ietf1024-aes128-cbc-pkcs7</emphasis></member>
-				<member><link linkend='eggdbus-method-org.freedesktop.Secrets.Session.Negotiate'>
+				<member><link linkend='org.freedesktop.Secrets.Session.Negotiate'>
 					Negotiate input</link>: client dh pub key as an array of bytes</member>
-				<member><link linkend='eggdbus-method-org.freedesktop.Secrets.Session.Negotiate'>
+				<member><link linkend='org.freedesktop.Secrets.Session.Negotiate'>
 					Negotiate output</link>: service dh pub key as an array of bytes</member>
-				<member><link linkend='eggdbus-struct-Secret'>
+				<member><link linkend='type-Secret'>
 					Secret parameter</link>: 16 byte AES initialization vector.</member>
 				</simplelist>
 
 				<para>TODO: Document</para>
-			</sect1>
+			</section>
 
 		</chapter>
 
@@ -281,7 +281,7 @@
 			<para>In order to unlock an item or collection a
 			<link linkend='sessions'>session</link> is established by the client application,
 			and the
-			<link linkend='eggdbus-method-org.freedesktop.Secrets.Session.BeginAuthenticate'>BeginAuthenticate()</link>
+			<link linkend='org.freedesktop.Secrets.Session.BeginAuthenticate'>BeginAuthenticate()</link>
 			method is called with one or more DBus object paths of items or collections. The
 			BeginAuthenticate() method is asynchronous and may return before the item is
 			actually unlocked.</para>
@@ -291,11 +291,11 @@
 
 			<para>After the service tries to unlock an item or collection, whether successfully
 			or unsuccessfully, the
-			<link linkend='eggdbus-signal-org.freedesktop.Secrets.Session::Authenticated'>Authenticated</link>
+			<link linkend='org.freedesktop.Secrets.Session.Authenticated'>Authenticated</link>
 			signal on the session interface is emitted.</para>
 
 			<para>The client application may, but is not required to, call the
-			<link linkend='eggdbus-method-org.freedesktop.Secrets.Session.CompleteAuthenticate'>CompleteAuthenticate()</link>
+			<link linkend='org.freedesktop.Secrets.Session.CompleteAuthenticate'>CompleteAuthenticate()</link>
 			method. One or more DBus object paths of items or collections that BeginAuthenticate()
 			was previously called with, can be passed in. The CompleteAuthenticate() returns the
 			items that were successfully authenticated. In addition if the unlock process is not
@@ -346,62 +346,43 @@
 	<part id="ref-dbus-api">
 		<title>D-Bus API Reference</title>
 
-		<refentry id='object-paths'>
-			<refmeta>
-				<refentrytitle role="top_of_page">Object Paths</refentrytitle>
-			</refmeta>
+    <chapter id='object-paths'>
+			<title>Object Paths</title>
 
 			<para>The various DBus object paths used with the Secrets API are designed to be human
 			readable but not displayed to the user. The object path of an item or collection should
 			not change for its lifetime, under normal circumstances.</para>
 
-			<refsect1>
-				<programlisting>/org/freedesktop/Secrets</programlisting>
-				<para>The object path for the service.</para>
-			</refsect1>
+			<programlisting>/org/freedesktop/Secrets</programlisting>
+			<para>The object path for the service.</para>
 
-			<refsect1>
-				<programlisting>/org/freedesktop/Secrets/collection/<emphasis>xxxx</emphasis></programlisting>
-				<para>The object path for a collection, where <emphasis>xxxx</emphasis> represents a
-				possibly encoded or truncated version of the initial label of the collection.</para>
-			</refsect1>
+			<programlisting>/org/freedesktop/Secrets/collection/<emphasis>xxxx</emphasis></programlisting>
+			<para>The object path for a collection, where <emphasis>xxxx</emphasis> represents a
+			possibly encoded or truncated version of the initial label of the collection.</para>
 
-			<refsect1>
-				<programlisting>/org/freedesktop/Secrets/collection/<emphasis>xxxx</emphasis>/<emphasis>iiii</emphasis></programlisting>
+			<programlisting>/org/freedesktop/Secrets/collection/<emphasis>xxxx</emphasis>/<emphasis>iiii</emphasis></programlisting>
 				<para>The object path for an item, where <emphasis>xxxx</emphasis> is the collection (above)
 				and <emphasis>iiii</emphasis> is an auto-generated item specific identifier.</para>
-			</refsect1>
 
-			<refsect1>
-				<programlisting>/org/freedesktop/Secrets/session/<emphasis>ssss</emphasis></programlisting>
-				<para>The object path for a session, where <emphasis>ssss</emphasis> is an auto-generated
-				session specific identifier.</para>
-			</refsect1>
+			<programlisting>/org/freedesktop/Secrets/session/<emphasis>ssss</emphasis></programlisting>
+			<para>The object path for a session, where <emphasis>ssss</emphasis> is an auto-generated
+			session specific identifier.</para>
 
-			<refsect1>
-				<programlisting>/org/freedesktop/Secrets/default</programlisting>
-				<para>The default collection for client applications to store secrets is available under
-				this object path in addition to its real object path (above).</para>
-			</refsect1>
-		</refentry>
+			<programlisting>/org/freedesktop/Secrets/default</programlisting>
+			<para>The default collection for client applications to store secrets is available under
+			this object path in addition to its real object path (above).</para>
+		</chapter>
 
-		<refentry id='eggdbus-interface.org.freedesktop.Secrets.Collection'>
-			<refmeta>
-				<refentrytitle role="top_of_page">org.freedesktop.Secrets.Collection Interface</refentrytitle>
-			</refmeta>
-			<refnamediv>
-				<refname>org.freedesktop.Secrets.Collection Interface</refname>
-				<refpurpose>Collection of items</refpurpose>
-			</refnamediv>
+		<xi:include href="reference.xml" xpointer="interfaces" xmlns:xi="http://www.w3.org/2001/XInclude">
+			<xi:fallback/>
+		</xi:include>
+		<xi:include href="reference.xml" xpointer="types" xmlns:xi="http://www.w3.org/2001/XInclude">
+			<xi:fallback/>
+		</xi:include>
+		<xi:include href="reference.xml" xpointer="errors" xmlns:xi="http://www.w3.org/2001/XInclude">
+			<xi:fallback/>
+		</xi:include>
 
-		</refentry>
-
-		<xi:include href="../../../secrets/docbook-interface-org.freedesktop.Secrets.Collection.xml"/>
-		<xi:include href="../../../secrets/docbook-interface-org.freedesktop.Secrets.Item.xml"/>
-		<xi:include href="../../../secrets/docbook-interface-org.freedesktop.Secrets.Service.xml"/>
-		<xi:include href="../../../secrets/docbook-interface-org.freedesktop.Secrets.Session.xml"/>
-		<xi:include href="../../../secrets/docbook-struct-Secret.xml"/>
-		<xi:include href="../../../secrets/docbook-enum-Error.xml"/>
 	</part>
 
 <!--
@@ -414,5 +395,5 @@
     <xi:include href="xml/api-index-full.xml"><xi:fallback /></xi:include>
   </index>
 -->
-  <xi:include href="xml/annotation-glossary.xml"><xi:fallback /></xi:include>
+  <xi:include href="xml/annotation-glossary.xml" xmlns:xi="http://www.w3.org/2001/XInclude"><xi:fallback /></xi:include>
 </book>
