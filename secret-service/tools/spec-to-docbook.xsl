@@ -42,6 +42,14 @@
     </xsl:copy>
   </xsl:template>
 
+  <xsl:template name="direction">
+    <xsl:param name="indirection"/>
+    <xsl:choose>
+      <xsl:when test="$indirection = 'in'">IN</xsl:when>
+      <xsl:otherwise>OUT</xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
   <xsl:template match="tp:type">
     <xsl:call-template name="tp-type">
       <xsl:with-param name="tp-type" select="string(.)"/>
@@ -663,7 +671,7 @@
             make sense.</para>
         </xsl:otherwise>
       </xsl:choose>
-      <classsynopsis language="c">
+      <classsynopsis>
         <ooclass>
           <modifier>struct</modifier>
           <classname><xsl:value-of select="@name"/></classname>
@@ -678,6 +686,10 @@
 
   <xsl:template match="arg" mode="paramdef">
     <paramdef>
+      <xsl:call-template name="direction">
+        <xsl:with-param name="indirection" select="@direction"/>
+      </xsl:call-template>
+      <xsl:text> </xsl:text>
       <xsl:call-template name="ResolveType">
         <xsl:with-param name="node" select="."/>
       </xsl:call-template>
@@ -690,11 +702,15 @@
       <entry><xsl:value-of select="@name"/></entry>
       <entry>
         <xsl:call-template name="ResolveType">
-            <xsl:with-param name="node" select="."/>
+          <xsl:with-param name="node" select="."/>
         </xsl:call-template>
       </entry>
       <xsl:if test="not(parent::signal)">
-        <entry><xsl:value-of select="@direction"/></entry>
+        <entry>
+          <xsl:call-template name="direction">
+            <xsl:with-param name="indirection" select="@direction"/>
+          </xsl:call-template>
+        </entry>
       </xsl:if>
       <entry><xsl:apply-templates select="tp:docstring" mode="nopara"/></entry>
     </row>
