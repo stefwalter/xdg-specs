@@ -498,12 +498,12 @@
 
     <glossentry>
       <glossterm id="{concat(../@name, '.', @name)}">
-        <xsl:value-of select="@name"/> -
-        <literal>
+        <property><xsl:value-of select="@name"/></property> -
+        <type>
           <xsl:call-template name="ResolveType">
             <xsl:with-param name="node" select="."/>
           </xsl:call-template>
-        </literal>
+        </type>
         <xsl:text>, </xsl:text>
         <xsl:choose>
           <xsl:when test="@access = 'read'">

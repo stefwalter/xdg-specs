@@ -75,7 +75,7 @@
 			<para>Secrets may be <link linkend='transfer-secrets'>encrypted when transferred</link>
 			 to the client application and vice versa.</para>
 
-			<para>The <link linkend='type-Secret'>Secret structure</link> encapsulates
+			<para>The <link linkend='type-Secret'><classname>Secret</classname> structure</link> encapsulates
 			a secret value along with it's transfer encryption parameters.</para>
 		</chapter>
 
@@ -105,18 +105,20 @@
 
 			<para>The service must prevent locked collections or items from modification. On
 			such an invalid access the
-			<link linkend='org.freedesktop.Secrets.Error.IsLocked'>IsLocked</link>
+			<link linkend='org.freedesktop.Secrets.Error.IsLocked'><errorname>IsLocked</errorname></link>
 			 error should be raised.</para>
 
 			<para>Client applications without special requirements should store in the default
 			collection. Use the
-			<link linkend='org.freedesktop.Secrets.Service.DefaultCollection'>DefaultCollection</link>
+			<link linkend='org.freedesktop.Secrets.Service.DefaultCollection'>
+			<property>DefaultCollection</property></link>
 			property on the Service interface to determine the default collection. In addition
 			the default collection is always accessible through a
 			<link linkend='object-paths'>specific object path</link>.</para>
 
 			<para>Client applications with special needs can create a new collection by calling the
-			<link linkend='org.freedesktop.Secrets.Service.CreateCollection'>CreateCollection()</link>
+			<link linkend='org.freedesktop.Secrets.Service.CreateCollection'>
+			<function>CreateCollection()</function></link>
 			method on the Service interface. A client application must have
 			<link linkend='sessions'>opened a session</link> before a collection can be created. The </para>
 
@@ -126,11 +128,12 @@
 			private argument when
 			<link linkend='org.freedesktop.Secrets.Service.CreateCollection'>creating a collection</link>.
 			Client applications that demand this feature, should check the the
-			<link linkend='org.freedesktop.Secrets.Collection.Private'>Private property</link>
-			after creating a collection to see if the request for a private collection was ignored.</para>
+			<link linkend='org.freedesktop.Secrets.Collection.Private'><property>Private</property>
+			property</link> after creating a collection to see if the request for a private collection
+			was ignored.</para>
 
 			<para>A collection can be deleted by calling the
-			<link linkend='org.freedesktop.Secrets.Collection.Delete'>Delete()</link>
+			<link linkend='org.freedesktop.Secrets.Collection.Delete'><function>Delete()</function></link>
 			method on the Service interface. A client application must have
 			<link linkend='sessions'>opened a session</link> before a collection can be created.
 			However the collection does not need to be unlocked. In addition private collections can
@@ -167,16 +170,18 @@
 			between the client application and the service.</para>
 
 			<para>A session is established by calling the service's
-			<link linkend='org.freedesktop.Secrets.Service.OpenSession'>OpenSession()</link>
+			<link linkend='org.freedesktop.Secrets.Service.OpenSession'>
+			<function>OpenSession()</function></link>
 			method. Once established, a session is bound to calling application's connection to
 			the DBus session bus. Generally only one session can be established per client
 			application. Calling OpenSession() a second time results in an
-			<link linkend='org.freedesktop.Secrets.Error.AlreadyExists'>AlreadyExists</link>
+			<link linkend='org.freedesktop.Secrets.Error.AlreadyExists'>
+			<errorname>AlreadyExists</errorname></link>
 			error.</para>
 
 			<para>A session is closed when the client application disconnects from the DBus
 			session bus. Alternatively the client application can call the
-			<link linkend='org.freedesktop.Secrets.Session.Close'>Close()</link>
+			<link linkend='org.freedesktop.Secrets.Session.Close'><function>Close()</function></link>
 			method on the session interface. Once a session is closed all session specific
 			negotiations and authentication should be dropped by the service.</para>
 		</chapter>
@@ -214,13 +219,14 @@
 
 				<para>The client application opens a <link linkend='sessions'>session</link>
 				with the service, and then calls the
-				<link linkend='org.freedesktop.Secrets.Session.Negotiate'>
-				Negotiate() method</link> on that session. The algorithms argument to the
+				<link linkend='org.freedesktop.Secrets.Session.Negotiate'><function>
+				Negotiate()</function> method</link> on that session. The algorithms argument to the
 				Negotiate() method specifies a set of algorithms to be used together for
 				key agreement and encryption. The other arguments are algorithm specific.</para>
 
 				<para>If a service does not support a specific set of algorithms, a
-				<link linkend='org.freedesktop.Secrets.Error.NotSupported'>NotSupported</link>
+				<link linkend='org.freedesktop.Secrets.Error.NotSupported'>
+				<errorname>NotSupported</errorname></link>
 				error is returned, and the client is free to try another set of algorithms.
 				The <emphasis>plain</emphasis> algorithm is almost always supported.</para>
 
@@ -231,21 +237,29 @@
 				<para>Once an algorithm has been negotiated, it is used for all transfer of secrets
 				between the service and the client application in both directions. Algorithm
 				specific parameters may be transfered with each
-				<link linkend='type-Secret'>secret</link>.</para>
+				<link linkend='type-Secret'><classname>secret</classname></link>.</para>
 			</section>
 
 			<section>
 				<title>Algorithm: plain</title>
 
-				<simplelist type='vert'>
-				<member>Algorithm string: <emphasis>plain</emphasis></member>
-				<member><link linkend='org.freedesktop.Secrets.Session.Negotiate'>
-					Negotiate input</link>:  empty string</member>
-				<member><link linkend='org.freedesktop.Secrets.Session.Negotiate'>
-					Negotiate output</link>:  empty string</member>
-				<member><link linkend='type-Secret'>
-					Secret parameter</link>:  empty string</member>
-				</simplelist>
+				<segmentedlist>
+					<?dbhtml list-presentation="list"?>
+					<segtitle>Algorithm string</segtitle>
+					<segtitle><link linkend='org.freedesktop.Secrets.Session.Negotiate'>
+					<function>Negotiate</function> input</link></segtitle>
+					<segtitle><link linkend='org.freedesktop.Secrets.Session.Negotiate'>
+					<function>Negotiate</function> output</link></segtitle>
+					<segtitle><link linkend='type-Secret'>
+					<classname>Secret</classname> parameter</link></segtitle>
+					<seglistitem>
+						<!-- TODO: literal? -->
+						<seg><emphasis>plain</emphasis></seg>
+						<seg>empty string</seg>
+						<seg>empty string</seg>
+						<seg>empty string</seg>
+					</seglistitem>
+				</segmentedlist>
 
 				<para>The plain algorithm does no encryption whatsoever.</para>
 
@@ -256,15 +270,23 @@
 			<section>
 				<title>Algorithm: dh-ietf1024-aes128-cbc-pkcs7</title>
 
-				<simplelist type='vert'>
-				<member>Algorithm string: <emphasis>dh-ietf1024-aes128-cbc-pkcs7</emphasis></member>
-				<member><link linkend='org.freedesktop.Secrets.Session.Negotiate'>
-					Negotiate input</link>: client dh pub key as an array of bytes</member>
-				<member><link linkend='org.freedesktop.Secrets.Session.Negotiate'>
-					Negotiate output</link>: service dh pub key as an array of bytes</member>
-				<member><link linkend='type-Secret'>
-					Secret parameter</link>: 16 byte AES initialization vector.</member>
-				</simplelist>
+				<segmentedlist>
+					<?dbhtml list-presentation="list"?>
+					<segtitle>Algorithm string</segtitle>
+					<segtitle><link linkend='org.freedesktop.Secrets.Session.Negotiate'>
+					<function>Negotiate</function> input</link></segtitle>
+					<segtitle><link linkend='org.freedesktop.Secrets.Session.Negotiate'>
+					<function>Negotiate</function> output</link></segtitle>
+					<segtitle><link linkend='type-Secret'>
+					<classname>Secret</classname> parameter</link></segtitle>
+					<seglistitem>
+						<!-- TODO: literal? -->
+						<seg><emphasis>dh-ietf1024-aes128-cbc-pkcs7</emphasis></seg>
+						<seg>client dh pub key as an array of bytes</seg>
+						<seg>service dh pub key as an array of bytes</seg>
+						<seg>16 byte AES initialization vector</seg>
+					</seglistitem>
+				</segmentedlist>
 
 				<para>TODO: Document</para>
 			</section>
@@ -281,7 +303,8 @@
 			<para>In order to unlock an item or collection a
 			<link linkend='sessions'>session</link> is established by the client application,
 			and the
-			<link linkend='org.freedesktop.Secrets.Session.BeginAuthenticate'>BeginAuthenticate()</link>
+			<link linkend='org.freedesktop.Secrets.Session.BeginAuthenticate'>
+			<function>BeginAuthenticate()</function></link>
 			method is called with one or more DBus object paths of items or collections. The
 			BeginAuthenticate() method is asynchronous and may return before the item is
 			actually unlocked.</para>
@@ -291,11 +314,13 @@
 
 			<para>After the service tries to unlock an item or collection, whether successfully
 			or unsuccessfully, the
-			<link linkend='org.freedesktop.Secrets.Session.Authenticated'>Authenticated</link>
+			<link linkend='org.freedesktop.Secrets.Session.Authenticated'>
+			<function>Authenticated()</function></link>
 			signal on the session interface is emitted.</para>
 
 			<para>The client application may, but is not required to, call the
-			<link linkend='org.freedesktop.Secrets.Session.CompleteAuthenticate'>CompleteAuthenticate()</link>
+			<link linkend='org.freedesktop.Secrets.Session.CompleteAuthenticate'>
+			<function>CompleteAuthenticate()</function></link>
 			method. One or more DBus object paths of items or collections that BeginAuthenticate()
 			was previously called with, can be passed in. The CompleteAuthenticate() returns the
 			items that were successfully authenticated. In addition if the unlock process is not
