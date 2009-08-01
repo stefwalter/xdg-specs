@@ -31,5 +31,7 @@
     <xsl:param name="html.stylesheet">style.css</xsl:param>
     <xsl:param name="funcsynopsis.style">ansi</xsl:param>
     <xsl:param name="funcsynopsis.decoration">1</xsl:param>
+    <xsl:param name="refentry.generate.name">0</xsl:param>
+    <xsl:param name="refentry.generate.title">1</xsl:param>
 
 </xsl:stylesheet>

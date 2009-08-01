@@ -78,10 +78,35 @@ div.informalexample pre {
   font-size: 2em;
 }
 
-div.funcsynopsis {
+div.funcsynopsis, code.fieldsynopsis,
+div.refsect2 div.refsynopsisdiv {
   padding: 0.5em;
   background-color: #F4F4F4;
   border: 1px solid gray;
+  display: block;
+  width: 80%;
+}
+
+div.refsynopsisdiv code.fieldsynopsis {
+  padding: 0;
+  border: 0;
+}
+
+code.fieldsynopsis span.modifier {
+  min-width: 8em;
+  display: inline-block;
+}
+
+code.fieldsynopsis span.type {
+  min-width: 11em;
+  display: inline-block;
+}
+
+code.fieldsynopsis span.varname {
+  min-width: 11em;
+  display: inline-block;
+  font-size: 1.1em;
+  font-weight: bold;
 }
 
 div.funcprototype-spacer {

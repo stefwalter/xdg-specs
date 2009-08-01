@@ -288,7 +288,7 @@
       </refmeta>
 
       <refnamediv>
-        <refdescriptor>D-Bus Interface</refdescriptor>
+        <refdescriptor><xsl:value-of select="@name"/></refdescriptor>
         <refname><xsl:value-of select="@name"/></refname>
         <refpurpose><xsl:apply-templates select="tp:docstring" mode="nopara"/></refpurpose>
       </refnamediv>
@@ -357,6 +357,15 @@
             </funcsynopsis>
           </refsect2>
         </xsl:if>
+        <xsl:if test="property">
+          <refsect2>
+            <title>Properties</title>
+            <refsynopsisdiv>
+              <title> </title>
+              <xsl:apply-templates select="property" mode="fieldsynopsislinked"/>
+            </refsynopsisdiv>
+          </refsect2>
+        </xsl:if>
       </refsynopsisdiv>
 
       <xsl:if test="method">
@@ -394,9 +403,7 @@
           <para>
             Accessed using the org.freedesktop.DBus.Properties interface.
           </para>
-          <glosslist>
-            <xsl:apply-templates select="property" mode="detail"/>
-          </glosslist>
+          <xsl:apply-templates select="property" mode="detail"/>
         </refsection>
       </xsl:if>
 
@@ -526,6 +533,88 @@
     </section>
   </xsl:template>
 
+  <xsl:template match="property" mode="fieldsynopsis">
+
+    <fieldsynopsis>
+      <xsl:attribute name="xml:id">
+        <xsl:value-of select="concat(../@name, '.', @name)"/>
+      </xsl:attribute>
+      <modifier>
+        <xsl:choose>
+          <xsl:when test="@access = 'read'">
+            <xsl:text>READ</xsl:text>
+          </xsl:when>
+          <xsl:when test="@access = 'write'">
+            <xsl:text>WRITE</xsl:text>
+          </xsl:when>
+          <xsl:when test="@access = 'readwrite'">
+            <xsl:text>READWRITE</xsl:text>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:message terminate="yes">
+              <xsl:text>ERR: unknown or missing value for </xsl:text>
+              <xsl:text>@access on property </xsl:text>
+              <xsl:value-of select="concat(../@name, '.', @name)"/>
+              <xsl:text>: '</xsl:text>
+              <xsl:value-of select="@access"/>
+              <xsl:text>'&#10;</xsl:text>
+            </xsl:message>
+          </xsl:otherwise>
+        </xsl:choose>
+      </modifier>
+      <type>
+        <xsl:call-template name="ResolveType">
+          <xsl:with-param name="node" select="."/>
+        </xsl:call-template>
+      </type>
+      <varname>
+        <xsl:value-of select="@name"/>
+      </varname>
+    </fieldsynopsis>
+
+  </xsl:template>
+
+  <xsl:template match="property" mode="fieldsynopsislinked">
+
+    <fieldsynopsis>
+      <modifier>
+        <xsl:choose>
+          <xsl:when test="@access = 'read'">
+            <xsl:text>READ</xsl:text>
+          </xsl:when>
+          <xsl:when test="@access = 'write'">
+            <xsl:text>WRITE</xsl:text>
+          </xsl:when>
+          <xsl:when test="@access = 'readwrite'">
+            <xsl:text>READWRITE</xsl:text>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:message terminate="yes">
+              <xsl:text>ERR: unknown or missing value for </xsl:text>
+              <xsl:text>@access on property </xsl:text>
+              <xsl:value-of select="concat(../@name, '.', @name)"/>
+              <xsl:text>: '</xsl:text>
+              <xsl:value-of select="@access"/>
+              <xsl:text>'&#10;</xsl:text>
+            </xsl:message>
+          </xsl:otherwise>
+        </xsl:choose>
+      </modifier>
+      <type>
+        <xsl:call-template name="ResolveType">
+          <xsl:with-param name="node" select="."/>
+        </xsl:call-template>
+      </type>
+      <varname>
+        <xsl:attribute name="xlink:href">
+          <xsl:value-of select="concat('#', ../@name, '.', @name)"/>
+        </xsl:attribute>
+        <xsl:value-of select="@name"/>
+      </varname>
+    </fieldsynopsis>
+
+  </xsl:template>
+
   <xsl:template match="property" mode="detail">
 
     <xsl:if test="not(parent::interface)">
@@ -554,47 +643,12 @@
       </xsl:message>
     </xsl:if>
 
-    <glossentry>
-      <glossterm>
-        <xsl:attribute name="xml:id">
-          <xsl:value-of select="concat(../@name, '.', @name)"/>
-        </xsl:attribute>
-        <property><xsl:value-of select="@name"/></property> -
-        <type>
-          <xsl:call-template name="ResolveType">
-            <xsl:with-param name="node" select="."/>
-          </xsl:call-template>
-        </type>
-        <xsl:text>, </xsl:text>
-        <xsl:choose>
-          <xsl:when test="@access = 'read'">
-            <xsl:text>read-only</xsl:text>
-          </xsl:when>
-          <xsl:when test="@access = 'write'">
-            <xsl:text>write-only</xsl:text>
-          </xsl:when>
-          <xsl:when test="@access = 'readwrite'">
-            <xsl:text>read/write</xsl:text>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:message terminate="yes">
-              <xsl:text>ERR: unknown or missing value for </xsl:text>
-              <xsl:text>@access on property </xsl:text>
-              <xsl:value-of select="concat(../@name, '.', @name)"/>
-              <xsl:text>: '</xsl:text>
-              <xsl:value-of select="@access"/>
-              <xsl:text>'&#10;</xsl:text>
-            </xsl:message>
-          </xsl:otherwise>
-        </xsl:choose>
-      </glossterm>
-      <glossdef>
-        <xsl:apply-templates select="tp:docstring"/>
-        <xsl:apply-templates select="tp:added"/>
-        <xsl:apply-templates select="tp:changed"/>
-        <xsl:apply-templates select="tp:deprecated"/>
-      </glossdef>
-    </glossentry>
+    <xsl:apply-templates select="." mode="fieldsynopsis"/>
+
+    <xsl:apply-templates select="tp:docstring"/>
+    <xsl:apply-templates select="tp:added"/>
+    <xsl:apply-templates select="tp:changed"/>
+    <xsl:apply-templates select="tp:deprecated"/>
   </xsl:template>
 
   <xsl:template match="tp:property" mode="detail">
@@ -803,21 +857,21 @@
   </xsl:template>
 
   <xsl:template match="method|signal" mode="funcsynopsislinked">
-      <funcprototype>
-        <funcdef>
-          <function linkend="{concat(parent::interface//@name, '.', @name)}">
-            <xsl:value-of select="@name"/>
-          </function>
-        </funcdef>
-        <xsl:choose>
-          <xsl:when test="arg">
-            <xsl:apply-templates select="arg" mode="paramdef"/>
-          </xsl:when>
-          <xsl:otherwise>
-            <void/>
-          </xsl:otherwise>
-        </xsl:choose>
-      </funcprototype>
+    <funcprototype>
+      <funcdef>
+        <function linkend="{concat(parent::interface//@name, '.', @name)}">
+          <xsl:value-of select="@name"/>
+        </function>
+      </funcdef>
+      <xsl:choose>
+        <xsl:when test="arg">
+          <xsl:apply-templates select="arg" mode="paramdef"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <void/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </funcprototype>
   </xsl:template>
 
   <xsl:template match="method" mode="detail">
