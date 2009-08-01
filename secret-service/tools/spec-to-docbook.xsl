@@ -3,6 +3,7 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:tp="http://telepathy.freedesktop.org/wiki/DbusSpec#extensions-v0"
   xmlns:html="http://www.w3.org/1999/xhtml"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
   exclude-result-prefixes="tp html">
 
 <!--
@@ -802,7 +803,7 @@
       <funcprototype>
         <funcdef>
           <function linkend="{concat(parent::interface//@name, '.', @name)}">
-              <xsl:value-of select="@name"/>
+            <xsl:value-of select="@name"/>
           </function>
         </funcdef>
         <xsl:choose>
