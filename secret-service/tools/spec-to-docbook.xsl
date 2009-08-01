@@ -344,13 +344,17 @@
         <xsl:if test="method">
           <refsect2>
             <title>Methods</title>
-            <xsl:apply-templates select="method" mode="funcsynopsislinked"/>
+            <funcsynopsis>
+              <xsl:apply-templates select="method" mode="funcsynopsislinked"/>
+            </funcsynopsis>
           </refsect2>
         </xsl:if>
         <xsl:if test="signal">
           <refsect2>
             <title>Signals</title>
-            <xsl:apply-templates select="signal" mode="funcsynopsislinked"/>
+            <funcsynopsis>
+              <xsl:apply-templates select="signal" mode="funcsynopsislinked"/>
+            </funcsynopsis>
           </refsect2>
         </xsl:if>
       </refsynopsisdiv>
@@ -799,7 +803,6 @@
   </xsl:template>
 
   <xsl:template match="method|signal" mode="funcsynopsislinked">
-    <funcsynopsis>
       <funcprototype>
         <funcdef>
           <function linkend="{concat(parent::interface//@name, '.', @name)}">
@@ -815,7 +818,6 @@
           </xsl:otherwise>
         </xsl:choose>
       </funcprototype>
-    </funcsynopsis>
   </xsl:template>
 
   <xsl:template match="method" mode="detail">
