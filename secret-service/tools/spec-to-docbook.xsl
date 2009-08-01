@@ -759,23 +759,21 @@
       <title id="{concat(../@name, concat('.', @name))}">
         <literal><xsl:value-of select="concat(../@name, concat('.', @name))"/></literal>
       </title>
-      <para>
-        <funcsynopsis>
-            <funcprototype>
-            <funcdef>
-                <function><xsl:value-of select="@name"/></function>
-            </funcdef>
-            <xsl:choose>
-                <xsl:when test="arg">
-                <xsl:apply-templates select="arg" mode="paramdef"/>
-                </xsl:when>
-                <xsl:otherwise>
-                <void/>
-                </xsl:otherwise>
-            </xsl:choose>
-            </funcprototype>
-        </funcsynopsis>
-      </para>
+      <funcsynopsis>
+        <funcprototype>
+          <funcdef>
+            <function><xsl:value-of select="@name"/></function>
+          </funcdef>
+          <xsl:choose>
+            <xsl:when test="arg">
+              <xsl:apply-templates select="arg" mode="paramdef"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <void/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </funcprototype>
+      </funcsynopsis>
       <xsl:apply-templates select="tp:docstring" />
       <xsl:apply-templates select="tp:added"/>
       <xsl:apply-templates select="tp:changed"/>
