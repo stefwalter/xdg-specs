@@ -1,0 +1,20 @@
+Generating the specification consists of separate steps:
+
+1. Use an xslt processor to create a DocBook XML document from the Telepathy
+   Introspection document using the provided stylesheet:
+
+$ xsltproc tools/spec-to-docbook.xsl \
+    org.freedesktop.Secrets.xml >reference.xml
+
+2. Convert specification.xml and reference.xml to a suitable output format
+   (specification.xml includes reference.xml), eg html:
+
+$ xmlto --skip-validation -o html -p params-html.xsl xhtml specification.xml
+
+If you choose a different directory for html generation, be sure to copy
+html/style.css to that location.
+
+Then open the resulting html/index.html in your favourite browser.
+
+
+Michael Leupold <lemma@confuego.org>
