@@ -258,9 +258,9 @@
 
   <xsl:template match="/tp:spec/tp:copyright">
     <!-- TODO: use <copyright> -->
-    <para>
-      <xsl:apply-templates mode="text"/>
-    </para>
+    <legalnotice>
+      <para><xsl:apply-templates mode="text"/></para>
+    </legalnotice>
   </xsl:template>
   <xsl:template match="/tp:spec/tp:license">
     <!-- TODO: right tag? -->
@@ -569,7 +569,7 @@
       <section>
         <title>Members</title>
         <glosslist>
-          <xsl:apply-templates select="tp:member" mode="descriptionwithtype"/>
+          <xsl:apply-templates select="tp:member" mode="description"/>
         </glosslist>
       </section>
     </section>
@@ -690,30 +690,23 @@
         <xsl:with-param name="indirection" select="@direction"/>
       </xsl:call-template>
       <xsl:text> </xsl:text>
-      <xsl:call-template name="ResolveType">
-        <xsl:with-param name="node" select="."/>
-      </xsl:call-template>
+      <type>
+        <xsl:call-template name="ResolveType">
+          <xsl:with-param name="node" select="."/>
+        </xsl:call-template>
+      </type>
       <xsl:text> </xsl:text>
       <parameter><xsl:value-of select="@name"/></parameter>
     </paramdef>
   </xsl:template>
+
   <xsl:template match="arg" mode="paramtable">
-    <row>
-      <entry><xsl:value-of select="@name"/></entry>
-      <entry>
-        <xsl:call-template name="ResolveType">
-          <xsl:with-param name="node" select="."/>
-        </xsl:call-template>
-      </entry>
-      <xsl:if test="not(parent::signal)">
-        <entry>
-          <xsl:call-template name="direction">
-            <xsl:with-param name="indirection" select="@direction"/>
-          </xsl:call-template>
-        </entry>
-      </xsl:if>
-      <entry><xsl:apply-templates select="tp:docstring" mode="nopara"/></entry>
-    </row>
+    <glossentry>
+      <glossterm><literal><xsl:value-of select="@name"/></literal></glossterm>
+      <glossdef>
+        <para><xsl:apply-templates select="tp:docstring" mode="nopara"/></para>
+      </glossdef>
+    </glossentry>
   </xsl:template>
 
   <xsl:template match="method">
@@ -796,22 +789,9 @@
       <xsl:apply-templates select="tp:deprecated"/>
 
         <xsl:if test="arg">
-          <table>
-            <title>Parameters</title>
-            <tgroup cols="4">
-              <thead>
-                <row>
-                  <entry>Name</entry>
-                  <entry>Type</entry>
-                  <entry>Direction</entry>
-                  <entry>Description</entry>
-                </row>
-              </thead>
-              <tbody valign="top">
-                <xsl:apply-templates select="arg" mode="paramtable"/>
-              </tbody>
-            </tgroup>
-          </table>
+          <glosslist>
+            <xsl:apply-templates select="arg" mode="paramtable"/>
+          </glosslist>
         </xsl:if>
 
         <xsl:if test="tp:possible-errors">
@@ -931,32 +911,7 @@
   <xsl:template match="tp:member" mode="description">
     <glossentry>
       <glossterm>
-        <xsl:value-of select="@name"/>
-      </glossterm>
-      <glossdef>
-        <xsl:choose>
-          <xsl:when test="tp:docstring">
-            <xsl:apply-templates select="tp:docstring" />
-          </xsl:when>
-          <xsl:otherwise>
-            <!-- emphasize -->
-            (undocumented)
-          </xsl:otherwise>
-        </xsl:choose>
-      </glossdef>
-    </glossentry>
-  </xsl:template>
-
-  <xsl:template match="tp:member" mode="descriptionwithtype">
-    <xsl:variable name="type">
-      <xsl:call-template name="ResolveType">
-        <xsl:with-param name="node" select="."/>
-      </xsl:call-template>
-    </xsl:variable>
-    <glossentry>
-      <glossterm>
-        <xsl:value-of select="@name"/> -
-        <literal><xsl:value-of select="normalize-space($type)"/></literal>
+        <varname><xsl:value-of select="@name"/></varname>
       </glossterm>
       <glossdef>
         <xsl:choose>
@@ -1064,21 +1019,9 @@
       <xsl:apply-templates select="tp:deprecated"/>
 
       <xsl:if test="arg">
-        <table>
-          <title>Parameters</title>
-          <tgroup cols="3">
-            <thead>
-              <row>
-                <entry>Name</entry>
-                <entry>Type</entry>
-                <entry>Description</entry>
-              </row>
-            </thead>
-            <tbody valign="top">
-              <xsl:apply-templates select="arg" mode="paramtable"/>
-            </tbody>
-          </tgroup>
-        </table>
+        <glosslist>
+          <xsl:apply-templates select="arg" mode="paramtable"/>
+        </glosslist>
       </xsl:if>
     </section>
   </xsl:template>
@@ -1102,17 +1045,6 @@
       </bookinfo>
       <chapter>
         <title>Interfaces</title>
-        <xsl:for-each select="//node/interface">
-          <itemizedlist>
-            <listitem>
-              <para>
-                <link linkend="{@name}">
-                  <literal><xsl:value-of select="@name"/></literal>
-                </link>
-              </para>
-            </listitem>
-          </itemizedlist>
-        </xsl:for-each>
         <xsl:apply-templates select="//node"/>
       </chapter>
       <xsl:call-template name="generic-types"/>
@@ -1122,36 +1054,6 @@
         </chapter>
       </xsl:if>
     </book>
-    <!-- TODO: index -->
-<!--        <h2>Interfaces</h2>
-        <ul>
-        </ul>
-
-
-
-        <h1>Index</h1>
-        <h2>Index of interfaces</h2>
-        <ul>
-          <xsl:for-each select="//node/interface">
-            <li><code><a href="#{@name}"><xsl:value-of select="@name"/></a></code></li>
-          </xsl:for-each>
-        </ul>
-        <h2>Index of types</h2>
-        <ul>
-          <xsl:for-each select="//tp:simple-type | //tp:enum | //tp:flags | //tp:mapping | //tp:struct | //tp:external-type">
-            <xsl:sort select="@name"/>
-            <li>
-              <code>
-                <a href="#type-{@name}">
-                  <xsl:value-of select="@name"/>
-                </a>
-              </code>
-              <xsl:apply-templates mode="in-index" select="."/>
-            </li>
-          </xsl:for-each>
-        </ul>
-      </body>
-    </html>-->
   </xsl:template>
 
   <xsl:template match="node">
