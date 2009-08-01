@@ -1,7 +1,5 @@
 <?xml version="1.0"?>
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
-               "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd">
-<book id="index">
+<book xml:id="index" xmlns="http://docbook.org/ns/docbook" version="5.0">
 	<bookinfo>
 		<title>Secrets API Specification</title>
 		<releaseinfo>
@@ -40,7 +38,7 @@
 
 	</bookinfo>
 
-	<part id="description">
+	<part xml:id="description">
 		<title>API Documentation</title>
 		<chapter>
 			<title>Introduction</title>
@@ -140,7 +138,7 @@
 			be deleted by any application.</para>
 		</chapter>
 
-		<chapter id="lookup-attributes">
+		<chapter xml:id="lookup-attributes">
 			<title>Lookup Attributes</title>
 
 			<para>Attributes can and should be stored with a secret to facilitate lookup
@@ -161,7 +159,7 @@
 			manner in order to support simple and effecient lookups.</para>
 		</chapter>
 
-		<chapter id="sessions">
+		<chapter xml:id="sessions">
 			<title>Sessions</title>
 
 			<para>A session is established between a client application and a service. A session
@@ -186,7 +184,7 @@
 			negotiations and authentication should be dropped by the service.</para>
 		</chapter>
 
-		<chapter id='transfer-secrets'>
+		<chapter xml:id='transfer-secrets'>
 			<title>Transfer of Secrets</title>
 
 			<para>Since this is a D-Bus API, the data in all method calls and other accesses
@@ -293,7 +291,7 @@
 
 		</chapter>
 
-		<chapter id='authentication-unlocking'>
+		<chapter xml:id='authentication-unlocking'>
 			<title>Authentication or Unlocking</title>
 
 			<para>Some items and/or collections may be marked as locked by the service.
@@ -368,10 +366,10 @@
 
 	</part>
 
-	<part id="ref-dbus-api">
+	<part xml:id="ref-dbus-api">
 		<title>D-Bus API Reference</title>
 
-    <chapter id='object-paths'>
+    <chapter xml:id='object-paths'>
 			<title>Object Paths</title>
 
 			<para>The various DBus object paths used with the Secrets API are designed to be human
@@ -411,11 +409,11 @@
 	</part>
 
 <!--
-  <chapter id="object-tree">
+  <chapter xml:id="object-tree">
     <title>Object Hierarchy</title>
      <xi:include href="xml/tree_index.sgml"/>
   </chapter>
-  <index id="api-index-full">
+  <index xml:id="api-index-full">
     <title>API Index</title>
     <xi:include href="xml/api-index-full.xml"><xi:fallback /></xi:include>
   </index>

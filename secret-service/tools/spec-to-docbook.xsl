@@ -28,9 +28,7 @@
 -->
 
   <xsl:output method="xml" indent="yes" encoding="ascii"
-    omit-xml-declaration="no"
-    doctype-system="docbookV4.5/docbookx.dtd"
-    doctype-public="-//OASIS//DTD DocBook XML V4.5//EN"/>
+    omit-xml-declaration="no"/>
 
   <xsl:include href="resolve-type.xsl"/>
 
@@ -192,7 +190,8 @@
   </xsl:template>
 
   <xsl:template name="generic-types">
-    <chapter id="types">
+    <chapter>
+      <xsl:attribute name="xml:id">types</xsl:attribute>
         <title>Types</title>
         <xsl:call-template name="do-types"/>
     </chapter>
@@ -246,7 +245,10 @@
 
   <xsl:template match="tp:error">
     <simplesect>
-      <title id="{concat(../@namespace, '.', translate(@name, ' ', ''))}">
+      <title>
+        <xsl:attribute name="xml:id">
+          <xsl:value-of select="concat(../@namespace, '.', translate(@name, ' ', ''))"/>
+        </xsl:attribute>
         <literal><xsl:value-of select="concat(../@namespace, '.', translate(@name, ' ', ''))"/></literal>
       </title>
       <xsl:apply-templates select="tp:docstring"/>
@@ -274,85 +276,130 @@
   <xsl:template match="tp:copyright"/>
   <xsl:template match="tp:license"/>
 
-  <xsl:template match="interface"><section>
-    <title id="{@name}"><literal><xsl:value-of select="@name"/></literal></title>
+  <xsl:template match="interface">
 
-    <xsl:if test="@tp:causes-havoc">
-      <warning>
-        <para>
-          This interface is <xsl:value-of select="@tp:causes-havoc"/>
-          and is likely to cause havoc to your API/ABI if bindings are generated.
-          Don't include it in libraries that care about compatibility.
-        </para>
-      </warning>
-    </xsl:if>
+    <refentry>
+      <xsl:attribute name="xml:id">
+        <xsl:value-of select="@name"/>
+      </xsl:attribute>
+      <refmeta>
+        <refentrytitle><literal><xsl:value-of select="@name"/></literal></refentrytitle>
+      </refmeta>
 
-    <xsl:if test="tp:requires">
-      <tip>
-        <para>Implementations of this interface must also implement:</para>
-        <itemizedlist>
-          <xsl:for-each select="tp:requires">
-            <listitem>
-              <para>
-                <link linkend="{@interface}">
-                  <literal><xsl:value-of select="@interface"/></literal>
-                </link>
-              </para>
-            </listitem>
-          </xsl:for-each>
-        </itemizedlist>
-      </tip>
-    </xsl:if>
+      <refnamediv>
+        <refdescriptor>D-Bus Interface</refdescriptor>
+        <refname><xsl:value-of select="@name"/></refname>
+        <refpurpose><xsl:apply-templates select="tp:docstring" mode="nopara"/></refpurpose>
+      </refnamediv>
 
-    <xsl:apply-templates select="tp:docstring" />
-    <xsl:apply-templates select="tp:added"/>
-    <xsl:apply-templates select="tp:changed"/>
-    <xsl:apply-templates select="tp:deprecated"/>
+      <xsl:if test="tp:added">
+        <refsection>
+          <xsl:apply-templates select="tp:added"/>
+        </refsection>
+      </xsl:if>
+      <xsl:if test="tp:changed">
+        <refsection>
+          <xsl:apply-templates select="tp:changed"/>
+        </refsection>
+      </xsl:if>
+      <xsl:if test="tp:deprecated">
+        <refsection>
+          <xsl:apply-templates select="tp:deprecated"/>
+        </refsection>
+      </xsl:if>
 
-    <xsl:if test="method">
-      <section>
-        <title>Methods</title>
-        <xsl:apply-templates select="method"/>
-      </section>
-    </xsl:if>
+      <xsl:if test="@tp:causes-havoc">
+        <refsection>
+          <warning>
+            <para>
+              This interface is <xsl:value-of select="@tp:causes-havoc"/>
+              and is likely to cause havoc to your API/ABI if bindings are generated.
+              Don't include it in libraries that care about compatibility.
+            </para>
+          </warning>
+        </refsection>
+      </xsl:if>
 
-    <xsl:if test="signal">
-      <section>
-        <title>Signals</title>
-        <xsl:apply-templates select="signal"/>
-      </section>
-    </xsl:if>
+      <xsl:if test="tp:requires">
+        <refsection>
+          <tip>
+            <para>Implementations of this interface must also implement:</para>
+            <itemizedlist>
+              <xsl:for-each select="tp:requires">
+                <listitem>
+                  <para>
+                    <link linkend="{@interface}">
+                      <literal><xsl:value-of select="@interface"/></literal>
+                    </link>
+                  </para>
+                </listitem>
+              </xsl:for-each>
+            </itemizedlist>
+          </tip>
+        </refsection>
+      </xsl:if>
 
-    <xsl:if test="tp:property">
-      <section>
-        <title>Telepathy Properties</title>
-        <para>
-          Accessed using the
-          <link linkend="org.freedesktop.Telepathy.Properties">
-            <literal>org.freedesktop.Telepathy.Properties</literal>
-          </link>
-        </para>
-        <glosslist>
-          <xsl:apply-templates select="tp:property"/>
-        </glosslist>
-      </section>
-    </xsl:if>
+      <refsynopsisdiv>
+        <xsl:if test="method">
+          <refsect2>
+            <title>Methods</title>
+            <xsl:apply-templates select="method" mode="funcsynopsislinked"/>
+          </refsect2>
+        </xsl:if>
+        <xsl:if test="signal">
+          <refsect2>
+            <title>Signals</title>
+            <xsl:apply-templates select="signal" mode="funcsynopsislinked"/>
+          </refsect2>
+        </xsl:if>
+      </refsynopsisdiv>
 
-    <xsl:if test="property">
-      <section>
-        <title>D-Bus Properties</title>
-        <para>
-          Accessed using the org.freedesktop.DBus.Properties interface.
-        </para>
-        <glosslist>
-          <xsl:apply-templates select="property"/>
-        </glosslist>
-      </section>
-    </xsl:if>
+      <xsl:if test="method">
+        <refsection>
+          <title>Methods</title>
+          <xsl:apply-templates select="method" mode="detail"/>
+        </refsection>
+      </xsl:if>
 
-    <xsl:call-template name="do-types"/>
+      <xsl:if test="signal">
+        <refsection>
+          <title>Signals</title>
+          <xsl:apply-templates select="signal" mode="detail"/>
+        </refsection>
+      </xsl:if>
 
-  </section></xsl:template>
+      <xsl:if test="tp:property">
+        <refsection>
+          <title>Telepathy Properties</title>
+          <para>
+            Accessed using the
+            <link linkend="org.freedesktop.Telepathy.Properties">
+              <literal>org.freedesktop.Telepathy.Properties</literal>
+            </link>
+          </para>
+          <glosslist>
+            <xsl:apply-templates select="tp:property" mode="detail"/>
+          </glosslist>
+        </refsection>
+      </xsl:if>
+
+      <xsl:if test="property">
+        <refsection>
+          <title>D-Bus Properties</title>
+          <para>
+            Accessed using the org.freedesktop.DBus.Properties interface.
+          </para>
+          <glosslist>
+            <xsl:apply-templates select="property" mode="detail"/>
+          </glosslist>
+        </refsection>
+      </xsl:if>
+
+      <xsl:call-template name="do-types"/>
+
+    </refentry>
+
+  </xsl:template>
 
   <xsl:template match="tp:flags">
 
@@ -371,7 +418,10 @@
     </xsl:if>
 
     <section>
-      <title id="type-{@name}"><literal><xsl:value-of select="@name"/></literal></title>
+      <xsl:attribute name="xml:id">
+        <xsl:value-of select="@name"/>
+      </xsl:attribute>
+      <title><literal><xsl:value-of select="@name"/></literal></title>
       <xsl:apply-templates select="tp:docstring" />
       <xsl:apply-templates select="tp:added"/>
       <xsl:apply-templates select="tp:changed"/>
@@ -428,7 +478,10 @@
     </xsl:if>
 
     <section>
-      <title id="type-{@name}"><literal><xsl:value-of select="@name"/></literal></title>
+      <xsl:attribute name="xml:id">
+        <xsl:value-of select="concat('type-', @name)"/>
+      </xsl:attribute>
+      <title><literal><xsl:value-of select="@name"/></literal></title>
       <xsl:apply-templates select="tp:docstring" />
       <xsl:apply-templates select="tp:added"/>
       <xsl:apply-templates select="tp:changed"/>
@@ -468,7 +521,7 @@
     </section>
   </xsl:template>
 
-  <xsl:template match="property">
+  <xsl:template match="property" mode="detail">
 
     <xsl:if test="not(parent::interface)">
       <xsl:message terminate="yes">
@@ -497,7 +550,10 @@
     </xsl:if>
 
     <glossentry>
-      <glossterm id="{concat(../@name, '.', @name)}">
+      <glossterm>
+        <xsl:attribute name="xml:id">
+          <xsl:value-of select="concat(../@name, '.', @name)"/>
+        </xsl:attribute>
         <property><xsl:value-of select="@name"/></property> -
         <type>
           <xsl:call-template name="ResolveType">
@@ -536,7 +592,7 @@
     </glossentry>
   </xsl:template>
 
-  <xsl:template match="tp:property">
+  <xsl:template match="tp:property" mode="detail">
     <glossentry>
       <glossterm>
         <xsl:if test="@name">
@@ -555,7 +611,10 @@
 
   <xsl:template match="tp:mapping">
     <section>
-      <title id="type-{@name}">
+      <xsl:attribute name="xml:id">
+        <xsl:value-of select="concat('type-', @name)"/>
+      </xsl:attribute>
+      <title>
         <literal><xsl:value-of select="@name"/></literal>
       </title>
       <xsl:apply-templates select="tp:docstring"/>
@@ -599,7 +658,10 @@
     </xsl:if>
 
     <section>
-      <title id="type-{@name}">
+      <xsl:attribute name="xml:id">
+        <xsl:value-of select="concat('type-', @name)"/>
+      </xsl:attribute>
+      <title>
         <literal><xsl:value-of select="@name"/> − <xsl:value-of select="@type"/></literal>
       </title>
       <para>
@@ -628,8 +690,11 @@
     </xsl:if>
 
     <glossentry>
-      <glossterm id="type-{@name}">
-          <xsl:value-of select="@name"/> − <xsl:value-of select="@type"/>
+      <glossterm>
+        <xsl:attribute name="xml:id">
+          <xsl:value-of select="concat('type-', @name)"/>
+        </xsl:attribute>
+        <xsl:value-of select="@name"/> − <xsl:value-of select="@type"/>
       </glossterm>
       <glossdef>Defined by: <xsl:value-of select="@from"/></glossdef>
     </glossentry>
@@ -651,7 +716,10 @@
 
   <xsl:template match="tp:struct">
     <section>
-      <title id="type-{@name}">
+      <xsl:attribute name="xml:id">
+        <xsl:value-of select="concat('type-', @name)"/>
+      </xsl:attribute>
+      <title>
         <literal>
           <xsl:value-of select="@name"/>
         </literal>
@@ -709,7 +777,47 @@
     </glossentry>
   </xsl:template>
 
-  <xsl:template match="method">
+  <xsl:template match="method|signal" mode="funcsynopsis">
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>
+          <function>
+            <xsl:value-of select="@name"/>
+          </function>
+        </funcdef>
+        <xsl:choose>
+          <xsl:when test="arg">
+            <xsl:apply-templates select="arg" mode="paramdef"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <void/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </funcprototype>
+    </funcsynopsis>
+  </xsl:template>
+
+  <xsl:template match="method|signal" mode="funcsynopsislinked">
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>
+          <function linkend="{concat(parent::interface//@name, '.', @name)}">
+              <xsl:value-of select="@name"/>
+          </function>
+        </funcdef>
+        <xsl:choose>
+          <xsl:when test="arg">
+            <xsl:apply-templates select="arg" mode="paramdef"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <void/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </funcprototype>
+    </funcsynopsis>
+  </xsl:template>
+
+  <xsl:template match="method" mode="detail">
 
     <xsl:if test="not(parent::interface)">
       <xsl:message terminate="yes">
@@ -764,26 +872,15 @@
       </xsl:choose>
     </xsl:for-each>
 
-    <section>
-      <title id="{concat(../@name, concat('.', @name))}">
+    <refsection>
+      <xsl:attribute name="xml:id">
+        <xsl:value-of select="concat(../@name, concat('.', @name))"/>
+      </xsl:attribute>
+      <title>
         <literal><xsl:value-of select="concat(../@name, concat('.', @name))"/></literal>
       </title>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>
-            <function><xsl:value-of select="@name"/></function>
-          </funcdef>
-          <xsl:choose>
-            <xsl:when test="arg">
-              <xsl:apply-templates select="arg" mode="paramdef"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <void/>
-            </xsl:otherwise>
-          </xsl:choose>
-        </funcprototype>
-      </funcsynopsis>
-      <xsl:apply-templates select="tp:docstring" />
+      <xsl:apply-templates select="." mode="funcsynopsis"/>
+      <xsl:apply-templates select="tp:docstring"/>
       <xsl:apply-templates select="tp:added"/>
       <xsl:apply-templates select="tp:changed"/>
       <xsl:apply-templates select="tp:deprecated"/>
@@ -804,7 +901,7 @@
             </para>
           </formalpara>
         </xsl:if>
-    </section>
+    </refsection>
   </xsl:template>
 
   <xsl:template name="tp-type">
@@ -949,7 +1046,7 @@
     </glossentry>
   </xsl:template>
 
-  <xsl:template match="signal">
+  <xsl:template match="signal" mode="detail">
 
     <xsl:if test="not(parent::interface)">
       <xsl:message terminate="yes">
@@ -1001,18 +1098,14 @@
       </xsl:choose>
     </xsl:for-each>
 
-    <section>
-      <title id="{concat(../@name, concat('.', @name))}">
+    <refsection>
+      <xsl:attribute name="xml:id">
+        <xsl:value-of select="concat(../@name, concat('.', @name))"/>
+      </xsl:attribute>
+      <title>
         <literal><xsl:value-of select="concat(../@name, concat('.', @name))"/></literal>
       </title>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>
-            <function><xsl:value-of select="@name"/></function>
-          </funcdef>
-          <xsl:apply-templates select="arg" mode="paramdef"/>
-        </funcprototype>
-      </funcsynopsis>
+      <xsl:apply-templates select="." mode="funcsynopsis"/>
       <xsl:apply-templates select="tp:docstring"/>
       <xsl:apply-templates select="tp:added"/>
       <xsl:apply-templates select="tp:changed"/>
@@ -1023,11 +1116,11 @@
           <xsl:apply-templates select="arg" mode="paramtable"/>
         </glosslist>
       </xsl:if>
-    </section>
+    </refsection>
   </xsl:template>
 
   <xsl:template match="/tp:spec">
-    <book>
+    <book xmlns="http://docbook.org/ns/docbook" version="5.0">
       <bookinfo>
         <title><xsl:value-of select="tp:title"/></title>
         <xsl:apply-templates select="tp:copyright"/>
@@ -1043,13 +1136,15 @@
           <xsl:value-of select="tp:version"/>
         </xsl:if> -->
       </bookinfo>
-      <chapter id="interfaces">
+      <chapter>
+        <xsl:attribute name="xml:id">interfaces</xsl:attribute>
         <title>Interfaces</title>
         <xsl:apply-templates select="//node"/>
       </chapter>
       <xsl:call-template name="generic-types"/>
       <xsl:if test="tp:errors">
-        <chapter id="errors">
+        <chapter>
+            <xsl:attribute name="xml:id">errors</xsl:attribute>
             <xsl:apply-templates select="tp:errors"/>
         </chapter>
       </xsl:if>
