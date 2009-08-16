@@ -376,22 +376,22 @@
 			readable but not displayed to the user. The object path of an item or collection should
 			not change for its lifetime, under normal circumstances.</para>
 
-			<programlisting>/org/freedesktop/Secrets</programlisting>
+			<programlisting>/org/freedesktop/secrets</programlisting>
 			<para>The object path for the service.</para>
 
-			<programlisting>/org/freedesktop/Secrets/collection/<emphasis>xxxx</emphasis></programlisting>
+			<programlisting>/org/freedesktop/secrets/collection/<emphasis>xxxx</emphasis></programlisting>
 			<para>The object path for a collection, where <emphasis>xxxx</emphasis> represents a
 			possibly encoded or truncated version of the initial label of the collection.</para>
 
-			<programlisting>/org/freedesktop/Secrets/collection/<emphasis>xxxx</emphasis>/<emphasis>iiii</emphasis></programlisting>
+			<programlisting>/org/freedesktop/secrets/collection/<emphasis>xxxx</emphasis>/<emphasis>iiii</emphasis></programlisting>
 				<para>The object path for an item, where <emphasis>xxxx</emphasis> is the collection (above)
 				and <emphasis>iiii</emphasis> is an auto-generated item specific identifier.</para>
 
-			<programlisting>/org/freedesktop/Secrets/session/<emphasis>ssss</emphasis></programlisting>
+			<programlisting>/org/freedesktop/secrets/session/<emphasis>ssss</emphasis></programlisting>
 			<para>The object path for a session, where <emphasis>ssss</emphasis> is an auto-generated
 			session specific identifier.</para>
 
-			<programlisting>/org/freedesktop/Secrets/default</programlisting>
+			<programlisting>/org/freedesktop/secrets/default</programlisting>
 			<para>The default collection for client applications to store secrets is available under
 			this object path in addition to its real object path (above).</para>
 		</chapter>
