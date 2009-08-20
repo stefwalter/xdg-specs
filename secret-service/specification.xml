@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <book xml:id="index" xmlns="http://docbook.org/ns/docbook" version="5.0">
 	<bookinfo>
-		<title>Secrets API Specification</title>
+		<title>Secrets API Draft</title>
 		<releaseinfo>
-			Secrets 0.1
+			Secrets 0.1 DRAFT
 <!--			The latest version of this documentation can be found on-line at
 			<ulink role="online-location" url="http://[SERVER]/secrets/index.html">http://[SERVER]/secrets/</ulink>.-->
 		</releaseinfo>
