@@ -222,8 +222,8 @@
 				<para>The client application opens a <link linkend='sessions'>session</link>
 				with the service, and then calls the
 				<link linkend='org.freedesktop.Secrets.Session.Negotiate'><function>
-				Negotiate()</function> method</link> on that session. The algorithms argument to the
-				Negotiate() method specifies a set of algorithms to be used together for
+				Negotiate()</function></link> method on that session. The algorithms argument to the
+				<function>Negotiate()</function> method specifies a set of algorithms to be used together for
 				key agreement and encryption. The other arguments are algorithm specific.</para>
 
 				<para>If a service does not support a specific set of algorithms, a
@@ -232,7 +232,7 @@
 				error is returned, and the client is free to try another set of algorithms.
 				The <emphasis>plain</emphasis> algorithm is almost always supported.</para>
 
-				<para>An algorithm may require that the Negotiate() method is called multiple
+				<para>An algorithm may require that the <function>Negotiate()</function> method is called multiple
 				times in succession to be complete. Each iteration transfers algorithm specific
 				data back forth between the service and the client.</para>
 
@@ -306,7 +306,7 @@
 			<link linkend='org.freedesktop.Secrets.Service.BeginAuthenticate'>
 			<function>BeginAuthenticate()</function></link>
 			method is called with one or more DBus object paths of items or collections. The
-			BeginAuthenticate() method is asynchronous and may return before the item is
+			<function>BeginAuthenticate()</function> method is asynchronous and may return before the item is
 			actually unlocked.</para>
 
 			<para>The service will then unlock the item or collection, perhaps by prompting the
@@ -321,8 +321,8 @@
 			<para>The client application may, but is not required to, call the
 			<link linkend='org.freedesktop.Secrets.Service.CompleteAuthenticate'>
 			<function>CompleteAuthenticate()</function></link>
-			method. One or more DBus object paths of items or collections that BeginAuthenticate()
-			was previously called with, can be passed in. The CompleteAuthenticate() returns the
+			method. One or more DBus object paths of items or collections that <function>BeginAuthenticate()</function>
+			was previously called with, can be passed in. The <function>CompleteAuthenticate()</function> returns the
 			items that were successfully authenticated. In addition if the unlock process is not
 			yet complete for some items or collections, the service should stop trying to ask the
 			user to unlock or authenticate them.</para>
@@ -339,7 +339,7 @@
 			application. Alternatively the service may choose to allow any client application to access
 			items or collections authenticated by a single client application.</para>
 
-			<para>A client application should always be ready to call BeginAuthenticate() the secrets
+			<para>A client application should always be ready to call <function>BeginAuthenticate()</function> the secrets
 			it needs, or objects it must modify. It must not assume that an item is already unlocked
 			for whatever reason.</para>
 
