@@ -163,29 +163,33 @@
 			<title>Sessions</title>
 
 			<para>A session is established between a client application and a service. A session
-			is used to unlock items and collections when necessary. It is also used to
-			<link linkend='transfer-secrets'>negotiate encryption of transferred secrets</link>
-			between the client application and the service.</para>
+			is used to <link linkend='transfer-secrets'>transfer secrets</link> between the client
+			application and the service.</para>
 
 			<para>A session is established by calling the service's
 			<link linkend='org.freedesktop.Secrets.Service.OpenSession'>
 			<function>OpenSession()</function></link>
 			method. Once established, a session is bound to calling application's connection to
-			the DBus session bus. Generally only one session can be established per client
-			application. Calling OpenSession() a second time results in an
-			<link linkend='org.freedesktop.Secrets.Error.AlreadyExists'>
-			<errorname>AlreadyExists</errorname></link>
-			error.</para>
+			the DBus session bus.</para>
 
 			<para>A session is closed when the client application disconnects from the DBus
 			session bus. Alternatively the client application can call the
 			<link linkend='org.freedesktop.Secrets.Session.Close'><function>Close()</function></link>
 			method on the session interface. Once a session is closed all session specific
-			negotiations and authentication should be dropped by the service.</para>
+			negotiations will be dropped by the service.</para>
+
+			<para>More than one session may opened by a client application, although this is
+			not normally necessary.</para>
 		</chapter>
 
 		<chapter xml:id='transfer-secrets'>
 			<title>Transfer of Secrets</title>
+
+			<para>To access or store secrets, use the
+			<link linkend='org.freedesktop.Secrets.Session.GetSecret'><function>GetSecret()</function></link>,
+			<link linkend='org.freedesktop.Secrets.Session.GetSecrets'><function>GetSecrets()</function></link>,
+			<link linkend='org.freedesktop.Secrets.Session.SetSecret'><function>SetSecret()</function></link>
+			methods on the session interface.</para>
 
 			<para>Since this is a D-Bus API, the data in all method calls and other accesses
 			in this API will go through multiple processes, and may be cached arbitrarily
@@ -298,10 +302,8 @@
 			The secrets of locked items cannot be accessed. Locked items or collections
 			cannot be modified by the client application.</para>
 
-			<para>In order to unlock an item or collection a
-			<link linkend='sessions'>session</link> is established by the client application,
-			and the
-			<link linkend='org.freedesktop.Secrets.Session.BeginAuthenticate'>
+			<para>In order to unlock an item or collection the service's
+			<link linkend='org.freedesktop.Secrets.Service.BeginAuthenticate'>
 			<function>BeginAuthenticate()</function></link>
 			method is called with one or more DBus object paths of items or collections. The
 			BeginAuthenticate() method is asynchronous and may return before the item is
@@ -312,12 +314,12 @@
 
 			<para>After the service tries to unlock an item or collection, whether successfully
 			or unsuccessfully, the
-			<link linkend='org.freedesktop.Secrets.Session.Authenticated'>
+			<link linkend='org.freedesktop.Secrets.Service.Authenticated'>
 			<function>Authenticated()</function></link>
-			signal on the session interface is emitted.</para>
+			signal on the service interface is emitted.</para>
 
 			<para>The client application may, but is not required to, call the
-			<link linkend='org.freedesktop.Secrets.Session.CompleteAuthenticate'>
+			<link linkend='org.freedesktop.Secrets.Service.CompleteAuthenticate'>
 			<function>CompleteAuthenticate()</function></link>
 			method. One or more DBus object paths of items or collections that BeginAuthenticate()
 			was previously called with, can be passed in. The CompleteAuthenticate() returns the
@@ -335,9 +337,15 @@
 
 			<para>A service may choose to authenticate items or collections just for a single client
 			application. Alternatively the service may choose to allow any client application to access
-			items or collections authenticated by a single client application. A client application
-			should always be ready to call BeginAuthenticate() the secrets it needs, or objects it must
-			modify. It must not assume that an item is already unlocked for whatever reason.</para>
+			items or collections authenticated by a single client application.</para>
+
+			<para>A client application should always be ready to call BeginAuthenticate() the secrets
+			it needs, or objects it must modify. It must not assume that an item is already unlocked
+			for whatever reason.</para>
+
+			<para>A service may lock previously unlocked items for any reason at any time. Usually this
+			is done in response to user actions, timeouts, or external actions (such as the computer
+			sleeping).</para>
 		</chapter>
 
 		<chapter>
@@ -355,7 +363,6 @@
 			choose to allow certain applications to access a keyring, and others.</para>
 
 			<para>[TODO: complete]</para>
-
 		</chapter>
 
 		<chapter>
