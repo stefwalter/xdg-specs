@@ -54,6 +54,10 @@
 			The attributes can be used to lookup and retrieve a secret at a later date. The
 			lookup attributes are not treated as secret material, and the service may choose
 			to not encrypt attributes when storing them to disk.</para>
+
+			<para>This API was desigened by GNOME and KDE developers with the goal of having
+			a common way to store secrets. Its predecessors are the desktop specific APIs
+			used by GNOME Keyring and KWallet.</para>
 		</chapter>
 
 		<chapter>
@@ -223,31 +227,27 @@
 			<title>Transfer of Secrets</title>
 
 			<para>To access or store secrets, use the
-			<link linkend='org.freedesktop.Secrets.Session.GetSecret'><function>GetSecret()</function></link>,
-			<link linkend='org.freedesktop.Secrets.Session.GetSecrets'><function>GetSecrets()</function></link>,
-			<link linkend='org.freedesktop.Secrets.Session.SetSecret'><function>SetSecret()</function></link>
-			methods on the session interface.</para>
+			<link linkend='org.freedesktop.Secrets.Item.GetSecret'><function>GetSecret()</function></link>,
+			<link linkend='org.freedesktop.Secrets.Item.SetSecret'><function>SetSecret()</function></link>
+			methods on the item interface, or the
+			<link linkend='org.freedesktop.Secrets.Service.GetSecrets'><function>GetSecrets()</function></link>,
+			method on the service interface.</para>
 
-			<para>Since this is a D-Bus API, the data in all method calls and other accesses
-			in this API will go through multiple processes, and may be cached arbitrarily
-			by the OS or elsewhere.</para>
+			<para>You must specify a session when retrieving or storing a secret. The session
+			controls how the secret is encoded during transfer. Since this is a D-Bus API, the
+			data in all method calls and other accesses in this API will go through multiple
+			processes, and may be cached arbitrarilyby the OS or elsewhere.</para>
 
 			<para>The Secrets API has provision to encrypt secrets while in transit between
-			the service and the client application.</para>
-
-			<para>The encryption is not envisioned to withstand man in the middle attacks, or
-			other active attacks. It is envisioned to minimize storage of plain text secrets
-			in memory and prevent storage plain text storage of secrets in a swap file or other
-			caching mechanism.</para>
+			the service and the client application. The encryption is not envisioned to withstand
+			man in the middle attacks, or other active attacks. It is envisioned to minimize
+			storage of plain text secrets in memory and prevent storage plain text storage of
+			secrets in a swap file or other caching mechanism.</para>
 
 			<para>Many client applications may choose not to make use of the provisions to
 			encrypt secrets in transit. In fact for applications unable to prevent their own
 			memory from being paged to disk (eg: Java, C# or Python apps), transfering
 			encrypted secrets would be an excersize of questionable value.</para>
-
-			<para>This API was desigened by GNOME and KDE developers with the goal of having
-			a common way to store secrets. Its predecessors are the desktop specific APIs
-			used by GNOME Keyring and KWallet.</para>
 
 			<section>
 				<title>Negotiation of Algorithms</title>
