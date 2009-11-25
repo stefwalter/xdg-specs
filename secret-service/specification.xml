@@ -47,8 +47,8 @@
 			service running in the user's login session. </para>
 
 			<para>The secrets are usually stored in an encrypted manner by the service. The
-			service may need to be unlocked and/or authenticated by the user before the
-			secrets become available for retrieval by client applications.</para>
+			service may need to be unlocked by the user before the secrets become available
+			for retrieval by client applications.</para>
 
 			<para>The Secrets service stores a secret along with a set of lookup attributes.
 			The attributes can be used to lookup and retrieve a secret at a later date. The
@@ -74,7 +74,7 @@
 			 to the client application and vice versa.</para>
 
 			<para>The <link linkend='type-Secret'><classname>Secret</classname> structure</link> encapsulates
-			a secret value along with it's transfer encryption parameters.</para>
+			a secret value along with its transfer encryption parameters.</para>
 		</chapter>
 
 		<chapter>
@@ -89,7 +89,7 @@
 			A collection is similar in concept to the terms 'keyring' or 'wallet'.</para>
 
 			<para>Collections and items are represented as DBus objects, and each have their own
-			object paths. The object path of a collection or item should not change for it's lifetime,
+			object paths. The object path of a collection or item should not change for its lifetime,
 			under normal circumstances.</para>
 
 			<para>It is strongly recommended that client applications use
@@ -99,7 +99,7 @@
 			<para>An item or a collection may be initially in a locked state. When in a locked
 			state the item or collection may not be modified in any way, and the secret may not
 			be read. Client applications that require access to the secret of a locked item, or
-			desire to modify a locked item, should <link linkend='authentication-unlocking'>unlock it before use</link>.</para>
+			desire to modify a locked item, should <link linkend='unlocking'>unlock it before use</link>.</para>
 
 			<para>The service must prevent locked collections or items from modification. On
 			such an invalid access the
@@ -114,28 +114,52 @@
 			the default collection is always accessible through a
 			<link linkend='object-paths'>specific object path</link>.</para>
 
+			<para>A new item can be created with the
+			<link linkend='org.freedesktop.Secrets.Collection.CreateItem'>
+			<function>CreateItem()</function></link>
+			method on the Collection interface. When creating an item, the properties of the new
+			item are specified. The service may ignore or change these properties when creating
+			the item.</para>
+
+			<para>When creating an item, the service may need to prompt the user for additional
+			information. In this case, a <link linkend='prompts'>prompt object</link> is returned. It
+			must be <link linkend='org.freedesktop.Secrets.Prompt.Prompt'>acted upon</link> in order for
+			the collection to be created. In this case, the
+			<link linkend='org.freedesktop.Secrets.Prompt.Completed'>result of the prompt</link>
+			will contain the object path of the new item.</para>
+
+			<para>An item can be deleted by calling the
+			<link linkend='org.freedesktop.Secrets.Item.Delete'><function>Delete()</function></link>
+			method on the Item interface.</para>
+
+			<para>When deleting an item, the service may need to prompt the user for additional
+			information. In this case, a <link linkend='prompts'>prompt object</link> is returned. It
+			must be <link linkend='org.freedesktop.Secrets.Prompt.Prompt'>acted upon</link> in order for
+			the item to be deleted.</para>
+
 			<para>Client applications with special needs can create a new collection by calling the
 			<link linkend='org.freedesktop.Secrets.Service.CreateCollection'>
 			<function>CreateCollection()</function></link>
-			method on the Service interface. A client application must have
-			<link linkend='sessions'>opened a session</link> before a collection can be created. The </para>
+			method on the Service interface. When creating a collection, the properties of the new
+			collection are specified. The service may ignore or change these properties when creating
+			the collection.</para>
 
-			<para>A collection may be marked as private on creation. A private collection and the
-			items within it may only be unlocked by the application that created the collection.
-			Service implementors may choose not to implement this feature and should ignore the
-			private argument when
-			<link linkend='org.freedesktop.Secrets.Service.CreateCollection'>creating a collection</link>.
-			Client applications that demand this feature, should check the the
-			<link linkend='org.freedesktop.Secrets.Collection.Private'><property>Private</property>
-			property</link> after creating a collection to see if the request for a private collection
-			was ignored.</para>
+			<para>When creating a collection, the service may need to prompt the user for additional
+			information. In this case, a <link linkend='prompts'>prompt object</link> is returned. It
+			must be <link linkend='org.freedesktop.Secrets.Prompt.Prompt'>acted upon</link> in order for
+			the collection to be created. In this case, the
+			<link linkend='org.freedesktop.Secrets.Prompt.Completed'>result of the prompt</link>
+			will contain the object path of the new collection.</para>
 
 			<para>A collection can be deleted by calling the
 			<link linkend='org.freedesktop.Secrets.Collection.Delete'><function>Delete()</function></link>
-			method on the Service interface. A client application must have
-			<link linkend='sessions'>opened a session</link> before a collection can be created.
-			However the collection does not need to be unlocked. In addition private collections can
-			be deleted by any application.</para>
+			method on the Collection interface.</para>
+
+			<para>When deleting a collection, the service may need to prompt the user for additional
+			information. In this case, a <link linkend='prompts'>prompt object</link> is returned. It
+			must be <link linkend='org.freedesktop.Secrets.Prompt.Prompt'>acted upon</link> in order for
+			the collection to be deleted.</para>
+
 		</chapter>
 
 		<chapter xml:id="lookup-attributes">
@@ -157,6 +181,19 @@
 			<para>It's important to remember that attributes are not part of the secret.
 			Services implementing this API will probably store attributes in an unencrypted
 			manner in order to support simple and effecient lookups.</para>
+
+			<para>In order to search for items, use the
+			<link linkend='org.freedesktop.Secrets.Service.SearchItems'><function>SearchItems()</function></link>
+			method of the Service interface. The matched items will be returned in two sets. The
+			<parameter class='function'>unlocked</parameter> return value will contain the object paths
+			of all the items that are not locked. The <parameter class='function'>locked</parameter> return
+			value will contain object paths of items that are locked, which can be
+			<link linkend='unlocking'>unlocked if desired</link>.</para>
+
+			<para>The
+			<link linkend='org.freedesktop.Secrets.Collection.SearchItems'><function>SearchItems()</function></link>
+			method of the Collection interface is similar, except for it only searches a single collection.</para>
+
 		</chapter>
 
 		<chapter xml:id="sessions">
@@ -209,7 +246,7 @@
 			encrypted secrets would be an excersize of questionable value.</para>
 
 			<para>This API was desigened by GNOME and KDE developers with the goal of having
-			a common way to store secrets. It's predecessors are the desktop specific APIs
+			a common way to store secrets. Its predecessors are the desktop specific APIs
 			used by GNOME Keyring and KWallet.</para>
 
 			<section>
@@ -295,57 +332,100 @@
 
 		</chapter>
 
-		<chapter xml:id='authentication-unlocking'>
-			<title>Authentication or Unlocking</title>
+		<chapter xml:id='unlocking'>
+			<title>Locking and Unlocking</title>
 
 			<para>Some items and/or collections may be marked as locked by the service.
-			The secrets of locked items cannot be accessed. Locked items or collections
+			The secrets of locked items cannot be accessed. Additionally, locked items or collections
 			cannot be modified by the client application.</para>
-
-			<para>In order to unlock an item or collection the service's
-			<link linkend='org.freedesktop.Secrets.Service.BeginAuthenticate'>
-			<function>BeginAuthenticate()</function></link>
-			method is called with one or more DBus object paths of items or collections. The
-			<function>BeginAuthenticate()</function> method is asynchronous and may return before the item is
-			actually unlocked.</para>
-
-			<para>The service will then unlock the item or collection, perhaps by prompting the
-			user for a password, or it could require use a hardware token of some sort.</para>
-
-			<para>After the service tries to unlock an item or collection, whether successfully
-			or unsuccessfully, the
-			<link linkend='org.freedesktop.Secrets.Service.Authenticated'>
-			<function>Authenticated()</function></link>
-			signal on the service interface is emitted.</para>
-
-			<para>The client application may, but is not required to, call the
-			<link linkend='org.freedesktop.Secrets.Service.CompleteAuthenticate'>
-			<function>CompleteAuthenticate()</function></link>
-			method. One or more DBus object paths of items or collections that <function>BeginAuthenticate()</function>
-			was previously called with, can be passed in. The <function>CompleteAuthenticate()</function> returns the
-			items that were successfully authenticated. In addition if the unlock process is not
-			yet complete for some items or collections, the service should stop trying to ask the
-			user to unlock or authenticate them.</para>
 
 			<para>It's up to the service whether to unlock items individually, or collections as a
 			whole. The client application should act as if it must unlock each item individually.</para>
 
 			<para>A service may upon unlocking a collection, unlock all items in that collection. If
 			a service is not able to unlock an item individually, it should treat a request to unlock
-			an item as a request to unlock the connection that the item is in. The Authenticated signal
-			should however still be emitted for the individual items that were requested to be unlocked.</para>
+			an item as a request to unlock the connection that the item is in.</para>
 
-			<para>A service may choose to authenticate items or collections just for a single client
+			<para>A service may choose to unlock items or collections just for a single client
 			application. Alternatively the service may choose to allow any client application to access
-			items or collections authenticated by a single client application.</para>
+			items or collections unlocked by a another client application.</para>
 
-			<para>A client application should always be ready to call <function>BeginAuthenticate()</function> the secrets
+			<para>A client application should always be ready to unlock the items for the secrets
 			it needs, or objects it must modify. It must not assume that an item is already unlocked
 			for whatever reason.</para>
 
 			<para>A service may lock previously unlocked items for any reason at any time. Usually this
 			is done in response to user actions, timeouts, or external actions (such as the computer
-			sleeping).</para>
+			sleeping). The inherent race conditions present due to this are unavoidable, and must be
+			handled gracefully.</para>
+
+			<para>In order to unlock an item or collection the service's
+			<link linkend='org.freedesktop.Secrets.Service.Unlock'>
+			<function>Unlock()</function></link>
+			method is called with one or more DBus object paths of items or collections. The
+			<function>Unlock()</function> will return the DBus object paths of objects it could
+			immediately unlock without prompting.</para>
+
+			<para>The <function>Unlock()</function> method may also return a
+			<link linkend='org.freedesktop.Secrets.Prompt.Prompt'>prompt object</link>. If a prompt
+			object is returned, it must be <link linkend='prompts'>acted upon</link> in order to complete
+			the unlocking of the remaining objects. The
+			<link linkend='org.freedesktop.Secrets.Prompt.Completed'>result of the prompt</link>
+			will contain the object paths that were successfully unlocked by the prompt.</para>
+
+			<para>In order to lock an item or collection the service's
+			<link linkend='org.freedesktop.Secrets.Service.Unlock'>
+			<function>Lock()</function></link>
+			method is called with one or more DBus object paths of items or collections. The
+			<function>Lock()</function> will return the DBus object paths of objects it could
+			immediately lock without prompting.</para>
+
+			<para>The <function>Lock()</function> method may also return a
+			<link linkend='org.freedesktop.Secrets.Prompt.Prompt'>prompt object</link>. If a prompt
+			object is returned, it must be <link linkend='prompts'>acted upon</link> in order to complete
+			the locking of the remaining objects. The
+			<link linkend='org.freedesktop.Secrets.Prompt.Completed'>result of the prompt</link>
+			will contain the object paths that were successfully locked by the prompt.</para>
+		</chapter>
+
+		<chapter xml:id='prompts'>
+			<title>Prompts and Prompting</title>
+
+			<para>In order to complete various operations, such as unlocking a collection, the
+			service may need to prompt the user for additional information, such as a master password.</para>
+
+			<para>The prompts are displayed by the service on behalf of the client application.</para>
+
+			<para>Operations that require a prompt to complete will return a prompt object. The client
+			application must then call the
+			<link linkend='org.freedesktop.Secrets.Prompt.Prompt'><function>Prompt()</function></link>
+			method of the prompt object to display the prompt. Client applications can use the
+			<parameter class='function'>window-id</parameter>
+			argument to display the prompt attached to their application window.</para>
+
+			<para>Once the user provides the additional required information to the prompt, the service
+			completes the operation that required the prompt. Then it emits the the
+			<link linkend='org.freedesktop.Secrets.Prompt.Completed'><function>Completed</function></link>
+			signal of the prompt object. The <parameter class='function'>result</parameter> argument of
+			the signal contains operation an operation specific result.</para>
+
+			<para>Either the user or the client application can dismiss a prompt. In this case the
+			operation that required the additional information is cancelled. The client application
+			can dismiss a prompt by calling the
+			<link linkend='org.freedesktop.Secrets.Prompt.Dismiss'><function>Dismiss()</function></link>
+			method of the prompt object. The <function>Completed</function> signal will be emitted
+			with its <parameter class='function'>dismissed</parameter> argument set to
+			<constant>TRUE</constant>.</para>
+
+			<para>Once the <function>Completed</function> signal is emitted on a prompt object, it
+			is no longer valid. Prompt objects are specific to the client application's connection
+			to the DBus bus. Once an application disconnects, all its prompts are no longer valid.</para>
+
+			<para>There is an inherent race between the <function>Dismiss()</function> method and the
+			<function>Completed</function> signal. An application calling <function>Dismiss()</function>
+			must be prepared to handle the fact that the <function>Completed</function> has already been
+			emitted (although perhaps not received by the client). In addition the client must be prepared
+			to handle the fact that the prompt object is no longer valid.</para>
 		</chapter>
 
 		<chapter>
@@ -356,7 +436,7 @@
 			focused tools should make use of these when necessary.</para>
 
 			<para>This specification does not mandate the use of master passwords to lock a
-			collection of secrets. The service may choose to implement any method for authenticating
+			collection of secrets. The service may choose to implement any method for locking
 			secrets.</para>
 
 			<para>This specification does not mandate any form of access control. The service may
