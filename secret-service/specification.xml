@@ -254,12 +254,13 @@
 				application must agree on an algorithm, and some algorithm specific
 				parameters (eg: a key).</para>
 
-				<para>The client application opens a <link linkend='sessions'>session</link>
-				with the service, and then calls the
-				<link linkend='org.freedesktop.Secret.Session.Negotiate'><function>
-				Negotiate()</function></link> method on that session. The algorithms argument to the
-				<function>Negotiate()</function> method specifies a set of algorithms to be used together for
-				key agreement and encryption. The other arguments are algorithm specific.</para>
+				<para>When the client application opens a <link linkend='sessions'>session</link>
+				with the service, it calls the
+				<link linkend='org.freedesktop.Secret.Service.OpenSession'><function>
+				OpenSession()</function></link> method on the service. The algorithms argument to the
+				<function>OpenSession()</function> method specifies a set of algorithms to be used
+				together for key agreement and encryption. The other arguments are algorithm
+				specific.</para>
 
 				<para>If a service does not support a specific set of algorithms, a
 				<link linkend='org.freedesktop.Secret.Error.NotSupported'>
@@ -267,13 +268,20 @@
 				error is returned, and the client is free to try another set of algorithms.
 				The <emphasis>plain</emphasis> algorithm is almost always supported.</para>
 
-				<para>An algorithm may require that the <function>Negotiate()</function> method is called multiple
-				times in succession to be complete. Each iteration transfers algorithm specific
-				data back forth between the service and the client.</para>
+				<para>An algorithm may require that the <function>OpenSession()</function> method is
+				called multiple times in succession to be complete. Each iteration transfers
+				algorithm specific data back forth between the service and the client. The object path
+				'/' is returned from <function>OpenSession()</function> when session negotiation is
+				incomplete.</para>
 
-				<para>Once an algorithm has been negotiated, it is used for all transfer of secrets
-				between the service and the client application in both directions. Algorithm
-				specific parameters may be transfered with each
+				<para>None of the algorithms documented in this initial version of the specification
+				require multiple calls to <function>OpenSession()</function>.</para>
+
+				<para>When <function>OpenSession()</function> completes, it returns the session object
+				path along with a valid session object path.</para>
+
+				<para>Once an session algorithm has been negotiated, it is used for all transfer a
+				secrets whenever that session is specified along with the
 				<link linkend='type-Secret'><classname>secret</classname></link>.</para>
 			</section>
 
@@ -282,11 +290,11 @@
 
 				<segmentedlist>
 					<?dbhtml list-presentation="list"?>
-					<segtitle>Algorithm string</segtitle>
-					<segtitle><link linkend='org.freedesktop.Secret.Session.Negotiate'>
-					<function>Negotiate</function> input</link></segtitle>
-					<segtitle><link linkend='org.freedesktop.Secret.Session.Negotiate'>
-					<function>Negotiate</function> output</link></segtitle>
+					<segtitle>Session algorithm</segtitle>
+					<segtitle><link linkend='org.freedesktop.Secret.Service.OpenSession'>
+					Session input</link></segtitle>
+					<segtitle><link linkend='org.freedesktop.Secret.Service.OpenSession'>
+					Session output</link></segtitle>
 					<segtitle><link linkend='type-Secret'>
 					<classname>Secret</classname> parameter</link></segtitle>
 					<seglistitem>
@@ -309,23 +317,25 @@
 
 				<segmentedlist>
 					<?dbhtml list-presentation="list"?>
-					<segtitle>Algorithm string</segtitle>
-					<segtitle><link linkend='org.freedesktop.Secret.Session.Negotiate'>
-					<function>Negotiate</function> input</link></segtitle>
-					<segtitle><link linkend='org.freedesktop.Secret.Session.Negotiate'>
-					<function>Negotiate</function> output</link></segtitle>
+					<segtitle>Session algorithm</segtitle>
+					<segtitle><link linkend='org.freedesktop.Secret.Service.OpenSession'>
+					Session input</link></segtitle>
+					<segtitle><link linkend='org.freedesktop.Secret.Service.OpenSession'>
+					Session output</link></segtitle>
 					<segtitle><link linkend='type-Secret'>
 					<classname>Secret</classname> parameter</link></segtitle>
 					<seglistitem>
 						<!-- TODO: literal? -->
 						<seg><emphasis>dh-ietf1024-aes128-cbc-pkcs7</emphasis></seg>
-						<seg>client dh pub key as an array of bytes</seg>
-						<seg>service dh pub key as an array of bytes</seg>
+						<seg>Client DH pub key as an array of bytes</seg>
+						<seg>Service DH pub key as an array of bytes</seg>
 						<seg>16 byte AES initialization vector</seg>
 					</seglistitem>
 				</segmentedlist>
 
-				<para>TODO: Document</para>
+				<para>The public keys are transferred as an array of bytes representing an
+				unsigned integer of arbitrary size, most-significant byte first (e.g., the
+				integer 32768 is represented as the 2-byte string 0x80 0x00)</para>
 			</section>
 
 		</chapter>
