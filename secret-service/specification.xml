@@ -1,11 +1,9 @@
 <?xml version="1.0"?>
 <book xml:id="index" xmlns="http://docbook.org/ns/docbook" version="5.0">
 	<bookinfo>
-		<title>Secrets API Draft</title>
+		<title>Secrets Service API Draft</title>
 		<releaseinfo>
-			Secrets 0.1 DRAFT
-<!--			The latest version of this documentation can be found on-line at
-			<ulink role="online-location" url="http://[SERVER]/secrets/index.html">http://[SERVER]/secrets/</ulink>.-->
+			Secrets Service 0.1 DRAFT
 		</releaseinfo>
 
 		<authorgroup>
@@ -33,7 +31,7 @@
 
 		<copyright>
 			<year>2008-2009</year>
-			<holder>The Secrets API Authors</holder>
+			<holder>The Secrets Service API Authors</holder>
 		</copyright>
 
 	</bookinfo>
@@ -43,14 +41,14 @@
 		<chapter>
 			<title>Introduction</title>
 
-			<para>The Secrets API allows client applications to store secrets securily in a
+			<para>The Secret Service API allows client applications to store secrets securily in a
 			service running in the user's login session. </para>
 
 			<para>The secrets are usually stored in an encrypted manner by the service. The
 			service may need to be unlocked by the user before the secrets become available
 			for retrieval by client applications.</para>
 
-			<para>The Secrets service stores a secret along with a set of lookup attributes.
+			<para>The Secret Service stores a secret along with a set of lookup attributes.
 			The attributes can be used to lookup and retrieve a secret at a later date. The
 			lookup attributes are not treated as secret material, and the service may choose
 			to not encrypt attributes when storing them to disk.</para>
@@ -86,10 +84,10 @@
 
 			<para>Each secret is stored together with
 			<link linkend='lookup-attributes'>lookup attributes</link> and a label. These together
-			form an <link linkend='org.freedesktop.Secrets.Item'>item</link>.</para>
+			form an <link linkend='org.freedesktop.Secret.Item'>item</link>.</para>
 
 			<para>A group of items together form a
-			<link linkend='org.freedesktop.Secrets.Collection'>collection</link>.
+			<link linkend='org.freedesktop.Secret.Collection'>collection</link>.
 			A collection is similar in concept to the terms 'keyring' or 'wallet'.</para>
 
 			<para>Collections and items are represented as DBus objects, and each have their own
@@ -107,19 +105,19 @@
 
 			<para>The service must prevent locked collections or items from modification. On
 			such an invalid access the
-			<link linkend='org.freedesktop.Secrets.Error.IsLocked'><errorname>IsLocked</errorname></link>
+			<link linkend='org.freedesktop.Secret.Error.IsLocked'><errorname>IsLocked</errorname></link>
 			 error should be raised.</para>
 
 			<para>Client applications without special requirements should store in the default
 			collection. Use the
-			<link linkend='org.freedesktop.Secrets.Service.DefaultCollection'>
+			<link linkend='org.freedesktop.Secret.Service.DefaultCollection'>
 			<property>DefaultCollection</property></link>
 			property on the Service interface to determine the default collection. In addition
 			the default collection is always accessible through a
 			<link linkend='object-paths'>specific object path</link>.</para>
 
 			<para>A new item can be created with the
-			<link linkend='org.freedesktop.Secrets.Collection.CreateItem'>
+			<link linkend='org.freedesktop.Secret.Collection.CreateItem'>
 			<function>CreateItem()</function></link>
 			method on the Collection interface. When creating an item, the properties of the new
 			item are specified. The service may ignore or change these properties when creating
@@ -127,22 +125,22 @@
 
 			<para>When creating an item, the service may need to prompt the user for additional
 			information. In this case, a <link linkend='prompts'>prompt object</link> is returned. It
-			must be <link linkend='org.freedesktop.Secrets.Prompt.Prompt'>acted upon</link> in order for
+			must be <link linkend='org.freedesktop.Secret.Prompt.Prompt'>acted upon</link> in order for
 			the collection to be created. In this case, the
-			<link linkend='org.freedesktop.Secrets.Prompt.Completed'>result of the prompt</link>
+			<link linkend='org.freedesktop.Secret.Prompt.Completed'>result of the prompt</link>
 			will contain the object path of the new item.</para>
 
 			<para>An item can be deleted by calling the
-			<link linkend='org.freedesktop.Secrets.Item.Delete'><function>Delete()</function></link>
+			<link linkend='org.freedesktop.Secret.Item.Delete'><function>Delete()</function></link>
 			method on the Item interface.</para>
 
 			<para>When deleting an item, the service may need to prompt the user for additional
 			information. In this case, a <link linkend='prompts'>prompt object</link> is returned. It
-			must be <link linkend='org.freedesktop.Secrets.Prompt.Prompt'>acted upon</link> in order for
+			must be <link linkend='org.freedesktop.Secret.Prompt.Prompt'>acted upon</link> in order for
 			the item to be deleted.</para>
 
 			<para>Client applications with special needs can create a new collection by calling the
-			<link linkend='org.freedesktop.Secrets.Service.CreateCollection'>
+			<link linkend='org.freedesktop.Secret.Service.CreateCollection'>
 			<function>CreateCollection()</function></link>
 			method on the Service interface. When creating a collection, the properties of the new
 			collection are specified. The service may ignore or change these properties when creating
@@ -150,18 +148,18 @@
 
 			<para>When creating a collection, the service may need to prompt the user for additional
 			information. In this case, a <link linkend='prompts'>prompt object</link> is returned. It
-			must be <link linkend='org.freedesktop.Secrets.Prompt.Prompt'>acted upon</link> in order for
+			must be <link linkend='org.freedesktop.Secret.Prompt.Prompt'>acted upon</link> in order for
 			the collection to be created. In this case, the
-			<link linkend='org.freedesktop.Secrets.Prompt.Completed'>result of the prompt</link>
+			<link linkend='org.freedesktop.Secret.Prompt.Completed'>result of the prompt</link>
 			will contain the object path of the new collection.</para>
 
 			<para>A collection can be deleted by calling the
-			<link linkend='org.freedesktop.Secrets.Collection.Delete'><function>Delete()</function></link>
+			<link linkend='org.freedesktop.Secret.Collection.Delete'><function>Delete()</function></link>
 			method on the Collection interface.</para>
 
 			<para>When deleting a collection, the service may need to prompt the user for additional
 			information. In this case, a <link linkend='prompts'>prompt object</link> is returned. It
-			must be <link linkend='org.freedesktop.Secrets.Prompt.Prompt'>acted upon</link> in order for
+			must be <link linkend='org.freedesktop.Secret.Prompt.Prompt'>acted upon</link> in order for
 			the collection to be deleted.</para>
 
 		</chapter>
@@ -187,7 +185,7 @@
 			manner in order to support simple and effecient lookups.</para>
 
 			<para>In order to search for items, use the
-			<link linkend='org.freedesktop.Secrets.Service.SearchItems'><function>SearchItems()</function></link>
+			<link linkend='org.freedesktop.Secret.Service.SearchItems'><function>SearchItems()</function></link>
 			method of the Service interface. The matched items will be returned in two sets. The
 			<parameter class='function'>unlocked</parameter> return value will contain the object paths
 			of all the items that are not locked. The <parameter class='function'>locked</parameter> return
@@ -195,7 +193,7 @@
 			<link linkend='unlocking'>unlocked if desired</link>.</para>
 
 			<para>The
-			<link linkend='org.freedesktop.Secrets.Collection.SearchItems'><function>SearchItems()</function></link>
+			<link linkend='org.freedesktop.Secret.Collection.SearchItems'><function>SearchItems()</function></link>
 			method of the Collection interface is similar, except for it only searches a single collection.</para>
 
 		</chapter>
@@ -208,14 +206,14 @@
 			application and the service.</para>
 
 			<para>A session is established by calling the service's
-			<link linkend='org.freedesktop.Secrets.Service.OpenSession'>
+			<link linkend='org.freedesktop.Secret.Service.OpenSession'>
 			<function>OpenSession()</function></link>
 			method. Once established, a session is bound to calling application's connection to
 			the DBus session bus.</para>
 
 			<para>A session is closed when the client application disconnects from the DBus
 			session bus. Alternatively the client application can call the
-			<link linkend='org.freedesktop.Secrets.Session.Close'><function>Close()</function></link>
+			<link linkend='org.freedesktop.Secret.Session.Close'><function>Close()</function></link>
 			method on the session interface. Once a session is closed all session specific
 			negotiations will be dropped by the service.</para>
 
@@ -227,10 +225,10 @@
 			<title>Transfer of Secrets</title>
 
 			<para>To access or store secrets, use the
-			<link linkend='org.freedesktop.Secrets.Item.GetSecret'><function>GetSecret()</function></link>,
-			<link linkend='org.freedesktop.Secrets.Item.SetSecret'><function>SetSecret()</function></link>
+			<link linkend='org.freedesktop.Secret.Item.GetSecret'><function>GetSecret()</function></link>,
+			<link linkend='org.freedesktop.Secret.Item.SetSecret'><function>SetSecret()</function></link>
 			methods on the item interface, or the
-			<link linkend='org.freedesktop.Secrets.Service.GetSecrets'><function>GetSecrets()</function></link>,
+			<link linkend='org.freedesktop.Secret.Service.GetSecrets'><function>GetSecrets()</function></link>,
 			method on the service interface.</para>
 
 			<para>You must specify a session when retrieving or storing a secret. The session
@@ -258,13 +256,13 @@
 
 				<para>The client application opens a <link linkend='sessions'>session</link>
 				with the service, and then calls the
-				<link linkend='org.freedesktop.Secrets.Session.Negotiate'><function>
+				<link linkend='org.freedesktop.Secret.Session.Negotiate'><function>
 				Negotiate()</function></link> method on that session. The algorithms argument to the
 				<function>Negotiate()</function> method specifies a set of algorithms to be used together for
 				key agreement and encryption. The other arguments are algorithm specific.</para>
 
 				<para>If a service does not support a specific set of algorithms, a
-				<link linkend='org.freedesktop.Secrets.Error.NotSupported'>
+				<link linkend='org.freedesktop.Secret.Error.NotSupported'>
 				<errorname>NotSupported</errorname></link>
 				error is returned, and the client is free to try another set of algorithms.
 				The <emphasis>plain</emphasis> algorithm is almost always supported.</para>
@@ -285,9 +283,9 @@
 				<segmentedlist>
 					<?dbhtml list-presentation="list"?>
 					<segtitle>Algorithm string</segtitle>
-					<segtitle><link linkend='org.freedesktop.Secrets.Session.Negotiate'>
+					<segtitle><link linkend='org.freedesktop.Secret.Session.Negotiate'>
 					<function>Negotiate</function> input</link></segtitle>
-					<segtitle><link linkend='org.freedesktop.Secrets.Session.Negotiate'>
+					<segtitle><link linkend='org.freedesktop.Secret.Session.Negotiate'>
 					<function>Negotiate</function> output</link></segtitle>
 					<segtitle><link linkend='type-Secret'>
 					<classname>Secret</classname> parameter</link></segtitle>
@@ -312,9 +310,9 @@
 				<segmentedlist>
 					<?dbhtml list-presentation="list"?>
 					<segtitle>Algorithm string</segtitle>
-					<segtitle><link linkend='org.freedesktop.Secrets.Session.Negotiate'>
+					<segtitle><link linkend='org.freedesktop.Secret.Session.Negotiate'>
 					<function>Negotiate</function> input</link></segtitle>
-					<segtitle><link linkend='org.freedesktop.Secrets.Session.Negotiate'>
+					<segtitle><link linkend='org.freedesktop.Secret.Session.Negotiate'>
 					<function>Negotiate</function> output</link></segtitle>
 					<segtitle><link linkend='type-Secret'>
 					<classname>Secret</classname> parameter</link></segtitle>
@@ -360,31 +358,31 @@
 			handled gracefully.</para>
 
 			<para>In order to unlock an item or collection the service's
-			<link linkend='org.freedesktop.Secrets.Service.Unlock'>
+			<link linkend='org.freedesktop.Secret.Service.Unlock'>
 			<function>Unlock()</function></link>
 			method is called with one or more DBus object paths of items or collections. The
 			<function>Unlock()</function> will return the DBus object paths of objects it could
 			immediately unlock without prompting.</para>
 
 			<para>The <function>Unlock()</function> method may also return a
-			<link linkend='org.freedesktop.Secrets.Prompt.Prompt'>prompt object</link>. If a prompt
+			<link linkend='org.freedesktop.Secret.Prompt.Prompt'>prompt object</link>. If a prompt
 			object is returned, it must be <link linkend='prompts'>acted upon</link> in order to complete
 			the unlocking of the remaining objects. The
-			<link linkend='org.freedesktop.Secrets.Prompt.Completed'>result of the prompt</link>
+			<link linkend='org.freedesktop.Secret.Prompt.Completed'>result of the prompt</link>
 			will contain the object paths that were successfully unlocked by the prompt.</para>
 
 			<para>In order to lock an item or collection the service's
-			<link linkend='org.freedesktop.Secrets.Service.Unlock'>
+			<link linkend='org.freedesktop.Secret.Service.Unlock'>
 			<function>Lock()</function></link>
 			method is called with one or more DBus object paths of items or collections. The
 			<function>Lock()</function> will return the DBus object paths of objects it could
 			immediately lock without prompting.</para>
 
 			<para>The <function>Lock()</function> method may also return a
-			<link linkend='org.freedesktop.Secrets.Prompt.Prompt'>prompt object</link>. If a prompt
+			<link linkend='org.freedesktop.Secret.Prompt.Prompt'>prompt object</link>. If a prompt
 			object is returned, it must be <link linkend='prompts'>acted upon</link> in order to complete
 			the locking of the remaining objects. The
-			<link linkend='org.freedesktop.Secrets.Prompt.Completed'>result of the prompt</link>
+			<link linkend='org.freedesktop.Secret.Prompt.Completed'>result of the prompt</link>
 			will contain the object paths that were successfully locked by the prompt.</para>
 		</chapter>
 
@@ -398,21 +396,21 @@
 
 			<para>Operations that require a prompt to complete will return a prompt object. The client
 			application must then call the
-			<link linkend='org.freedesktop.Secrets.Prompt.Prompt'><function>Prompt()</function></link>
+			<link linkend='org.freedesktop.Secret.Prompt.Prompt'><function>Prompt()</function></link>
 			method of the prompt object to display the prompt. Client applications can use the
 			<parameter class='function'>window-id</parameter>
 			argument to display the prompt attached to their application window.</para>
 
 			<para>Once the user provides the additional required information to the prompt, the service
 			completes the operation that required the prompt. Then it emits the the
-			<link linkend='org.freedesktop.Secrets.Prompt.Completed'><function>Completed</function></link>
+			<link linkend='org.freedesktop.Secret.Prompt.Completed'><function>Completed</function></link>
 			signal of the prompt object. The <parameter class='function'>result</parameter> argument of
 			the signal contains operation an operation specific result.</para>
 
 			<para>Either the user or the client application can dismiss a prompt. In this case the
 			operation that required the additional information is cancelled. The client application
 			can dismiss a prompt by calling the
-			<link linkend='org.freedesktop.Secrets.Prompt.Dismiss'><function>Dismiss()</function></link>
+			<link linkend='org.freedesktop.Secret.Prompt.Dismiss'><function>Dismiss()</function></link>
 			method of the prompt object. The <function>Completed</function> signal will be emitted
 			with its <parameter class='function'>dismissed</parameter> argument set to
 			<constant>TRUE</constant>.</para>
@@ -459,7 +457,7 @@
     <chapter xml:id='object-paths'>
 			<title>Object Paths</title>
 
-			<para>The various DBus object paths used with the Secrets API are designed to be human
+			<para>The various DBus object paths used with the Secret Service API are designed to be human
 			readable but not displayed to the user. The object path of an item or collection should
 			not change for its lifetime, under normal circumstances.</para>
 
@@ -495,15 +493,7 @@
 
 	</part>
 
-<!--
-  <chapter xml:id="object-tree">
-    <title>Object Hierarchy</title>
-     <xi:include href="xml/tree_index.sgml"/>
-  </chapter>
-  <index xml:id="api-index-full">
-    <title>API Index</title>
-    <xi:include href="xml/api-index-full.xml"><xi:fallback /></xi:include>
-  </index>
--->
-  <xi:include href="xml/annotation-glossary.xml" xmlns:xi="http://www.w3.org/2001/XInclude"><xi:fallback /></xi:include>
+	<xi:include href="xml/annotation-glossary.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+		<xi:fallback/>
+	</xi:include>
 </book>
