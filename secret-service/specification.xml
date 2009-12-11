@@ -263,8 +263,7 @@
 				specific.</para>
 
 				<para>If a service does not support a specific set of algorithms, a
-				<link linkend='org.freedesktop.Secret.Error.NotSupported'>
-				<errorname>NotSupported</errorname></link>
+				<errorname>org.freedesktop.DBus.Error.NotSupported</errorname>
 				error is returned, and the client is free to try another set of algorithms.
 				The <emphasis>plain</emphasis> algorithm is almost always supported.</para>
 
