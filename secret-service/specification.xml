@@ -109,11 +109,7 @@
 			 error should be raised.</para>
 
 			<para>Client applications without special requirements should store in the default
-			collection. Use the
-			<link linkend='org.freedesktop.Secret.Service.DefaultCollection'>
-			<property>DefaultCollection</property></link>
-			property on the Service interface to determine the default collection. In addition
-			the default collection is always accessible through a
+			collection. The default collection is always accessible through a
 			<link linkend='object-paths'>specific object path</link>.</para>
 
 			<para>A new item can be created with the
@@ -485,9 +481,10 @@
 			<para>The object path for a session, where <emphasis>ssss</emphasis> is an auto-generated
 			session specific identifier.</para>
 
-			<programlisting>/org/freedesktop/secrets/default</programlisting>
+			<programlisting>/org/freedesktop/secrets/aliases/default</programlisting>
 			<para>The default collection for client applications to store secrets is available under
-			this object path in addition to its real object path (above).</para>
+			this object path in addition to its real object path (above). Other aliases may also be
+			present.</para>
 		</chapter>
 
 		<xi:include href="reference.xml" xpointer="interfaces" xmlns:xi="http://www.w3.org/2001/XInclude">
