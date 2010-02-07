@@ -21,12 +21,14 @@
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 -->
 
+    <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/xhtml/chunk.xsl"/>
+
     <xsl:param name="toc.max.depth">3</xsl:param>
     <xsl:param name="generate.section.toc.level">0</xsl:param>
     <xsl:param name="generate.toc">
         book     toc
         part     nop
-        chapter  nop
+        chapter  toc
     </xsl:param>
     <xsl:param name="html.stylesheet">style.css</xsl:param>
     <xsl:param name="funcsynopsis.style">ansi</xsl:param>
