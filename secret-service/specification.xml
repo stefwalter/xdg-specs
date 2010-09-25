@@ -41,7 +41,7 @@
 		<chapter>
 			<title>Introduction</title>
 
-			<para>The Secret Service API allows client applications to store secrets securily in a
+			<para>The Secret Service API allows client applications to store secrets securely in a
 			service running in the user's login session. </para>
 
 			<para>The secrets are usually stored in an encrypted manner by the service. The
