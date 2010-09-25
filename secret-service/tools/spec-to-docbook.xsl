@@ -4,6 +4,7 @@
   xmlns:tp="http://telepathy.freedesktop.org/wiki/DbusSpec#extensions-v0"
   xmlns:html="http://www.w3.org/1999/xhtml"
   xmlns:xlink="http://www.w3.org/1999/xlink"
+  xmlns:docbook="http://docbook.org/ns/docbook"
   exclude-result-prefixes="tp html">
 
 <!--
@@ -35,7 +36,7 @@
 
   <xsl:param name="allow-undefined-interfaces" select="false()"/>
 
-  <xsl:template match="html:* | @*">
+  <xsl:template match="docbook:* | html:* | @*">
     <xsl:copy>
       <xsl:apply-templates/>
     </xsl:copy>
@@ -143,11 +144,13 @@
   </xsl:template>
 
   <xsl:template match="tp:docstring">
-    <para><xsl:value-of select="text()"/></para>
+    <para>
+      <xsl:copy-of select="child::node()"/>
+    </para>
   </xsl:template>
 
   <xsl:template match="tp:docstring" mode="nopara">
-    <xsl:value-of select="text()"/>
+    <xsl:copy-of select="child::node()"/>
   </xsl:template>
 
   <xsl:template match="tp:added">
