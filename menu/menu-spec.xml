@@ -8,7 +8,7 @@
   <articleinfo>
     <title>Desktop Menu Specification</title>
     <releaseinfo>Version &version;</releaseinfo>
-    <date>10 January 2009</date>
+    <date>23 June 2010</date>
     <authorgroup>
       <author>
 	<firstname>Waldo</firstname>
@@ -1348,7 +1348,7 @@
           <tbody>
             <row>
               <entry>AudioVideo</entry>
-              <entry>A multimedia (audio/video) application</entry>
+              <entry>Application for presenting, creating, or processing multimedia (audio/video)</entry>
             </row><row>
               <entry>Audio</entry>
               <entry>An audio application</entry>
@@ -1368,7 +1368,7 @@
               <entry>A game</entry>
             </row><row>
               <entry>Graphics</entry>
-              <entry>Graphical application</entry>
+              <entry>Application for viewing, creating, or processing graphics</entry>
             </row><row>
               <entry>Network</entry>
               <entry>Network application such as a web browser</entry>
@@ -1517,17 +1517,17 @@
 
             </row><row>
               <entry>VectorGraphics</entry>
-              <entry>Vector based graphical application</entry>
+              <entry>Application for viewing, creating, or processing vector graphics</entry>
               <entry>Graphics;2DGraphics</entry>
 
             </row><row>
               <entry>RasterGraphics</entry>
-              <entry>Raster based graphical application</entry>
+              <entry>Application for viewing, creating, or processing raster (bitmap) graphics</entry>
               <entry>Graphics;2DGraphics</entry>
 
             </row><row>
               <entry>3DGraphics</entry>
-              <entry>3D based graphical application</entry>
+              <entry>Application for viewing, creating, or processing 3-D graphics</entry>
               <entry>Graphics</entry>
 
             </row><row>
