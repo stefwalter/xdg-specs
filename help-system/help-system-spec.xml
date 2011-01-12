@@ -1,0 +1,195 @@
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+]>
+<article id="index">
+  <title>Help System Specification</title>
+
+  <articleinfo>
+    <title>Help System Specification</title>
+    <date>2010-04-30</date>
+    <authorgroup>
+      <author>
+        <firstname>Shaun</firstname>
+        <surname>McCance</surname>
+        <affiliation>
+          <address>
+            <email>shaunm@gnome.org</email>
+          </address>
+        </affiliation>
+      </author>
+    </authorgroup>
+  </articleinfo>
+
+  <section id="overview">
+    <title>Overview</title>
+    <para>This specification provides a common directory layout and URI
+    scheme for locally installed help documents. Documents installed and
+    referenced using this system will have better interoperability between
+    different desktop environments and help applications.</para>
+  </section>
+
+  <section id="layout">
+    <title>Directory Layout</title>
+
+    <para>A document is a collection of files, possibly from multiple
+    directories in a path. Documents may be in any format, or even in
+    multiple formats; see <xref linkend="formats"/> for details. A
+    document has a <emphasis>document identifier</emphasis> that
+    identifies it uniquely and specifies where it can be found on
+    the file system. A document identifier consists of one or more
+    characters from the following: digits (U+0030-U+0039), letters
+    (U+0041-U+005A and U+0061-U+007A), hyphen (U+002D), underscore
+    (U+005F), period (U+002E), and percent (U+0025).</para>
+
+    <para>Document identifiers are not explicitly namespaced. To
+    avoid conflicts, document identifiers should start with the name
+    of the application or package that provides the document. In many
+    cases, the name of the application or package alone may be used.
+    Otherwise, the document identifier should start with the name
+    of the package or application followed by a hyphen.</para>
+
+    <para>Documents are installed under the <filename>help</filename>
+    subdirectory in <envar>$XDG_DATA_HOME</envar> or in the
+    <envar>$XDG_DATA_DIRS</envar> path. See the
+    <ulink url="http://standards.freedesktop.org/basedir-spec/latest/">XDG
+    Base Directory Specification</ulink> for details on <envar>$XDG_DATA_HOME</envar>
+    and <envar>$XDG_DATA_DIRS</envar>. Each <filename>help</filename>
+    directory in the path contains subdirectories for languages. Each
+    language subdirectory contains subdirectories for documents, where
+    the name of each subdirectory matches the document identifier of
+    a document.</para>
+
+    <para>The <emphasis>document path</emphasis> for a given document
+    is the list of directories of the following form:</para>
+
+    <programlisting><replaceable>datadir</replaceable>/help/<replaceable>lang</replaceable>/<replaceable>document</replaceable></programlisting>
+
+    <variablelist>
+      <varlistentry>
+        <term><filename><replaceable>datadir</replaceable></filename></term>
+        <listitem><para>Either <envar>$XDG_DATA_HOME</envar> or a directory in
+        the <envar>$XDG_DATA_DIRS</envar> path.</para></listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><filename><replaceable>lang</replaceable></filename></term>
+        <listitem><para>The language code of a language in the user's
+        list of preferred languages.</para></listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><filename><replaceable>document</replaceable></filename></term>
+        <listitem><para>The document identifier of the document.</para></listitem>
+      </varlistentry>
+    </variablelist>
+
+    <para>The document path is ordered first according to the position of
+    <filename><replaceable>datadir</replaceable></filename> in the path, then
+    by the position of <filename><replaceable>lang</replaceable></filename>
+    in the user's preferred list of languages. So, for example, if the
+    user's preferred language list is <systemitem>pt_BT:pt:C</systemitem>,
+    then <filename>~/.local/share/help/pt/beanstalk</filename> would take
+    precedence over <filename>/usr/share/help/pt_BR/beanstalk</filename>.</para>
+  </section>
+
+  <section id="uri-scheme">
+    <title>URI Scheme</title>
+
+    <para>Documents are referenced using the <systemitem>help:</systemitem>
+    URI scheme. The <systemitem>help:</systemitem> URI scheme has the
+    following form:</para>
+
+    <programlisting>help:<replaceable>document</replaceable>/<replaceable>page</replaceable>?<replaceable>options</replaceable>#<replaceable>anchor</replaceable></programlisting>
+
+    <variablelist>
+      <varlistentry>
+        <term><replaceable>document</replaceable></term>
+        <listitem><para>The document identifier.</para></listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><replaceable>page</replaceable></term>
+        <listitem><para>An identifier for a page within the document. Documents
+        often consist of multiple logical pages, which may not be reflected in
+        the actual files on the system. The page identifier is optional. If it
+        is not present, the preceding <systemitem>/</systemitem> character
+        should be omitted.</para></listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><replaceable>options</replaceable></term>
+        <listitem><para>Additional options that can influence how applications
+        present a document. Options are optional. If they are not present, the
+        preceding <systemitem>?</systemitem> character should be omitted. If
+        they are present, they must conform to the
+        <systemitem>application/x-www-form-urlencoded</systemitem> MIME type.
+        Options may be used, for example, to override language settings or to
+        provide keys for conditional processing. This specification makes no
+        specific recommendations for the options.</para></listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><replaceable>anchor</replaceable></term>
+        <listitem><para>An anchor point within a page. Applications should
+        scroll to an appropriate point whenever possible. The anchor is
+        optional. If it is not present, the preceding <systemitem>#</systemitem>
+        character should be omitted.</para></listitem>
+      </varlistentry>
+    </variablelist>
+
+    <para>Page identifiers and anchors may contain any character that is
+    valid in a document identifier. Some document types may have further
+    restrictions on page identifiers or anchors.</para>
+  </section>
+
+  <section id="formats">
+    <title>Help Formats</title>
+
+    <para>Documents may be installed in any format. Not all help applications
+    may recognize and handle the same types of documents. Whenever possible,
+    help applications should support HTML. Documents may be installed in
+    multiple formats. Help applications choose which format to use when
+    multiple formats are present.</para>
+
+    <para>For any format, a help application must map the information found
+    in the <systemitem>help:</systemitem> URI scheme to the information in
+    that format. This specification contains recommendations for finding
+    and handling documents in DocBook, Mallard, HTML, and XHTML.</para>
+
+    <section id="docbook">
+      <title>DocBook</title>
+      <para>DocBook documents have a file named <filename>index.docbook</filename>
+      in the document path. Any files referenced from the DocBook file, including
+      XML fragments included through XInclude, should be looked up according to
+      the document path.</para>
+      <para>When a help application displays a DocBook document, it will often
+      display it in multiple pages or chunks, rather than as a single long page.
+      The page identifier specifies which chunk to display. Not all applications
+      will split a DocBook document into chunks in the same way, so the page
+      identifier may not map exactly to the <sgmltag>id</sgmltag> attribute
+      of an element that is chunked. In this case, the applicaiton displays
+      the nearest enclosing chunk and treats the page identifier as an anchor
+      if no anchor was explicitly provided.</para>
+    </section>
+
+    <section id="mallard">
+      <title>Mallard</title>
+      <para>Mallard documents have a file named <filename>index.page</filename>
+      in the document path. Other page files may be different directories in
+      the document path. Any files referenced in any page file, including XML
+      fragments included through XInclude, should be looked up according to
+      the document path.</para>
+      <para>The page identifier specifies the id of a Mallard page file. The
+      anchor specifies the id of a section within a Mallard page file.</para>
+    </section>
+
+    <section id="html">
+      <title>HTML and XHTML</title>
+      <para>HTML documents have a file named <filename>index.html</filename>
+      in the document path. XHTML documents have a file named <filename>index.xhtml</filename>
+      in the document path. Other HTML or XHTML files in the document may
+      be in different directories in the document path. Any files referenced
+      in any HTML or XHTML page, including XML fragments included through
+      XInclude in XHTML, should be looked up according to the document path.</para>
+      <para>The page identifier specifies the base file name, without the
+      <filename>.html</filename> or <filename>.xhtml</filename> extension,
+      of an HTML or XHTML file in the document. The anchor specifies a named
+      anchor within the HTML or XHTML file.</para>
+    </section>
+  </section>
+</article>
