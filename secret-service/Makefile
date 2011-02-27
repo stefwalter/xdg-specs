@@ -8,3 +8,7 @@ html/index.html: reference.xml docbook-params.xsl specification.xml
 
 reference.xml: tools/spec-to-docbook.xsl $(SPEC)
 	xsltproc tools/spec-to-docbook.xsl $(SPEC) > $@
+
+clean:
+	rm -f reference.xml
+	rm -f html/*.html
