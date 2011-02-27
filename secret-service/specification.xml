@@ -498,8 +498,4 @@
 		</xi:include>
 
 	</part>
-
-	<xi:include href="xml/annotation-glossary.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
-		<xi:fallback/>
-	</xi:include>
 </book>

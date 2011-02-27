@@ -1141,6 +1141,8 @@
       </xsl:if>
       <xsl:choose>
         <xsl:when test="not(@direction)"/>
+        <xsl:when test="@direction='in'"/>
+        <!-- This doesn't work with the DTD (see comment in DTD)
         <xsl:when test="@direction='in'">
           <xsl:message terminate="no">
             <xsl:text>INFO: an arg of signal </xsl:text>
@@ -1148,6 +1150,7 @@
             <xsl:text> has unnecessary direction 'in'</xsl:text>
           </xsl:message>
         </xsl:when>
+        -->
         <xsl:otherwise>
           <xsl:message terminate="yes">
             <xsl:text>ERR: an arg of signal </xsl:text>
