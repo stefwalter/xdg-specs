@@ -157,7 +157,31 @@
 			information. In this case, a <link linkend='prompts'>prompt object</link> is returned. It
 			must be <link linkend='org.freedesktop.Secret.Prompt.Prompt'>acted upon</link> in order for
 			the collection to be deleted.</para>
+		</chapter>
 
+		<chapter xml:id="aliases">
+			<title>Aliases</title>
+
+			<para>Collections may be accessed via well known aliases. For example an alias
+			called <literal>default</literal> tells applications which is the default
+			collection to store secrets.</para>
+
+			<para>The aliased collections will be available at a
+			<link linkend='object-paths'>well-known DBus object path</link>.</para>
+
+			<para>If an application needs to create a collection with a given alias, this can
+			be done in a race free fashion by specifying the alias parameter of the
+			<link linkend='org.freedesktop.Secret.Service.CreateCollection'>CreateCollection()</link>
+			method on the service interface. If a collection with that alias already exists,
+			then it will be returned instead of creating a new one.</para>
+
+			<para>For applications like password managers it can be useful to allow the user to
+			configure which collection is associated with which well known alias. To alias or
+			unalias a collection use the
+			<link linkend='org.freedesktop.Secret.Service.SetAlias'>SetAlias()</link> method on the
+			service interface. Use the
+			<link linkend='org.freedesktop.Secret.Service.ReadAlias'>ReadAlias()</link> method on the
+			service interface to discover which collection is associated with a given alias.</para>
 		</chapter>
 
 		<chapter xml:id="lookup-attributes">
