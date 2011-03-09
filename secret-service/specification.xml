@@ -332,7 +332,7 @@
 			</section>
 
 			<section>
-				<title>Algorithm: dh-ietf1024-aes128-cbc-pkcs7</title>
+				<title>Algorithm: dh-ietf1024-sha256-aes128-cbc-pkcs7</title>
 
 				<segmentedlist>
 					<?dbhtml list-presentation="list"?>
@@ -345,12 +345,21 @@
 					<classname>Secret</classname> parameter</link></segtitle>
 					<seglistitem>
 						<!-- TODO: literal? -->
-						<seg><emphasis>dh-ietf1024-aes128-cbc-pkcs7</emphasis></seg>
+						<seg><emphasis>dh-ietf1024-sha256-aes128-cbc-pkcs7</emphasis></seg>
 						<seg>Client DH pub key as an array of bytes</seg>
 						<seg>Service DH pub key as an array of bytes</seg>
 						<seg>16 byte AES initialization vector</seg>
 					</seglistitem>
 				</segmentedlist>
+
+				<para>DH key agreement <citation>rfc2631</citation> is used to create a secret key
+				using 1024 bit parameters of the standard IETF 'Second Oakley Group'
+				<citation>rfc2409</citation>. The secret key is then digested into a 128-bit key
+				appropriate for AES. This is done using HKDF <citation>rfc5869</citation> with NULL
+				salt and empty info, using the SHA-2 256 hash algorithm
+				<citation>fips-180-3.2008</citation>. The secrets are encrypted using AES
+				<citation>fips-197.2001</citation> in cipher block chaining mode with pkcs7 style
+				padding <citation>rfc2315</citation>.</para>
 
 				<para>The public keys are transferred as an array of bytes representing an
 				unsigned integer of arbitrary size, most-significant byte first (e.g., the
@@ -483,7 +492,7 @@
 	<part xml:id="ref-dbus-api">
 		<title>D-Bus API Reference</title>
 
-    <chapter xml:id='object-paths'>
+		<chapter xml:id='object-paths'>
 			<title>Object Paths</title>
 
 			<para>The various DBus object paths used with the Secret Service API are designed to be human
@@ -522,4 +531,50 @@
 		</xi:include>
 
 	</part>
+
+	<xi:include href="xml/annotation-glossary.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+		<xi:fallback/>
+	</xi:include>
+
+	<bibliography>
+		<title>References</title>
+
+		<bibliomixed>
+			<abbrev>rfc2315</abbrev>
+			IETF <ulink url="http://www.ietf.org/rfc/rfc2315.txt">RFC 2315</ulink>:
+			PKCS #7: Cryptographic Message Syntax Version 1.5
+		</bibliomixed>
+
+		<bibliomixed>
+			<abbrev>rfc2409</abbrev>
+			IETF <ulink url="http://www.ietf.org/rfc/rfc2409.txt">RFC 2409</ulink>:
+			The Internet Key Exchange (IKE)
+		</bibliomixed>
+
+		<bibliomixed>
+			<abbrev>rfc2631</abbrev>
+			IETF <ulink url="http://www.ietf.org/rfc/rfc2631.txt">RFC 2631</ulink>:
+			Diffie-Hellman Key Agreement Method
+		</bibliomixed>
+
+		<bibliomixed>
+			<abbrev>rfc5869</abbrev>
+			IETF <ulink url="http://www.ietf.org/rfc/rfc5869.txt">RFC 5869</ulink>:
+			HMAC-based Extract-and-Expand Key Derivation Function (HKDF)
+		</bibliomixed>
+
+		<bibliomixed>
+			<abbrev>fips-180-3.2008</abbrev>
+			NIST <ulink url="http://csrc.nist.gov/publications/fips/fips180-3/fips180-3_final.pdf">FIPS PUB 180-3</ulink>:
+			Secure Hash Standard (SHS), October 2008
+		</bibliomixed>
+
+		<bibliomixed>
+			<abbrev>fips-197.2001</abbrev>
+			NIST <ulink url="http://csrc.nist.gov/publications/fips/fips197/fips-197.pdf">FIPS PUB 197</ulink>:
+			Advanced Encryption Standard (AES), November 2001
+		</bibliomixed>
+
+	</bibliography>
+
 </book>
