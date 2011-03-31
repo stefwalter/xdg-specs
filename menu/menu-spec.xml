@@ -8,7 +8,7 @@
   <articleinfo>
     <title>Desktop Menu Specification</title>
     <releaseinfo>Version &version;</releaseinfo>
-    <date>23 June 2010</date>
+    <date>31 March 2011</date>
     <authorgroup>
       <author>
 	<firstname>Waldo</firstname>
@@ -2075,6 +2075,8 @@
               <entry>LXDE</entry><entry>LXDE Desktop</entry>
             </row><row>
               <entry>ROX</entry><entry>ROX Desktop</entry>
+            </row><row>
+              <entry>Unity</entry><entry>Unity Shell</entry>
             </row><row>
               <entry>XFCE</entry><entry>XFCE Desktop</entry>
             </row><row>
