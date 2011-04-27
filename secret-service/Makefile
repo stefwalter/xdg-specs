@@ -12,3 +12,6 @@ reference.xml: tools/spec-to-docbook.xsl $(SPEC)
 clean:
 	rm -f reference.xml
 	rm -f html/*.html
+
+upload: all
+	rsync -Hvax html/./ specs.freedesktop.org:/srv/specifications.freedesktop.org/www/secret-service/./
