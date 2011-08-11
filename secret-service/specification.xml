@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <book xml:id="index" xmlns="http://docbook.org/ns/docbook" version="5.0">
 	<bookinfo>
-		<title>Secrets Service API Draft</title>
+		<title>Secret Service API Draft</title>
 		<releaseinfo>
-			Secrets Service 0.2 DRAFT
+			Secret Service 0.2 DRAFT
 		</releaseinfo>
 
 		<authorgroup>
@@ -30,8 +30,8 @@
 		</authorgroup>
 
 		<copyright>
-			<year>2008-2009</year>
-			<holder>The Secrets Service API Authors</holder>
+			<year>2008-2011</year>
+			<holder>The Secret Service API Authors</holder>
 		</copyright>
 
 	</bookinfo>
