@@ -49,12 +49,12 @@
 			for retrieval by client applications.</para>
 
 			<para>The Secret Service stores a secret along with a set of lookup attributes.
-			The attributes can be used to lookup and retrieve a secret at a later date. The
+			The attributes can be used to look up and retrieve a secret at a later date. The
 			lookup attributes are not treated as secret material, and the service may choose
-			to not encrypt attributes when storing them to disk.</para>
+			not to encrypt attributes when storing them to disk.</para>
 
 			<para>This API was desigened by GNOME and KDE developers with the goal of having
-			a common way to store secrets. Its predecessors are the desktop specific APIs
+			a common way to store secrets. Its predecessors are the desktop-specific APIs
 			used by GNOME Keyring and KWallet.</para>
 		</chapter>
 
@@ -65,15 +65,15 @@
 			is a password that an application needs to save and use at a later date.</para>
 
 			<para>Within this API a secret value is treated as an array of bytes. It is
-			recommended that a secret consist of user readable text, although this API has
+			recommended that a secret consist of user-readable text, although this API has
 			no such requirement.</para>
 
 			<para>Applications wishing to store multiple values as part of a single secret, may
-			choose to use a textual format to combine these values into one. For example, the
-			'desktop' key file format, or XML or another form of markup.</para>
+			choose to use a textual format to combine these values into one. For example, multiple
+			values may be combined using the 'desktop' key file format, or XML.</para>
 
 			<para>Secrets may be <link linkend='transfer-secrets'>encrypted when transferred</link>
-			 to the client application and vice versa.</para>
+			 to or from the client application.</para>
 
 			<para>The <link linkend='type-Secret'><classname>Secret</classname> structure</link> encapsulates
 			a secret value along with its transfer encryption parameters.</para>
@@ -90,9 +90,9 @@
 			<link linkend='org.freedesktop.Secret.Collection'>collection</link>.
 			A collection is similar in concept to the terms 'keyring' or 'wallet'.</para>
 
-			<para>Collections and items are represented as DBus objects, and each have their own
-			object paths. The object path of a collection or item should not change for its lifetime,
-			under normal circumstances.</para>
+			<para>Collections and items are represented as DBus objects, and each has its own
+			object path. Under normal circumstances, the object path of a collection or item
+			should not change for its lifetime.</para>
 
 			<para>It is strongly recommended that client applications use
 			<link linkend='lookup-attributes'>lookup attributes</link> to find items rather than
@@ -101,9 +101,9 @@
 			<para>An item or a collection may be initially in a locked state. When in a locked
 			state the item or collection may not be modified in any way, and the secret may not
 			be read. Client applications that require access to the secret of a locked item, or
-			desire to modify a locked item, should <link linkend='unlocking'>unlock it before use</link>.</para>
+			desire to modify a locked item, must <link linkend='unlocking'>unlock it</link> before use.</para>
 
-			<para>The service must prevent locked collections or items from modification. On
+			<para>The service must prevent modification of locked collections or items. On
 			such an invalid access the
 			<link linkend='org.freedesktop.Secret.Error.IsLocked'><errorname>IsLocked</errorname></link>
 			 error should be raised.</para>
