@@ -2011,6 +2011,11 @@
               <entry>Application that only works inside a terminal (text-based or command line application)</entry>
               <entry></entry>
 
+            </row><row>
+              <entry>Adult</entry>
+              <entry>Application handles adult or explicit material</entry>
+              <entry></entry>
+
             </row>
           </tbody>
         </tgroup>
