@@ -1972,6 +1972,11 @@
 	      <entry></entry>
 
             </row><row>
+              <entry>Adult</entry>
+              <entry>Application handles adult or explicit material</entry>
+              <entry></entry>
+
+            </row><row>
               <entry>Core</entry>
               <entry>Important application, core to the desktop such as a file manager or a help browser</entry>
               <entry></entry>
@@ -2009,11 +2014,6 @@
             </row><row>
               <entry>ConsoleOnly</entry>
               <entry>Application that only works inside a terminal (text-based or command line application)</entry>
-              <entry></entry>
-
-            </row><row>
-              <entry>Adult</entry>
-              <entry>Application handles adult or explicit material</entry>
               <entry></entry>
 
             </row>
