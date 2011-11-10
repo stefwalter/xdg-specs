@@ -1717,7 +1717,7 @@ or simply clear the list, returning to "normal" fullscreen.
 	<sect2>
 		<title>_NET_WM_FULL_PLACEMENT</title>
 		<para>
-By including this hint in _NET_WM_SUPPORTED_LIST the Window Manager announces
+By including this hint in _NET_SUPPORTED the Window Manager announces
 that it performs reasonable window placement for all window types it supports
 (for example centering dialogs on the mainwindow or whatever handling the
 Window Manager considers reasonable). This in turn means that Clients,
@@ -1740,7 +1740,7 @@ because many applications abuse positioning flags and/or provide unnecessary
 default positions.
                 </para>
                 <para>
-Note: The property is not used anywhere else besides being listed in _NET_WM_SUPPORTED_LIST.
+Note: The property is not used anywhere else besides being listed in _NET_SUPPORTED.
                 </para>
         </sect2>
 </sect1>
