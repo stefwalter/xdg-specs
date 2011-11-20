@@ -1553,6 +1553,31 @@ window's frame.  left, right, top and bottom are widths of the
 respective borders added by the Window Manager.
 	</para>
 	</sect2>
+
+	<sect2><title>_NET_WM_OPAQUE_REGION</title>
+        <programlisting><![CDATA[
+_NET_WM_OPAQUE_REGION, x, y, width, height, CARDINAL[][4]/32
+]]></programlisting>
+        <para>
+The Client MAY set this property to a list of 4-tuples [x, y, width,
+height], each representing a rectangle in window coordinates where the
+pixels of the window's contents have a fully opaque alpha value. If
+the window is drawn by the compositor without adding any transparency,
+then such a rectangle will occlude whatever is drawn behind it. When
+the window has an RGB visual rather than an ARGB visual, this property
+is not typically useful, since the effective opaque region of a
+window is exactly the bounding region of the window as set via the
+shape extension.  For windows with an ARGB visual and also a bounding
+region set via the shape extension, the effective opaque region is
+given by the intersection of the region set by this property and the
+bounding region set via the shape extension. The compositing manager
+MAY ignore this hint.
+        </para>
+        <para>
+Rationale: This gives the compositing manager more room for optimizations.
+For example, it can avoid drawing occluded portions behind the window.
+        </para>
+        </sect2>
 </sect1>
 <sect1>
 	<title>Window Manager Protocols</title>
@@ -2260,6 +2285,9 @@ OR OTHER DEALINGS IN THE SOFTWARE.
 		<itemizedlist>
 			<listitem><para>
 Added _NET_WM_STATE_FOCUSED.
+			</para></listitem>
+			<listitem><para>
+Added _NET_WM_OPAQUE_REGION
 			</para></listitem>
 		</itemizedlist>
 	    </sect2>
