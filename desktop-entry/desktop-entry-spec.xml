@@ -528,6 +528,19 @@
 	    <entry>NO</entry>
             <entry>1</entry>
 	  </row>
+          <row>
+            <entry id="key-keywords"><varname>Keywords</varname></entry>
+            <entry>
+            A list of strings which may be used in addition to other
+            metadata to describe this entry. This can be useful e.g. to
+            facilitate searching through entries. The values are not meant
+            for display, and should not be redundant with the values of
+            <varname>Name</varname> or <varname>GenericName</varname>.
+            </entry>
+            <entry>localestring(s)</entry>
+            <entry>NO</entry>
+            <entry>1</entry>
+          </row>
 	  <row>
 	    <entry id="key-startupnotify"><varname>StartupNotify</varname></entry>
 	    <entry>
@@ -894,8 +907,7 @@ X-KDE-ServiceType=FooService</programlisting>
       <listitem>
         <para>
          KDE specific keys: <varname>ServiceTypes</varname>,
-         <varname>DocPath</varname>, <varname>Keywords</varname>,
-         <varname>InitialPreference</varname>
+         <varname>DocPath</varname>, <varname>InitialPreference</varname>
         </para>
       </listitem>
 	  <listitem>
@@ -905,6 +917,13 @@ X-KDE-ServiceType=FooService</programlisting>
         </para>
       </listitem>
 	</itemizedlist>
+    <para>
+      KDE also used the <varname>Keywords</varname> key before it was
+      standardized, using commas instead of semi-colons as separators.
+      At the time of standardization, the field had been prefixed with a
+      <literal>X-KDE</literal> prefix, but the Trinity fork still used
+      the non-prefixed variant.
+    </para>
     <para>
       KDE uses the following additional keys for desktop entries of the
       <constant>FSDevice</constant> type.
