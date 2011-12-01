@@ -1330,8 +1330,7 @@
       show up in a section of the application menu dedicated to this
       category. The list of Additional Categories provides categories
       that can be used to provide more fine grained information about
-      the application. Additional Categories should always be used in
-      combination with one of the Main Categories.  
+      the application.
     </para>
     <para>    
       The table below lists all Main Categories. 
@@ -1394,9 +1393,8 @@
     <para>
       The table below describes Additional Categories. The Related
       Categories column lists one or more categories that are suggested
-      to be used in conjunction with the Additional Category. Note that at
-      least one Main Category must be included in the desktop entry's list
-      of categories. If multiple Main Categories are included in a single
+      to be used in conjunction with the Additional Category. If multiple
+      Main Categories are included in a single
       desktop entry file, the entry may appear more than once in the menu.
       If the Related Categories column is blank, the
       Additional Category can be used with any Main Category.
