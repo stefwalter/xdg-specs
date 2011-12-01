@@ -1332,6 +1332,13 @@
       that can be used to provide more fine grained information about
       the application.
     </para>
+    <para>
+      Category-based menus based on the Main Categories listed in this
+      specification do not provide a complete ontology for all
+      available applications. Category-based menu implementations
+      SHOULD therefore provide a "catch-all" submenu for applications
+      that cannot be appropriately placed elsewhere.
+    </para>
     <para>    
       The table below lists all Main Categories. 
       Note that category names are case-sensitive.
