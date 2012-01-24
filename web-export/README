@@ -1,0 +1,9 @@
+This directory contains the files used to export the specifications on
+  http://specifications.freedesktop.org/
+
+It's mostly two files:
+
+ - specs.idx: information on where to fetch specific versions of different
+   specifications (usually CVS or git)
+
+ - update.py: hacky script that uses specs.idx and creates html pages
