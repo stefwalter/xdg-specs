@@ -483,7 +483,9 @@
 	  <row>
 	    <entry id="key-exec"><varname>Exec</varname></entry>
 	    <entry>
-           Program to execute, possibly with arguments.
+           Program to execute, possibly with arguments. See the <link
+           linkend="exec-variables"><varname>Exec</varname> key</link> for
+           details on how this key works.
 	    </entry>
 	    <entry>string</entry>
 	    <entry>YES</entry>
@@ -881,100 +883,115 @@ application/x-bar=bar.desktop;</programlisting>
       submenu) within the context of the application. This is used to build
       so called "Quicklists" or "Jumplists".
     </para>
-    <para>
-      Application actions should be supported by implementors. However, in
-      case they are not supported, implementors can simply ignore the
-      <varname>Actions</varname> key and the associated <varname>Desktop
-      Action</varname> action groups, and keep using the <varname>Desktop
-      Entry</varname> group. Therefore, the primary way to invoke the application
-      should be through the main Exec line, as well as the primary Name and Icon.
-    </para>
-    <para>
-      Also, it is not expected that other desktop components showing app lists
-      (eg. software installers) will provide any UI for these actions, therefore
-      applications must only include actions that make sense as general launchers.
-    </para>
-    <para>
-      Each action action is identified by a string, following the same rules
-      as key names (see <xref linkend="entries"/>). Each identifier is associated
-      with an action group that must be present in the <filename>.desktop</filename>
-      file. The action group is a group named <varname>Desktop Action %s</varname>,
-      where <varname>%s</varname> is the action identifier.
-    </para>
-    <para>
-      It is not valid to have an action group for an action identifier not
-      mentioned in the <varname>Actions</varname> key. Such an action group
-      must be ignored by implementors.
-    </para>
-    <para>
-      The following keys are supported within each action group. If a
-      REQUIRED key is not present in an action group, then the implementor
-      should ignore this action.
-    </para>
-    <table>
-      <title>Action group keys</title>
-      <tgroup cols="5">
-        <thead>
-          <row>
-            <entry>Key</entry>
-            <entry>Description</entry>
-            <entry>Value Type</entry>
-            <entry>REQ?</entry>
-          </row>
-        </thead>
-        <tbody>
-          <row>
-            <entry id="key-action-group-name"><varname>Name</varname></entry>
-            <entry>
-              The label that will be shown to the user. Since actions will be
-              always shown in the context of a specific application (that is, as
-              a submenu of a launcher), this only needs to be unambiguous within
-              one app and should not include the application name.
-            </entry>
-            <entry>localestring</entry>
-            <entry>YES</entry>
-          </row>
-          <row>
-            <entry id="key-action-group-exec"><varname>Exec</varname></entry>
-            <entry>
-              Program to execute for this action, possibly with arguments. See <link
-              linkend="XXX">the Exec key</link> for details on how this key works.
-            </entry>
-            <entry>string</entry>
-            <entry>YES</entry>
-          </row>
-          <row>
-            <entry id="key-action-group-icon"><varname>Icon</varname></entry>
-            <entry>
-              The icon to be shown togheter with the action. If the name is
-              an absolute path, the given file will be used. If the name is not
-              an absolute path, the algorithm described in the <ulink
-              url="http://freedesktop.org/wiki/Standards/icon-theme-spec">Icon
-              Theme Specification</ulink> will be used to locate the icon.
-              A string to be interpreted as [Desktop Entry]/Icon, that is,
-              according to the icon theme. Implementations may choose to ignore it.
-            </entry>
-            <entry>string</entry>
-            <entry>NO</entry>
-          </row>
-          <row>
-            <entry id="key-action-group-osi-nsi">
-              <varname>OnlyShowIn</varname>, <varname>NotShowIn</varname>
-            </entry>
-            <entry>
-              A list of strings to be interpreted according to the <ulink
-              url="http://www.freedesktop.org/Standards/menu-spec">Desktop
-              Menu Specification</ulink>, but affect only the visibility of
-              the specific action. These are to be interpreted in addition to,
-              and not to replace, the keys in the main group with the same
-              name.
-            </entry>
-            <entry>string(s)</entry>
-            <entry>NO</entry>
-          </row>
-        </tbody>
-      </tgroup>
-    </table>
+    <sect2 id="extra-actions-identifier">
+      <title>Action identifier</title>
+      <para>
+        Each action is identified by a string, following the same format
+        as key names (see <xref linkend="entries"/>). Each identifier is associated
+        with an action group that must be present in the <filename>.desktop</filename>
+        file. The action group is a group named <varname>Desktop Action %s</varname>,
+        where <varname>%s</varname> is the action identifier.
+      </para>
+      <para>
+        It is not valid to have an action group for an action identifier not
+        mentioned in the <varname>Actions</varname> key. Such an action group
+        must be ignored by implementors.
+      </para>
+    </sect2>
+    <sect2 id="extra-actions-keys">
+      <title>Action keys</title>
+      <para>
+        The following keys are supported within each action group. If a
+        REQUIRED key is not present in an action group, then the implementor
+        should ignore this action.
+      </para>
+      <table>
+        <title>Action Specific Keys</title>
+        <tgroup cols="5">
+          <thead>
+            <row>
+              <entry>Key</entry>
+              <entry>Description</entry>
+              <entry>Value Type</entry>
+              <entry>REQ?</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry id="key-action-group-name"><varname>Name</varname></entry>
+              <entry>
+                Label that will be shown to the user. Since actions are
+                always shown in the context of a specific application (that is, as
+                a submenu of a launcher), this only needs to be unambiguous within
+                one application and should not include the application name.
+              </entry>
+              <entry>localestring</entry>
+              <entry>YES</entry>
+            </row>
+            <row>
+              <entry id="key-action-group-icon"><varname>Icon</varname></entry>
+              <entry>
+                Icon to be shown togheter with the action. If the name is
+                an absolute path, the given file will be used. If the name is not
+                an absolute path, the algorithm described in the <ulink
+                url="http://freedesktop.org/wiki/Standards/icon-theme-spec">Icon
+                Theme Specification</ulink> will be used to locate the icon.
+                Implementations may choose to ignore it.
+              </entry>
+              <entry>localestring</entry>
+              <entry>NO</entry>
+            </row>
+            <row>
+              <entry id="key-action-group-osi-nsi">
+                <varname>OnlyShowIn</varname>, <varname>NotShowIn</varname>
+              </entry>
+              <entry>
+                A list of strings identifying the environments that should
+                display/not display this specific action. These keys are to be
+                interpreted in addition to the <varname>OnlyShowIn</varname>
+                and <varname>NotShowIn</varname> keys of the <varname>Desktop
+                Entry</varname> group, and are not replacing them. Only one of
+                these keys, either <varname>OnlyShowIn</varname> or
+                <varname>NotShowIn</varname>, may appear in each action group
+                (for possible values see the <ulink
+                url="http://www.freedesktop.org/Standards/menu-spec">Desktop
+                Menu Specification</ulink>).
+              </entry>
+              <entry>string(s)</entry>
+              <entry>NO</entry>
+            </row>
+            <row>
+              <entry id="key-action-group-exec"><varname>Exec</varname></entry>
+              <entry>
+                Program to execute for this action, possibly with arguments.
+                See the <link linkend="exec-variables"><varname>Exec</varname>
+                key</link> for details on how this key works.
+              </entry>
+              <entry>string</entry>
+              <entry>YES</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </sect2>
+    <sect2 id="extra-actions-implementation-notes">
+      <title>Implementation notes</title>
+      <para>
+        Application actions should be supported by implementors. However, in
+        case they are not supported, implementors can simply ignore the
+        <varname>Actions</varname> key and the associated <varname>Desktop
+        Action</varname> action groups, and keep using the <varname>Desktop
+        Entry</varname> group: the primary way to describe and invoke the
+        application is through the Name, Icon and Exec keys from the
+        <varname>Desktop Entry</varname> group.
+      </para>
+      <para>
+        It is not expected that other desktop components showing application
+        lists (software installers, for instance) will provide any user
+        interface for these actions. Therefore applications must only include
+        actions that make sense as general launchers.
+      </para>
+    </sect2>
   </sect1>
   <sect1 id="extending">
     <title>Extending the format</title>
