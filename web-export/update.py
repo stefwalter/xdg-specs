@@ -12,6 +12,10 @@ try:
 	lastname = ''
 	lastpath = ''
 	for line in f.readlines():
+		line = line.strip()
+		if not line or line.startswith('#'):
+			continue
+
 		(file, revision, version, path) = string.split(line)
 		use_git = False
 		if file.startswith("git:"):
