@@ -198,7 +198,7 @@ class SpecObject():
 
         if self.ext == '.xml':
             # One-chunk HTML
-            html_path_latest = os.path.join(self.spec_dir, '%s%s' % (self.basename_no_ext, '.html'))
+            html_path_latest = os.path.join(self.spec_dir, '%s-latest%s' % (self.basename_no_ext, '.html'))
             if os.path.exists(html_path_latest):
                 os.unlink(html_path_latest)
 
