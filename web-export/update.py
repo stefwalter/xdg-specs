@@ -164,26 +164,35 @@ class SpecObject():
         path = os.path.join(self.spec_dir, self.filename)
         (path_no_ext, ext) = os.path.splitext(path)
 
+        # One-chunk HTML
+        html_path = '%s%s' % (path_no_ext, '.html')
+        if os.path.exists(html_path):
+            os.unlink(html_path)
+
+        # Multiple chunks
+        html_dir = os.path.join(self.spec_dir, self.version)
+        if os.path.exists(html_dir):
+            shutil.rmtree(html_dir)
+
+        one_chunk_command = None
+        multiple_chunks_command = None
+
         if self.ext == '.xml':
-            # One-chunk HTML
-            html_path = '%s%s' % (path_no_ext, '.html')
-            if os.path.exists(html_path):
-                os.unlink(html_path)
+            one_chunk_command = ['xmlto', '-o', self.spec_dir, 'html-nochunks', path]
+            multiple_chunks_command = ['xmlto', '-o', html_dir, 'html', path]
+        elif self.ext == '.sgml':
+            one_chunk_command = ['docbook2html', '-o', self.spec_dir, '--nochunks', path]
+            multiple_chunks_command = ['docbook2html', '-o', html_dir, path]
 
-            retcode = subprocess.call(['xmlto', '-o', self.spec_dir, 'html-nochunks', path])
-
+        if one_chunk_command:
+            retcode = subprocess.call(one_chunk_command)
             if retcode != 0:
                 raise Exception('Cannot convert \'%s\' to HTML.' % path)
             self.one_chunk = True
 
-            # Multiple chunks
-            html_dir = os.path.join(self.spec_dir, self.version)
-            if os.path.exists(html_dir):
-                shutil.rmtree(html_dir)
+        if multiple_chunks_command:
             safe_mkdir(html_dir)
-
-            retcode = subprocess.call(['xmlto', '-o', html_dir, 'html', path])
-
+            retcode = subprocess.call(multiple_chunks_command)
             if retcode != 0:
                 raise Exception('Cannot convert \'%s\' to multiple-chunks HTML.' % path)
             self.multiple_chunks = True
@@ -196,7 +205,7 @@ class SpecObject():
             os.unlink(path_latest)
         os.symlink(self.filename, path_latest)
 
-        if self.ext == '.xml':
+        if self.ext in ['.xml', '.sgml']:
             # One-chunk HTML
             html_path_latest = os.path.join(self.spec_dir, '%s-latest%s' % (self.basename_no_ext, '.html'))
             if os.path.exists(html_path_latest):
