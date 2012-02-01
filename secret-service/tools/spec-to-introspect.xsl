@@ -61,24 +61,21 @@
     <xsl:template match="arg|property">
         <xsl:copy>
             <xsl:for-each select="@*">
-                <xsl:choose>
-                    <xsl:when test="not(starts-with(name(), 'tp:'))">
-                        <xsl:copy/>
-                    </xsl:when>
-                    <xsl:when test="name() = 'tp:type'">
-                        <xsl:variable name="type">
-                            <xsl:call-template name="TpType">
-                                <xsl:with-param name="type" select="."/>
-                            </xsl:call-template>
-                        </xsl:variable>
-                        <annotation name="org.gtk.EggDBus.Type">
-                            <xsl:attribute name="value">
-                                <xsl:value-of select="translate(translate($type, ' ', ''), '&#xa;', '')"/>
-                            </xsl:attribute>
-                        </annotation>
-                    </xsl:when>
-                    <xsl:otherwise/>
-                </xsl:choose>
+                <xsl:if test="not(starts-with(name(), 'tp:'))">
+                    <xsl:copy/>
+                </xsl:if>
+            </xsl:for-each>
+            <xsl:for-each select="@tp:type">
+                <xsl:variable name="type">
+                    <xsl:call-template name="TpType">
+                        <xsl:with-param name="type" select="."/>
+                    </xsl:call-template>
+                </xsl:variable>
+                <annotation name="org.gtk.EggDBus.Type">
+                    <xsl:attribute name="value">
+                        <xsl:value-of select="translate(translate($type, ' ', ''), '&#xa;', '')"/>
+                    </xsl:attribute>
+                </annotation>
             </xsl:for-each>
             <xsl:apply-templates/>
         </xsl:copy>
