@@ -6,8 +6,8 @@ git:xdg/xdg-specs:basedir/basedir-spec.xml		2c096d0c74244bd573027b217be3a69335a9
 # Invalid docbook:
 #git:xdg/xdg-specs:basedir/basedir-spec.xml		c8475bef1d1f84afcc89c710b6b5b214f11a670f	0.5	basedir-spec
 
-icccm-extensions/selections/clipboards.txt		1.2		0.1	clipboards-spec
-icccm-extensions/selections/clipboard-extensions.txt	1.1		0.1	clipboard-extensions-spec
+git:xdg/xdg-specs:clipboard/clipboards.txt		e7b4103d0019c6ccfe2651ba63db8cf09e19ee80	0.1	clipboards-spec
+git:xdg/xdg-specs:clipboard/clipboard-extensions.txt		791f359c0a03dd36e716a9a040a2e4ea620b4059	0.1	clipboard-extensions-spec
 
 git:dbus/dbus:doc/introspect.dtd				7652304bff969afb3969603149bb385efe861fe8		1.0	dbus
 
@@ -51,7 +51,7 @@ git:xdg/xdg-specs:menu/menu-spec.xml			e1b6bf680dc4d021e7f2122841f812975a31985c	
 #git:xdg/xdg-specs:menu/menu-spec.xml			c8475bef1d1f84afcc89c710b6b5b214f11a670f		0.4	menu-spec
 git:xdg/xdg-specs:menu/menu.dtd                                2403355e486ac6bc972fd150d38e3c44d086960a                0.91	menu-spec
 
-recent-files/recent-file-spec/recent-file-spec.xml	1.1		0.2	recent-file-spec
+git:xdg/xdg-specs:recent-files/recent-file-spec.xml		2f2e0cc7ded9b2c8afe29281c621d8ee6c5def9a	0.2	recent-file-spec
 
 git:xdg/shared-mime-info:shared-mime-info-spec.xml	2f909cff817a3f08d12321769173cac2de0da1b4		0.20	shared-mime-info-spec
 git:xdg/shared-mime-info:shared-mime-info-spec.xml	30349a8810143c1f808a74c96bceba87d48e8364		0.19	shared-mime-info-spec
@@ -88,4 +88,6 @@ git:xdg/xdg-specs:wm-spec/wm-spec.sgml			a6e9a0a88112e5f6ac7099530e5c732c7ec6fb7
 # Invalid docbook:
 #git:xdg/xdg-specs:wm-spec/wm-spec.sgml			b58352845cebc1d3b5754215a03ed047d1b28b11		1.0	wm-spec
 
-xembed/xembed/spec/xembed-spec.xml			1.2		0.5	xembed-spec
+git:xdg/xdg-specs:xembed/spec/xembed-spec.xml		7bcfe52e21363072766a7ab428a9ab3e8552f6ff	0.5	xembed-spec
+
+git:xdg/xdg-specs:xsettings/xsettings.xml		481e6fef65998dd376084532af878268cd45ae82	0.5	xsettings-spec
