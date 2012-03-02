@@ -1,0 +1,62 @@
+2005-08-09  Owen Taylor  <otaylor@redhat.com>
+
+	* xsettings-client.c (read_settings): Fix a typo (Travis Spencer)
+
+Thu Feb 26 19:55:29 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* xsettings-client.[ch]: Add
+	xsettings_client_set_grab_func(),
+	xsettings_client_set_ungrab_func() to allow users to
+	control exactly how server grabs are done. (In case
+	the user has a refcounted grab facility, for instance.)
+	(Patch by Soeren Sandmann)
+
+	* xsettings-client.c: Use XInternAtoms() to reduce
+	roundtrips.
+
+	* xsettings-client.c: Fix a memory leak for
+	XGetWindowProperty() on type mismatch.
+
+Mon Dec  2 20:24:02 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* xsettings.xml: Fix ordering of color components.
+	(Fredrik H)
+
+Wed Oct  9 15:57:21 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* === Version 0.2 ===
+
+Wed Oct  9 15:49:03 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* xsettings.xml: Convert to DocBook XML
+
+	* Makefile: Add a rule for xsettings.html
+
+Wed Oct  9 15:32:20 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* xsettings.xml: Add the spec (prior to converting
+	to DocBook XML)
+
+Tue Oct  8 19:19:37 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* xsettings-common.c (xsettings_setting_free): Fre
+	the setting name. (Anders Carlsson)
+
+	* xsettings-client.c (xsettings_client_process_event):
+	Be more selective about which manager client events
+	we process. (Anders Carlsson)
+
+	* xsettings-client.c (fetch_card8): Fix cut-and-paste
+	bug (Jacob Berkman, bugzilla.gnome.org #73585)
+
+	* xsettings-client.c (parse_settings): Suppress
+	a signed-unsigned warning (David L. Cooper II
+	bugzilla.gnome.org, #85853)
+
+	* xsettings-client.h (enum): Remove trailing ,
+	(Miroslaw Dobrzanski-Neumann, bugzilla.gnome.org #72182)
+
+Thu May 10 15:23:50 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* xsettings-manager.[ch]: Add xsettings_manager_delete_setting().
+

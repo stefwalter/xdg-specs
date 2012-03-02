@@ -1,0 +1,313 @@
+XSettings - cross toolkit configuration
+=======================================
+
+Goals
+=====
+
+The intent of this specification is to specify a mechanism to
+allow the configuration of settings such as double click timeout,
+drag-and-drop threshold, and default foreground and background colors
+for all applications running within a desktop. The mechanism should:
+
+ - allow for instant updates to be propagated across all applications at
+   runtime
+ - it should perform well, even for remote applications.
+
+It is not intended:
+ 
+ - for the storage of application-specific data
+ - to be able to store large amounts of data
+ - to store complex data types (other than as strings)
+
+
+Existing systems
+================
+
+The existing systems in this area are the Xrm database, and various
+other configuration database systems, mostly specific to particular
+desktops. (The kde configuration system, gnome-config, GConf,
+libproplist, etc.)
+
+The Xrm database is tempting to use for this purpose since it is
+very well established and has a universally deployed existing
+implementation. However, it has various defects, that make it
+not suitable for this purpose.
+
+ - The Xrm database merges information from various sources - the
+   ~/.Xdefaults file on the root window, and a property on the root
+   window. This means that to programatically configure the Xrm
+   database in response to a GUI config tool is difficult and
+   unreliable.
+
+ - The Xrm database was not designed for on-the-fly changing of
+   settings.
+
+ - The Xrm database stores all information in a single text
+   property on the root window. This makes it difficult to
+   determine what settings have changed; it is necessary to parse
+   the property and do string comparisons.
+
+   Additionally, most systems have a large amount of application
+   specific information in the Xrm database, which further slows
+   down notification of changes.
+
+Other configuration databases are more designed for this
+task. However, they are sophisticated systems that are not easily
+reimplementable. Also, picking one would mean difficulties
+integrating with other desktops that use different systems.
+
+It is our contention that a system designed specifically for
+configuration of a small number of settings being changed at
+runtime can:
+
+ - Be easier to bridge onto each systems native configuration
+   mechanism.
+
+ - Be easier to implement in whatever language/library combination
+   people want to use.
+
+ - Be more efficient.
+
+Than using a more general existing system.
+
+
+Overview
+========
+
+The XSettings mechanism does not specify the manner in which settings
+are stored or changed. Instead, it is a mechanism for clients to
+interact with the _settings_manager_, which uses desktop-specific
+mechanisms for storing and tracking changes to settings.
+
+The settings manager maintains an unmapped window on which all
+settings are stored, the _settings_window_. This window is the owner
+of the _XSETTINGS_S[N] resource. ([N] is replaced by the value of the
+screen - for instances, _XSETTINGS_S0.)
+
+The values of the settings are stored in a single property on this
+window, the _XSETTINGS_SETTINGS
+
+
+Client behavior
+===============
+
+On startup, each client that should identify the settings window by
+calling XGetSelectionOwner() for the _XSETTINGS_S[N] selection and select
+for notification on the settings window by calling XSelectInput()
+with a mask of StructureNotifyMask|PropertyChangeMask.
+
+To prevent race conditions a client MUST grab the
+server while performing these operations using XGrabServer().
+
+Clients 
+
+If there is no owner of the _XSETTINGS_S[N] selection, the client can
+determine when an owner is established by listening for client
+messages sent to root window of the screen with type MANAGER. (See
+section 2.8, Manager Selections of the ICCCM.) The format of this
+message is:
+
+ event-mask:   StructureNotify
+ event:        ClientMessage
+ type:         MANAGER
+ format:       32
+ data[0]:      timestamp
+ data[1]:      _XSETTINGS_S[N] (atom)
+ data[2]:      New owner of the selection
+ data[3]:      0 (reserved)
+ 
+The client can then proceed to read contents of the _XSETTINGS_SETTINGS
+property from the settings window and interpret according to 
+the information in the "_XSETTINGS_SETTINGS Format" section of this 
+document.
+
+Clients must trap X errors when reading the _XSETTING_SETTINGS property
+because it is possible that the selection window may be destroyed
+at any time. 
+
+When the client is notified that the settings window has been
+destroyed or discovers that the selection window has been destroyed,
+it should reset all settings to their default values and then proceed
+as on initial startup. [ See rational section ]
+
+When a client receives a PropertyChangeNotify event for the window
+it should reread the _XSETTING_SETTINGS property. It can use
+the 'serial' field to tell what fields have been changed. The
+client must parse the entire property and read in all new values
+before taking action on changed settings such as notifying listeners
+for those settings to avoid using a mix of old and new data.
+
+
+_XSETTINGS_SETTINGS Format
+==========================
+
+The _XSETTINGS_SETTINGS property is of form 8 and type _XSETTINGS_SETTINGS.
+The contents are a 
+
+ 1	CARD8    byte-order
+ 3               unused
+ 4      CARD32   SERIAL
+ 4      CARD32   N_SETTINGS
+
+Followed by N_SETTINGS settings records, which have a header:
+
+ 1      SETTING_TYPE  type
+ 1                    unused
+ 2      n             name-len
+ n      STRING8       name
+ P                    unused, p=pad(n)
+ 4      CARD32        last-change-serial
+ 
+Where SETTING_TYPE is 
+
+ 0  XSettingsTypeInteger
+ 1  XSettingsTypeString
+ 2  XSettingsTypeColor
+
+followed by the body. If TYPE = XSettingsTypeString  the body is:
+
+ 4      n             value-len
+ n      STRING8       value
+ P                    unused, p=pad(n)
+
+If TYPE == XSettingsTypeInteger, then the body is:
+
+ 4      INT32         value
+
+If TYPE == XSettingsTypeColor, then the body is:
+
+ 2      CARD16        red
+ 2      CARD16        blue
+ 2      CARD16        green
+ 2      CARD16        alpha
+
+If the setting does not need the alpha field, it should
+be set to 65535.
+
+
+Setting names must be confined to the ascii characters:
+
+ 'A'-'Z' 'a'-'z' '0'-'9' '_' and '/'
+ 
+With the additional restrictions that '/' cannot appear in
+the leading or trailing position, that two occurences of
+'/' cannot be consecutive, and that the first character
+of the name, and and the first character after a slash
+cannot be one of '0'-'9'. Names may not be empty.
+
+So, 
+
+ "GTK/colors/background0"
+ "_background"
+ "_111"
+
+are legitimate names, while 
+ 
+ "/"
+ "_background/"
+ "GTK//colors"
+ ""
+Are not legitimate names.
+ 
+The names, types, contents, and default values of standard settings
+will be separately agreed upon.
+
+Names beginning with 'Net/' and case variants of that string are
+reserved and must not be used without prior agreement.
+
+
+The 'serial' field and and the 'last-change-serial' field of the each
+settings record can be used to tell which settings have changed since
+the last time a client retrieved the _XSETTINGS_SETTINGS property. Each
+time the client retrieves the contents of the _XSETTINGS_SETTINGS
+property it should store the contents of the 'serial' field. When
+it next retrieves the property, any settings whose 'last-change-serial'
+is greater than the stored value.
+
+(Careful clients will make provisions for wrap-around of the serial
+field. This is, however, not expected to happen in practice.)
+
+
+Settings Manager behavior
+=========================
+
+The _XSETTING_S[N] selection is managed as a manager selection
+according to section 2.8 of the ICCCM and the handling of the
+selections window, the _XSETTING_S[N] window and MANAGER client
+messages must conform to that specification.
+
+The settings manager changes the contents of the _XSETTINGS_SETTINGS 
+property of the root window whenever the source it derives them
+from changes, taking care to increment the 'serial' field at each
+increment and set the 'last-change-serial' fields appropriately.
+
+
+Rational and discussion
+=======================
+
+The reasons why an existing configuration mechanism, and in particular,
+the Xrm database, was not used is discussed above. Various other
+design decisions are discussed below:
+
+
+Why aren't the contents of the property stored in XML?
+
+The data format is designed to be space efficient and to be easily
+and efficiently parsed with minimal code. These are not things
+XML does well. Flexibility of structure, things that XML
+does well are not needed here. If needed, XML can be used for
+the contents of individual settings.
+
+
+Why is the settings property screen specific?
+
+While most settings are expected to be shared across all screens
+of a display, some settings, such as font sizes will be screen
+specific, and it is considered easier to let the settings manager
+propagate shared resources across screens then to have both
+screen-specific and screen-independent resources.
+
+
+Why does there need to be a "settings manager" process running?
+
+Having a process always present as the owner of the _XSETTING
+selection ensures that there are no race conditions and is simpler
+than trying to create a locking mechanism that can work without a
+persistant process.
+
+It is also expected that to properly handle notification of changes to
+the stored properties most desktops will want a process running to
+watch for changes in any case. In cases of tight resource usage, the
+settings manager can be combined with some other function, such
+as the window manager or session manager.
+
+
+Why use a single property for all settings?
+
+Using a single property has several advantages. First, retrieving
+all settings takes only a single round-trip to the server instead
+of a round-trip for each settings. Second, it means that when
+multiple settings can be changed at once, only a single notification
+is received by clients, and clients will see interrelated properties
+changed in an atomic fashion.
+
+
+Why is the _XSETTINGS_SETTINGS property stored in the endianess
+of the manager instead of a neutral endianness?
+
+This conforms to the way many other X mechanisms work. The main reason
+for doing it this way is to save conversions for the common case when
+the client and manager are on machines of the same endianness.
+
+
+When the settings manager exits, why should clients reset the 
+values to the default settings instead of keeping the current
+settings?
+
+Resetting the settings to the default values is preferred to
+maintaining the current values because it makes sure that all programs
+on the desktop have consistent values for settings whether they were 
+started before or after the settings manager exited. It is not
+expected that changes in the current settings manager will occur
+very often.
+
