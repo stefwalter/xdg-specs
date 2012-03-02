@@ -1,0 +1,156 @@
+<?xml version="1.0"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
+"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+]>
+<article id="index">
+  <articleinfo>
+    <title>Recent File Storage Specification</title>
+    <releaseinfo>Version 0.2</releaseinfo>
+    <date>12 August 2002</date>
+    <authorgroup>
+      <author>
+	<firstname>James</firstname>
+	<surname>Willcox</surname>
+	<affiliation>
+	  <address>
+	    <email>jwillcox@gnome.org</email>
+	  </address>
+	</affiliation>
+      </author>
+    </authorgroup>
+  </articleinfo>
+
+  <sect1 id="overview">
+    <title>Overview</title>
+    <para>
+     Many applications choose to have a menu containing a list of recently
+     used files, which can be used as an alternative to opening a file
+     selector.  GNOME, and KDE applications have done this for quite some
+     time, and probably others have as well.
+     This specification aims to do the following things:
+    </para>
+    <itemizedlist mark="bullet">
+      <listitem>
+        <para>Provide a standard mechanism for storing a list of recently used
+      files (really, URIs)</para>
+      </listitem>
+      <listitem>
+        <para>Allow for notification of changes in the list</para>
+      </listitem>
+    </itemizedlist>
+    <para>
+     Accomplishing this will make using applications that are not native
+     to the user's desktop a bit nicer, and give a more unified feel to
+     the X desktop in general.  It will be especially useful to applications
+     that don't belong to a specific desktop at all, such as Mozilla and
+     Open Office,
+     since those applications could become compatible with all desktops
+     in this area without special case considerations for each one.
+    </para>
+  </sect1>
+
+  <sect1 id="storage">
+    <title>Storage</title>
+    <para>
+     For different desktops and applications to have access to the same
+     information, a protocol for storing the recent file list has to be
+     determined.  An XML document will be used, of the form below:
+    </para>
+    <programlisting><![CDATA[
+<?xml version="1.0"?>
+<RecentFiles>
+  <RecentItem>
+    <URI>file:///home/jwillcox/testfile.txt</URI>
+    <Mime-Type>text/plain</Mime-Type>
+    <Timestamp>1028181153</Timestamp>
+    <Private/>
+    <Groups>
+      <Group>Recent File Test</Group>
+    </Groups>
+  </RecentItem>
+  <RecentItem>
+    <URI>file:///home/jwillcox/recent-file-spec.xml</URI>
+    <Mime-Type>text/xml</Mime-Type>
+    <Timestamp>1028181158</Timestamp>
+    <Private/>
+    <Groups>
+      <Group>Recent File Test</Group>
+    </Groups>
+  </RecentItem>
+</RecentFiles>
+    ]]></programlisting>
+    <para> 
+     The URI, Mime-Type, Timestamp tags are required, but the
+     Private, Groups, and Group tags are not.  The Timestamp tag should be
+     the number of
+     seconds sinced the Epoch when the item was added to the list.
+     The Group tags exist for the purpose of
+     making groups of items with an arbitrary set of MIME types.  A single item
+     can belong to an unlimited number of groups.  If the Private tag is
+     specified, it means that implementations should only include the item if
+     requestor has specifically asked for items in a group that the item
+     belongs to.  For instance, maybe a file selector would like to hold a list
+     of directories that you have recently saved files in, and allow you to
+     choose from one of these next time you save a file.  You wouldn't want
+     those directories showing up in the "Recent Documents" menu.  If the items
+     are put into the "File Selector Save Directories" group and marked as
+     private, this problem is solved.
+    </para>
+    <para>
+     All text in the file should be stored in the UTF-8 encoding.  
+     No local paths are allowed in the URI tag.  They should be converted to a
+     valid
+     <ulink url="http://www.ietf.org/rfc/rfc2396.txt">URI</ulink>
+     with a "file" scheme.  Items with the
+     same URI should not be allowed.  If a duplicate is found, it should have
+     its timestamp updated, and any new groups added to it.  No other
+     information should be changed.  The document should be stored in
+     "~/.recently-used", and it should contain no more than 500 items.
+    </para>
+    <para>
+     Before reading or writing the document, it should be locked using the
+     POSIX lockf() mechanism, and unlocked when finished.
+    </para>
+  </sect1>
+
+  <sect1 id="notification">
+    <title>Notification</title>
+    <para>
+     Notification should be accomplished by simply monitoring the document for
+     changes.  This can be done by either polling the file every so often,
+     or using a library like
+     <ulink url="http://oss.sgi.com/projects/fam/">FAM</ulink>.
+    </para>
+  </sect1>
+
+  <appendix id="changes">
+    <title>Change history</title>
+    <formalpara>
+      <title>Version 0.2, 12 August 2002, James Willcox</title>    
+      <para>
+	<itemizedlist>
+	  <listitem>
+	    <para>
+	      Switched from flat-file storage to XML.  This was done to
+	      facilitate easier storage of meta-data.  Files can now belong
+	      to "groups", and the timestamp is now a required piece of
+	      meta-data.
+	    </para>
+	  </listitem>
+	</itemizedlist>
+      </para>
+    </formalpara>
+    <formalpara>
+      <title>Version 0.1, 8 July 2002, James Willcox</title>    
+      <para>
+	<itemizedlist>
+	  <listitem>
+	    <para>
+              Created initial draft.
+	    </para>
+	  </listitem>
+	</itemizedlist>
+      </para>
+    </formalpara>
+  </appendix>
+</article>
