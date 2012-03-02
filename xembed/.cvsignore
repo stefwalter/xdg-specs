@@ -1,0 +1,17 @@
+Makefile
+Makefile.in
+aclocal.m4
+autom4te.cache
+config.log
+config.status
+config.rpath
+config.sub
+config.guess
+config.h
+config.h.in
+configure
+libtool
+ltmain.sh
+stamp-h*
+
+
