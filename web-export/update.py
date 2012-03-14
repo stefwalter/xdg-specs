@@ -133,7 +133,7 @@ class SpecObject():
 
         self.filename = '%s-%s%s' % (self.basename_no_ext, self.version, self.ext)
 
-        if self.ext not in ['.xml', '.sgml', '.txt', '.dtd']:
+        if self.ext not in ['.xml', '.sgml', '.txt', '.dtd', '.html']:
             raise Exception('Format \'%s\' not supported for %s' % (self.ext, self.vcs.get_url()))
 
         self.downloaded = False
@@ -159,6 +159,9 @@ class SpecObject():
 
     def htmlize(self, force = False):
         if not self.downloaded and not force:
+            return
+
+        if self.ext == '.html':
             return
 
         path = os.path.join(self.spec_dir, self.filename)
