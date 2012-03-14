@@ -18,7 +18,7 @@
 <H3>Content by David Faure &lt;<A HREF="mailto:dfaure@trolltech.com">dfaure@trolltech.com</A>&gt;,
 Alexander Larsson &lt;<A HREF="mailto:alexl@redhat.com">alexl@redhat.com</A>&gt;
 and others on the FreeDesktop.org mailing list</H3>
-<H3>Version 0.6</H3>
+<H3>Version 0.7</H3>
 <H2>Abstract</H2>
 <P>The purpose of this Specification is to provide a common way in
 which all &ldquo;Trash can&rdquo; implementations should store, list,
@@ -284,9 +284,10 @@ key/value pairs as described in the Desktop Entry Specification:</P>
 	the directories under $topdir. 
 	</P>
 	<P>The value type for this key is
-	&ldquo;string&rdquo;; it should store the file name as exactly the
-	sequence of bytes produced by the file system, with no locale
-	conversion.</P>
+	&ldquo;string&rdquo;; it should store the file name as the
+	sequence of bytes produced by the file system, with characters escaped
+        as in URLs (as defined by <A HREF="http://www.faqs.org/rfcs/rfc2396.html">RFC
+2396</A>, section 2).</P>
 	<LI><P>The key &ldquo;DeletionDate&rdquo; contains
 	the date and time when the file/directory was trashed. The date and
 	time are to be in the YYYY-MM-DDThh:mm:ss
@@ -382,7 +383,7 @@ version.</P>
 <P><A HREF="http://www.ramendik.ru/docs/trashspec.html">http://www.ramendik.ru/docs/trashspec.html</A>
 . If this document gets hosted by FreeDesktop.org, a link to the page
 will still be available at this location.</P>
-<P><A HREF="http://www.ramendik.ru/docs/trashspec.0.5.html">http://www.ramendik.ru/docs/trashspec.0.5.html</A>
+<P><A HREF="http://www.ramendik.ru/docs/trashspec.0.7.html">http://www.ramendik.ru/docs/trashspec.0.5.html</A>
 is the permanent location of this version. 
 </P>
 <H3>Version history</H3>
@@ -404,6 +405,8 @@ fixed some typo's</P>
 &lt;<A HREF="mailto:alexl@redhat.com">alexl@redhat.com</A>&gt; . Also
 added &ldquo;note on scope&rdquo;. Cleaned up HTML. Added a link to this 
 document on the freedesktop.org standards page</P>
+<P>0.7 April 12, 2005. Added URL-style encoding for the name of the deleted file,
+as implemented in KDE 3.4</P>
 <P><BR><BR>
 </P>
 <DIV ID="sdfootnote1">
