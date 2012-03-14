@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <HTML>
 <HEAD>
-	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=us-ascii">
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=koi8-r">
 	<TITLE>Trash specification</TITLE>
 	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.1.0  (Linux)">
 	<META NAME="AUTHOR" CONTENT="Mikhail Ramendik">
@@ -14,68 +14,70 @@
 </HEAD>
 <BODY LANG="en-US" DIR="LTR">
 <H1>The FreeDesktop.org Trash specification</H1>
-<H3><SPAN>By Mikhail Ramendik &lt;<A HREF="mailto:mr@ramendik.ru">mr@ramendik.ru</A>&gt;</SPAN></H3>
-<H3>Version 0.1 &ldquo;First Try&rdquo;</H3>
-<H4>Based on network discussion by David Faure
-&lt;<A HREF="mailto:dfaure@trolltech.com">dfaure@trolltech.com</A>&gt;,
+<H3>Written by Mikhail Ramendik &lt;<A HREF="mailto:mr@ramendik.ru">mr@ramendik.ru</A>&gt;</H3>
+<H3>Content by David Faure &lt;<A HREF="mailto:dfaure@trolltech.com">dfaure@trolltech.com</A>&gt;,
 Alexander Larsson &lt;<A HREF="mailto:alexl@redhat.com">alexl@redhat.com</A>&gt;
-and others on the FreeDesktop.org mailing list.</H4>
-<H2>Overview</H2>
-<P>An ability to recover accidentally deleted files has
-become the de facto standard for today's desktop user experience. 
-</P>
-<P>Users do not expect that anything they delete is
-permanently gone. Instead, they are used to a &ldquo;Trash can&rdquo;
-metaphor. A deleted document ends up in a &ldquo;Trash can&rdquo;,
-and stays there at least for some time &ndash; until the can is
-manually or automatically cleaned. 
-</P>
-<P>This system has its own problems. Notably, cleaning
-disk space becomes a two-step operation &ndash; delete files and
-empty trash; this can lead to confusion for inexperienced users
-(&ldquo;what's taking up my space?!&rdquo;). Also, it is not easy to
-adapt the system to a multiuser environment. Besides, there is a
-potential for abuse by uneducated users &ndash; anecdotal evidence
-says they sometimes store important documents in the Trash can, and
-lose them when it gets cleaned!</P>
-<P>However, the benefits of this system are so great,
-and the user expectation for it so high, that it definitely should be
-implemented on a free desktop system. And in fact, several
-implementations already exist &ndash; some as command line utilities,
-some as preloaded libraries, and some as parts of major desktop
-environments. For example, both Gnome and KDE have their own trash
-mechanisms.</P>
-<P>The purpose of this Specification is to provide a
-common way in which all Trash can implementation should store, list,
+and others on the FreeDesktop.org mailing list</H3>
+<H3>Version 0.2 
+</H3>
+<H2>Abstract</H2>
+<P>The purpose of this Specification is to provide a common way in
+which all &ldquo;Trash can&rdquo; implementations should store, list,
 and undelete trashed files. By complying with this Specification,
 various Trash implementations will be able to work with the same
 devices and use the same Trash storage. For example, if one
 implementation sends a file into the Trash can, another will be able
 to list it, undelete it, or clear it from the Trash.</P>
-<P>This is important, at least, for shared network
-resources, removable devices, and in cases when different
-implementations are used on the same machine at different moments
-(i.e. some users prefer Gnome, others prefer KDE, and yet others are
-command-line fans).</P>
+<H2>Introduction</H2>
+<P>An ability to recover accidentally deleted files has become the de
+facto standard for today's desktop user experience. 
+</P>
+<P>Users do not expect that anything they delete is permanently gone.
+Instead, they are used to a &ldquo;Trash can&rdquo; metaphor. A
+deleted document ends up in a &ldquo;Trash can&rdquo;, and stays
+there at least for some time &ndash; until the can is manually or
+automatically cleaned. 
+</P>
+<P>This system has its own problems. Notably, cleaning disk space
+becomes a two-step operation &ndash; delete files and empty trash;
+this can lead to confusion for inexperienced users (&ldquo;what's
+taking up my space?!&rdquo;). Also, it is not easy to adapt the
+system to a multiuser environment. Besides, there is a potential for
+abuse by uneducated users &ndash; anecdotal evidence says they
+sometimes store important documents in the Trash can, and lose them
+when it gets cleaned!</P>
+<P>However, the benefits of this system are so great, and the user
+expectation for it so high, that it definitely should be implemented
+on a free desktop system. And in fact, several implementations
+already exist &ndash; some as command line utilities, some as
+preloaded libraries, and some as parts of major desktop environments.
+For example, both Gnome and KDE have their own trash mechanisms.</P>
+<P>This Specification is to provide a common way in which all Trash
+can implementations should store trashed files. By complying with
+this Specification, various Trash implementations will be able to
+work with the same devices and use the same Trash storage. 
+</P>
+<P>This is important, at least, for shared network resources,
+removable devices, and in cases when different implementations are
+used on the same machine at different moments (i.e. some users prefer
+Gnome, others prefer KDE, and yet others are command-line fans).</P>
 <H2>Scope and limitations</H2>
-<P>This Specification only describes the Trash storage.
-It does <B>not</B> limit the ways in which the actual implementations
-should operate, as long as they use the same Trash storage. Command
-line utilities, desktop-integrated solutions and preloaded libraries
-can work with this specification. <A CLASS="sdfootnoteanc" NAME="sdfootnote1anc" HREF="#sdfootnote1sym"><SUP>1</SUP></A></P>
-<P>This Specification is
-geared towards the Unix file system tree approach. However, with
-slight modifications, it can easily be used with another kind of file
-system tree (for example, with drive letters). 
+<P>This Specification only describes the Trash storage. It does <B>not</B>
+limit the ways in which the actual implementations should operate, as
+long as they use the same Trash storage. Command line utilities,
+desktop-integrated solutions and preloaded libraries can work with
+this specification. <A CLASS="sdfootnoteanc" NAME="sdfootnote1anc" HREF="#sdfootnote1sym"><SUP>1</SUP></A></P>
+<P>This Specification is geared towards the Unix file system tree
+approach. However, with slight modifications, it can easily be used
+with another kind of file system tree (for example, with drive
+letters). 
 </P>
-<P>A multi-user environment,
-where users have specific alphanumeric names, is essential for this
-Specification. 
+<P>A multi-user environment, where users have specific alphanumeric
+names, is essential for this Specification. 
 </P>
-<P LANG="en-US" STYLE="font-weight: medium">File systems and logon
-systems can be case-sensitive or non-case-sensitive; therefore,
-systems should generally not allow user names that differ only in
-case.</P>
+<P STYLE="font-weight: medium">File systems and logon systems can be
+case-sensitive or non-case-sensitive; therefore, systems should
+generally not allow user names that differ only in case.</P>
 <H2>Definitions</H2>
 <P>Trash, or Trash can &ndash; the storage of files that were trashed
 (&ldquo;deleted&rdquo;) by the user. These files can be listed,
@@ -109,13 +111,11 @@ trashing, are stored. There may be several trash directories on one
 system; this Specification defines their location and contents. In
 this text, the designation &ldquo;$trash&rdquo; is used for &ldquo;any
 trash directory&rdquo;.</P>
-<P>MUST &ndash; an
-implementation has to do this in order to be in compliance with this
-Specification.</P>
-<P>SHOULD &ndash; doing this
-is recommended, but not required.</P>
-<P>MAY &ndash; doing this is
-optional.</P>
+<P>The key words &quot;MUST&quot;, &quot;MUST NOT&quot;, &quot;REQUIRED&quot;,
+&quot;SHALL&quot;, &quot;SHALL NOT&quot;, &quot;SHOULD&quot;, &quot;SHOULD
+NOT&quot;, &quot;RECOMMENDED&quot;,  &quot;MAY&quot;, and &quot;OPTIONAL&quot;
+in this document are to be interpreted as described in <A HREF="http://www.faqs.org/rfcs/rfc2119.html">RFC
+2119</A>.</P>
 <H2>Trash directories</H2>
 <P>A system can have one or more trash directories. The contents of
 any trash directory are to be compliant with the same standard,
@@ -123,8 +123,9 @@ described below.</P>
 <P>For every user<A CLASS="sdfootnoteanc" NAME="sdfootnote2anc" HREF="#sdfootnote2sym"><SUP>2</SUP></A>
 a <B>$HOME/.Trash</B> directory MUST be available<A CLASS="sdfootnoteanc" NAME="sdfootnote3anc" HREF="#sdfootnote3sym"><SUP>3</SUP></A>.
 It should function as the user's Trash directory. Files that the user
-trashes from the home directory should be stored here (see the next
-section for the storage details). $HOME/.Trash SHOULD be
+trashes from the home directory, and from other directories on the
+same file system (device/partition), should be stored here (see the
+next section for the storage details). $HOME/.Trash SHOULD be
 automatically created for new user. If this directory is needed for a
 trashing operation but does not exist, the implementation SHOULD
 automatically create it, without any warnings or delays.</P>
@@ -145,27 +146,24 @@ This is what some well known operating systems do.</P>
 directories of some mounted file systems. How these directories are
 created (by the system administrator, a daemon, etc.) is determined
 by the implementation.</P>
-<P>Such .Trash directories are <I>not</I>
-in themselves trash storage directories; this would break multi-user
-support. Instead, an $topdir/.Trash directory can contain any number
-of subdirectories, named for users that perform trashing operations;
-i.e. <B>$topdir/.Trash/user</B> . Each of these is a trash storage
+<P>Such .Trash directories are <I>not</I> in themselves trash storage
+directories; this would break multi-user support. Instead, an
+$topdir/.Trash directory can contain any number of subdirectories,
+named for users that perform trashing operations; i.e.
+<B>$topdir/.Trash/user</B> . Each of these is a trash storage
 directory, containing the files trashed by this user. (See the next
 section for the storage details).</P>
-<P>Note that an
-implementation MAY choose to support or not support trashing into
-$topdir/.Trash/user. If it does support it, it SHOULD make it a
-configuration option, so that the administrator can disable it for
-any or all mount points for security reasons (and use $HOME/.Trash or
-no trashing at all).</P>
-<P>However, if a
-.Trash directory does exist in any top directory, an implementation
-MUST be able to list and undelete files that are in the current
-user's subdirectory within it.</P>
-<P>The use of
-$topdir/$Trash can lead to some peculiar issues. These are discussed
-in the &ldquo;Implementation notes&rdquo; section, at the end of
-this document.</P>
+<P>Note that an implementation MAY choose to support or not support
+trashing into $topdir/.Trash/user. If it does support it, it SHOULD
+make it a configuration option, so that the administrator can disable
+it for any or all mount points for security reasons (and use
+$HOME/.Trash or no trashing at all).</P>
+<P>However, if a .Trash directory does exist in any top directory, an
+implementation MUST be able to list and undelete files that are in
+the current user's subdirectory within it.</P>
+<P>The use of $topdir/$Trash can lead to some peculiar issues. These
+are discussed in the &ldquo;Implementation notes&rdquo; section, at
+the end of this document.</P>
 <H2>Contents of a trash directory</H2>
 <P>The previous section has described the location of trash
 directories. This section concerns the contents of any trash
@@ -173,9 +171,9 @@ directory (including $HOME/.Trash). This trash directory will be
 named &ldquo;$trash&rdquo; here.</P>
 <P>A trash directory contains two subdirectories, named <B>info </B>and
 <B>files</B>.</P>
-<P>The $<B>trash/files</B> directory
-contains the files and directories that were trashed. When a file or
-directory is trashed, it MUST be moved into this directory<A CLASS="sdfootnoteanc" NAME="sdfootnote4anc" HREF="#sdfootnote4sym"><SUP>4</SUP></A>
+<P>The $<B>trash/files</B> directory contains the files and
+directories that were trashed. When a file or directory is trashed,
+it MUST be moved into this directory<A CLASS="sdfootnoteanc" NAME="sdfootnote4anc" HREF="#sdfootnote4sym"><SUP>4</SUP></A>
 . The names of files in this directory are to be determined by the
 implementation; the only limitation is that they must be unique
 within the directory. <I>Even if a file with the same name and
@@ -187,15 +185,16 @@ same as the file/directory had before getting trashed.</P>
 filenames in the $trash/files directory on the original filenames,
 this is never to be taken for granted<A CLASS="sdfootnoteanc" NAME="sdfootnote5anc" HREF="#sdfootnote5sym"><SUP>5</SUP></A>.
 A filename in the $trash/files directory MUST NEVER be used to
-recover the original filename </B>(except in an emergency case when
-an info file has been lost; this case must be clearly marked to the
-user as an emergency). 
+recover the original filename; use the info file (see below) for
+that. </B><SPAN STYLE="font-weight: medium">(If an info file
+corresponding to a file/directory in $trash/files is not available,
+this is an emergency case, and MUST be clearly presented as such to
+the user or to the system administrator). </SPAN>
 </P>
-<P>The $<B>trash/info </B>directory
-contains an &ldquo;information file&rdquo; for every file and
-directory in $trash/files. This file MUST have exactly the same name
-as the file or directory in $trash/files. The contents of this file
-are:</P>
+<P>The $<B>trash/info </B>directory contains an &ldquo;information
+file&rdquo; for every file and directory in $trash/files. This file
+MUST have exactly the same name as the file or directory in
+$trash/files. The contents of this file are:</P>
 <PRE><I>original_location</I>\n
 <I>trashing_time</I>\n</PRE><P>
 Where:</P>
@@ -242,21 +241,26 @@ the future.</P>
 will serve as evidence of prior art for any patent filed after this
 date.</P>
 <H3>License</H3>
-<P>Use as you wish. If you make a modified version and redistribute
+<P>Use and disribute as you wish. If you make a modified version and redistribute
 it, (a) keep the name of the author and contributors somewhere, and
 (b) indicate that this is a modified version.</P>
-<P>Redistribution and implementation under any license at all is
+<P>Implementation under any license at all is
 explicitly allowed.</P>
 <H3>Location</H3>
 <P><A HREF="http://www.ramendik.ru/docs/trashspec.html">http://www.ramendik.ru/docs/trashspec.html</A>
 . If this document gets hosted by FreeDesktop.org, a link to the page
 will still be available at this location.</P>
-<P><A HREF="http://www.ramendik.ru/docs/trashspec.0.1.html">http://www.ramendik.ru/docs/trashspec.0.1.html</A>
+<P><A HREF="http://www.ramendik.ru/docs/trashspec.0.2.html">http://www.ramendik.ru/docs/trashspec.0.2.html</A>
 is the permanent location of this version. 
 </P>
 <H3>Version history</H3>
 <P>0.1 &ldquo;First try&rdquo;, August 30, 2004. Initial draft.
 &ldquo;Implementation notes&rdquo; not written as yet.</P>
+<P>0.2 August 30, 2004. Updated with feedback by Alexander Larsson
+&lt;<A HREF="mailto:alexl@redhat.com">alexl@redhat.com</A>&gt; and by
+Dave Cridland &lt;<A HREF="mailto:dave@cridland.net">dave@cridland.net</A>&gt;</P>
+<P><BR><BR>
+</P>
 <DIV ID="sdfootnote1">
 	<P CLASS="sdfootnote" STYLE="margin-bottom: 0.5cm"><A CLASS="sdfootnotesym" NAME="sdfootnote1sym" HREF="#sdfootnote1anc">1</A>However,
 	developers of preloaded libraries should somehow work around the
