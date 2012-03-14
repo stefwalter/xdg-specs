@@ -7,7 +7,7 @@
 	<META NAME="AUTHOR" CONTENT="Mikhail Ramendik">
 	<META NAME="CREATED" CONTENT="20040909;384300">
 	<META NAME="CHANGEDBY" CONTENT="Рамендик Григорьевич">
-	<META NAME="CHANGED" CONTENT="20040909;2034600">
+	<META NAME="CHANGED" CONTENT="20040909;2380800">
 	<STYLE>
 	<!--
 		P.sdfootnote { margin-left: 0.5cm; text-indent: -0.5cm; margin-bottom: 0cm; font-size: 10pt }
@@ -21,7 +21,7 @@
 <H3>Content by David Faure &lt;<A HREF="mailto:dfaure@trolltech.com">dfaure@trolltech.com</A>&gt;,
 Alexander Larsson &lt;<A HREF="mailto:alexl@redhat.com">alexl@redhat.com</A>&gt;
 and others on the FreeDesktop.org mailing list</H3>
-<H3>Version 0.3 
+<H3>Version 0.4 
 </H3>
 <H2>Abstract</H2>
 <P>The purpose of this Specification is to provide a common way in
@@ -127,8 +127,7 @@ described below.</P>
 <P>For every user<A CLASS="sdfootnoteanc" NAME="sdfootnote2anc" HREF="#sdfootnote2sym"><SUP>2</SUP></A>
 a &ldquo;home trash&rdquo; directory MUST be available<A CLASS="sdfootnoteanc" NAME="sdfootnote3anc" HREF="#sdfootnote3sym"><SUP>3</SUP></A>.
 Its name and location are $XDG_DATA_HOME/Trash ; $XDG_DATA_HOME is
-the   base directory for user-specific data, as defined in the
-<A HREF="http://www.freedesktop.org/Standards/basedir-spec">Desktop
+the base directory for user-specific data, as defined in the <A HREF="http://www.freedesktop.org/Standards/basedir-spec">Desktop
 Base Directory Specification</A> . 
 </P>
 <P>The &ldquo;home trash&rdquo; should function as the user's main
@@ -170,41 +169,40 @@ user), an implementation also MUST check for .Trash in all top
 directories that are known to it.</P>
 <P>If this directory is present, the implementation MUST, by default,
 check for the &ldquo;sticky bit&rdquo;. (It MAY provide a way for the
-administrator, <I>and only the administrator</I><SPAN STYLE="font-style: normal">,
-to disable this checking for a particular top directory, in order to
-support file systems that do not have the &ldquo;sticky bit&rdquo;).</SPAN></P>
-<P><SPAN STYLE="font-style: normal">The implementation also MUST
-check that this directory is not a symbolic link. </SPAN>
+administrator, <I>and only the administrator</I>, to disable this
+checking for a particular top directory, in order to support file
+systems that do not have the &ldquo;sticky bit&rdquo;).</P>
+<P STYLE="font-style: normal">The implementation also MUST check that
+this directory is not a symbolic link. 
 </P>
-<P><SPAN STYLE="font-style: normal">If any of these checks fail, the
+<P STYLE="font-style: normal">If any of these checks fail, the
 implementation MUST NOT use this directory for either trashing or
 undeleting files, even is an appropriate $uid directory (see below)
 already exists in it. Besides, the implementation SHOULD report the
 failed check to the administrator, and MAY also report it to the
-user.</SPAN></P>
-<P><SPAN STYLE="font-style: normal">The following paragraph applies
-ONLY to the case when the implementation supports trashing in the top
-directory, and a $topdir/.Trash exists and has passed the checks:</SPAN></P>
-<P STYLE="margin-left: 2cm"><SPAN STYLE="font-style: normal">If the
-directory exists and passes the checks, a subdirectory of the
-$topdir/.Trash directory is to be used as the user's trash directory
-for this partition/device. </SPAN>The name of this subdirectory is
-the numeric identifier of the current user ($topdir/.Trash/$uid).
-When trashing a file, if this directory does not exist for the
-current user, the implementation MUST immediately create it, without
-any warnings or delays for the user.</P>
-<P><SPAN STYLE="font-style: normal">(2) If an $topdir/.Trash
-directory is absent, an $topdir/.Trash-$uid directory is to be used
-as the user's trash directory for this device/partition. $uid is the
-user's numeric identifier.</SPAN></P>
-<P><SPAN STYLE="font-style: normal">The following paragraph applies
-ONLY to the case when the implementation supports trashing in the top
+user.</P>
+<P STYLE="font-style: normal">The following paragraph applies ONLY to
+the case when the implementation supports trashing in the top
+directory, and a $topdir/.Trash exists and has passed the checks:</P>
+<P STYLE="margin-left: 2cm">If the directory exists and passes the
+checks, a subdirectory of the $topdir/.Trash directory is to be used
+as the user's trash directory for this partition/device. The name of
+this subdirectory is the numeric identifier of the current user
+($topdir/.Trash/$uid). When trashing a file, if this directory does
+not exist for the current user, the implementation MUST immediately
+create it, without any warnings or delays for the user.</P>
+<P STYLE="font-style: normal">(2) If an $topdir/.Trash directory is
+absent, an $topdir/.Trash-$uid directory is to be used as the user's
+trash directory for this device/partition. $uid is the user's numeric
+identifier.</P>
+<P STYLE="font-style: normal">The following paragraph applies ONLY to
+the case when the implementation supports trashing in the top
 directory, and a $topdir/.Trash does not exist or has not passed the
-checks:</SPAN></P>
-<P STYLE="margin-left: 2cm"><SPAN STYLE="font-style: normal">When
-trashing a file, if an $topdir/.Trash-$uid directory does not exist,
-the implementation MUST immediately create it, without any warnings
-or delays for the user.</SPAN></P>
+checks:</P>
+<P STYLE="margin-left: 2cm; font-style: normal">When trashing a file,
+if an $topdir/.Trash-$uid directory does not exist, the
+implementation MUST immediately create it, without any warnings or
+delays for the user.</P>
 <P STYLE="font-style: normal">When trashing a file, if this directory
 does not exist for the current user, the implementation MUST
 immediately create it, without any warnings or delays for the user.</P>
@@ -223,8 +221,8 @@ the implementation MUST, by default, fall back to method (2),
 described below. Except for the case when $topdir/.Trash fails the
 checks, the fallback must be immediate, without any warnings or
 delays. The implementation MAY, however, a way for the administrator
-<SPAN STYLE="font-style: normal">to disable (2) completely.</SPAN></P>
-<P><SPAN STYLE="font-style: normal">If both (1) and (2) fail (i.e. no
+to disable (2) completely.</P>
+<P STYLE="font-style: normal">If both (1) and (2) fail (i.e. no
 $topdir/.Trash directory exists, and an attempt to create
 $topdir/.Trash-$uid fails), the implementation MUST either trash the
 file into the user's &ldquo;home trash&rdquo; or refuse to trash it.
@@ -232,7 +230,7 @@ The choice between these options can be pre-determined, or it can
 depend on the particular situation (i.e. No trashing of very large
 files). However, if an implementation refuses to trash a file after a
 user action that generally causes trashing, it MUST clearly warn the
-user about this, and request confirmation for the action.</SPAN></P>
+user about this, and request confirmation for the action.</P>
 <P>For showing trashed files, implementations SHOULD support (1) and
 (2) at the same time (i.e. if both $topdir/.Trash/$uid and
 $topdir/.Trash-$uid are present, it should list trashed files from
@@ -269,12 +267,10 @@ administrator).
 file&rdquo; for every file and directory in $trash/files. This file
 MUST have exactly the same name as the file or directory in
 $trash/files, plus the extension &ldquo;.trashinfo&rdquo;<A CLASS="sdfootnoteanc" NAME="sdfootnote7anc" HREF="#sdfootnote7sym"><SUP>7</SUP></A>.
- 
 </P>
 <P>The format of this file is similar to the format of a desktop
 entry file, as described in the <A HREF="http://www.freedesktop.org/Standards/desktop-entry-spec">Desktop
-Entry Specification</A><SPAN STYLE="font-style: normal"> . Its first
-line must be [Trash entry]. </SPAN>
+Entry Specification</A> . Its first line must be [Trash info]. 
 </P>
 <P STYLE="font-style: normal">It also must have two lines that are
 key/value pairs as described in the Desktop Entry Specification:</P>
@@ -295,21 +291,20 @@ key/value pairs as described in the Desktop Entry Specification:</P>
 	&ldquo;localestring&rdquo;; it should use the locale in which file
 	names are stored on this file systems, or, if this is unknown,
 	UTF-8.</P>
-	<LI><P><SPAN STYLE="font-style: normal">The key &ldquo;DeletionDate<FONT FACE="Times New Roman">&rdquo;
-	contains the date and time when the file/directory was trashed. The
-	date and time are to be in the </FONT></SPAN><TT><FONT FACE="Times New Roman">YYYY-MM-DDThh:mm:ss
+	<LI><P>The key &ldquo;DeletionDate&rdquo; <FONT FACE="Times New Roman">contains
+	the date and time when the file/directory was trashed. The date and
+	time are to be in the </FONT><TT><FONT FACE="Times New Roman">YYYY-MM-DDThh:mm:ss
 	format (see <A HREF="http://www.faqs.org/rfcs/rfc3339.html">RFC
-	333<SPAN STYLE="font-style: normal">9</SPAN></A></FONT></TT><SPAN STYLE="font-style: normal">).
-	The time zone should be the user's (or filesystem's) local time. The
-	value type for this key is &ldquo;string&rdquo;.</SPAN></P>
+	3339</A></FONT></TT>). The time zone should be the user's (or
+	filesystem's) local time. The value type for this key is &ldquo;string&rdquo;.</P>
 </UL>
 <P STYLE="font-style: normal">Example:</P>
-<PRE STYLE="font-style: normal">[Trash entry]
+<PRE STYLE="font-style: normal">[Trash info]
 Path=foo/bar/meow.bow-wow
 DeletionDate=20040831T22:32:08</PRE><P>
 The implementation MUST ignore any other lines in this file, except
-the first line (must be [Trash entry]) and these two key/value pairs.
-If a srting that starts with &ldquo;Path=&rdquo; or &ldquo;DeletionDate=&rdquo;
+the first line (must be [Trash info]) and these two key/value pairs.
+If a string that starts with &ldquo;Path=&rdquo; or &ldquo;DeletionDate=&rdquo;
 occurs several times, the first occurence is to be used.<A CLASS="sdfootnoteanc" NAME="sdfootnote8anc" HREF="#sdfootnote8sym"><SUP>8</SUP></A></P>
 <P>Note that $trash/info has no subdirectories. For a directory in
 $trash/files, only an information file for its own name is needed.
@@ -341,7 +336,7 @@ file.directory that was owned by another user will now be owned by
 this user (changing owners is usually only available to root). This
 should not cause the trashing operation to fail.</P>
 <P>In this same situation, setting the permissions should be done
-<I>after</I> writing the copied file, as they may may make it
+<I>after</I> writing the copied file, as they may make it
 unwriteable..</P>
 <P>A trashing operation might be refused because of insufficient
 permissions, even when the user does have the right to delete a file
@@ -383,7 +378,7 @@ version.</P>
 <P><A HREF="http://www.ramendik.ru/docs/trashspec.html">http://www.ramendik.ru/docs/trashspec.html</A>
 . If this document gets hosted by FreeDesktop.org, a link to the page
 will still be available at this location.</P>
-<P><A HREF="http://www.ramendik.ru/docs/trashspec.0.3.html">http://www.ramendik.ru/docs/trashspec.0.3.html</A>
+<P><A HREF="http://www.ramendik.ru/docs/trashspec.0.4.html">http://www.ramendik.ru/docs/trashspec.0.4.html</A>
 is the permanent location of this version. 
 </P>
 <H3>Version history</H3>
@@ -393,11 +388,13 @@ is the permanent location of this version.
 &lt;<A HREF="mailto:alexl@redhat.com">alexl@redhat.com</A>&gt; and by
 Dave Cridland &lt;<A HREF="mailto:dave@cridland.net">dave@cridland.net</A>&gt;</P>
 <P>0.3 September 8, 2004. Changed the name and location of the &ldquo;home
-trash&rdquo; license, and introduced the generic term &ldquo;home
+trash&rdquo; directory, and introduced the generic term &ldquo;home
 trash&rdquo;. Changed the trash info file format to a .desktop-like
 one. Added directions on creation of info files and copying of
 trashed files. Changed user names to user ids. Added implementation
 notes. Added a copyright notice.</P>
+<P>0.4 September 9, 2004. Changed [Trash entry] to [Trash info] and
+fixed some typo's</P>
 <P><BR><BR>
 </P>
 <DIV ID="sdfootnote1">
@@ -420,7 +417,7 @@ notes. Added a copyright notice.</P>
 	the case.</P>
 </DIV>
 <DIV ID="sdfootnote4">
-	<P CLASS="sdfootnote"><A CLASS="sdfootnotesym" NAME="sdfootnote4sym" HREF="#sdfootnote4anc">4</A>To
+	<P CLASS="sdfootnote" STYLE="margin-bottom: 0.5cm"><A CLASS="sdfootnotesym" NAME="sdfootnote4sym" HREF="#sdfootnote4anc">4</A>To
 	be more precise, from a partition/device different from the one on
 	which $XDG_DATA_HOME resides. 
 	</P>
@@ -436,12 +433,12 @@ notes. Added a copyright notice.</P>
 	trash directory</P>
 </DIV>
 <DIV ID="sdfootnote7">
-	<P CLASS="sdfootnote"><A CLASS="sdfootnotesym" NAME="sdfootnote7sym" HREF="#sdfootnote7anc">7</A>For
+	<P CLASS="sdfootnote" STYLE="margin-bottom: 0.5cm"><A CLASS="sdfootnotesym" NAME="sdfootnote7sym" HREF="#sdfootnote7anc">7</A>For
 	example, if the file in $trash/files is named foo.bar , the
 	corresponding file in $trash/info must be named foo.bar.trashinfo</P>
 </DIV>
 <DIV ID="sdfootnote8">
-	<P CLASS="sdfootnote"><A CLASS="sdfootnotesym" NAME="sdfootnote8sym" HREF="#sdfootnote8anc">8</A>This
+	<P CLASS="sdfootnote" STYLE="margin-bottom: 0.5cm"><A CLASS="sdfootnotesym" NAME="sdfootnote8sym" HREF="#sdfootnote8anc">8</A>This
 	provides for future extension</P>
 </DIV>
 </BODY>
