@@ -5,12 +5,9 @@
 	<TITLE>Trash specification</TITLE>
 	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.1.0  (Linux)">
 	<META NAME="AUTHOR" CONTENT="Mikhail Ramendik">
-	<META NAME="CREATED" CONTENT="20040909;384300">
-	<META NAME="CHANGEDBY" CONTENT="Рамендик Григорьевич">
-	<META NAME="CHANGED" CONTENT="20040909;9125500">
 	<STYLE>
 	<!--
-		P.sdfootnote { margin-left: 0.5cm; text-indent: -0.5cm; margin-bottom: 0cm; font-size: 10pt }
+		P.sdfootnote { margin-left: 0.5cm; text-indent: -0.5cm; margin-bottom: 0cm; font-size: 80% }
 		A.sdfootnoteanc { font-size: 57% }
 	-->
 	</STYLE>
@@ -21,7 +18,7 @@
 <H3>Content by David Faure &lt;<A HREF="mailto:dfaure@trolltech.com">dfaure@trolltech.com</A>&gt;,
 Alexander Larsson &lt;<A HREF="mailto:alexl@redhat.com">alexl@redhat.com</A>&gt;
 and others on the FreeDesktop.org mailing list</H3>
-<H3>Version 0.5</H3>
+<H3>Version 0.6</H3>
 <H2>Abstract</H2>
 <P>The purpose of this Specification is to provide a common way in
 which all &ldquo;Trash can&rdquo; implementations should store, list,
@@ -37,21 +34,21 @@ facto standard for today's desktop user experience.
 <P>Users do not expect that anything they delete is permanently gone.
 Instead, they are used to a &ldquo;Trash can&rdquo; metaphor. A
 deleted document ends up in a &ldquo;Trash can&rdquo;, and stays
-there at least for some time &ndash; until the can is manually or
+there at least for some time &mdash; until the can is manually or
 automatically cleaned. 
 </P>
 <P>This system has its own problems. Notably, cleaning disk space
-becomes a two-step operation &ndash; delete files and empty trash;
+becomes a two-step operation &mdash; delete files and empty trash;
 this can lead to confusion for inexperienced users (&ldquo;what's
 taking up my space?!&rdquo;). Also, it is not easy to adapt the
 system to a multiuser environment. Besides, there is a potential for
-abuse by uneducated users &ndash; anecdotal evidence says they
+abuse by uneducated users &mdash; anecdotal evidence says they
 sometimes store important documents in the Trash can, and lose them
 when it gets cleaned!</P>
 <P>However, the benefits of this system are so great, and the user
 expectation for it so high, that it definitely should be implemented
 on a free desktop system. And in fact, several implementations
-already exist &ndash; some as command line utilities, some as
+already exist &mdash; some as command line utilities, some as
 preloaded libraries, and some as parts of major desktop environments.
 For example, both Gnome and KDE have their own trash mechanisms.</P>
 <P>This Specification is to provide a common way in which all Trash
@@ -77,42 +74,42 @@ letters).
 <P>A multi-user environment, where users have specific numeric
 identifiers, is essential for this Specification. 
 </P>
-<P STYLE="font-weight: medium">File systems and logon systems can be
+<P>File systems and logon systems can be
 case-sensitive or non-case-sensitive; therefore, systems should
 generally not allow user names that differ only in case.</P>
 <H2>Definitions</H2>
-<P>Trash, or Trash can &ndash; the storage of files that were trashed
+<P>Trash, or Trash can &mdash; the storage of files that were trashed
 (&ldquo;deleted&rdquo;) by the user. These files can be listed,
 undeleted, or cleaned from the trash can.</P>
-<P>Trashing &ndash; a &ldquo;delete&rdquo; operation in which files
+<P>Trashing &mdash; a &ldquo;delete&rdquo; operation in which files
 are transferred into the Trash can.</P>
-<P>Erasing &ndash; an operation in which files (possibly already in
+<P>Erasing &mdash; an operation in which files (possibly already in
 the Trash can) are removed (unlinked) from the file system. An erased
 file is generally considered to be non-recoverable; the space used by
 this file is freed. [A &ldquo;shredding&rdquo; operation, physically
 overwriting the data, may or may not accompany an erasing operation;
 the question of shredding is beyond the scope of this document].</P>
-<P>Original location &ndash; the name and location that a file
+<P>Original location &mdash; the name and location that a file
 (currently in the trash) had prior to getting trashed.</P>
-<P>Original filename &ndash; the name that a file (currently in the
+<P>Original filename &mdash; the name that a file (currently in the
 trash) had prior to getting trashed. 
 </P>
-<P>Top directory , $topdir &ndash; the directory where a file system
+<P>Top directory , $topdir &mdash; the directory where a file system
 is mounted. &ldquo;/&rdquo; is the top directory for the root file
 system, but not for the other mounted file systems. For example,
 separate FSes can be mounted on &ldquo;/home&rdquo;, &ldquo;/mnt/flash&rdquo;,
 etc. In this text, the designation &ldquo;$topdir&rdquo; is used for
 &ldquo;any top directory&rdquo;.</P>
-<P>User identifier , $uid &ndash; the numeric user identifier for a
+<P>User identifier , $uid &mdash; the numeric user identifier for a
 user. $uid is used here as &ldquo;the numeric user identifier of the
 user who is currently logged on&rdquo;.</P>
-<P>Trash directory &ndash; a directory where trashed files, as well
+<P>Trash directory &mdash; a directory where trashed files, as well
 as the information on their original name/location and time of
 trashing, are stored. There may be several trash directories on one
 system; this Specification defines their location and contents. In
 this text, the designation &ldquo;$trash&rdquo; is used for &ldquo;any
 trash directory&rdquo;.</P>
-<P>&ldquo;Home trash&rdquo; directory &ndash; a user's main trash
+<P>&ldquo;Home trash&rdquo; directory &mdash; a user's main trash
 directory. Its name and location is defined in this document.</P>
 <P>The key words &quot;MUST&quot;, &quot;MUST NOT&quot;, &quot;REQUIRED&quot;,
 &quot;SHALL&quot;, &quot;SHALL NOT&quot;, &quot;SHOULD&quot;, &quot;SHOULD
@@ -171,16 +168,16 @@ check for the &ldquo;sticky bit&rdquo;. (It MAY provide a way for the
 administrator, <I>and only the administrator</I>, to disable this
 checking for a particular top directory, in order to support file
 systems that do not have the &ldquo;sticky bit&rdquo;).</P>
-<P STYLE="font-style: normal">The implementation also MUST check that
+<P>The implementation also MUST check that
 this directory is not a symbolic link. 
 </P>
-<P STYLE="font-style: normal">If any of these checks fail, the
+<P>If any of these checks fail, the
 implementation MUST NOT use this directory for either trashing or
 undeleting files, even is an appropriate $uid directory (see below)
 already exists in it. Besides, the implementation SHOULD report the
 failed check to the administrator, and MAY also report it to the
 user.</P>
-<P STYLE="font-style: normal">The following paragraph applies ONLY to
+<P>The following paragraph applies ONLY to
 the case when the implementation supports trashing in the top
 directory, and a $topdir/.Trash exists and has passed the checks:</P>
 <P STYLE="margin-left: 2cm">If the directory exists and passes the
@@ -190,19 +187,19 @@ this subdirectory is the numeric identifier of the current user
 ($topdir/.Trash/$uid). When trashing a file, if this directory does
 not exist for the current user, the implementation MUST immediately
 create it, without any warnings or delays for the user.</P>
-<P STYLE="font-style: normal">(2) If an $topdir/.Trash directory is
+<P>(2) If an $topdir/.Trash directory is
 absent, an $topdir/.Trash-$uid directory is to be used as the user's
 trash directory for this device/partition. $uid is the user's numeric
 identifier.</P>
-<P STYLE="font-style: normal">The following paragraph applies ONLY to
+<P>The following paragraph applies ONLY to
 the case when the implementation supports trashing in the top
 directory, and a $topdir/.Trash does not exist or has not passed the
 checks:</P>
-<P STYLE="margin-left: 2cm; font-style: normal">When trashing a file,
+<P STYLE="margin-left: 2cm">When trashing a file,
 if an $topdir/.Trash-$uid directory does not exist, the
 implementation MUST immediately create it, without any warnings or
 delays for the user.</P>
-<P STYLE="font-style: normal">When trashing a file, if this directory
+<P>When trashing a file, if this directory
 does not exist for the current user, the implementation MUST
 immediately create it, without any warnings or delays for the user.</P>
 <P><B>Notes.</B> If an implementation provides trashing in top
@@ -213,15 +210,15 @@ provide the user with some interface to view and/or undelete trashed
 files, it SHOULD make a &ldquo;best effort&rdquo; to show files
 trashed in top directories (by both methods) to the user, among other
 trashed files or in a clearly accessible separate way.</P>
-<P>When trashing a file, if the method (1) fails at any point &ndash;
+<P>When trashing a file, if the method (1) fails at any point &mdash;
 i.e. the $topdir/.Trash directory does not exist, or it fails the
-checks, or the system refuses to create an $uid directory in it &ndash;
+checks, or the system refuses to create an $uid directory in it &mdash;
 the implementation MUST, by default, fall back to method (2),
 described below. Except for the case when $topdir/.Trash fails the
 checks, the fallback must be immediate, without any warnings or
 delays. The implementation MAY, however, a way for the administrator
 to disable (2) completely.</P>
-<P STYLE="font-style: normal">If both (1) and (2) fail (i.e. no
+<P>If both (1) and (2) fail (i.e. no
 $topdir/.Trash directory exists, and an attempt to create
 $topdir/.Trash-$uid fails), the implementation MUST either trash the
 file into the user's &ldquo;home trash&rdquo; or refuse to trash it.
@@ -241,7 +238,7 @@ directory (including the &ldquo;home trash&rdquo; directory). This
 trash directory will be named &ldquo;$trash&rdquo; here.</P>
 <P>A trash directory contains two subdirectories, named <B>info </B>and
 <B>files</B>.</P>
-<P>The $<B>trash/files</B> directory contains the files and
+<P>The <B>$trash/files</B> directory contains the files and
 directories that were trashed. When a file or directory is trashed,
 it MUST be moved into this directory<A CLASS="sdfootnoteanc" NAME="sdfootnote5anc" HREF="#sdfootnote5sym"><SUP>5</SUP></A>
 . The names of files in this directory are to be determined by the
@@ -262,7 +259,7 @@ $trash/files is not available, this is an emergency case, and MUST be
 clearly presented as such to the user or to the system
 administrator). 
 </P>
-<P>The $<B>trash/info </B>directory contains an &ldquo;information
+<P>The <B>$trash/info </B>directory contains an &ldquo;information
 file&rdquo; for every file and directory in $trash/files. This file
 MUST have exactly the same name as the file or directory in
 $trash/files, plus the extension &ldquo;.trashinfo&rdquo;<A CLASS="sdfootnoteanc" NAME="sdfootnote7anc" HREF="#sdfootnote7sym"><SUP>7</SUP></A>.
@@ -271,34 +268,34 @@ $trash/files, plus the extension &ldquo;.trashinfo&rdquo;<A CLASS="sdfootnoteanc
 entry file, as described in the <A HREF="http://www.freedesktop.org/Standards/desktop-entry-spec">Desktop
 Entry Specification</A> . Its first line must be [Trash Info]. 
 </P>
-<P STYLE="font-style: normal">It also must have two lines that are
+<P>It also must have two lines that are
 key/value pairs as described in the Desktop Entry Specification:</P>
 <UL>
-	<LI><P STYLE="font-style: normal">The key &ldquo;Path&rdquo;
+	<LI><P>The key &ldquo;Path&rdquo;
 	contains the original location of the file/directory, as either an
 	absolute pathname (starting with the slash character &ldquo;/&rdquo;)
 	or a relative pathname (starting with any other character). A
 	relative pathname is to be from the directory in which the trash
 	directory resides (i.e., from $XDG_DATA_HOME for the &ldquo;home
-	trash&rdquo; directory); it MUST not contain &ldquo;..&rdquo;, and
-	for files not &ldquo;under&rdquo; that directory, absolute pathnames
-	must be used. The system SHOULD only support absolute pathnames in
-	the &ldquo;home trash&rdquo; directory, not in the directories under
-	$topdir. 
+	trash&rdquo; directory); it MUST not include a &ldquo;..&rdquo;
+	directory, and for files not &ldquo;under&rdquo; that directory,
+	absolute pathnames must be used. The system SHOULD only support
+	absolute pathnames in the &ldquo;home trash&rdquo; directory, not in
+	the directories under $topdir. 
 	</P>
-	<P STYLE="font-style: normal">The value type for this key is
-	&ldquo;localestring&rdquo;; it should use the locale in which file
-	names are stored on this file systems, or, if this is unknown,
-	UTF-8.</P>
-	<LI><P>The key &ldquo;DeletionDate&rdquo; <FONT FACE="Times New Roman">contains
+	<P>The value type for this key is
+	&ldquo;string&rdquo;; it should store the file name as exactly the
+	sequence of bytes produced by the file system, with no locale
+	conversion.</P>
+	<LI><P>The key &ldquo;DeletionDate&rdquo; contains
 	the date and time when the file/directory was trashed. The date and
-	time are to be in the </FONT><TT><FONT FACE="Times New Roman">YYYY-MM-DDThh:mm:ss
+	time are to be in the YYYY-MM-DDThh:mm:ss
 	format (see <A HREF="http://www.faqs.org/rfcs/rfc3339.html">RFC
-	3339</A></FONT></TT>). The time zone should be the user's (or
+	3339</A>). The time zone should be the user's (or
 	filesystem's) local time. The value type for this key is &ldquo;string&rdquo;.</P>
 </UL>
-<P STYLE="font-style: normal">Example:</P>
-<PRE STYLE="font-style: normal">[Trash Info]
+<P>Example:</P>
+<PRE>[Trash Info]
 Path=foo/bar/meow.bow-wow
 DeletionDate=20040831T22:32:08</PRE><P>
 The implementation MUST ignore any other lines in this file, except
@@ -312,14 +309,15 @@ to $trash/files with its entire contents. The names of the files and
 directories within the directory MUST NOT be altered; the
 implementation also SHOULD preserve the access and modification time
 for them.</P>
-<P>When trashing a file or directory, the implementation SHOULD
-create the corresponding file in $trash/info first. Moreover, it
-SHOULD use O_EXCL when creating it. Before creating this file, or
-before trying again if the creation fails, the implementation should
-check whether a file with the same already exists; if so, the name
-should be changed. (This prevents a race condition if two processes
-try to trash files at the same time, and attempt to use the same file
-name.)</P>
+<P>When trashing a file or directory, the implementation MUST create
+the corresponding file in $trash/info first. When trashing a file or
+directory, the implementation MUST create thecorresponding file in
+$trash/info first. Moreover, it MUST try to do this in an atomic
+fashion, so that if two processes try trash files with the same
+filename this will result in two different trash files. On Unix-line
+systems this is done by generating a filename, and then opening with
+O_EXCL. If that succeeds the creation was atomic (at least on the
+same machine), if it fails you need to pick another filename.</P>
 <H2>Implementation notes</H2>
 <P>The names of the files/directories in $trash/info SHOULD be
 somehow related to original file names. This can help manual recovery
@@ -352,6 +350,13 @@ undelete it or remove it from the trash only in its entirety as well,
 not as separate files. The user might not have the permissions to
 delete some files in it even while he does have the permission to
 delete the directory!</P>
+<P><B>Important note on scope</B>. This specification currently does
+NOT define trashing on remote machines where multiuser permissions
+are implemented but the numeric user ID is not supported, like FTP
+sites and CIFS shares. In systems implementing this specification,
+trashing of files from such machines is to be done only to the user's
+home trash directory (if at all). A future version may address this
+limitation.</P>
 <H2>Administrativia</H2>
 <H3>Status of this document</H3>
 <P>This document is, at this moment, only a draft. It will hopefully
@@ -395,6 +400,10 @@ notes. Added a copyright notice.</P>
 <P>0.4 September 9, 2004. Changed [Trash entry] to [Trash info] and
 fixed some typo's</P>
 <P>0.5 September 9, 2004. Changed [Trash info] to [Trash Info]</P>
+<P>0.6 October 8, 2004. Corrections by Alexander Larsson
+&lt;<A HREF="mailto:alexl@redhat.com">alexl@redhat.com</A>&gt; . Also
+added &ldquo;note on scope&rdquo;. Cleaned up HTML. Added a link to this 
+document on the freedesktop.org standards page</P>
 <P><BR><BR>
 </P>
 <DIV ID="sdfootnote1">
