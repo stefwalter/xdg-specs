@@ -7,7 +7,7 @@
 	<META NAME="AUTHOR" CONTENT="Mikhail Ramendik">
 	<META NAME="CREATED" CONTENT="20040909;384300">
 	<META NAME="CHANGEDBY" CONTENT="Рамендик Григорьевич">
-	<META NAME="CHANGED" CONTENT="20040909;2380800">
+	<META NAME="CHANGED" CONTENT="20040909;9125500">
 	<STYLE>
 	<!--
 		P.sdfootnote { margin-left: 0.5cm; text-indent: -0.5cm; margin-bottom: 0cm; font-size: 10pt }
@@ -21,8 +21,7 @@
 <H3>Content by David Faure &lt;<A HREF="mailto:dfaure@trolltech.com">dfaure@trolltech.com</A>&gt;,
 Alexander Larsson &lt;<A HREF="mailto:alexl@redhat.com">alexl@redhat.com</A>&gt;
 and others on the FreeDesktop.org mailing list</H3>
-<H3>Version 0.4 
-</H3>
+<H3>Version 0.5</H3>
 <H2>Abstract</H2>
 <P>The purpose of this Specification is to provide a common way in
 which all &ldquo;Trash can&rdquo; implementations should store, list,
@@ -270,7 +269,7 @@ $trash/files, plus the extension &ldquo;.trashinfo&rdquo;<A CLASS="sdfootnoteanc
 </P>
 <P>The format of this file is similar to the format of a desktop
 entry file, as described in the <A HREF="http://www.freedesktop.org/Standards/desktop-entry-spec">Desktop
-Entry Specification</A> . Its first line must be [Trash info]. 
+Entry Specification</A> . Its first line must be [Trash Info]. 
 </P>
 <P STYLE="font-style: normal">It also must have two lines that are
 key/value pairs as described in the Desktop Entry Specification:</P>
@@ -299,11 +298,11 @@ key/value pairs as described in the Desktop Entry Specification:</P>
 	filesystem's) local time. The value type for this key is &ldquo;string&rdquo;.</P>
 </UL>
 <P STYLE="font-style: normal">Example:</P>
-<PRE STYLE="font-style: normal">[Trash info]
+<PRE STYLE="font-style: normal">[Trash Info]
 Path=foo/bar/meow.bow-wow
 DeletionDate=20040831T22:32:08</PRE><P>
 The implementation MUST ignore any other lines in this file, except
-the first line (must be [Trash info]) and these two key/value pairs.
+the first line (must be [Trash Info]) and these two key/value pairs.
 If a string that starts with &ldquo;Path=&rdquo; or &ldquo;DeletionDate=&rdquo;
 occurs several times, the first occurence is to be used.<A CLASS="sdfootnoteanc" NAME="sdfootnote8anc" HREF="#sdfootnote8sym"><SUP>8</SUP></A></P>
 <P>Note that $trash/info has no subdirectories. For a directory in
@@ -378,7 +377,7 @@ version.</P>
 <P><A HREF="http://www.ramendik.ru/docs/trashspec.html">http://www.ramendik.ru/docs/trashspec.html</A>
 . If this document gets hosted by FreeDesktop.org, a link to the page
 will still be available at this location.</P>
-<P><A HREF="http://www.ramendik.ru/docs/trashspec.0.4.html">http://www.ramendik.ru/docs/trashspec.0.4.html</A>
+<P><A HREF="http://www.ramendik.ru/docs/trashspec.0.5.html">http://www.ramendik.ru/docs/trashspec.0.5.html</A>
 is the permanent location of this version. 
 </P>
 <H3>Version history</H3>
@@ -395,6 +394,7 @@ trashed files. Changed user names to user ids. Added implementation
 notes. Added a copyright notice.</P>
 <P>0.4 September 9, 2004. Changed [Trash entry] to [Trash info] and
 fixed some typo's</P>
+<P>0.5 September 9, 2004. Changed [Trash info] to [Trash Info]</P>
 <P><BR><BR>
 </P>
 <DIV ID="sdfootnote1">
