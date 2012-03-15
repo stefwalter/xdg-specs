@@ -76,11 +76,11 @@ git:xdg/shared-mime-info:shared-mime-info-spec.xml	e235408efaeec39b5be22d4f1d421
 git:startup-notification:doc/startup-notification.txt   master                0.2     startup-notification-spec
 git:startup-notification:doc/startup-notification.txt   e1d689b36635ed632cbb91cf3104f84bd0b59bfd                0.1     startup-notification-spec
 
-git:xdg/xdg-specs:trash/trashspec.html			8141cb1a997c1be32b2c075841b8e676c42b4c6d	0.8	trash-spec
-
 git:xdg/xdg-specs:systemtray/systemtray-spec.xml			cbe62e957475dba73d9d830dd755c76f8d3abd23		0.3	systemtray-spec
 git:xdg/xdg-specs:systemtray/systemtray-spec.xml			87fb46a8631a8b509bb1b8026b88c7059f869ffd		0.2	systemtray-spec
 git:xdg/xdg-specs:systemtray/systemtray-spec.xml			c8475bef1d1f84afcc89c710b6b5b214f11a670f		0.1	systemtray-spec
+
+git:xdg/xdg-specs:trash/trashspec.html			082d2aba7792882e09f87ffe2bf3a3ae6c7e390b	0.8	trash-spec
 
 git:xdg/xdg-specs:wm-spec/wm-spec.xml			master		1.5	wm-spec
 git:xdg/xdg-specs:wm-spec/wm-spec.xml			a95af55a102b0814e81095bda46a691068009c3c		1.4	wm-spec
