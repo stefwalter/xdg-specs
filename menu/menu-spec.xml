@@ -1997,6 +1997,11 @@
               <entry>GTK</entry>
 
             </row><row>
+              <entry>XFCE</entry>
+              <entry>Application based on XFCE libraries</entry>
+              <entry>GTK</entry>
+
+            </row><row>
               <entry>GTK</entry>
               <entry>Application based on GTK+ libraries</entry>
               <entry></entry>
