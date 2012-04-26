@@ -1,0 +1,775 @@
+<!doctype article PUBLIC "-//OASIS//DTD DocBook V3.1//EN" [
+]>
+<article id="index">
+  <artheader>
+    <title>Thumbnail Managing Standard</title>
+    <releaseinfo>Version 0.7.0</releaseinfo>
+    <date>September 2004</date>
+    <authorgroup>
+      <author>
+	<firstname>Jens</firstname>
+	<surname>Finke</surname>
+	<affiliation>
+	  <address>
+	    <email>jens@gnome.org</email>
+	  </address>
+	</affiliation>
+      </author>
+      <author>
+	<firstname>Olivier</firstname>
+	<surname>Sessink</surname>
+	<affiliation>
+	  <address>
+	    <email>olivier@lx.student.wau.nl</email>
+	  </address>
+	</affiliation>
+      </author>
+    </authorgroup>
+  </artheader>
+
+  <sect1 id="history">
+    <title>History</title>
+    <itemizedlist>
+    <listitem><para>September 2004, Version 0.7.0</para>
+      <itemizedlist>
+      <listitem><para>Added readonly support for shared thumbnail repositories</para></listitem>
+      </itemizedlist>
+    </listitem>
+    <listitem><para>September 2002, Version 0.6.1</para>
+      <itemizedlist>
+      <listitem><para>The subdirectories weren't a good idea. Removed them from
+       this version.</para></listitem>
+      <listitem><para>Updated link to the MD5 implementation.</para></listitem>
+      </itemizedlist>
+    </listitem>
+    <listitem><para>September 2002, Version 0.6</para>
+      <itemizedlist>
+      <listitem><para>Added another sub directory level within the cache base
+      directories to avoid too much clutter.</para></listitem>
+      <listitem><para>State not to create thumbnails for files within the
+      thumbnail cache directory.</para></listitem>
+      <listitem><para>State when it's allowed to use thumbnails which haven't
+      been checked for validity.</para></listitem>   
+      <listitem><para>Some typo fixes.</para></listitem>
+      <listitem><para>Introduction and conclusion rewrite.</para></listitem>
+      </itemizedlist>
+    </listitem>
+    <listitem><para>Janurary 2002, Version 0.5</para>
+      <itemizedlist>
+      <listitem><para>Changed handling of different thumbnail sizes.</para></listitem>
+      <listitem><para>Renamed directories.</para></listitem>
+      <listitem><para>Propose using temporary filenames to avoid problems with
+      concurrent access.</para></listitem>
+      <listitem><para>Save thumbnails directly in the size dir without subdirs.</para></listitem>
+      <listitem><para>Added optional Thumb::Mimetype key</para></listitem>
+      <listitem><para>Give some more implementation notes.</para></listitem>
+      <listitem><para>Added "Thanks" section.</para></listitem>
+      </itemizedlist>
+    </listitem>
+    <listitem><para>December 2001, Version 0.4</para>
+      <itemizedlist>
+      <listitem><para>Destinction between required and optional thumbnail attributes.
+      </para></listitem> 
+      <listitem><para>Dropped distinction between global/local .thumbnail
+      directories.</para></listitem> 
+      <listitem><para>Use MD5 hashes as thumbnail filename.</para></listitem>
+      <listitem><para>Initial attempt to handle concurrent accesses by different programs.
+      </para></listitem>      
+      <listitem><para>Rewrote the "Deleting Thumbnails" section.
+      </para></listitem>      
+      </itemizedlist>
+    </listitem>
+    <listitem><para>August 2001, Version 0.3</para>
+      <itemizedlist>
+      <listitem><para>Rewrote this paper.</para></listitem>
+      </itemizedlist>
+    </listitem>
+    <listitem><para>July 2001, Version 0.2</para>
+      <itemizedlist>
+      <listitem><para>Removed distinction between low/high quality thumbnails.</para></listitem>
+      <listitem><para>Seperate directory for failures.</para></listitem>
+      <listitem><para>Consider permission settings.</para></listitem>
+      </itemizedlist>
+    </listitem>
+    <listitem><para>July 2001, Version 0.1</para>
+       <itemizedlist>
+        <listitem><para>First public release.</para></listitem>
+       </itemizedlist></listitem>
+    </itemizedlist>
+  </sect1>
+
+  <sect1 id="introduction">
+    <title>Introduction</title>
+    <para>
+      This paper deals with the permanent storage of previews for file
+      content. In particular, it tries to define a general and widely accepted
+      standard for this task. That way, it will be possible to share these so
+      called thumbnails across a large number of applications.</para>
+
+    <para>The current situation is, that nearly every program introdues a new
+    way of dealing with thumbnails. This results in the fact, that if the user
+    uses 4 or 5 different programs, he will end up with 4 or 5 thumbnails for
+    the same file. It's obvious that this is not only a waste of the users disc
+    space, but also makes the managing of large collections harder.
+    </para>
+
+    <para>But why does a program use thumbnails? Often these are presented in
+    file operation dialogs to give the user a hint what a certain file is
+    about. This can be seen as information in additon to the plain filename
+    which helps to identify the desired file faster and more easily. But the
+    idea isn't limited to images and file operation dialogs. The additional
+    value of previews is also applyable to other file types, like text
+    documents, pdf files, spreadsheets and so on. The reason why this isn't
+    deployed widely so far is, that it requires a lot of effort and is only of
+    little use for a single program (for example, if only the spreadsheet
+    program can create and view it's previews). But imagine if your filemanager
+    could display all these previews too, while you are browsing through your
+    filesystem.
+    </para>
+
+    <para>If there is a general accepted, file type independent way how to
+    deal with previews, the above sketched vision can come true. Everytime an
+    application saves a file it creates also a preview thumbnail for it. Other
+    programs can check if there is a thumbnail for a specific file and can
+    present it. This proposal tries to unifiy the thumbnail managing and
+    constitutes the first step to a better graphical desktop.
+    </para>
+  </sect1>
+  <sect1 id="issues">
+    <title>Issues To Solve</title>
+    <para>
+    There are some issues to solve to make this work correctly. Specifically
+    these are:
+      <itemizedlist>
+	<listitem>
+	  <para>Find a place for permanent storing.</para> 
+	</listitem>
+	<listitem>
+	  <para>Preserve information about original image and make them easily
+	  accessible without touching the original.</para>
+	</listitem>
+	<listitem>
+	  <para>Provide the ability to handle different thumbnail sizes.</para> 
+	</listitem>
+	<listitem>
+	  <para>Take care of thumbnail generation failures.</para>
+	</listitem>
+	<listitem>
+	  <para>Find a way to access thumbnails concurrently with different
+	  programs.</para>
+	</listitem>
+      </itemizedlist>
+      All these things will be discussed in the next chapters and solutions
+      will be presented.
+    </para>
+   </sect1>
+  <sect1 id="directory">
+    <title>Thumbnail Directory</title>
+
+    <para> There exists exactly one place where all generated thumbnails will
+       be stored. This is the .thumbnails directory located in the users
+       home. </para>
+
+    <sect2 id="dirstructure"><title>Directory Structure</title>
+
+    <para> Within this dir there are living some other subdirectories showing
+       in the following listing:
+       </para>
+       <programlisting>
+~/.thumbnails/
+~/.thumbnails/normal
+~/.thumbnails/large/
+~/.thumbnails/fail/
+       </programlisting>
+      <para> The meaning of the directories are as follows:</para>
+      <itemizedlist>
+	<listitem>
+	  <para>Normal: The default place for storing thumbnails. The image
+	  size must not exceed 128x128 pixel. Programs which need smaller
+	  resolutions should read and write the 128x128 thumbnails and
+	  downscale them afterwards to the desired dimension. See <link
+	  linkend="creation">Thumbnail Creation</link> for more details.</para>
+	</listitem>
+	<listitem>
+	  <para>Large: The previous notes apply to this directory too, except
+	  that the thumbnail size must be 256x256 pixel. </para>
+	</listitem>
+	<listitem>
+	  <para>Fail: This directory is used to store information about files
+	  where a thumbnail couldn't be generated. See <link
+	  linkend="failures">Thumbnail Generation Failure</link> for more
+	  details.
+	  </para>
+	</listitem>
+      </itemizedlist>
+     <note>
+     <para>
+     You must not create/save thumbnails for any files you will find in these
+     directories. Instead load and use these files directly.
+     </para>
+     </note>
+     </sect2>
+   </sect1>
+   
+   <sect1 id="creation"> <title>Thumbnail Creation</title> 
+
+     <sect2><title>Fileformat</title>
+
+     <para> The image format for thumbnails is the <ulink
+        url="http://www.w3.org/TR/REC-png">PNG format</ulink>, regardless in
+        which format the original file was saved. To be more specific it must
+        be a 8bit, non-interlaced PNG image with full alpha transparency (means
+        255 possible alpha values). However, every program should use the best
+        possible quality when creating the thumbnail. The exact meaning of this
+        is left to the specific program but it should consider applying
+        antialising.</para>
+     </sect2>
+
+     <sect2 id="addinfos"><title>Thumbnail Attributes</title> 
+   
+     <para>Beside the storage of the raw graphic data its often useful to
+        provide further information about a file in its thumbnail. Especially
+        file size, image dimension or image type are often used in graphic
+        programs. If the thumbnail provides such information it avoids any need
+        to access the original file and thus makes the loading faster.</para>
+
+     <para> The PNG format provides a mechanism to store arbitrary text strings
+        together with the image. It uses a simple key/value scheme, where some
+        keys are already predefined like Title, Author and so on (see <ulink
+        url="http://www.w3.org/TR/REC-png#C.tEXt">section 4.2.7</ulink> of the
+        PNG standard). This mechanism is used to store additional
+        thumbnail attributes.</para>
+
+     <para> Beside the png format there is another internet standard which is
+        important in this context: the <ulink
+        url="http://community.roxen.com/developers/idocs/rfc/rfc2396.html">URI
+        mechanism</ulink>. It is used to specify the location of the original
+        file. Only canonical absolute URIs (including the scheme) are used to
+        determine the original uniquely.</para>
+	
+     <para>The following keys and their appropriate values must be provided by
+	every program which supports this standard. All the keys are defined in
+	the "Thumb::" namespace or if already defined by the PNG standard
+	without any namespace.</para>
+	<para>
+	 <table>
+	   <title>Required attributes.</title>
+	  <tgroup cols="2" align="left">
+          <thead>
+	  <row>
+            <entry>Key</entry><entry>Description</entry>
+          </row>
+          </thead>
+          <tbody>
+	  <row>
+	     <entry>Thumb::URI</entry> <entry>The absolute canonical uri for
+	     the original file. (eg file:///home/jens/photo/me.jpg)</entry>
+	  </row>
+	  <row>
+	     <entry>Thumb::MTime</entry><entry>The modification time of the
+	     original file (as indicated by stat, which is represented as
+	     seconds since January 1st, 1970).</entry>
+	  </row>
+	  </tbody>
+	  </tgroup>
+	  </table>
+	  </para>
+
+	  <para>If it's not possible to obtain the modification time of the
+	  original then you shouldn't store a thumbnail for it at all. The
+	  mtime is needed to check if the thumbnail is valid yet (see <link
+	  linkend="modifications">Detect modifications</link>). Otherwise we
+	  can't guarantee the content corresponds to the original and must
+	  regenerate a thumb every time anyway.</para>
+
+	 <para>
+         <table>
+	  <title>Additional attributes.</title>
+	  <tgroup cols="2" align="left">
+          <thead>
+	  <row>
+            <entry>Key</entry><entry>Description</entry>
+          </row>
+          </thead>
+          <tbody>
+          <row>
+	     <entry>Thumb::Size</entry><entry>File size in bytes of the original
+	     file.</entry>
+          </row>
+          <row>
+	     <entry>Thumb::Mimetype</entry><entry>The file mimetype. </entry>
+          </row>
+	  <row>
+	    <entry>Description</entry><entry>This key is predefined by the PNG
+                standard. It provides a general description about the thumbnail
+                content and can be used eg. for accessability needs.</entry>
+	  </row>
+	  <row>
+	     <entry>Software</entry><entry>This key is predefined by the PNG
+                  standard. It stores the name of the program which generated
+                  the thumbnail.</entry>
+          </row>
+	  </tbody>
+	  </tgroup>
+	  </table>
+	  </para>
+
+     <para>There are surely some situations where further information are
+        desired. Eg. the Gimp could save the number of layers an image has or
+        something like this. So if an application wants to save more
+        information it is free to do so. It should use a key in its own
+        namespace (to avoid clashes) prefixed by X- to indicate that this is an
+        extension. Eg. Gimp could save the layer info in the key
+        X-GIMP::Layers.</para>
+
+     <para> However, regarding to the filetype there are some keys which are
+        generally useful. If a program can obtain information for the following
+        keys it should provide them.</para>
+	  <para>
+         <table>
+	  <title>Filetype specific attributes.</title>
+	  <tgroup cols="2" align="left">
+          <thead>
+	  <row>
+            <entry>Key</entry><entry>Description</entry>
+          </row>
+          </thead>
+          <tbody>
+          <row>
+	     <entry>Thumb::Image::Width</entry><entry>The width of the original
+	     image in pixel.</entry>
+          </row>
+          <row>
+	     <entry>Thumb::Image::Height</entry><entry>The height of the original
+	     image in pixel.</entry>
+          </row>
+          <row>
+	     <entry>Thumb::Document::Pages</entry><entry>The number of pages
+	     the original document has.</entry>
+          </row>
+          <row>
+	     <entry>Thumb::Movie::Length</entry><entry>The length of the movie
+	     in seconds.</entry>
+          </row>
+          </tbody>
+	  </tgroup>
+	</table>
+	</para>
+	
+
+     <para>With this approach a program doesn't have the guarantee that certain
+        keys are stored in a thumbnail, because it may have been created by
+        another application. If possible, a program should cope with the lack
+        of information in such a case instead of recreating the thumbnail and
+        the missing information.
+        </para>
+     </sect2>
+
+    <sect2 id="thumbsize"><title>Thumbnail Size</title>
+     <para>
+        As already mentionend in the <link linkend="directory">Thumbnail
+        Directory</link> section there exists two suggested sizes you can use
+        for your thumbnails: 128x128 and 256x256 pixel. The idea is that if a
+        program uses another size for it's previews it loads one of the two
+        versions and scales them down to the desired size. Similar, when
+        creating a thumbnail it scales the file down to 128x128 first (or
+        256x256), saves it to disk and then reduce the size further. This
+        mechanism enables all programs to obtain their desired previews in an
+        easy and fast way. </para>
+
+	<para> However, these are suggestions. Implementations should cope also
+        with images that are smaller than the suggested size for the normal and
+        large subdirectories. Depending on the difference between the actual
+        and the desired size, they can either use the smaller one found in the
+        cache and scale it down or recreate a thumbnail with the proposed size
+        for this directory.</para>
+
+	<para> If a program needs a thumbnail for an image file which is
+	smaller than 128x128 pixel it doesn't need to save it at all.</para>
+	
+	<note>
+	<para> All sizes define just a rectangle area where the thumbnail must
+        fit in. Don't scale every image to a rectangular thumbnail but preserve
+        the ratio instead!</para></note>
+    </sect2>
+  </sect1>
+
+  <sect1 id="thumbsave"><title>Thumbnail Saving</title>
+
+    <para>The thumbnail filename is determined by a hashfunction. This proposal
+    utilizes <ulink
+    url="http://community.roxen.com/developers/idocs/rfc/rfc1321.html">MD5</ulink>
+    as hash mechanism in the following way.
+    </para>
+    <orderedlist>
+    <listitem>
+    <para>You need the absolute canonical URI for the original file, as stated
+    in <ulink
+    url="http://community.roxen.com/developers/idocs/rfc/rfc2396.html">URI RFC
+    2396</ulink>. In particular this defines to use three '/' for local 'file:'
+    resources (see example below).</para>
+    </listitem>
+    <listitem>
+    <para>Calculate the MD5 hash for this URI. Not for the file it points to!
+    This results in a 128bit hash, which is representable by a hexadecimal
+    number in a 32 character long string.</para>
+    </listitem>
+    <listitem>
+    <para>To get the final filename for the thumbnail just append a '.png' to
+    the hash string. According to the dimension of the thumbnail you must store
+    the result either in ~/.thumbnails/normal or ~/.thumbnails/large.
+    </para>
+    </listitem>
+    </orderedlist>
+    <para>
+    An example will illustrate this:
+    </para>
+    <example><title>Saving a thumbnail</title>
+    <para>
+    Consider we have a file ~/photos/me.png. We want to create a thumbnail with
+    a size of 128x128 pixel for it, which means it will be stored in the
+    ~/.thumbnails/normal directory. The absolute canonical URI for the file in
+    this example is file:///home/jens/photos/me.png.
+    </para>
+    <para>The MD5 hash for the uri as a hex string is
+    c6ee772d9e49320e97ec29a7eb5b1697. Following the steps above this
+    results in the following final thumbnail path:</para>
+<programlisting>
+/home/jens/.thumbnails/normal/c6ee772d9e49320e97ec29a7eb5b1697.png
+</programlisting>
+    </example>
+
+    <sect2><title>Permissions</title> <para>A few words regarding permissions:
+    All the directories including the ~/.thumbnails directory must have set
+    their permissions to 700 (this means only the owner has read, write and
+    execute permissions, see "man chmod" for details). Similar, all the files
+    in the thumbnail directories should have set their permissions to 600. This
+    way we assure that if a user creates a thumbnail for a file where only he
+    has read-permissions no other user can take a glance on it through the
+    backdoor with the thumbnails.</para> 
+    </sect2>
+
+    <sect2><title>Concurrent Thumbnail Creation</title> <para>An important goal
+    of this paper is to enable programs to share their thumbnails. This
+    includes the occurences of concurrent accesses to the cache by different
+    programs. Problems arise if two programs try to create a thumbnail for the
+    same file at the same time. Because of this the following procedure is
+    suggested: </para>
+    <orderedlist>
+    <listitem><para>Check if the thumbnail already exists and if it's valid.</para>
+    </listitem>
+    <listitem><para>If the above conditions are not fulfiled create the
+    thumbnail and write it under a temporary filename onto the disk.</para>
+    </listitem>
+    <listitem><para>Rename the temporary file to the thumbnail filename. Since
+    this is an atomic operation the new thumbnail is either completely written
+    or not.</para>
+    </listitem>
+    </orderedlist>
+    <para>
+    This way the worst case is that a thumbnail will be written twice. However,
+    the thumbnail is in a sane state at any time. </para>
+    <note>
+    <para> The temporary file should be placed into the same directory as the
+    final thumbnail, because then you are sure that they lay on the same
+    filesystem. This guarantees a fast renaming of the temporary file. Using a
+    combination of programname, process id and eg. first characters from the
+    hash string should give a fairly unique temporary name.</para></note>
+    </sect2>
+
+    <sect2><title>Advantages Of This Approach</title> 
+
+      <para>Previously versions of this standard used a very different
+      mechanism for storing thumbnails. But this one has some very important
+      advantages:</para>
+      <orderedlist>
+      <listitem>
+      <para>Works for all kinds of possible file locations, since its based
+      only on the textual URI representation of a file. This way files that are
+      located on the locale filesystem or a samba, http, ftp or WebDAV server
+      can be treated equally.</para>
+      </listitem>
+      <listitem>
+      <para>It results in a flat directory hierarchy which assures fast
+      access. Since the hash is always 32 characters long the thumbnail
+      filename is exactly 36 characters long for every possible file (including
+      the '.png' suffix).</para>
+      </listitem>
+      <listitem>
+      <para>Due to the usage of the MD5 hash its unlikely that there occur
+      clashes between two different thumbnails, even if it's theoretically
+      possible. But the probability is very low and can be ignored in this
+      context. The worst case would be that a thumbnail overwrites another
+      valid one. Ok, if they have exactly the same modification time it is
+      theoretically possible too that a wrong thumbnail for a file will be
+      displayed (see <link linkend="modifications">Detect
+      Modifications</link>).
+      </para>
+      </listitem>
+      <listitem>
+      <para>It's very easy to implement.</para>
+      </listitem>
+      </orderedlist>
+      <note><para>There do exist a lot of different library implementations for
+      the MD5 hash algorithm. If you don't want to add yet another library
+      dependency to support thumbnailing in your program you can eg. use the
+      <ulink url="ftp://mirror.cs.wisc.edu/pub/mirrors/ghost/packages/md5.tar.gz">RFC 1321
+      implementation</ulink> by L. Peter Deutsch. It adds only 1.5kb sourcecode
+      in two files to your project and can be used without much
+      restrictions.</para>
+      </note>
+    </sect2>
+    </sect1>
+
+    <sect1 id="modifications"><title>Detect Modifications</title>
+
+     <para> One important thing is to assure that the thumbnail image displays
+        the same information than the original, only in a downscaled
+        version. To make this possible we use the modification time stored in
+        the required <link linkend="addinfos">'Thumb::MTime' key</link> and
+        check if it's equal the current modification time of the
+        original. If not we must recreate the thumbnail. <example><title>Algorithm
+        to check for modification.</title>
+         <programlisting>
+if (file.mtime != thumb.MTime) {
+      recreate_thumbnail ();
+}
+         </programlisting>
+         </example></para>
+
+      <note><para> It is not sufficient to do a <prompt>file.mtime >
+         thumb.MTime</prompt> check. If the user moves another file
+         over the original, where the mtime changes but is in fact lower than
+         the thumbnail stored mtime, we won't recognize this modification.
+         </para></note>
+
+      <para> If for some reason the thumbnail doesn't have the 'Thumb::MTime'
+         key (although it's required) it should be recreated in any
+         case.</para>
+
+      <note>
+      <para>There are certain circumstances where a program can't or don't want
+      to update a thumbnail (eg. within a history view of your recently edited
+      files). This is legally but it should be indicated to the user that an
+      thumbnail is maybe outdated or not even checked for modifications.</para>
+      </note>
+     </sect1>
+
+
+  <sect1 id="failures"><title>Thumbnail Creation Failures</title> 
+    <para>Due to several reasons its possible that the generation of a thumbnail fails:
+       <itemizedlist>
+	<listitem>
+	  <para>The file format is unknown and cannot be loaded by the program.</para>
+	</listitem>
+	<listitem>
+	  <para>The file format is known but the file is somehow broken and
+	  thus cannot be read.</para>
+	</listitem>
+	<listitem>
+	  <para> The generation of a thumbnail would take too long, due to the
+             large size of the file.</para>
+	</listitem>
+      </itemizedlist>
+     </para> 
+
+    <para>Under some circumstances a program want to preserve the information
+       that the creation failed. Eg to avoid trying it again and again in the
+       future. The problem is that the above mentioned issues are often program
+       specific. Eg Nautilus can't read the native Gimp format xcf but of
+       course Gimp can and could create thumbnails for them. Or one program
+       uses a broken TIFF implementation which refuses to load an TIFF image
+       but another one uses a correct implementation.</para>
+    
+    <para> Because of this, its best to save these failure information per
+       program. In the <link linkend="dirstructure">Directory Structure</link>
+       section there is already a 'fail' directory mentioned, which should be
+       used for this. Every program must create a directory of it's own there
+       with the name of the program appended by the version number
+       (eg. <prompt>~/.thumbnails/fail/nautilus-1.0</prompt>).</para>
+
+    <para> For every thumbnail generation failure the program creates an empty
+       PNG file. If it's possible to obtain some additional information from
+       the image (see <link linkend="addinfos">Store Additional
+       Information</link>) they should be stored together with the thumbnail
+       too, at least the required 'Thumb::MTime' and 'Thumb::URI' keys must be
+       set.  The procedure for the saving of such a fail image is the same as
+       described in <link linkend="thumbsave">Thumbnail Saving</link>. You must
+       only use the application specific directory within
+       <prompt>~./thumbnails/fail</prompt> instead of the size specific ones.
+       </para>
+    <para>This approach has the advantage that a program can access information
+       about a thumbnail creation failure the same way as it does with
+       successfully generated ones.</para>
+  </sect1>
+
+  <sect1 id="delete"><title>Deleting Thumbnails</title> 
+  
+    <para> The deletion of a thumbnail is somehow tricky. A general rule is
+     that a thumbnail should be deleted if the orginial file doesn't exist
+     anymore (Note: If it was only modified the thumbnail should be recreated
+     instead). There are different ways how this can be achieved:</para>
+     <orderedlist>
+     <listitem>
+     <para>If a filemanger is aware of this standard and deletes a file it
+       could take care of deleting the thumbnail too.</para>
+     </listitem>
+     <listitem>
+     <para>A daemon runs in the background which cleans up the cache in certain
+       intervalls.</para>
+     </listitem>
+     <listitem>
+     <para>The user can call a managing tool which lists all the thumbnails
+       together with their original file paths. From there he can delete single
+       images, all images where the orignial doesn't exist anymore or all
+       images older than eg. 30 days.</para>
+     </listitem>
+     </orderedlist>
+     <para>Another problem is that there are some URI schemes where it isn't
+     directly possible to determine if the file exists or not. Eg. this applies
+     to all the internet related schemes like http:, ftp: and so on when you
+     don't have an internet connection. The same applies to removable media
+     eg. a cdrom. </para>
+
+     <para>The above mentioned managing tools should therefore consider
+       the following rules:</para>
+       <orderedlist>
+       <listitem>
+       <para>If the URI scheme specifies a local file (like the file: scheme)
+       then it should check if the original file exists. If it doesn't exist
+       anymore the program should delete the thumbnail.</para>
+       </listitem>
+       <listitem>
+       <para>For all internet related schemes (like http: or ftp:) delete the
+         thumbnail if it hasn't been accessed within a certain user defined
+         time period (can default to 30 days).</para>
+       </listitem>
+       <listitem>
+        <para>Removable medias should be considered too. Although this can't
+        work for all systems in all cases reliable there are some heuristics
+        which can be used. Eg. checking the fstab configuration file and look
+        for the mount point of /dev/fd0 (floppy disk) or check if the CD-Rom
+        drive is mounted under /cdrom. Thumbnails for removable media files
+        should be handled as in the previous point.</para>
+       </listitem>
+       </orderedlist>
+  </sect1>
+  
+   <sect1 id="shared"><title>Shared Thumbnail repositories</title>
+   <para>
+   In some situations it is desirable to have a shared thumbnail repository. This 
+   is a read-only collection of thumbnails that is shared among different users or different 
+   computers. For example a CD-ROM with images, could include the thumbnails for 
+   these images such that they do not need to be generated for every user or computer
+   accessing this CD-ROM.
+   </para>
+
+   <para>
+   Because the URI of such an image is not constant (a CD-ROM for example can be mounted
+   at different locations) the thumbnails should be in a relative path from the original 
+   image.
+   </para>
+
+   <para>
+   The location for shared thumbnails will be
+   </para>
+ <programlisting>.sh_thumbnails/</programlisting>
+   
+   <para>Within this directory are the same subdirectories as in the global thumbnail directory.</para>
+   <programlisting>.sh_thumbnails/
+   .sh_thumbnails/normal/
+   .sh_thumbnails/large/
+   .sh_thumbnails/fail/
+   </programlisting>
+   <para>The meaning of these directories is identical to their meaning in the global directory.</para>
+   
+   <para>The filename of the thumbnail is also in the shared thumbnail repository the md5sum 
+   of the URI. But, because the URI is possibly not constant, only the filename part of the 
+   URI should be used, no directory parts.</para>
+   
+   <sect2><title>Creating thumbnails in a shared thumbnail repository</title>
+   <para>
+   A shared thumbnail repository should be considered read-only. A program should never 
+   add or update a thumbnail in the shared thumbnail repository. Such a repository should only 
+   be created on special request by the user. If a thumbnail is outdated or corrupt, a program 
+   should create a new thumbnail in the personal thubmnail repository, and not update the shared
+   thumbnail repository. 
+   </para>
+   
+   <para>
+   If the user specific requested the creation of a shared thumbnail repository, the thumbnails
+   can be created. Because the URI for shared images is possibly not constant, this means that 
+   the full URI can not be stored in the thumbnail. The URI field should, therefore, contain only 
+   the filename, and no directory parts. All other properties, however, should be the 
+   same as in the personal repository, including the size. The permissions for shared thumbnails 
+   should be the same as their original images.</para>
+   
+   </sect2>
+   <sect2><title>Loading thumbnails from a shared thumbnail repository</title>
+   <para>
+   When loading thumbnails from a shared thumbnail repository, the personal repository 
+   has a higher priority. If a thumbnail exists in the personal thumbnail repository, this
+   thumbnail should be used, and not the thumbnail from the shared repository. 
+   </para>
+   <para>
+   There is one exception to this rule. If the thumbnail in the personal thumbnail repository
+   is outdated or corrupt, the thumbnail from the shared repository should be checked. If this 
+   thumbnail is correct, the thumbnail in the personal repository can be deleted and the thumbnail
+   from the shared collection can be used.
+   </para>
+   </sect2>
+ 
+	</sect1>
+
+  <sect1 id="conclusion"><title>Conclusion</title> 
+
+   <para> The proposed way of dealing with file previews fulfiles the
+     requirements of a file type independent preview cache. It is relative
+     easy to use, understand and implement. All these are important facts to
+     allow it's wide spread.</para>
+
+   <para>The next step will be to take these ideas to the applications. If a
+   lot of users, coders and maintainers will cooperate on this, we can reach a
+   new level of usability.</para>
+  </sect1>
+
+  <sect1 id="thanks"><title>Thanks</title> 
+   
+   <para>The following people helped me to write this paper with a lot of
+   suggestions, good ideas and constructive critism. They found serious bugs
+   and problems in previous versions or helped me in another way. Thank you
+   very much:
+   </para>
+   <para> 
+   Darin Adler (Gnome/Nautilus), 
+   Alexander Larsson (Gnome/Nautilus), 
+   Thomas Leonard (Rox Desktop), 
+   Sven Neumann (Gimp), 
+   Havoc Pennington (Gnome/freedesktop.org), 
+   Malte Starostik (KDE), 
+   Owen Taylor (GTK), 
+   and all I forgot to mention here.
+   </para>
+  </sect1>
+
+  <sect1 id="links"><title>Links</title>
+  <itemizedlist>
+  <listitem>
+  <para>URI standard: <ulink
+  url="http://community.roxen.com/developers/idocs/rfc/rfc2396.html">http://community.roxen.com/developers/idocs/rfc/rfc2396.html</ulink></para>
+  </listitem>
+  <listitem>
+  <para>PNG standard: <ulink
+  url="http://www.w3.org/TR/REC-png">http://www.w3.org/TR/REC-png</ulink></para>
+  </listitem>
+  <listitem>
+  <para>MD5 hash algorithm: <ulink
+  url="http://community.roxen.com/developers/idocs/rfc/rfc1321.html">http://community.roxen.com/developers/idocs/rfc/rfc1321.html</ulink>
+  </para>
+  </listitem>
+  </itemizedlist>
+  </sect1>
+</article>
+
+
+
