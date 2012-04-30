@@ -3,8 +3,8 @@
 <article id="index">
   <artheader>
     <title>Thumbnail Managing Standard</title>
-    <releaseinfo>Version 0.7.0</releaseinfo>
-    <date>September 2004</date>
+    <releaseinfo>Version 0.8.0</releaseinfo>
+    <date>May 2012</date>
     <authorgroup>
       <author>
 	<firstname>Jens</firstname>
@@ -30,6 +30,13 @@
   <sect1 id="history">
     <title>History</title>
     <itemizedlist>
+    <listitem><para>May 2012, Version 0.8.0</para>
+      <itemizedlist>
+      <listitem><para>Modified to respect the
+        <ulink url="http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html">XDG
+        Base Directory Specification</ulink></para></listitem>
+      </itemizedlist>
+    </listitem>
     <listitem><para>September 2004, Version 0.7.0</para>
       <itemizedlist>
       <listitem><para>Added readonly support for shared thumbnail repositories</para></listitem>
@@ -166,20 +173,24 @@
   <sect1 id="directory">
     <title>Thumbnail Directory</title>
 
-    <para> There exists exactly one place where all generated thumbnails will
-       be stored. This is the .thumbnails directory located in the users
-       home. </para>
+    <para> For every user, there must be exactly one place where all generated thumbnails are
+       stored. This thumbnails directory is located in the user's
+       XDG Cache Home, as defined by the
+       <ulink url="http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html">XDG
+       Base Directory Specification</ulink>. Namely, if the environment variable $XDG_CACHE_HOME
+       is set and not blank then the directory $XDG_CACHE_HOME/thumbnails will be used, otherwise
+       $HOME/.cache/thumbnails will be used.
+    </para>
 
     <sect2 id="dirstructure"><title>Directory Structure</title>
 
-    <para> Within this dir there are living some other subdirectories showing
-       in the following listing:
+    <para> The thumbnails directory will have the following internal structure:
        </para>
        <programlisting>
-~/.thumbnails/
-~/.thumbnails/normal
-~/.thumbnails/large/
-~/.thumbnails/fail/
+$XDG_CACHE_HOME/thumbnails/
+$XDG_CACHE_HOME/thumbnails/normal
+$XDG_CACHE_HOME/thumbnails/large/
+$XDG_CACHE_HOME/thumbnails/fail/
        </programlisting>
       <para> The meaning of the directories are as follows:</para>
       <itemizedlist>
@@ -417,7 +428,7 @@
     <listitem>
     <para>To get the final filename for the thumbnail just append a '.png' to
     the hash string. According to the dimension of the thumbnail you must store
-    the result either in ~/.thumbnails/normal or ~/.thumbnails/large.
+    the result either in $XDG_CACHE_HOME/thumbnails/normal or $XDG_CACHE_HOME/thumbnails/large.
     </para>
     </listitem>
     </orderedlist>
@@ -428,19 +439,19 @@
     <para>
     Consider we have a file ~/photos/me.png. We want to create a thumbnail with
     a size of 128x128 pixel for it, which means it will be stored in the
-    ~/.thumbnails/normal directory. The absolute canonical URI for the file in
+    $XDG_CACHE_HOME/thumbnails/normal directory. The absolute canonical URI for the file in
     this example is file:///home/jens/photos/me.png.
     </para>
     <para>The MD5 hash for the uri as a hex string is
     c6ee772d9e49320e97ec29a7eb5b1697. Following the steps above this
     results in the following final thumbnail path:</para>
 <programlisting>
-/home/jens/.thumbnails/normal/c6ee772d9e49320e97ec29a7eb5b1697.png
+/home/jens/.cache/thumbnails/normal/c6ee772d9e49320e97ec29a7eb5b1697.png
 </programlisting>
     </example>
 
     <sect2><title>Permissions</title> <para>A few words regarding permissions:
-    All the directories including the ~/.thumbnails directory must have set
+    All the directories including the $XDG_CACHE_HOME/thumbnails directory must have set
     their permissions to 700 (this means only the owner has read, write and
     execute permissions, see "man chmod" for details). Similar, all the files
     in the thumbnail directories should have set their permissions to 600. This
@@ -586,7 +597,7 @@ if (file.mtime != thumb.MTime) {
        section there is already a 'fail' directory mentioned, which should be
        used for this. Every program must create a directory of it's own there
        with the name of the program appended by the version number
-       (eg. <prompt>~/.thumbnails/fail/nautilus-1.0</prompt>).</para>
+       (eg. <prompt>$XDG_CACHE_HOME/thumbnails/fail/nautilus-1.0</prompt>).</para>
 
     <para> For every thumbnail generation failure the program creates an empty
        PNG file. If it's possible to obtain some additional information from
@@ -596,7 +607,7 @@ if (file.mtime != thumb.MTime) {
        set.  The procedure for the saving of such a fail image is the same as
        described in <link linkend="thumbsave">Thumbnail Saving</link>. You must
        only use the application specific directory within
-       <prompt>~./thumbnails/fail</prompt> instead of the size specific ones.
+       <prompt>$XDG_CACHE_HOME/thumbnails/fail</prompt> instead of the size specific ones.
        </para>
     <para>This approach has the advantage that a program can access information
        about a thumbnail creation failure the same way as it does with
