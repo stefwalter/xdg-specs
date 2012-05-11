@@ -213,7 +213,7 @@
    
    <sect1 id="creation"> <title>Thumbnail Creation</title> 
 
-     <sect2><title>Fileformat</title>
+     <sect2><title>File format</title>
 
      <para> The image format for thumbnails is the <ulink
         url="http://www.w3.org/TR/REC-png">PNG format</ulink>, regardless in
@@ -611,12 +611,12 @@ if (file.mtime != thumb.MTime) {
      instead). There are different ways how this can be achieved:</para>
      <orderedlist>
      <listitem>
-     <para>If a filemanger is aware of this standard and deletes a file it
+     <para>If a file manager is aware of this standard and deletes a file it
        could take care of deleting the thumbnail too.</para>
      </listitem>
      <listitem>
      <para>A daemon runs in the background which cleans up the cache in certain
-       intervalls.</para>
+       intervals.</para>
      </listitem>
      <listitem>
      <para>The user can call a managing tool which lists all the thumbnails
