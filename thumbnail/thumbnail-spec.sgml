@@ -234,6 +234,15 @@ $XDG_CACHE_HOME/thumbnails/fail/
         possible quality when creating the thumbnail. The exact meaning of this
         is left to the specific program but it should consider applying
         antialiasing.</para>
+
+     <para>If the original file contains metadata affecting the interpretation
+        of the image, it should be respected as much as possible. In particular,
+        metadata specifying the orientation of the original image data should
+        always be respected. The image data should be transformed as specified by the
+        metadata before generating the thumbnail. JPEG files commonly have Exif
+        orientation tags. TIFF files may also have Exif orientation tags, although
+        this is less common. It is less critical, but still desirable, to respect
+        other image metadata, such as white balance information.</para>
      </sect2>
 
      <sect2 id="addinfos"><title>Thumbnail Attributes</title> 
