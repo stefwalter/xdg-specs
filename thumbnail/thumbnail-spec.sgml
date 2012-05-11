@@ -467,6 +467,12 @@ $XDG_CACHE_HOME/thumbnails/fail/
     way we assure that if a user creates a thumbnail for a file where only he
     has read-permissions no other user can take a glance on it through the
     backdoor with the thumbnails.</para> 
+
+    <para>Programs should first check that the original image file is readable.
+    If it is not, the program should not attempt to read a thumbnail from the
+    cache, and it should not save any information in the cache (including
+    "failed" thumbnails). Otherwise, thumbnailing will be prevented even if the
+    permissions are changed to permit reading.</para>
     </sect2>
 
     <sect2><title>Concurrent Thumbnail Creation</title> <para>An important goal
@@ -608,7 +614,7 @@ if (file.mtime != thumb.MTime) {
        with the name of the program appended by the version number
        (eg. <prompt>$XDG_CACHE_HOME/thumbnails/fail/nautilus-1.0</prompt>).</para>
 
-    <para> For every thumbnail generation failure the program creates an empty
+    <para> For every thumbnail generation failure of a readable image, the program creates an empty
        PNG file. If it's possible to obtain some additional information from
        the image (see <link linkend="addinfos">Store Additional
        Information</link>) they should be stored together with the thumbnail
