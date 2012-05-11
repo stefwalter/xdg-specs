@@ -222,7 +222,7 @@
         255 possible alpha values). However, every program should use the best
         possible quality when creating the thumbnail. The exact meaning of this
         is left to the specific program but it should consider applying
-        antialising.</para>
+        antialiasing.</para>
      </sect2>
 
      <sect2 id="addinfos"><title>Thumbnail Attributes</title> 
