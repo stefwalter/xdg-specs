@@ -1877,7 +1877,7 @@
 
 	      </row><row>
 		<entry>Geoscience</entry>
-		<entry>Geoscience software</entry>
+		<entry>Geoscience software, GIS</entry>
 		<entry>Education or Science</entry>
 
 	      </row><row>
@@ -1899,6 +1899,11 @@
 		<entry>Literature</entry>
 		<entry>Literature software</entry>
 		<entry>Education or Science</entry>
+
+	      </row><row>
+		<entry>Maps</entry>
+		<entry>Sofware for viewing maps, navigation, mapping, GPS</entry>
+		<entry>Education or Science or Utility</entry>
 
 	      </row><row>
 		<entry>Math</entry>
