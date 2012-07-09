@@ -1418,6 +1418,10 @@
 		<entry>An office type application</entry>
 		<entry/>
 	      </row><row>
+		<entry>Science</entry>
+		<entry>Scientific software</entry>
+		<entry/>
+	      </row><row>
 		<entry>Settings</entry>
 		<entry>Settings applications</entry>
 		<entry>Entries may appear in a separate menu or as part of a
@@ -1819,11 +1823,6 @@
 	      </row><row>
 		<entry>Languages</entry>
 		<entry>Software to learn foreign languages</entry>
-		<entry>Education</entry>
-
-	      </row><row>
-		<entry>Science</entry>
-		<entry>Scientific software</entry>
 		<entry>Education</entry>
 
 	      </row><row>
