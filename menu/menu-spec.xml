@@ -1808,12 +1808,12 @@
 	      </row><row>
 		<entry>Art</entry>
 		<entry>Software to teach arts</entry>
-		<entry>Education</entry>
+		<entry>Education or Science</entry>
 
 	      </row><row>
 		<entry>Construction</entry>
 		<entry></entry>
-		<entry>Education</entry>
+		<entry>Education or Science</entry>
 
 	      </row><row>
 		<entry>Music</entry>
@@ -1823,7 +1823,7 @@
 	      </row><row>
 		<entry>Languages</entry>
 		<entry>Software to learn foreign languages</entry>
-		<entry>Education</entry>
+		<entry>Education or Science</entry>
 
 	      </row><row>
 		<entry>ArtificialIntelligence</entry>
@@ -1858,7 +1858,7 @@
 	      </row><row>
 		<entry>Economy</entry>
 		<entry>Economy software</entry>
-		<entry>Education</entry>
+		<entry>Education or Science</entry>
 
 	      </row><row>
 		<entry>Electricity</entry>
@@ -1868,7 +1868,7 @@
 	      </row><row>
 		<entry>Geography</entry>
 		<entry>Geography software</entry>
-		<entry>Education</entry>
+		<entry>Education or Science</entry>
 
 	      </row><row>
 		<entry>Geology</entry>
@@ -1883,7 +1883,7 @@
 	      </row><row>
 		<entry>History</entry>
 		<entry>History software</entry>
-		<entry>Education</entry>
+		<entry>Education or Science</entry>
 
 	      </row><row>
 		<entry>Humanities</entry>
@@ -1898,7 +1898,7 @@
 	      </row><row>
 		<entry>Literature</entry>
 		<entry>Literature software</entry>
-		<entry>Education</entry>
+		<entry>Education or Science</entry>
 
 	      </row><row>
 		<entry>Math</entry>
@@ -1933,7 +1933,7 @@
 	      </row><row>
 		<entry>Sports</entry>
 		<entry>Sports software</entry>
-		<entry>Education</entry>
+		<entry>Education or Science</entry>
 
 	      </row><row>
 		<entry>ParallelComputing</entry>
