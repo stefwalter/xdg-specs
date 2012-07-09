@@ -1887,6 +1887,11 @@
 		<entry>Education</entry>
 
 	      </row><row>
+		<entry>Humanities</entry>
+		<entry>Software for philosophy, psychology and other humanities</entry>
+		<entry>Education or Science</entry>
+
+	      </row><row>
 		<entry>ImageProcessing</entry>
 		<entry>Image Processing software</entry>
 		<entry>Education or Science</entry>
@@ -1920,6 +1925,11 @@
 		<entry>Robotics</entry>
 		<entry>Robotics software</entry>
 		<entry>Education or Science</entry>
+
+	      </row><row>
+		<entry>Spirituality</entry>
+		<entry>Religious and spiritual software, theology</entry>
+		<entry>Education or Science or Utility</entry>
 
 	      </row><row>
 		<entry>Sports</entry>
