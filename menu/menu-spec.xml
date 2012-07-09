@@ -1651,6 +1651,11 @@
 		<entry>Network</entry>
 
 	      </row><row>
+		<entry>Feed</entry>
+		<entry>RSS, podcast and other subscription based contents</entry>
+		<entry>Network</entry>
+
+	      </row><row>
 		<entry>FileTransfer</entry>
 		<entry>Tools like FTP or P2P programs</entry>
 		<entry>Network</entry>
