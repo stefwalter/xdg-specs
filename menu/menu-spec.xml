@@ -1509,7 +1509,7 @@
 	      </row><row>
 		<entry>Dictionary</entry>
 		<entry>A dictionary</entry>
-		<entry>Office;TextTools</entry>
+		<entry>Office or TextTools</entry>
 
 	      </row><row>
 		<entry>Chart</entry>
@@ -1519,7 +1519,7 @@
 	      </row><row>
 		<entry>Email</entry>
 		<entry>Email application</entry>
-		<entry>Office;Network</entry>
+		<entry>Office or Network</entry>
 
 	      </row><row>
 		<entry>Finance</entry>
@@ -1539,7 +1539,7 @@
 	      </row><row>
 		<entry>ProjectManagement</entry>
 		<entry>Project management application</entry>
-		<entry>Office;Development</entry>
+		<entry>Office or Development</entry>
 
 	      </row><row>
 		<entry>Presentation</entry>
@@ -1814,7 +1814,7 @@
 	      </row><row>
 		<entry>Music</entry>
 		<entry>Musical software</entry>
-		<entry>AudioVideo;Education</entry>
+		<entry>AudioVideo or Education</entry>
 
 	      </row><row>
 		<entry>Languages</entry>
@@ -1829,32 +1829,32 @@
 	      </row><row>
 		<entry>ArtificialIntelligence</entry>
 		<entry>Artificial Intelligence software</entry>
-		<entry>Education;Science</entry>
+		<entry>Education or Science</entry>
 
 	      </row><row>
 		<entry>Astronomy</entry>
 		<entry>Astronomy software</entry>
-		<entry>Education;Science</entry>
+		<entry>Education or Science</entry>
 
 	      </row><row>
 		<entry>Biology</entry>
 		<entry>Biology software</entry>
-		<entry>Education;Science</entry>
+		<entry>Education or Science</entry>
 
 	      </row><row>
 		<entry>Chemistry</entry>
 		<entry>Chemistry software</entry>
-		<entry>Education;Science</entry>
+		<entry>Education or Science</entry>
 
 	      </row><row>
 		<entry>ComputerScience</entry>
 		<entry>ComputerSience software</entry>
-		<entry>Education;Science</entry>
+		<entry>Education or Science</entry>
 
 	      </row><row>
 		<entry>DataVisualization</entry>
 		<entry>Data visualization software</entry>
-		<entry>Education;Science</entry>
+		<entry>Education or Science</entry>
 
 	      </row><row>
 		<entry>Economy</entry>
@@ -1864,7 +1864,7 @@
 	      </row><row>
 		<entry>Electricity</entry>
 		<entry>Electricity software</entry>
-		<entry>Education;Science</entry>
+		<entry>Education or Science</entry>
 
 	      </row><row>
 		<entry>Geography</entry>
@@ -1874,12 +1874,12 @@
 	      </row><row>
 		<entry>Geology</entry>
 		<entry>Geology software</entry>
-		<entry>Education;Science</entry>
+		<entry>Education or Science</entry>
 
 	      </row><row>
 		<entry>Geoscience</entry>
 		<entry>Geoscience software</entry>
-		<entry>Education;Science</entry>
+		<entry>Education or Science</entry>
 
 	      </row><row>
 		<entry>History</entry>
@@ -1889,7 +1889,7 @@
 	      </row><row>
 		<entry>ImageProcessing</entry>
 		<entry>Image Processing software</entry>
-		<entry>Education;Science</entry>
+		<entry>Education or Science</entry>
 
 	      </row><row>
 		<entry>Literature</entry>
@@ -1899,27 +1899,27 @@
 	      </row><row>
 		<entry>Math</entry>
 		<entry>Math software</entry>
-		<entry>Education;Science</entry>
+		<entry>Education or Science</entry>
 
 	      </row><row>
 		<entry>NumericalAnalysis</entry>
 		<entry>Numerical analysis software</entry>
-		<entry>Education;Science;Math</entry>
+		<entry>Education;Math or Science;Math</entry>
 
 	      </row><row>
 		<entry>MedicalSoftware</entry>
 		<entry>Medical software</entry>
-		<entry>Education;Science</entry>
+		<entry>Education or Science</entry>
 
 	      </row><row>
 		<entry>Physics</entry>
 		<entry>Physics software</entry>
-		<entry>Education;Science</entry>
+		<entry>Education or Science</entry>
 
 	      </row><row>
 		<entry>Robotics</entry>
 		<entry>Robotics software</entry>
-		<entry>Education;Science</entry>
+		<entry>Education or Science</entry>
 
 	      </row><row>
 		<entry>Sports</entry>
@@ -1929,7 +1929,7 @@
 	      </row><row>
 		<entry>ParallelComputing</entry>
 		<entry>Parallel computing software</entry>
-		<entry>Education;Science;ComputerScience</entry>
+		<entry>Education;ComputerScience or Science;ComputerScience</entry>
 
 	      </row><row>
 		<entry>Amusement</entry>
