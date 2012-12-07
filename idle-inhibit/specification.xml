@@ -1,0 +1,114 @@
+<?xml version="1.0"?>
+<book xml:id="index" xmlns="http://docbook.org/ns/docbook" version="5.0">
+	<bookinfo>
+		<title>Idle Inhibition Service Draft</title>
+		<releaseinfo>
+			Idle Inhibition Service 0.1 DRAFT
+		</releaseinfo>
+
+		<authorgroup>
+		<author>
+			<firstname>Bastien</firstname>
+			<surname>Nocera</surname>
+			<affiliation>
+				<jobtitle>GNOME core Developer</jobtitle>
+				<address>
+					<email>hadess@hadess.net</email>
+				</address>
+			</affiliation>
+		</author>
+		</authorgroup>
+
+		<copyright>
+			<year>2012</year>
+			<holder>The Idle Inhibition Service API Authors</holder>
+		</copyright>
+
+	</bookinfo>
+
+	<part xml:id="description">
+		<title>API Documentation</title>
+		<chapter xml:id="introduction">
+			<title>Introduction</title>
+
+			<para>The Idle Inhibition Service API allows client applications to inhibit a
+				user's login session from becoming idle.</para>
+
+			<para>The service is usually implemented by the session manager, or anothe daemon
+			running inside the user's session, and communicating with the platform software
+			to avoid the idle, and the consequences of becoming idle.</para>
+
+			<para>This API was designed by GNOME and KDE developers with the goal of having
+			a common way to inhibit idleness.</para>
+		</chapter>
+
+		<chapter xml:id="consequences">
+			<title>Consequences of idleness</title>
+
+			<para>Depending on the user session software running, idleness can have multiple
+			consequences, including, but not limited to:
+			<segmentedlist>
+				<?dbhtml list-presentation="list"?>
+				<seglistitem>Screen backlight dimming</seglistitem>
+				<seglistitem>Screensaver animation replacing the desktop content</seglistitem>
+				<seglistitem>Instant messenging client going to "auto-away"</seglistitem>
+				<seglistitem>Computer suspending or hibernating</seglistitem>
+			</segmentedlist>
+			</para>
+
+			<para>Inhibiting idleness is supposed to stop all those actions from taking place, specifically
+			in response to idleness. A user action asking for any of those states would obviously
+			be acted upon witout delay.</para>.
+
+		</chapter>
+
+		<chapter xml:id='api'>
+			<title>API documentation</title>
+
+			<para>Idle inhibition is achieved by the application calling an
+			<link linked="org.freedesktop.ScreenSaver.Inhibit"><function>Inhibit</function></link>
+			function on a well-known D-Bus name.</para>
+
+			<para>Inhibition will stop when the <link linked="org.freedesktop.ScreenSaver.UnInhibit"><function>
+			UnInhibit</function></link> function is called, or the application disconnects from the D-Bus
+			session bus (which usually happens upon exit).</para>
+		</chapter>
+
+		<chapter>
+			<title>API notes</title>
+
+			<para>The D-Bus service name is intentionally, as KDE implements the idle inhibition
+			API in a screensaver sub-module. It was necessary for the specificed Idle Inhibition
+			Service API to be compatible with this existing software.</para>
+
+			<para>For the same reasons, inhibition of suspend, hibernation, or user-switching (amongst
+			others) is not supported in the API.</para>
+		</chapter>
+
+	</part>
+
+	<part xml:id="ref-dbus-api">
+		<title>D-Bus API Reference</title>
+
+		<xi:include href="reference.xml" xpointer="interfaces" xmlns:xi="http://www.w3.org/2001/XInclude">
+			<xi:fallback/>
+		</xi:include>
+
+	</part>
+
+	<bibliography>
+		<title>References</title>
+
+		<bibliomixed>
+			<abbrev>kde-api</abbrev>
+			<ulink url="https://projects.kde.org/projects/kde/kde-workspace/repository/revisions/master/entry/ksmserver/screenlocker/dbus/org.freedesktop.ScreenSaver.xml">KDE Screenlocker D-Bus API</ulink>
+		</bibliomixed>
+
+		<bibliomixed>
+			<abbrev>gnome-impl</abbrev>
+			<ulink url="http://git.gnome.org/browse/gnome-settings-daemon/tree/plugins/screensaver-proxy">GNOME org.freedesktop.ScreenSaver proxy implementation</ulink>
+		</bibliomixed>
+
+	</bibliography>
+
+</book>
