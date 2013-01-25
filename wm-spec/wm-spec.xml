@@ -1578,6 +1578,29 @@ Rationale: This gives the compositing manager more room for optimizations.
 For example, it can avoid drawing occluded portions behind the window.
         </para>
         </sect2>
+        <sect2><title>_NET_WM_BYPASS_COMPOSITOR</title>
+        <programlisting><![CDATA[
+_NET_WM_BYPASS_COMPOSITOR, CARDINAL/32
+]]></programlisting>
+        <para>
+The Client MAY set this property to hint the compositor that the
+window would benefit from running uncomposited (i.e not redirected
+offscreen) or that the window might be hurt from being uncomposited.
+A value of 0 indicates no preference. A value of 1 hints the
+compositor to disabling compositing of this window. A value of 2 hints
+the compositor to not disabling compositing of this window. All other
+values are reserved and should be treated the same as a value of
+0. The compositing manager MAY bypass compositing for both fullscreen
+and non-fullscreen windows if bypassing is requested, but MUST NOT
+bypass if it would cause differences from the composited appearance.
+        </para>
+        <para>
+Rationale: Some applications like fullscreen games might want run
+without the overhead of being redirected offscreen (to avoid extra
+copies) and thus perform better. An application which creates
+pop-up windows might always want to run composited to avoid exposes.
+        </para>
+       </sect2>
 </sect1>
 <sect1>
 	<title>Window Manager Protocols</title>
@@ -2283,6 +2306,9 @@ OR OTHER DEALINGS IN THE SOFTWARE.
 	    <sect2>
 		<title>Changes since 1.4draft</title>
 		<itemizedlist>
+			<listitem><para>
+Added _NET_WM_BYPASS_COMPOSITOR
+			</para></listitem>
 			<listitem><para>
 Added _NET_WM_STATE_FOCUSED.
 			</para></listitem>
