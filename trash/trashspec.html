@@ -14,11 +14,12 @@
 </HEAD>
 <BODY LANG="en-US" DIR="LTR">
 <H1>The FreeDesktop.org Trash specification</H1>
-<H3>Written by Mikhail Ramendik &lt;<A HREF="mailto:mr@ramendik.ru">mr@ramendik.ru</A>&gt;</H3>
+<H3>Initial version written by Mikhail Ramendik &lt;<A HREF="mailto:mr@ramendik.ru">mr@ramendik.ru</A>&gt;</H3>
 <H3>Content by David Faure &lt;<A HREF="mailto:faure@kde.org">faure@kde.org</A>&gt;,
-Alexander Larsson &lt;<A HREF="mailto:alexl@redhat.com">alexl@redhat.com</A>&gt;
+Alexander Larsson &lt;<A HREF="mailto:alexl@redhat.com">alexl@redhat.com</A>&gt;,
+Ryan Lortie &lt;<A HREF="mailto:desrt@desrt.ca">desrt@desrt.ca</A>&gt;
 and others on the FreeDesktop.org mailing list</H3>
-<H3>Version 0.8</H3>
+<H3>Version 1.0</H3>
 <H2>Abstract</H2>
 <P>The purpose of this Specification is to provide a common way in
 which all &ldquo;Trash can&rdquo; implementations should store, list,
@@ -236,7 +237,7 @@ both of them).</P>
 directories. This section concerns the contents of any trash
 directory (including the &ldquo;home trash&rdquo; directory). This
 trash directory will be named &ldquo;$trash&rdquo; here.</P>
-<P>A trash directory contains two subdirectories, named <B>info </B>and
+<P>A trash directory contains two subdirectories, named <B>info</B> and
 <B>files</B>.</P>
 <P>The <B>$trash/files</B> directory contains the files and
 directories that were trashed. When a file or directory is trashed,
@@ -358,14 +359,65 @@ sites and CIFS shares. In systems implementing this specification,
 trashing of files from such machines is to be done only to the user's
 home trash directory (if at all). A future version may address this
 limitation.</P>
+<H2>Directory size cache</H2>
+<P>In order to speed up the calculation of the total size of a given trash directory,
+implementations (since version 1.0 of this specification) SHOULD create or update the
+<B>$trash/directorysizes</B> file, which is a cache of the sizes of the directories
+that were trashed into this trash directory.
+Individual trashed files are not present in this cache, since their size can be determined
+with a call to stat().</P>
+<P>Each entry contains the name and size of the trashed directory, as well as the modification
+time of the corresponding <B>trashinfo file</B> (IMPORTANT: not the modification time of the directory itself)<A CLASS="sdfootnoteanc" NAME="sdfootnote9anc" HREF="#sdfootnote9sym"><SUP>9</SUP></A>.</P>
+<P>The size is calculated to be the disk space used by the directory and its
+contents, i.e. the size of the blocks, in bytes (like `du -B1` would calculate).</P>
+<P>The modification time is stored as an integer, the number of seconds since Epoch. Implementations should use at least 64 bits for this number in memory.</P>
+<P>The format of the &ldquo;directorysizes&rdquo; file is a simple text-based format, where each line is:</P>
+<PRE>
+[size] [mtime] [percent-encoded-directory-name]
+</PRE>
+<P>Example:</P>
+<PRE>
+16384 15803468 Documents
+8192 15803582 Another_Folder
+</PRE>
+<P>The last entry on each line is the name of the trashed directory, stored as the
+sequence of bytes produced by the file system, with characters escaped
+as in URLs (as defined by <A HREF="http://www.faqs.org/rfcs/rfc2396.html">RFC 2396</A>, section 2).
+Strictly speaking, percent-encoding is really only necessary for the newline character and for '%' itself.
+Encoding all control characters or fully applying RFC 2396 for consistency with trashinfo files
+is perfectly valid, however.</P>
+<P>The character '/' is not allowed in the directory name (even as %2F), since all these
+directories must be direct children of the "files" directory, and absolute paths are not allowed.</P>
+<P>Implementations MUST use a temporary file followed by an atomic rename() operation in order
+to avoid corruption due to two implementations writing to the file at the same time. The fact
+that the changes from one of the writers could get lost isn't an issue, the cache can be updated again
+later on to add that entry.</P>
+
+<H2>Non-normative: suggested algorithm for calculating the size of a trash directory</H2>
+
+<PRE>
+load directorysizes file into memory, e.g. a hash directory_name -&gt; (size, mtime, seen=false)
+totalsize = 0
+list "files" directory, and for each item:
+    stat the item
+    if a file:
+        totalsize += file size
+    if a directory:
+        stat the trashinfo file to get its mtime
+        lookup entry in hash
+        if no entry found or entry's cached mtime != trashinfo's mtime:
+            calculate directory size (from disk)
+            totalsize += calculated size
+            add/update entry in hash (size of directory, trashinfo's mtime, seen=true)
+        else:
+            totalsize += entry's cached size
+            update entry in hash to set seen=true
+done
+remove entries from hash which have (seen == false)
+write out hash back to directorysizes file
+</PRE>
+
 <H2>Administrativia</H2>
-<H3>Status of this document</H3>
-<P>This document is, at this moment, only a draft. It will hopefully
-become an official or semi-official FreeDesktop.org specification in
-the future.</P>
-<P>Date of first public distribution: August 30, 2004. This document
-will serve as evidence of prior art for any patent filed after this
-date.</P>
 <H3>Copyright and License</H3>
 <P>Copyright (C) 2004 Mikhail Ramendik , <A HREF="mailto:mr@ramendik.ru">mr@ramendik.ru</A>
 . 
@@ -404,6 +456,7 @@ document on the freedesktop.org standards page</P>
 <P>0.7 April 12, 2005. Added URL-style encoding for the name of the deleted file,
 as implemented in KDE 3.4</P>
 <P>0.8 March 14, 2012. Update David Faure's email address, fix permanent URL for this spec.</P>
+<P>1.0 April 16, 2013. Add directorysizes cache.</p>
 <P><BR><BR>
 </P>
 <DIV ID="sdfootnote1">
@@ -449,6 +502,12 @@ as implemented in KDE 3.4</P>
 <DIV ID="sdfootnote8">
 	<P CLASS="sdfootnote" STYLE="margin-bottom: 0.5cm"><A CLASS="sdfootnotesym" NAME="sdfootnote8sym" HREF="#sdfootnote8anc">8</A>This
 	provides for future extension</P>
+</DIV>
+<DIV ID="sdfootnote9">
+  <P CLASS="sdfootnote" STYLE="margin-bottom: 0.5cm"><A CLASS="sdfootnotesym" NAME="sdfootnote9sym" HREF="#sdfootnote9anc">9</A>Rationale:
+  if an older trash implementation restores a trashed directory, adds files to a nested subdir and trashes it again,
+  the modification time of the directoy didn't change, so it is not a good indicator. However the modification time
+  of the trashinfo file will have changed, since it is always the time of the actual trashing operation.</P>
 </DIV>
 </BODY>
 </HTML>
