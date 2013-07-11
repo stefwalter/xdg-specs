@@ -1023,25 +1023,6 @@ application/x-bar=bar.desktop;</programlisting>
               <entry>NO</entry>
             </row>
             <row>
-              <entry id="key-action-group-osi-nsi">
-                <varname>OnlyShowIn</varname>, <varname>NotShowIn</varname>
-              </entry>
-              <entry>
-                A list of strings identifying the environments that should
-                display/not display this specific action. These keys are to be
-                interpreted in addition to the <varname>OnlyShowIn</varname>
-                and <varname>NotShowIn</varname> keys of the <varname>Desktop
-                Entry</varname> group, and are not replacing them. Only one of
-                these keys, either <varname>OnlyShowIn</varname> or
-                <varname>NotShowIn</varname>, may appear in each action group
-                (for possible values see the <ulink
-                url="http://www.freedesktop.org/Standards/menu-spec">Desktop
-                Menu Specification</ulink>).
-              </entry>
-              <entry>string(s)</entry>
-              <entry>NO</entry>
-            </row>
-            <row>
               <entry id="key-action-group-exec"><varname>Exec</varname></entry>
               <entry>
                 Program to execute for this action, possibly with arguments.  See the
