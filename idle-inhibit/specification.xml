@@ -63,19 +63,25 @@
 		</chapter>
 
 		<chapter xml:id='api'>
-			<title>API documentation</title>
+			<title>API overview</title>
 
 			<para>Idle inhibition is achieved by the application calling an
 			<link linked="org.freedesktop.ScreenSaver.Inhibit"><function>Inhibit</function></link>
-			function on a well-known D-Bus name.</para>
+			method on a well-known D-Bus name.</para>
 
 			<para>Inhibition will stop when the <link linked="org.freedesktop.ScreenSaver.UnInhibit"><function>
-			UnInhibit</function></link> function is called, or the application disconnects from the D-Bus
+			UnInhibit</function></link> method is called, or the application disconnects from the D-Bus
 			session bus (which usually happens upon exit).</para>
+
+			<para>Implementations of this well-known bus name must have an object
+			/org/freedesktop/ScreenSaver which implements the
+			<link linkend='org.freedesktop.ScreenSaver'>org.freedesktop.ScreenSaver</link> interface.
+			</para>
+
 		</chapter>
 
 		<chapter>
-			<title>API notes</title>
+			<title>Design notes</title>
 
 			<para>The D-Bus service name, org.freedesktop.ScreenSaver, intentionally contains
 			the word screensaver, as KDE implements the idle inhibition API in a screensaver
