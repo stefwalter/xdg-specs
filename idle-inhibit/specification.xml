@@ -88,6 +88,10 @@
 			sub-module. It was necessary for the specificed Idle Inhibition Service API to be
 			compatible with this existing software.</para>
 
+			<para>KDE's current (as of writing) implementation lives on the
+			/ScreenSaver object, not on /org/freedesktop/ScreenSaver as described in
+			this specification.</para>
+
 			<para>For the same reasons, inhibition of suspend, hibernation, or user-switching (amongst
 			others) is not supported in the API.</para>
 		</chapter>
