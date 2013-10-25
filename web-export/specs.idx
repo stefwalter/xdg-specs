@@ -30,6 +30,8 @@ git:xdg/default-icon-theme:spec/icon-naming-spec.xml    1dc55c9db340a7d0a9ac84e1
 # Invalid docbook:
 #git:xdg/default-icon-theme:spec/icon-naming-spec.xml    db9bb955c0cf20322b149676b908ecd69929d2f1          0.3  icon-naming-spec
 
+git:xdg/xdg-specs:idle-inhibit/specification.xml       master                                            0.1   idle-inhibit-spec
+
 git:xdg/default-icon-theme:spec/icon-theme-spec.xml    e54ef4b65ae0eab72ffe23e18a470072e1719471          0.12  icon-theme-spec
 git:xdg/default-icon-theme:spec/icon-theme-spec.xml    f09150e444382a18d147ef45afa9310e2e27c713          0.11  icon-theme-spec
 git:xdg/default-icon-theme:spec/icon-theme-spec.xml    37f3118e81954b2171a333614901a0b74c295edc          0.10  icon-theme-spec
