@@ -85,7 +85,7 @@ git:xdg/xdg-specs:systemtray/systemtray-spec.xml			c8475bef1d1f84afcc89c710b6b5b
 git:xdg/xdg-specs:thumbnail/thumbnail-spec.sgml			master	0.8.0	thumbnail-spec
 git:xdg/xdg-specs:thumbnail/thumbnail-spec.sgml			27347f5fe2c06fe95f19a041941036a9f7413a08	0.7.0	thumbnail-spec
 
-git:xdg/xdg-specs:trash/trashspec.html			082d2aba7792882e09f87ffe2bf3a3ae6c7e390b	0.8	trash-spec
+git:xdg/xdg-specs:trash/trashspec.html			master		1.0	trash-spec
 
 git:xdg/xdg-specs:wm-spec/wm-spec.xml			master		1.5	wm-spec
 git:xdg/xdg-specs:wm-spec/wm-spec.xml			a95af55a102b0814e81095bda46a691068009c3c		1.4	wm-spec
