@@ -4,8 +4,8 @@
 <article id="index">
   <articleinfo>
     <title>Desktop Entry Specification</title>
-    <releaseinfo>Version 1.1-draft</releaseinfo>
-	<date>4 Mar 2008</date>
+    <releaseinfo>Version 1.2</releaseinfo>
+	<date>1 Apr 2014</date>
     <authorgroup>
       <author>
 	<firstname>Preston</firstname>
@@ -214,9 +214,10 @@
     <para>
       Some keys can have multiple values. In such a case, the value of the key
       is specified as a plural: for example, <literal>string(s)</literal>. The
-      multiple values should be separated by a semicolon, and the value of the
-      key should have a semicolon as trailing character. Semicolons in these
-      values need to be escaped using <literal>\;</literal>.
+      multiple values should be separated by a semicolon and the value of the
+      key may be optionally terminated by a semicolon. Trailing empty strings
+      must always be terminated with a semicolon. Semicolons in these values
+      need to be escaped using <literal>\;</literal>.
     </para>
   </sect1>
   <sect1 id="localized-keys">
