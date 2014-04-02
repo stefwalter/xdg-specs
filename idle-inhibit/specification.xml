@@ -1,5 +1,7 @@
-<?xml version="1.0"?>
-<book xml:id="index" xmlns="http://docbook.org/ns/docbook" version="5.0">
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+]>
+<book xml:id="index" xmlns="http://docbook.org/ns/docbook">
 	<bookinfo>
 		<title>Idle Inhibition Service Draft</title>
 		<releaseinfo>
@@ -26,9 +28,9 @@
 
 	</bookinfo>
 
-	<part xml:id="description">
+	<part id="description">
 		<title>API Documentation</title>
-		<chapter xml:id="introduction">
+		<chapter id="introduction">
 			<title>Introduction</title>
 
 			<para>The Idle Inhibition Service API allows client applications to inhibit a
@@ -42,34 +44,33 @@
 			a common way to inhibit idleness.</para>
 		</chapter>
 
-		<chapter xml:id="consequences">
+		<chapter id="consequences">
 			<title>Consequences of idleness</title>
 
 			<para>Depending on the user session software running, idleness can have multiple
-			consequences, including, but not limited to:
-			<segmentedlist>
-				<?dbhtml list-presentation="list"?>
-				<seglistitem>Screen backlight dimming</seglistitem>
-				<seglistitem>Screensaver animation replacing the desktop content</seglistitem>
-				<seglistitem>Instant messenging client going to "auto-away"</seglistitem>
-				<seglistitem>Computer suspending or hibernating</seglistitem>
-			</segmentedlist>
+			  consequences, including, but not limited to:
+			<itemizedlist>
+			  <listitem><para>Screen backlight dimming</para></listitem>
+			  <listitem><para>Screensaver animation replacing the desktop content</para></listitem>
+			  <listitem><para>Instant messenging client going to "auto-away"</para></listitem>
+			  <listitem><para>Computer suspending or hibernating</para></listitem>
+			</itemizedlist>
 			</para>
 
 			<para>Inhibiting idleness is supposed to stop all those actions from taking place, specifically
 			in response to idleness. A user action asking for any of those states would obviously
-			be acted upon witout delay.</para>.
+			be acted upon witout delay.</para>
 
 		</chapter>
 
-		<chapter xml:id='api'>
+		<chapter id='api'>
 			<title>API overview</title>
 
 			<para>Idle inhibition is achieved by the application calling an
-			<link linked="org.freedesktop.ScreenSaver.Inhibit"><function>Inhibit</function></link>
+			<link linkend="org.freedesktop.ScreenSaver.Inhibit"><function>Inhibit</function></link>
 			method on a well-known D-Bus name.</para>
 
-			<para>Inhibition will stop when the <link linked="org.freedesktop.ScreenSaver.UnInhibit"><function>
+			<para>Inhibition will stop when the <link linkend="org.freedesktop.ScreenSaver.UnInhibit"><function>
 			UnInhibit</function></link> method is called, or the application disconnects from the D-Bus
 			session bus (which usually happens upon exit).</para>
 
@@ -98,7 +99,7 @@
 
 	</part>
 
-	<part xml:id="ref-dbus-api">
+	<part id="ref-dbus-api">
 		<title>D-Bus API Reference</title>
 
 		<xi:include href="reference.xml" xpointer="interfaces" xmlns:xi="http://www.w3.org/2001/XInclude">
@@ -107,19 +108,29 @@
 
 	</part>
 
-	<bibliography>
+	<part>
 		<title>References</title>
-
-		<bibliomixed>
-			<abbrev>kde-api</abbrev>
-			<ulink url="https://projects.kde.org/projects/kde/kde-workspace/repository/revisions/master/entry/ksmserver/screenlocker/dbus/org.freedesktop.ScreenSaver.xml">KDE Screenlocker D-Bus API</ulink>
-		</bibliomixed>
-
-		<bibliomixed>
-			<abbrev>gnome-impl</abbrev>
-			<ulink url="http://git.gnome.org/browse/gnome-settings-daemon/tree/plugins/screensaver-proxy">GNOME org.freedesktop.ScreenSaver proxy implementation</ulink>
-		</bibliomixed>
-
-	</bibliography>
+		<chapter>
+		<title>References</title>
+		<variablelist>
+			<varlistentry>
+				<term>kde-api</term>
+				<listitem>
+					<para>
+						<ulink url="https://projects.kde.org/projects/kde/kde-workspace/repository/revisions/master/entry/ksmserver/screenlocker/dbus/org.freedesktop.ScreenSaver.xml">KDE Screenlocker D-Bus API</ulink>
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>gnome-impl</term>
+				<listitem>
+					<para>
+						<ulink url="http://git.gnome.org/browse/gnome-settings-daemon/tree/plugins/screensaver-proxy">GNOME org.freedesktop.ScreenSaver proxy implementation</ulink>
+					</para>
+				</listitem>
+			</varlistentry>
+		</variablelist>
+		</chapter>
+	</part>
 
 </book>
