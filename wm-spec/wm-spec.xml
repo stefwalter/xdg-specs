@@ -1,7 +1,5 @@
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
 "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
-<!ENTITY version "Draft version 1.5.draft-1">
-<!ENTITY date "Fri November 29, 2011">
 ]>
 <article id="index">
 <articleinfo>
@@ -11,8 +9,8 @@
       </corpauthor>
       </authorgroup>
 <title>Extended Window Manager Hints</title>
-<date>&date;</date>
-<releaseinfo>&version;</releaseinfo>
+<pubdate>29 November 2011</pubdate>
+<releaseinfo>1.5</releaseinfo>
 </articleinfo>
 <sect1>
 	<title>Introduction</title>
