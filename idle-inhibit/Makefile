@@ -14,4 +14,4 @@ clean:
 	rm -f html/*.html
 
 upload: all
-	rsync -Hvax html/./ specs.freedesktop.org:/srv/specifications.freedesktop.org/www/idle-inhibition-service/./
+	rsync -Hvax html/./ specs.freedesktop.org:/srv/specifications.freedesktop.org/www/idle-inhibit-spec/latest/
