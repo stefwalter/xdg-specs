@@ -1,0 +1,98 @@
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+]>
+<article id="index">
+<articleinfo>
+   <authorgroup>
+    <corpauthor>
+      <ulink url="http://www.freedesktop.org">X Desktop Group</ulink>
+    </corpauthor>
+    <author>
+        <firstname>David</firstname>
+        <surname>Faure</surname>
+        <affiliation>
+          <address>
+            <email>faure@kde.org</email>
+          </address>
+        </affiliation>
+    </author>
+    </authorgroup>
+  <title>Association between MIME types and applications</title>
+  <pubdate>2 April 2014</pubdate>
+  <releaseinfo>1.0</releaseinfo>
+</articleinfo>
+<sect1>
+  <title>Introduction</title>
+  <para>The freedesktop.org <ulink url="http://www.freedesktop.org/wiki/Specifications/shared-mime-info-spec/">Shared MIME database</ulink> provides a single way to store static information about MIME types and rules for determining a type.</para>
+  <para>The freedesktop.org <ulink url="http://www.freedesktop.org/wiki/Specifications/desktop-entry-spec/">Desktop Entry specification</ulink> allows applications to announce which MIME types they support.</para>
+  <para>This specification solves the remaining issues: which application should open a file by default, how to let the user change the default application, and how to let the user add or remove associations between applications and mimetypes.</para>
+</sect1>
+<sect1 id="file">
+  <title>File name and location</title>
+  <para>Users, system administrators, application vendors et distributions can change associations between applications and mimetypes by writing into a file called mimeapps.list.</para>
+  <para>The lookup order for this file is as follows:</para>
+  <informaltable>
+    <tgroup cols="2">
+      <tbody>
+        <row>
+          <entry>$XDG_CONFIG_HOME/$xdc-mimeapps.list</entry><entry>user overrides, desktop-specific (for advanced users)</entry>
+        </row><row>
+          <entry>$XDG_CONFIG_HOME/mimeapps.list</entry><entry>user overrides (recommended location for user configuration GUIs)</entry>
+        </row><row>
+          <entry>$XDG_CONFIG_DIRS/$xdc-mimeapps.list</entry><entry>sysadmin and ISV overrides, desktop-specific</entry>
+        </row><row>
+          <entry>$XDG_CONFIG_DIRS/mimeapps.list</entry><entry>sysadmin and ISV overrides</entry>
+        </row><row>
+          <entry>$XDG_DATA_HOME/applications/$xdc-mimeapps.list</entry><entry>for completeness, deprecated, desktop-specific</entry>
+        </row><row>
+          <entry>$XDG_DATA_HOME/applications/mimeapps.list</entry><entry>for compatibility, deprecated</entry>
+        </row><row>
+          <entry>$XDG_DATA_DIRS/applications/$xdc-mimeapps.list</entry><entry>distribution-provided defaults, desktop-specific</entry>
+        </row><row>
+          <entry>$XDG_DATA_DIRS/applications/mimeapps.list</entry><entry>distribution-provided defaults</entry>
+        </row>
+      </tbody>
+    </tgroup>
+  </informaltable>
+  <para>In this table, $xdc means the lowercase version of $XDG_CURRENT_DESKTOP (for instance, kde, gnome, xfce, etc.)</para>
+  <para>All of the above files are referred to as "mimeapps.list" in the rest of this specification, for simplicity.</para>
+</sect1>
+<sect1 id="default">
+  <title>Default Application</title>
+  <para>Indicating the default application for a given mimetype is done by writing into the group [Default Applications] in the file mimeapps.list.</para>
+  <para>The [Default Applications] group indicates the preferred application for a given mimetype. This is for instance the one that will be started when left-clicking on a file in a file manager. If the application is no longer installed, the next application in the list is used.</para>
+  <para>This example ensures that the application default1.desktop will be used for mimetype1, if it's installed, and otherwise default2.desktop if it's installed:
+    <programlisting>
+[Default Applications]
+mimetype1=default1.desktop;default2.desktop</programlisting>
+  </para>
+  <para>In the absence of such an entry, the next mimeapps.list is checked. Once all levels have been checked, if no entry could be found, the implementations can pick any of the .desktop files associated with the mimetype, taking into account added and removed associations as per the next section.</para>
+</sect1>
+<sect1 id="associations">
+  <title>Adding/removing associations</title>
+  <para>Adding and removing associations between mimetypes and applications is done with the following syntax in the mimeapps.list file:
+    <programlisting>
+[Added Associations]
+mimetype1=foo1.desktop;foo2.desktop;foo3.desktop
+mimetype2=foo4.desktop
+[Removed Associations]
+mimetype1=foo5.desktop</programlisting>
+  </para>
+  <para>The [Added Associations] group defines additional associations of applications with mimetypes, as if the .desktop file was listing this mimetype in the first place.</para>
+  <para>The entries in [Default Applications] should also be considered to add an association between application and mimetype in the same manner.</para>
+  <para>The [Removed Associations] group removes associations of applications with mimetypes, as if the .desktop file was NOT listing this mimetype in the first place.</para>
+</sect1>
+<sect1 id="ordering">
+  <title>Application ordering</title>
+  <para>The suggested algorithm for listing the applications associated to a given mimetype is:</para>
+   <itemizedlist>
+     <listitem><para>add any "Default Applications" and then "Added Associations" in the first mimeapps.list</para></listitem>
+     <listitem><para>make a blacklist with the "Removed Associations" in the first mimeapps.list</para></listitem>
+     <listitem><para>add any "Default Applications" and then the "Added Associations" in the second mimeapps.list, except those in the current blacklist</para></listitem>
+     <listitem><para>append to the blacklist the "Removed Associations" in the second mimeapps.list</para></listitem>
+     <listitem><para>repeat the last two steps for all subsequent mimeapps.list files</para></listitem>
+     <listitem><para>finish by adding the mimetypes listed in the .desktop file, except those in the blacklist</para></listitem>
+   </itemizedlist>
+</sect1>
+
+</article>
