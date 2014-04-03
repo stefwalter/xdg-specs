@@ -68,6 +68,7 @@
 [Default Applications]
 mimetype1=default1.desktop;default2.desktop</programlisting>
   </para>
+  <para>The value is a semicolon-separated list of desktop file IDs (as defined in the desktop entry spec).</para>
   <para>In the absence of such an entry, the next mimeapps.list is checked. Once all levels have been checked, if no entry could be found, the implementations can pick any of the .desktop files associated with the mimetype, taking into account added and removed associations as per the next section.</para>
 </sect1>
 <sect1 id="associations">
