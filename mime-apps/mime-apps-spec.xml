@@ -5,7 +5,7 @@
 <articleinfo>
    <authorgroup>
     <corpauthor>
-      <ulink url="http://www.freedesktop.org">X Desktop Group</ulink>
+      <ulink url="http://www.freedesktop.org">Cross Desktop Group</ulink>
     </corpauthor>
     <author>
         <firstname>David</firstname>
@@ -35,26 +35,28 @@
     <tgroup cols="2">
       <tbody>
         <row>
-          <entry>$XDG_CONFIG_HOME/$xdc-mimeapps.list</entry><entry>user overrides, desktop-specific (for advanced users)</entry>
+          <entry>$XDG_CONFIG_HOME/$desktop-mimeapps.list</entry><entry>user overrides, desktop-specific (for advanced users)</entry>
         </row><row>
           <entry>$XDG_CONFIG_HOME/mimeapps.list</entry><entry>user overrides (recommended location for user configuration GUIs)</entry>
         </row><row>
-          <entry>$XDG_CONFIG_DIRS/$xdc-mimeapps.list</entry><entry>sysadmin and ISV overrides, desktop-specific</entry>
+          <entry>$XDG_CONFIG_DIRS/$desktop-mimeapps.list</entry><entry>sysadmin and ISV overrides, desktop-specific</entry>
         </row><row>
           <entry>$XDG_CONFIG_DIRS/mimeapps.list</entry><entry>sysadmin and ISV overrides</entry>
         </row><row>
-          <entry>$XDG_DATA_HOME/applications/$xdc-mimeapps.list</entry><entry>for completeness, deprecated, desktop-specific</entry>
+          <entry>$XDG_DATA_HOME/applications/$desktop-mimeapps.list</entry><entry>for completeness, deprecated, desktop-specific</entry>
         </row><row>
           <entry>$XDG_DATA_HOME/applications/mimeapps.list</entry><entry>for compatibility, deprecated</entry>
         </row><row>
-          <entry>$XDG_DATA_DIRS/applications/$xdc-mimeapps.list</entry><entry>distribution-provided defaults, desktop-specific</entry>
+          <entry>$XDG_DATA_DIRS/applications/$desktop-mimeapps.list</entry><entry>distribution-provided defaults, desktop-specific</entry>
         </row><row>
           <entry>$XDG_DATA_DIRS/applications/mimeapps.list</entry><entry>distribution-provided defaults</entry>
         </row>
       </tbody>
     </tgroup>
   </informaltable>
-  <para>In this table, $xdc means the lowercase version of $XDG_CURRENT_DESKTOP (for instance, kde, gnome, xfce, etc.)</para>
+  <para>In this table, $desktop is one of the names of the current desktop, lowercase (for instance, kde, gnome, xfce, etc.)</para>
+  <para>This is determined from the environment variable $XDG_CURRENT_DESKTOP, which is a colon-separated list of names that the current desktop is known as.
+    The $desktop variable should be each of these values in turn.</para>
   <para>All of the above files are referred to as "mimeapps.list" in the rest of this specification, for simplicity.</para>
 </sect1>
 <sect1 id="default">
