@@ -61,6 +61,15 @@
           </address>
         </affiliation>
       </author>
+      <author>
+        <firstname>David</firstname>
+        <surname>Faure</surname>
+        <affiliation>
+          <address>
+            <email>faure@kde.org</email>
+          </address>
+        </affiliation>
+      </author>
     </authorgroup>
   </articleinfo>
 
@@ -1475,4 +1484,39 @@ Icon=fooview-new
       the name as it appears in the "Encoding" column above.
     </para>
   </appendix>
+  <appendix id="desktop-file-id">
+    <title>Desktop File ID</title>
+    <para>
+        The desktop file ID is the identifier of an installed desktop entry file.
+    </para>
+    <para>
+        To determine the ID of a desktop file, make its full path relative to
+        the <literal>$XDG_DATA_DIRS</literal> component in which the desktop file is installed, remove the "applications/"
+        prefix, and turn '/' into '-'.
+     </para>
+     <para>
+        For example <filename>/usr/share/applications/foo/bar.desktop</filename> has
+        the desktop file ID <literal>foo-bar.desktop</literal>.
+     </para>
+     <para>
+        If multiple files have the same desktop file ID, the first one in the
+        $XDG_DATA_DIRS precedence order is used.
+     </para>
+     <para>
+        For example, if <literal>$XDG_DATA_DIRS</literal> contains the default paths /usr/local/share:/usr/share, then
+        <filename>/usr/local/share/applications/org.foo.bar.desktop</filename> and
+        <filename>/usr/share/applications/org.foo.bar.desktop</filename> both have
+        the same desktop file ID <literal>org.foo.bar.desktop</literal>, but only the first
+        one will be used.
+     </para>
+     <para>
+        If both <filename>foo-bar.desktop</filename> and <filename>foo/bar.desktop</filename> exist,
+        it is undefined which is selected.
+     </para>
+     <para>
+        If the desktop file is not installed in an <literal>applications</literal> subdirectory of one
+        of the $XDG_DATA_DIRS components, it does not have an ID.
+     </para>
+  </appendix>
+
 </article>
