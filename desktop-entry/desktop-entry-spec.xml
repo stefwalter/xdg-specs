@@ -469,13 +469,32 @@
 	  <row>
 	    <entry id="key-onlyshowin"><varname>OnlyShowIn</varname>, <varname>NotShowIn</varname></entry>
 	    <entry>
-           A list of strings identifying the environments that should
-           display/not display a given desktop entry. Only one of
-           these keys, either <varname>OnlyShowIn</varname> or
-           <varname>NotShowIn</varname>, may appear in a group (for
-           possible values see the <ulink
-           url="http://www.freedesktop.org/Standards/menu-spec">Desktop
-           Menu Specification</ulink>).
+              <para>
+                A list of strings identifying the desktop environments that
+                should display/not display a given desktop entry.
+              </para>
+
+              <para>
+                By default, a desktop file should be shown, unless an OnlyShowIn
+                key is present, in which case, the default is for the file not to
+                be shown.
+              </para>
+
+              <para>
+                If <envar>$XDG_CURRENT_DIRECTORY</envar> is set then it contains a
+                colon-separated list of strings.  In order, each string is
+                considered.  If a matching entry is found in
+                <varname>OnlyShowIn</varname> then the desktop file is shown.
+                If an entry is found in <varname>NotShowIn</varname> then the
+                desktop file is not shown.  If none of the strings match then
+                the default action is taken (as above).
+              </para>
+
+              <para>
+                The same desktop name may not appear in both
+                <varname>OnlyShowIn</varname> and <varname>NotShowIn</varname> of
+                a group.
+              </para>
 	    </entry>
 	    <entry>string(s)</entry>
 	    <entry>NO</entry>
