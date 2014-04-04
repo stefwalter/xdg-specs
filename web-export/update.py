@@ -27,7 +27,12 @@ import urllib
 import urllib2
 import urlparse
 
-DEVELOPMENT = False
+# True = Allow this file to differ from the committed version
+DEVELOPMENT = True
+
+# When running this on the website itself, set USELOCALFILES to False
+# But since xmlto isn't installed there, we currently have to run it locally so this is now True (i.e. it uses the local files)
+USELOCALFILES = True
 
 GITWEB = 'http://cgit.freedesktop.org'
 HASH = 'md5'
@@ -106,10 +111,16 @@ class VcsObject:
         if self.data:
             return
 
-        url = self.get_url()
-        fd = urllib2.urlopen(url, None)
-        self.data = fd.read()
-        fd.close()
+        if USELOCALFILES:
+            localpath = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + '/' + self.file
+            fd = open(localpath)
+            self.data = fd.read()
+            fd.close()
+        else:
+            url = self.get_url()
+            fd = urllib2.urlopen(url, None)
+            self.data = fd.read()
+            fd.close()
 
     def get_hash(self):
         self.fetch()
@@ -157,6 +168,8 @@ class SpecObject():
 
         if self.ext == '.html':
             return
+
+        print "Converting", self.filename, "to HTML"
 
         path = os.path.join(self.spec_dir, self.filename)
         (path_no_ext, ext) = os.path.splitext(path)
@@ -256,7 +269,10 @@ for line in lines:
     (data, revision, version, path) = line.split()
     splitted_line = data.split(":")
     if data.startswith("git:"):
-        vcs = VcsObject('git', splitted_line[1], splitted_line[2], revision)
+        repo = splitted_line[1]
+        if USELOCALFILES and (revision != "master" or repo != "xdg/xdg-specs" or path in [ "idle-inhibit-spec", "secret-service-spec" ]):
+            continue
+        vcs = VcsObject('git', repo, splitted_line[2], revision)
     else:
         vcs = VcsObject(splitted_line[0], None, data, revision)
 
