@@ -2416,16 +2416,13 @@
     <glossentry id="term-desktop-file-id"><glossterm>Desktop-File Id</glossterm>
       <glossdef>
         <para>
-          The id to identify a desktop entry with. 
-          For example, if <filename>/usr/share/applications</filename> is
-          specified as an &lt;AppDir&gt;, and <filename>/opt/ude</filename>
-          as &lt;LegacyDir prefix="foo-"&gt;
-          then 
-          <filename>/usr/share/applications/foo/bar.desktop</filename>, 
-          <filename>/usr/share/applications/foo-bar.desktop</filename>
-          and
-          <filename>/opt/ude/Settings/bar.desktop</filename> all have
-          the same desktop-file id <literal>foo-bar.desktop</literal>
+          The ID to identify a desktop entry with.
+          For desktop files installed in $XDG_DATA_DIRS/applications, this
+          is the same as the desktop file ID defined in the Desktop Entry Specification.
+          In addition, if <filename>/opt/ude</filename> is defined
+          as &lt;LegacyDir prefix="foo-"&gt; then
+          <filename>/opt/ude/Settings/bar.desktop</filename> has
+          the desktop-file id <literal>foo-bar.desktop</literal>
         </para>
       </glossdef>
     </glossentry>
