@@ -29,7 +29,6 @@ import urlparse
 
 DEVELOPMENT = False
 
-CVSWEB = 'http://cvs.freedesktop.org'
 GITWEB = 'http://cgit.freedesktop.org'
 HASH = 'md5'
 
@@ -94,11 +93,6 @@ class VcsObject:
             path = '/'.join((self.repo, 'plain', self.file))
             if self.revision:
                 query['id'] = self.revision
-        elif self.vcs == 'cvs':
-            baseurl = CVSWEB
-            path = self.file
-            if self.revision:
-                query['rev'] = self.revision
         else:
             raise Exception('Unknown VCS: %s' % self.vcs)
 
@@ -260,11 +254,11 @@ for line in lines:
         continue
 
     (data, revision, version, path) = line.split()
+    splitted_line = data.split(":")
     if data.startswith("git:"):
-        git_data = data.split(":")
-        vcs = VcsObject('git', git_data[1], git_data[2], revision)
+        vcs = VcsObject('git', splitted_line[1], splitted_line[2], revision)
     else:
-        vcs = VcsObject('cvs', None, data, revision)
+        vcs = VcsObject(splitted_line[0], None, data, revision)
 
     spec = SpecObject(vcs, path, version)
 

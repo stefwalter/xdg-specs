@@ -4,6 +4,6 @@ This directory contains the files used to export the specifications on
 It's mostly two files:
 
  - specs.idx: information on where to fetch specific versions of different
-   specifications (usually CVS or git)
+   specifications (usually from git)
 
  - update.py: hacky script that uses specs.idx and creates html pages
