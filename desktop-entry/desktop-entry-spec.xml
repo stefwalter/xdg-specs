@@ -490,7 +490,7 @@
               </para>
 
               <para>
-                If <envar>$XDG_CURRENT_DIRECTORY</envar> is set then it contains a
+                If <envar>$XDG_CURRENT_DESKTOP</envar> is set then it contains a
                 colon-separated list of strings.  In order, each string is
                 considered.  If a matching entry is found in
                 <varname>OnlyShowIn</varname> then the desktop file is shown.
